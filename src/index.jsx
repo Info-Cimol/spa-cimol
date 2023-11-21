@@ -7,26 +7,29 @@ import AlunoLogado from './routes/AlunoLogado';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Secretaria from './routes/Secretaria';
 import Funcionario from './routes/Funcionario';
+import ErrorPage from './routes/ErrorPage';
+import { Private, UsuarioLogado } from './auth/checkAuthentication';
 
 const router = createBrowserRouter([
   {
     element: <App />,
+    errorElement: <ErrorPage/>,
     children: [
       {
         path: "/",
-        element: <Login/>
+        element: <UsuarioLogado><Login/></UsuarioLogado>
       },
       {
         path: "/AlunoLogado",
-        element: <AlunoLogado/>
+        element: <Private allowedRoles={["aluno"]}><AlunoLogado/></Private>
       },
       {
-        path: "/Secretaria",
-        element: <Secretaria/>
+        path: "/Secretaria",  
+        element: <Private allowedRoles={["professor"]}><Secretaria/></Private>
       },
       {
         path: "/Funcionario",
-        element: <Funcionario/>
+        element:<Private allowedRoles={["funcionario"]}><Funcionario/></Private> 
       }
     ],
   },

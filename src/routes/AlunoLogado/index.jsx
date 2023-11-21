@@ -4,56 +4,78 @@ import {Container} from './styled';
 import { motion } from 'framer-motion';
 import { ImBlocked } from 'react-icons/im'
 import imagem1 from '../../imagens/image1.jpg'
+import axiosFecht from '../../axios/config';
+import createHeaders from '../../auth/utils';
 
 function AlunoLogado(){
   const [mostrarBotao, setMostrarBotao] = useState(true);
   const carousel = useRef();
+  const carousel2 = useRef();
   const [width, setWidth] = useState(0);
   const hoje = new Date();
+  const [cardapio, setCardapio] = useState();
+  const [reservas, setReservas] = useState();
 
-  const [cardapio] = useState([
-    {
-      img : imagem1,
-      data: new Date(2023, 8, 26),
-      prato: "Arroz, feijao, batata doce"
-    },
-    {
-      img : imagem1,
-      data: new Date(2023, 8, 27),
-      prato: "Galinhada"
-    },
-    {
-      img : imagem1,
-      data: new Date(2023, 8, 28),
-      prato: "Arroz, lentilha, batata dore"
-    },
-    {
-      img : imagem1,
-      data: new Date(2023, 8, 29),
-      prato: "Arroz, feijao, frango assado"
-    },
-    {
-      img : imagem1,
-      data: new Date(2023, 8, 30),
-      prato: "Arroz, feijao, batata doce"
-    },
-  ]);
+  const img = imagem1;
 
   useEffect(() =>{
-    if(mostrarBotao === false){
-      setWidth(carousel.current?.scrollWidth - carousel.current?.offsetWidth)
-    }
-    
 
+    if (!mostrarBotao) {
+      setWidth(carousel.current?.scrollWidth - carousel.current?.offsetWidth);
+    }
+
+    const fetchData = async () => {
+      try {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const headers = createHeaders(userData);
+  
+        const response = await axiosFecht.get('/cardapio/', { headers });
+        setCardapio(response.data);
+
+        const responseReservas = await axiosFecht.get('/cardapio/reservas', { headers });
+        const reservasComDataConvertida = parseData(responseReservas.data);
+
+        setReservas(reservasComDataConvertida);
+      } catch (error) {
+        console.log('Erro ao listar cardapio', error);
+      }
+    };
+  
+    fetchData();
+    
   }, [mostrarBotao]);
 
-  const getNomeDiaDaSemana = (data) =>{
+  const getNomeDiaDaSemana = (dataDoCardapio) =>{
+      if (!(dataDoCardapio instanceof Date)) {
+    // Trate o caso em que dataDoCardapio não é uma instância válida de Date
+    console.error(`Valor inválido para data: ${dataDoCardapio}`);
+    return ''; // ou outra ação adequada
+  }
+
     const diaDaSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sabado'];
-    return diaDaSemana[data.getDay()];
+    return diaDaSemana[dataDoCardapio.getDay()];
   }
 
   const mostrarCardapio = () =>{
     setMostrarBotao(!mostrarBotao);
+  }
+
+  const parseData = (reservas) =>{
+    if (!Array.isArray(reservas)) {
+      console.error(`Reservas não é um array: ${reservas}`);
+      return [];
+    }
+    return reservas.map((reserva)=>{
+      const dataReserva = new Date(reserva.data);
+      if (isNaN(dataReserva.getTime())) {
+        console.error(`Data inválida para reserva: ${reserva.data}`);
+        return null; 
+      }
+      return {
+        ...reserva,
+        data: dataReserva,
+      };
+    })
   }
 
   return(
@@ -72,18 +94,26 @@ function AlunoLogado(){
               drag="x"
               dragConstraints={{ right: 0, left: -width}}
               >
-               {cardapio.map((cardapio,index) =>{
-                  const diferencaEmMilissegundos = cardapio.data - hoje;
-                  const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24)
+                {console.log("teste final", cardapio)}
+                {cardapio.map((cardapio, index) => {
+                  const dataDoCardapio = new Date(cardapio.data);
+
+                  if (isNaN(dataDoCardapio.getTime())) {
+                    console.error(`Data inválida: ${cardapio.data}`);
+                    return null; // ou faça algo para lidar com datas inválidas
+                  }
+
+                  const diferencaEmMilissegundos = dataDoCardapio - hoje;
+                  const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
                   const podeReservar = diferencaEmDias >= 2;
-                
-                  return(
+
+                  return (
                     <motion.div className='item' key={index}>
-                      <p>{`${getNomeDiaDaSemana(cardapio.data)} ${cardapio.data.getDate()}/${cardapio.data.getMonth() +1}/${cardapio.data.getFullYear()}`}</p>
+                      <p>{`${getNomeDiaDaSemana(dataDoCardapio)} ${dataDoCardapio.getDate()}/${dataDoCardapio.getMonth() + 1}/${dataDoCardapio.getFullYear()}`}</p>
                       <div className='containerCarrossel'>
                         <div>
-                          <img src={cardapio.img} alt='text alt' />
-                          <p>{cardapio.prato}</p>
+                          <img src={img} alt='text alt' />
+                          <p>{cardapio.nome}</p>
                         </div>
                         {podeReservar?(
                           <div className='checkboxContainer'>
@@ -105,18 +135,18 @@ function AlunoLogado(){
           </div>
           <div className='boxCardapio'>
             <h1>Reservas</h1>
-            <motion.div ref={carousel} className='carrossel' whileTap={{cursor: "grabbing"}}>
+            <motion.div ref={carousel2} className='carrossel' whileTap={{cursor: "grabbing"}}>
               <motion.div className='inner'
               drag="x"
               dragConstraints={{ right: 0, left: -width}}
               >
-                {cardapio.map((cardapio,index) =>(
+                {reservas.map((reservas,index) =>(
                     <motion.div className='item' key={index}>
-                      <p>{`${getNomeDiaDaSemana(cardapio.data)} ${cardapio.data.getDate()}/${cardapio.data.getMonth() +1}/${cardapio.data.getFullYear()}`}</p>
+                      <p>{`${getNomeDiaDaSemana(reservas.data)} ${reservas.data.getDate()}/${reservas.data.getMonth() +1}/${reservas.data.getFullYear()}`}</p>
                       <div className='containerCarrossel'>
                         <div>
-                          <img src={cardapio.img} alt='text alt' />
-                          <p>{cardapio.prato}</p>
+                          <img src={img} alt='text alt' />
+                          <p>{reservas.nome}</p>
                         </div>
                         <div className='checkboxContainer'>
                           <input type="checkbox" defaultChecked/>
