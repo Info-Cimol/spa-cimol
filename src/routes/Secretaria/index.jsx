@@ -1,18 +1,12 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Container } from "./styled";
 import ContainerTopo from "../../components/ContainerTopo";
 import {IoAddCircleOutline, IoSearchOutline, IoClose} from "react-icons/io5"
 import { Link } from "react-router-dom";
+import createHeaders from "../../auth/utils";
+import axiosFecht from "../../axios/config";
 
 function Secretaria(){
-    const [dados] = useState([
-        {data: new Date(2023, 10, 12 ), cardapio: "Arroz com ovo",  manha: 100, tarde: 50, noite: 40},
-        {data: new Date(2023, 10, 13 ), cardapio: "Arroz com feijão", manha: 80, tarde: 70, noite: 50},
-        {data: new Date(2023, 10, 14 ), cardapio: "Omelete com batata", manha: 95, tarde: 60, noite: 38},
-        {data: new Date(2023, 10, 15 ), cardapio: "Carreteiro", manha: 110, tarde: 48, noite: 70}, 
-        {data: new Date(2023, 10, 16 ), cardapio: "Omelete com batata", manha: 93, tarde: 75, noite: 60}, 
-    ])
-
     const [mostrarBotao, setMostrarBotao] = useState(true);
     const [inputValue, setInputValue] = useState('');
     const [newCardapio, setNewCardapio] = useState(false);
@@ -20,21 +14,93 @@ function Secretaria(){
     const [turnoTarde, setTurnoTarde] = useState();
     const [turnoNoite, setTurnoNoite] = useState();
     const [descricao, setDescricao] = useState(false);
-    const [descricaoText, setDescricaoText] = useState();
+    const [cardapioSelecionado, setCardapioSelecionado] = useState();
     const [dataFiltrada, setDataFiltrada] = useState('')
+    const [cardapio, setCardapio] = useState();
+    const [data, setData] = useState();
+    const [nomeCardapio, setNomeCardapio] = useState();
+    const [descricaoCardapio, setDescricaoCardapio] = useState();
+
+    const fetchData = useCallback(async (setCardapio) =>{
+        try {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            const headers = createHeaders(userData);
+
+            const response = await axiosFecht.get('/cardapio/',{}, {headers});
+            setCardapio(parseData(response.data));
+            console.log(response.data)
+            
+        } catch (error) {
+            console.log("Erro ao listar cardapio "+ error)
+        }
+    },[]);
+
+    useEffect(() =>{
+       fetchData(setCardapio);
+    },[fetchData])
+
+    
+    const parseData = (cardapio) => {
+        if (!Array.isArray(cardapio)) {
+          console.error(`Cardapio não é um array: ${cardapio}`);
+          return [];
+        }
+    
+        return cardapio.map((item) => {
+          const dataCardapio = new Date(item.data);
+          if (isNaN(dataCardapio.getTime())) {
+            console.error(`Data inválida para reserva: ${item.data}`);
+            return null;
+          }
+    
+          return {
+            ...item,
+            data: dataCardapio,
+          };
+        });
+      };
 
     const mostrarCardapio = () =>{
         setMostrarBotao(!mostrarBotao);
+        fetchData(setCardapio)
     }
 
-    const handleInputChange = (event) =>{
+    const handleInputChange = (event) => {
         setInputValue(event.target.value);
+    
+        const filtrarPesquisa = cardapio.filter((item) => {
+          const dataFormatada = `${item.data.getDate()}/${item.data.getMonth()}/${item.data.getFullYear()}`;
+          return dataFormatada.includes(event.target.value);
+        });
 
-        const filtrarPesquisa = dados.filter((item) =>{
-            const dataFormatada = `${item.data.getDate()}/${item.data.getMonth()}/${item.data.getFullYear()}`;
-            return dataFormatada.includes(event.target.value);
-        })
         setDataFiltrada(filtrarPesquisa);
+
+    };
+
+    const handleDelete = async(idCardapio) =>{
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const headers = createHeaders(userData);
+
+        const response = await axiosFecht.delete('/cardapio/deletar/'+idCardapio, {}, {headers});
+        console.log(response);
+
+        fetchData(setCardapio);
+        setDescricao(!descricao);
+    }
+
+    const handleCadastrar = async (e) =>{
+        e.preventDefault();
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const headers = createHeaders(userData);
+
+        const response = await axiosFecht.post('/cardapio/cadastrar', {
+            data: data,
+            nome: nomeCardapio,
+            descricao: descricaoCardapio
+        },{headers});
+        console.log(response);
+        fetchData(setCardapio);
+        setNewCardapio(!newCardapio);
     }
 
     const handleNewCardapio = () =>{
@@ -43,7 +109,7 @@ function Secretaria(){
 
     const boxDescricao = (item) =>{
         setDescricao(!descricao);
-        setDescricaoText(item.cardapio);
+        setCardapioSelecionado(item);
         setTurnoManha(item.manha);
         setTurnoTarde(item.tarde);
         setTurnoNoite(item.noite);
@@ -55,14 +121,14 @@ function Secretaria(){
             {descricao &&(
                 <div className="containerDescricao">
                     <IoClose size={20} onClick={() => setDescricao(false)}/>
-                    <p>{descricaoText}</p>
+                    <p>{cardapioSelecionado.nome}</p>
                     <div className="reservas">
                         <p>Manha: {turnoManha}</p>
                         <p>Tarde: {turnoTarde}</p>
                         <p>Noite: {turnoNoite}</p>
                     </div>
                     <div className="buttonDescricao">
-                        <Link>Editar</Link><a href="teste">Excluir</a>
+                        <Link>Editar</Link><Link onClick={() => handleDelete(cardapioSelecionado.id_cardapio)}>Excluir</Link>
                     </div>
                 </div>
             )}
@@ -74,12 +140,12 @@ function Secretaria(){
                     <div className="formulario">
                         <form>
                             <label>Data</label>
-                            <input type="date" />
+                            <input onChange={(e) =>(setData(e.target.value))} type="date"  />
                             <label>Prato</label>
-                            <input type="text" />
+                            <input type="text" onChange={(e) =>(setNomeCardapio(e.target.value))}/>
                             <label>Descrição</label>
-                            <textarea></textarea>
-                            <button className="btnCriar">Criar</button>
+                            <textarea onChange={(e) =>(setDescricaoCardapio(e.target.value))}/>
+                            <button className="btnCriar" onClick={handleCadastrar}>Criar</button>
                         </form>
                     </div>
                 </div>
@@ -106,19 +172,19 @@ function Secretaria(){
                             </thead>
                             <tbody>
                                 {dataFiltrada.length > 0? (
-                                    dataFiltrada.map((item) =>(
+                                    cardapio.map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
                                             <td>{`${item.data.getDate()}/${item.data.getMonth()}/${item.data.getFullYear()}`}</td>
-                                            <td>{item.cardapio}</td>
-                                            <td>{item.manha + item.tarde + item.noite}</td>
+                                            <td>{item.nome}</td>
+                                            <td>{item.reservas}</td>
                                         </tr>
                                     ))
                                 ) : (
-                                    dados.map((item) =>(
+                                    cardapio.map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
                                             <td>{`${item.data.getDate()}/${item.data.getMonth()}/${item.data.getFullYear()}`}</td>
-                                            <td>{item.cardapio}</td>
-                                            <td>{item.manha + item.tarde + item.noite}</td>
+                                            <td>{item.nome}</td>
+                                            <td>{item.reservas}</td>
                                         </tr>
                                     ))
                                 )}
@@ -134,4 +200,4 @@ function Secretaria(){
     
 }
 
-export default Secretaria;
+export default Secretaria ;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import ContainerTopo from '../../components/ContainerTopo';
 import {Container} from './styled';
 import { motion } from 'framer-motion';
@@ -12,11 +12,30 @@ function AlunoLogado(){
   const carousel = useRef();
   const carousel2 = useRef();
   const [width, setWidth] = useState(0);
+  const [width2, setWidth2] = useState(0);
   const hoje = new Date();
   const [cardapio, setCardapio] = useState();
   const [reservas, setReservas] = useState();
 
   const img = imagem1;
+
+  const fetchData = useCallback(async (setCardapio, setReservas) => {
+    try {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      const headers = createHeaders(userData);
+
+      const response = await axiosFecht.get('/cardapio/',{}, { headers });
+      setCardapio(response.data);
+
+      const responseReservas = await axiosFecht.get('/cardapio/reservas', { headers });
+      const reservasComDataConvertida = parseData(responseReservas.data);
+
+      setReservas(reservasComDataConvertida);
+      setWidth2(carousel2.current?.scrollWidth - carousel2.current?.offsetWidth);
+    } catch (error) {
+      console.log('Erro ao listar cardapio', error);
+    }
+  },[]);
 
   useEffect(() =>{
 
@@ -24,32 +43,14 @@ function AlunoLogado(){
       setWidth(carousel.current?.scrollWidth - carousel.current?.offsetWidth);
     }
 
-    const fetchData = async () => {
-      try {
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        const headers = createHeaders(userData);
-  
-        const response = await axiosFecht.get('/cardapio/', { headers });
-        setCardapio(response.data);
-
-        const responseReservas = await axiosFecht.get('/cardapio/reservas', { headers });
-        const reservasComDataConvertida = parseData(responseReservas.data);
-
-        setReservas(reservasComDataConvertida);
-      } catch (error) {
-        console.log('Erro ao listar cardapio', error);
-      }
-    };
-  
-    fetchData();
+    fetchData(setCardapio, setReservas);
     
-  }, [mostrarBotao]);
+  }, [mostrarBotao, fetchData]);
 
   const getNomeDiaDaSemana = (dataDoCardapio) =>{
       if (!(dataDoCardapio instanceof Date)) {
-    // Trate o caso em que dataDoCardapio não é uma instância válida de Date
-    console.error(`Valor inválido para data: ${dataDoCardapio}`);
-    return ''; // ou outra ação adequada
+        console.error(`Valor inválido para data: ${dataDoCardapio}`);
+        return ''; // ou outra ação adequada
   }
 
     const diaDaSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sabado'];
@@ -78,6 +79,20 @@ function AlunoLogado(){
     })
   }
 
+  const ReservarCardapio = async (id_cardapio)=>{
+    try {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      const headers = createHeaders(userData);
+      
+      const response = await axiosFecht.post('/cardapio/reservar/'+id_cardapio, {}, {headers});
+      console.log(response);
+      fetchData(setCardapio, setReservas);
+      
+    } catch (error) {
+      console.log("erro ao reservar cardapio "+ error)
+    }
+  }
+
   return(
     <Container>
       <ContainerTopo/>
@@ -94,7 +109,6 @@ function AlunoLogado(){
               drag="x"
               dragConstraints={{ right: 0, left: -width}}
               >
-                {console.log("teste final", cardapio)}
                 {cardapio.map((cardapio, index) => {
                   const dataDoCardapio = new Date(cardapio.data);
 
@@ -117,7 +131,7 @@ function AlunoLogado(){
                         </div>
                         {podeReservar?(
                           <div className='checkboxContainer'>
-                            <input type="checkbox"/>
+                            <input type="checkbox" onClick={() =>ReservarCardapio(cardapio.id_cardapio)}/>
                             <label>Reservar</label>
                           </div>
                         ):(
@@ -138,7 +152,7 @@ function AlunoLogado(){
             <motion.div ref={carousel2} className='carrossel' whileTap={{cursor: "grabbing"}}>
               <motion.div className='inner'
               drag="x"
-              dragConstraints={{ right: 0, left: -width}}
+              dragConstraints={{ right: 0, left: -width2}}
               >
                 {reservas.map((reservas,index) =>(
                     <motion.div className='item' key={index}>
