@@ -123,7 +123,7 @@ function AlunoLogado(){
 
                   return (
                     <motion.div className='item' key={index}>
-                      <p>{`${getNomeDiaDaSemana(dataDoCardapio)} ${dataDoCardapio.getDate()}/${dataDoCardapio.getMonth() + 1}/${dataDoCardapio.getFullYear()}`}</p>
+                      <p>{`${getNomeDiaDaSemana(dataDoCardapio)} ${String(dataDoCardapio.getDate()).padStart(2, '0')}/${dataDoCardapio.getMonth() + 1}/${dataDoCardapio.getFullYear()}`}</p>
                       <div className='containerCarrossel'>
                         <div>
                           <img src={img} alt='text alt' />
@@ -156,7 +156,7 @@ function AlunoLogado(){
               >
                 {reservas.map((reservas,index) =>(
                     <motion.div className='item' key={index}>
-                      <p>{`${getNomeDiaDaSemana(reservas.data)} ${reservas.data.getDate()}/${reservas.data.getMonth() +1}/${reservas.data.getFullYear()}`}</p>
+                      <p>{`${getNomeDiaDaSemana(reservas.data)} ${String(reservas.data.getDate()).padStart(2, '0')}/${reservas.data.getMonth() +1}/${reservas.data.getFullYear()}`}</p>
                       <div className='containerCarrossel'>
                         <div>
                           <img src={img} alt='text alt' />
