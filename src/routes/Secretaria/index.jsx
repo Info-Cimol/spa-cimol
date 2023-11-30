@@ -101,6 +101,7 @@ function Secretaria(){
         console.log(response);
         fetchData(setCardapio);
         setNewCardapio(!newCardapio);
+
     }
 
     const handleNewCardapio = () =>{
@@ -121,7 +122,7 @@ function Secretaria(){
             {descricao &&(
                 <div className="containerDescricao">
                     <IoClose size={20} onClick={() => setDescricao(false)}/>
-                    <p>{cardapioSelecionado.nome}</p>
+                    <p>{cardapioSelecionado.descricao}</p>
                     <div className="reservas">
                         <p>Manha: {turnoManha}</p>
                         <p>Tarde: {turnoTarde}</p>
@@ -140,11 +141,11 @@ function Secretaria(){
                     <div className="formulario">
                         <form>
                             <label>Data</label>
-                            <input onChange={(e) =>(setData(e.target.value))} type="date"  />
+                            <input onChange={(e) =>(setData(e.target.value))} type="date" required />
                             <label>Prato</label>
-                            <input type="text" onChange={(e) =>(setNomeCardapio(e.target.value))}/>
+                            <input type="text" onChange={(e) =>(setNomeCardapio(e.target.value))} required/>
                             <label>Descrição</label>
-                            <textarea onChange={(e) =>(setDescricaoCardapio(e.target.value))}/>
+                            <textarea onChange={(e) =>(setDescricaoCardapio(e.target.value))} required/>
                             <button className="btnCriar" onClick={handleCadastrar}>Criar</button>
                         </form>
                     </div>
@@ -174,7 +175,7 @@ function Secretaria(){
                                 {dataFiltrada.length > 0? (
                                     cardapio.map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
-                                            <td>{`${item.data.getDate()}/${item.data.getMonth()}/${item.data.getFullYear()}`}</td>
+                                            <td>{`${String(item.data.getDate()).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
                                             <td>{item.nome}</td>
                                             <td>{item.reservas}</td>
                                         </tr>
@@ -182,7 +183,7 @@ function Secretaria(){
                                 ) : (
                                     cardapio.map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
-                                            <td>{`${item.data.getDate()}/${item.data.getMonth()}/${item.data.getFullYear()}`}</td>
+                                            <td>{`${String(item.data.getDate()).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
                                             <td>{item.nome}</td>
                                             <td>{item.reservas}</td>
                                         </tr>
