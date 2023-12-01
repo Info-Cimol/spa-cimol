@@ -121,6 +121,7 @@ function AlunoLogado(){
                   const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
                   const podeReservar = diferencaEmDias >= 2;
 
+                  const reservado = reservas.some(reserva => reserva.id_cardapio === cardapio.id_cardapio);
                   return (
                     <motion.div className='item' key={index}>
                       <p>{`${getNomeDiaDaSemana(dataDoCardapio)} ${String(dataDoCardapio.getDate()+1).padStart(2, '0')}/${dataDoCardapio.getMonth() + 1}/${dataDoCardapio.getFullYear()}`}</p>
@@ -131,7 +132,7 @@ function AlunoLogado(){
                         </div>
                         {podeReservar?(
                           <div className='checkboxContainer'>
-                            <input type="checkbox" onClick={() =>ReservarCardapio(cardapio.id_cardapio)}/>
+                            <input type="checkbox" checked={reservado} onChange={() =>ReservarCardapio(cardapio.id_cardapio)}/>
                             <label>Reservar</label>
                           </div>
                         ):(
