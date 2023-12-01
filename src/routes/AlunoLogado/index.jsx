@@ -54,7 +54,7 @@ function AlunoLogado(){
   }
 
     const diaDaSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sabado'];
-    return diaDaSemana[dataDoCardapio.getDay()];
+    return diaDaSemana[dataDoCardapio.getDay()+1];
   }
 
   const mostrarCardapio = () =>{
@@ -112,7 +112,6 @@ function AlunoLogado(){
               >
                 {cardapio.map((cardapio, index) => {
                   const dataDoCardapio = new Date(cardapio.data);
-
                   if (isNaN(dataDoCardapio.getTime())) {
                     console.error(`Data inválida: ${cardapio.data}`);
                     return null; // ou faça algo para lidar com datas inválidas
@@ -124,7 +123,7 @@ function AlunoLogado(){
 
                   return (
                     <motion.div className='item' key={index}>
-                      <p>{`${getNomeDiaDaSemana(dataDoCardapio)} ${String(dataDoCardapio.getDate()).padStart(2, '0')}/${dataDoCardapio.getMonth() + 1}/${dataDoCardapio.getFullYear()}`}</p>
+                      <p>{`${getNomeDiaDaSemana(dataDoCardapio)} ${String(dataDoCardapio.getDate()+1).padStart(2, '0')}/${dataDoCardapio.getMonth() + 1}/${dataDoCardapio.getFullYear()}`}</p>
                       <div className='containerCarrossel'>
                         <div>
                           <img src={img} alt='text alt' />
@@ -157,7 +156,7 @@ function AlunoLogado(){
               >
                 {reservas.map((reservas,index) =>(
                     <motion.div className='item' key={index}>
-                      <p>{`${getNomeDiaDaSemana(reservas.data)} ${String(reservas.data.getDate()).padStart(2, '0')}/${reservas.data.getMonth() +1}/${reservas.data.getFullYear()}`}</p>
+                      <p>{`${getNomeDiaDaSemana(reservas.data)} ${String(reservas.data.getDate()+1).padStart(2, '0')}/${reservas.data.getMonth() +1}/${reservas.data.getFullYear()}`}</p>
                       <div className='containerCarrossel'>
                         <div>
                           <img src={img} alt='text alt' />
