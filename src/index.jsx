@@ -9,6 +9,8 @@ import Secretaria from './routes/Secretaria';
 import Funcionario from './routes/Funcionario';
 import ErrorPage from './routes/ErrorPage';
 import { Private, UsuarioLogado } from './auth/checkAuthentication';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,7 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <ToastContainer autoClose={3000}/>
     <RouterProvider router={router}/>
   </React.StrictMode>
 );

@@ -5,6 +5,7 @@ import {IoAddCircleOutline, IoSearchOutline, IoClose} from "react-icons/io5"
 import { Link } from "react-router-dom";
 import createHeaders from "../../auth/utils";
 import axiosFecht from "../../axios/config";
+import { toast } from "react-toastify";
 
 function Secretaria(){
     const [mostrarBotao, setMostrarBotao] = useState(true);
@@ -69,7 +70,7 @@ function Secretaria(){
         setInputValue(event.target.value);
     
         const filtrarPesquisa = cardapio.filter((item) => {
-          const dataFormatada = `${item.data.getDate()}/${item.data.getMonth()}/${item.data.getFullYear()}`;
+          const dataFormatada = `${String(item.data.getDate()).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`;
           return dataFormatada.includes(event.target.value);
         });
 
@@ -82,14 +83,21 @@ function Secretaria(){
         const headers = createHeaders(userData);
 
         const response = await axiosFecht.delete('/cardapio/deletar/'+idCardapio, {}, {headers});
-        console.log(response);
-
-        fetchData(setCardapio);
-        setDescricao(!descricao);
+        if(response.data.success === true){
+            fetchData(setCardapio);
+            setDescricao(!descricao);
+            toast.success('Cardápio excluido com sucesso');
+        }else{
+            toast.error('erro ao excluir cardápio');
+        }
     }
 
     const handleCadastrar = async (e) =>{
         e.preventDefault();
+        if (!data || !nomeCardapio || !descricaoCardapio) {
+            toast.error('Preencha todos os campos obrigatórios');
+            return;
+        }
         const userData = JSON.parse(localStorage.getItem('userData'));
         const headers = createHeaders(userData);
 
@@ -98,10 +106,17 @@ function Secretaria(){
             nome: nomeCardapio,
             descricao: descricaoCardapio
         },{headers});
-        console.log(response);
-        fetchData(setCardapio);
-        setNewCardapio(!newCardapio);
 
+        if(response.data.success === true){
+            fetchData(setCardapio);
+            setNewCardapio(!newCardapio);
+            setData('');
+            setNomeCardapio('');
+            setDescricaoCardapio('');
+            toast.success('Cardápio registrado com sucesso');
+        }else{
+            toast.error('Erro ao registrar cardápio')
+        }
     }
 
     const handleNewCardapio = () =>{
@@ -173,7 +188,7 @@ function Secretaria(){
                             </thead>
                             <tbody>
                                 {dataFiltrada.length > 0? (
-                                    cardapio.map((item) =>(
+                                    dataFiltrada.map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
                                             <td>{`${String(item.data.getDate()).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
                                             <td>{item.nome}</td>

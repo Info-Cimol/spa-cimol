@@ -88,6 +88,7 @@ function AlunoLogado(){
       console.log(response);
       fetchData(setCardapio, setReservas);
       
+      
     } catch (error) {
       console.log("erro ao reservar cardapio "+ error)
     }

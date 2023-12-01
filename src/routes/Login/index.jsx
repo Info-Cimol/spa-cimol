@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Container } from './styled';
 import { Link, useNavigate } from 'react-router-dom';
 import axiosFecht from '../../axios/config';
+import { toast } from 'react-toastify';
 
 function Login(){
     const[login, setLogin] = useState('');
@@ -19,18 +20,21 @@ function Login(){
                 senha: password,
             });
 
-            if(response){
+            if(response.data.auth === true){
                 if(response.data.user.perfil[0] === "professor"){
                     localStorage.setItem('userData', JSON.stringify(response.data));
+                    toast.success('Bem vindo(a)!')
                     navigate("/Secretaria")
                     console.log(response.data);
                 }else{
                     localStorage.setItem('userData', JSON.stringify(response.data));
+                    toast.success('Bem vindo(a)');
                     navigate("/AlunoLogado")
                 }   
             }
 
         } catch(error){
+            toast.error('usuario ou senha incorretos!')
             console.error('usuario ou senha incorretos', error);
         }
     }
@@ -47,9 +51,9 @@ function Login(){
             <h1>LOGIN</h1>
             <form onSubmit={handleFormSubmit}>
                 <label>Login</label>
-                <input value={login} onChange={(e) =>(setLogin(e.target.value))}type="text" />
+                <input value={login} onChange={(e) =>(setLogin(e.target.value))}type="text" required />
                 <label>Senha</label>
-                <input value={password} onChange={(e) =>(setPassword(e.target.value))} type="password" />
+                <input value={password} onChange={(e) =>(setPassword(e.target.value))} type="password" required/>
                 <button>Entrar</button>
             </form>
             <p>Ainda não fez <Link>cadrasto?</Link></p>
