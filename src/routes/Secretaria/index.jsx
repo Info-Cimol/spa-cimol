@@ -70,7 +70,7 @@ function Secretaria(){
         setInputValue(event.target.value);
     
         const filtrarPesquisa = cardapio.filter((item) => {
-          const dataFormatada = `${String(item.data.getDate()).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`;
+          const dataFormatada = `${String(item.data.getDate()+1).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`;
           return dataFormatada.includes(event.target.value);
         });
 
@@ -190,7 +190,7 @@ function Secretaria(){
                                 {dataFiltrada.length > 0? (
                                     dataFiltrada.map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
-                                            <td>{`${String(item.data.getDate()).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
+                                            <td>{`${String(item.data.getDate()+1).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
                                             <td>{item.nome}</td>
                                             <td>{item.reservas}</td>
                                         </tr>
@@ -198,7 +198,7 @@ function Secretaria(){
                                 ) : (
                                     cardapio.map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
-                                            <td>{`${String(item.data.getDate()).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
+                                            <td>{`${String(item.data.getDate()+1).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
                                             <td>{item.nome}</td>
                                             <td>{item.reservas}</td>
                                         </tr>

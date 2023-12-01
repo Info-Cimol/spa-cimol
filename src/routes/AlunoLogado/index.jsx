@@ -31,7 +31,6 @@ function AlunoLogado(){
       const reservasComDataConvertida = parseData(responseReservas.data);
 
       setReservas(reservasComDataConvertida);
-      setWidth2(carousel2.current?.scrollWidth - carousel2.current?.offsetWidth);
     } catch (error) {
       console.log('Erro ao listar cardapio', error);
     }
@@ -44,8 +43,8 @@ function AlunoLogado(){
     }
 
     fetchData(setCardapio, setReservas);
-    
-  }, [mostrarBotao, fetchData]);
+    setWidth2(carousel2.current?.scrollWidth - carousel2.current?.offsetWidth);
+  }, [mostrarBotao, fetchData, reservas]);
 
   const getNomeDiaDaSemana = (dataDoCardapio) =>{
       if (!(dataDoCardapio instanceof Date)) {
