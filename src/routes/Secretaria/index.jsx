@@ -124,11 +124,12 @@ function Secretaria(){
     }
 
     const boxDescricao = (item) =>{
+        console.log(item)
         setDescricao(!descricao);
         setCardapioSelecionado(item);
-        setTurnoManha(item.manha);
-        setTurnoTarde(item.tarde);
-        setTurnoNoite(item.noite);
+        setTurnoManha(item.manha_count);
+        setTurnoTarde(item.tarde_count);
+        setTurnoNoite(item.noite_count);
     }
 
     return(

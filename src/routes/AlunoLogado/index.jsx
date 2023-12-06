@@ -16,6 +16,8 @@ function AlunoLogado(){
   const hoje = new Date();
   const [cardapio, setCardapio] = useState();
   const [reservas, setReservas] = useState();
+  const [reservaChecked, setReservaChecked] = useState(false);
+  const [idCardapio, setIdCardapio] = useState();
 
   const img = imagem1;
 
@@ -79,18 +81,21 @@ function AlunoLogado(){
     })
   }
 
-  const ReservarCardapio = async (id_cardapio)=>{
+  const reservarCardapio = async (id_cardapio, turno )=>{
+    setReservaChecked(!reservaChecked);
     try {
       const userData = JSON.parse(localStorage.getItem('userData'));
       const headers = createHeaders(userData);
       
-      const response = await axiosFecht.post('/cardapio/reservar/'+id_cardapio, {}, {headers});
+      const response = await axiosFecht.post('/cardapio/reservar/'+id_cardapio, {
+        turno: turno
+      }, {headers});
       console.log(response);
       fetchData(setCardapio, setReservas);
-      
+      setIdCardapio();
       
     } catch (error) {
-      console.log("erro ao reservar cardapio "+ error)
+      console.log("erro ao reservar cardapio "+ error);
     }
   }
 
@@ -119,7 +124,7 @@ function AlunoLogado(){
 
                   const diferencaEmMilissegundos = dataDoCardapio - hoje;
                   const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
-                  const podeReservar = diferencaEmDias >= 2;
+                  const podeReservar = diferencaEmDias >= 1;
 
                   const reservado = reservas.some(reserva => reserva.id_cardapio === cardapio.id_cardapio);
                   return (
@@ -132,7 +137,17 @@ function AlunoLogado(){
                         </div>
                         {podeReservar?(
                           <div className='checkboxContainer'>
-                            <input type="checkbox" checked={reservado} onChange={() =>ReservarCardapio(cardapio.id_cardapio)}/>
+                            <input 
+                              type="checkbox" 
+                              checked={reservado} 
+                              onChange={() =>{ 
+                                if(reservado){
+                                  reservarCardapio(cardapio.id_cardapio);
+                                }else{
+                                  setIdCardapio(cardapio.id_cardapio)}
+                                  setReservaChecked((prevReservaChecked) => !prevReservaChecked);
+                              }}
+                            />
                             <label>Reservar</label>
                           </div>
                         ):(
@@ -147,6 +162,34 @@ function AlunoLogado(){
                 )})}
               </motion.div>
             </motion.div>
+            {reservaChecked && (
+              <div className='boxTurno'>
+                <div className='checkboxTuno'>
+                  <p>Em qual turno deseja fazer a reservar:</p>
+                  <div>
+                    <input 
+                      type="checkbox"
+                      onChange={() => reservarCardapio(idCardapio, 'manha')}
+                    />
+                    <label>Manha</label>
+                  </div>
+                  <div>
+                    <input 
+                      type="checkbox"
+                      onChange={() => reservarCardapio(idCardapio, 'tarde')}
+                    />
+                      <label>Tarde</label>
+                  </div>
+                  <div>
+                    <input 
+                      type="checkbox"
+                      onChange={() => reservarCardapio(idCardapio, 'noite')}
+                    />
+                    <label>Noite</label>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className='boxCardapio'>
             <h1>Reservas</h1>

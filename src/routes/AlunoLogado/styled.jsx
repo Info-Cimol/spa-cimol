@@ -67,6 +67,29 @@ export const Container = styled.div`
         }
     }
 
+    .boxTurno{
+        width: 60%;
+        height: 17%;
+        z-index: 1000;
+        background-color: white;
+        border: solid 1px black;
+        border-radius: 5%;
+        position: absolute;
+        top: 47.5%;
+        padding: 3%;
+        display: flex;
+        flex-direction: column;
+
+        p{
+            font-weight: bold;
+            margin-bottom: 3%;
+        }
+
+        label{
+            padding-left: 2%;
+        }
+    }
+    
     .reservarBloqueado{
         color: red;
     }
