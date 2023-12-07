@@ -12,11 +12,12 @@ function Login(){
     const[senhaAlterada, setSenhaAlterada] = useState('');
     const[confirmacaoDeSenha, setConfirmacaoDeSenha] = useState('');
     const[iduser, setIduser] = useState();
+    const[loading, setLoading] =  useState(false);
     
 
     const handleFormSubmit = async (e) =>{
         e.preventDefault();
-
+        setLoading(!loading);
         try{
 
             const response =  await axiosFecht.post('/user/login',{
@@ -90,7 +91,7 @@ function Login(){
                 <input value={login} onChange={(e) =>(setLogin(e.target.value))}type="text" required />
                 <label>Senha</label>
                 <input value={password} onChange={(e) =>(setPassword(e.target.value))} type="password" required/>
-                <button>Entrar</button>
+                <button>{loading ?('Carregando...'):('Entrar')}</button>
             </form>
             <p>Ainda não fez <Link>cadrasto?</Link></p>
         </div>

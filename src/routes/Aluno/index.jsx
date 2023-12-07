@@ -60,7 +60,7 @@ function Aluno(){
   }
 
   const mostrarCardapio = () =>{
-    setMostrarBotao(!mostrarBotao);
+      setMostrarBotao(!mostrarBotao);
   }
 
   const parseData = (reservas) =>{
@@ -110,89 +110,97 @@ function Aluno(){
         <div className='containerCardapio'>
           <div className='boxCardapio'>
             <h1>Cardápio da semana</h1>
-            <motion.div ref={carousel} className='carrossel' whileTap={{cursor: "grabbing"}}>
-              <motion.div className='inner'
-              drag="x"
-              dragConstraints={{ right: 0, left: -width}}
-              >
-                {cardapio.map((cardapio, index) => {
-                  const dataDoCardapio = new Date(cardapio.data);
-                  if (isNaN(dataDoCardapio.getTime())) {
-                    console.error(`Data inválida: ${cardapio.data}`);
-                    return null; // ou faça algo para lidar com datas inválidas
-                  }
+            {cardapio && reservas ?(
+            <>
+              <motion.div ref={carousel} className='carrossel' whileTap={{cursor: "grabbing"}}>
+                <motion.div className='inner'
+                  drag="x"
+                  dragConstraints={{ right: 0, left: -width}}
+                >
+                  {cardapio.map((cardapio, index) => {
+                    const dataDoCardapio = new Date(cardapio.data);
+                    if (isNaN(dataDoCardapio.getTime())) {
+                      console.error(`Data inválida: ${cardapio.data}`);
+                      return null; // ou faça algo para lidar com datas inválidas
+                    }
 
-                  const diferencaEmMilissegundos = dataDoCardapio - hoje;
-                  const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
-                  const podeReservar = diferencaEmDias >= 1;
+                    const diferencaEmMilissegundos = dataDoCardapio - hoje;
+                    const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
+                    const podeReservar = diferencaEmDias >= 1;
 
-                  const reservado = reservas.some(reserva => reserva.id_cardapio === cardapio.id_cardapio);
-                  return (
-                    <motion.div className='item' key={index}>
-                      <p>{`${getNomeDiaDaSemana(dataDoCardapio)} ${String(dataDoCardapio.getDate()+1).padStart(2, '0')}/${dataDoCardapio.getMonth() + 1}/${dataDoCardapio.getFullYear()}`}</p>
-                      <div className='containerCarrossel'>
-                        <div>
-                          <img src={img} alt='text alt' />
-                          <p>{cardapio.nome}</p>
+                    const reservado = reservas.some(reserva => reserva.id_cardapio === cardapio.id_cardapio);
+                    return (
+                      <motion.div className='item' key={index}>
+                        <p>{`${getNomeDiaDaSemana(dataDoCardapio)} ${String(dataDoCardapio.getDate()+1).padStart(2, '0')}/${dataDoCardapio.getMonth() + 1}/${dataDoCardapio.getFullYear()}`}</p>
+                        <div className='containerCarrossel'>
+                          <div>
+                            <img src={img} alt='text alt' />
+                            <p>{cardapio.nome}</p>
+                          </div>
+                          {podeReservar?(
+                            <div className='checkboxContainer'>
+                              <input 
+                                type="checkbox" 
+                                checked={reservado} 
+                                onChange={() =>{ 
+                                  if(reservado){
+                                    reservarCardapio(cardapio.id_cardapio);
+                                  }else{
+                                    setIdCardapio(cardapio.id_cardapio)}
+                                    setReservaChecked((prevReservaChecked) => !prevReservaChecked);
+                                }}
+                              />
+                              <label>Reservar</label>
+                            </div>
+                          ):(
+                            <div className='checkboxContainer'>
+                              <input type="checkbox" disabled/>
+                              <ImBlocked color='red' size={28}/>
+                              <label className='reservarBloqueado'>Reservar</label>
+                            </div>
+                          )} 
                         </div>
-                        {podeReservar?(
-                          <div className='checkboxContainer'>
-                            <input 
-                              type="checkbox" 
-                              checked={reservado} 
-                              onChange={() =>{ 
-                                if(reservado){
-                                  reservarCardapio(cardapio.id_cardapio);
-                                }else{
-                                  setIdCardapio(cardapio.id_cardapio)}
-                                  setReservaChecked((prevReservaChecked) => !prevReservaChecked);
-                              }}
-                            />
-                            <label>Reservar</label>
-                          </div>
-                        ):(
-                          <div className='checkboxContainer'>
-                            <input type="checkbox" disabled/>
-                            <ImBlocked color='red' size={28}/>
-                            <label className='reservarBloqueado'>Reservar</label>
-                          </div>
-                        )} 
-                      </div>
-                    </motion.div>
-                )})}
+                      </motion.div>
+                  )})}
+                </motion.div>
               </motion.div>
-            </motion.div>
-            {reservaChecked && (
-              <div className='boxTurno'>
-                <div className='checkboxTuno'>
-                  <p>Em qual turno deseja fazer a reservar:</p>
-                  <div className='turno'>
-                    <input 
-                      type="checkbox"
-                      onChange={() => reservarCardapio(idCardapio, 'manha')}
-                    />
-                    <label>Manha</label>
-                  </div>
-                  <div className='turno'>
-                    <input 
-                      type="checkbox"
-                      onChange={() => reservarCardapio(idCardapio, 'tarde')}
-                    />
-                      <label>Tarde</label>
-                  </div>
-                  <div className='turno'> 
-                    <input 
-                      type="checkbox"
-                      onChange={() => reservarCardapio(idCardapio, 'noite')}
-                    />
-                    <label>Noite</label>
+              {reservaChecked && (
+                <div className='boxTurno'>
+                  <div className='checkboxTuno'>
+                    <p>Em qual turno deseja fazer a reservar:</p>
+                    <div className='turno'>
+                      <input 
+                        type="checkbox"
+                        onChange={() => reservarCardapio(idCardapio, 'manha')}
+                      />
+                      <label>Manha</label>
+                    </div>
+                    <div className='turno'>
+                      <input 
+                        type="checkbox"
+                        onChange={() => reservarCardapio(idCardapio, 'tarde')}
+                      />
+                        <label>Tarde</label>
+                    </div>
+                    <div className='turno'> 
+                      <input 
+                        type="checkbox"
+                        onChange={() => reservarCardapio(idCardapio, 'noite')}
+                      />
+                      <label>Noite</label>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+            </>
+            ):(
+              <p>Carregando cardapio...</p>
             )}
           </div>
           <div className='boxCardapio'>
             <h1>Reservas</h1>
+            {cardapio && reservas ?(
+            <>
             <motion.div ref={carousel2} className='carrossel' whileTap={{cursor: "grabbing"}}>
               <motion.div className='inner'
               drag="x"
@@ -215,6 +223,10 @@ function Aluno(){
                 ))}
               </motion.div>
             </motion.div>
+          </>
+           ):(
+            <p>Carregando reservas...</p>
+          )}
           </div>
         </div>
       )}  
