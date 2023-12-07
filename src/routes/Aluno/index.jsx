@@ -7,7 +7,7 @@ import imagem1 from '../../imagens/image1.jpg'
 import axiosFecht from '../../axios/config';
 import createHeaders from '../../auth/utils';
 
-function AlunoLogado(){
+function Aluno(){
   const [mostrarBotao, setMostrarBotao] = useState(true);
   const carousel = useRef();
   const carousel2 = useRef();
@@ -166,21 +166,21 @@ function AlunoLogado(){
               <div className='boxTurno'>
                 <div className='checkboxTuno'>
                   <p>Em qual turno deseja fazer a reservar:</p>
-                  <div>
+                  <div className='turno'>
                     <input 
                       type="checkbox"
                       onChange={() => reservarCardapio(idCardapio, 'manha')}
                     />
                     <label>Manha</label>
                   </div>
-                  <div>
+                  <div className='turno'>
                     <input 
                       type="checkbox"
                       onChange={() => reservarCardapio(idCardapio, 'tarde')}
                     />
                       <label>Tarde</label>
                   </div>
-                  <div>
+                  <div className='turno'> 
                     <input 
                       type="checkbox"
                       onChange={() => reservarCardapio(idCardapio, 'noite')}
@@ -222,4 +222,4 @@ function AlunoLogado(){
   )   
 }
 
-export default AlunoLogado;
+export default Aluno;

@@ -8,6 +8,10 @@ function Login(){
     const[login, setLogin] = useState('');
     const[password, setPassword] = useState('')
     const navigate = useNavigate();
+    const[firstLogin, setFirstLogin] = useState(false);
+    const[senhaAlterada, setSenhaAlterada] = useState('');
+    const[confirmacaoDeSenha, setConfirmacaoDeSenha] = useState('');
+    const[iduser, setIduser] = useState();
     
 
     const handleFormSubmit = async (e) =>{
@@ -27,15 +31,47 @@ function Login(){
                     navigate("/Secretaria")
                     console.log(response.data);
                 }else{
-                    localStorage.setItem('userData', JSON.stringify(response.data));
-                    toast.success('Bem vindo(a)');
-                    navigate("/AlunoLogado")
+                    if(response.data.primeiroLogin === true){
+                        localStorage.setItem('userData', JSON.stringify(response.data));
+                        toast.success('Bem vindo(a)');
+                        setIduser(response.data.user.id);
+                        console.log(response.data);
+                        setFirstLogin(!firstLogin);
+                    }else{
+                        console.log(response.data);
+                        localStorage.setItem('userData', JSON.stringify(response.data));
+                        toast.success('Bem vindo(a)');
+                        navigate("/Aluno")
+                    } 
                 }   
             }
 
         } catch(error){
             toast.error('usuario ou senha incorretos!')
             console.error('usuario ou senha incorretos', error);
+        }
+    }
+
+    const handleAlterarSenha = async (e) =>{
+        e.preventDefault();
+        if(senhaAlterada === confirmacaoDeSenha){
+            try {
+
+                const response = await axiosFecht.put('/user/alterarSenha/'+iduser, {
+                    senhaAlterada : senhaAlterada
+                });
+
+                if(response.data.succsses === true){
+                    navigate("/Aluno");
+                }else{
+                    toast.error('Erro ao alterar senha!');
+                }
+                
+            } catch (error) {
+                console.log('Erro ao definir nova senha');
+            }
+        }else{
+            toast.error('As senhas não conferem!')
         }
     }
 
@@ -58,7 +94,20 @@ function Login(){
             </form>
             <p>Ainda não fez <Link>cadrasto?</Link></p>
         </div>
-        
+        {firstLogin && (
+            <div className='containerAlterarSenha'>
+                <div className='areaLogin'>
+                    <h2>Alterar senha</h2>
+                    <form onSubmit={handleAlterarSenha}>
+                        <label>digite sua nova senha</label>
+                        <input type="password" value={senhaAlterada} onChange={(e) =>(setSenhaAlterada(e.target.value))}/>
+                        <label>confirme a senha novamente</label>
+                        <input type="password" value={confirmacaoDeSenha} onChange={(e) =>(setConfirmacaoDeSenha(e.target.value))}/>
+                        <button>Alterar</button>
+                    </form>
+                </div>  
+            </div>
+        )}
     </Container>
   )
 }

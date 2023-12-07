@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
 
-.topo{
+    .topo{
         background-color: #275faf;
         height: 124px;
         display: flex;
@@ -35,6 +35,11 @@ export const Container = styled.div`
         h1{
             margin-bottom: 5%;
             font-weight: bold;
+        }
+
+        h2{
+            top: 2%;
+            position: absolute;
         }
 
         p{
@@ -78,6 +83,15 @@ export const Container = styled.div`
                 margin-bottom: 5%;
             }
         }
+    }
+
+    .containerAlterarSenha{
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        z-index: 1000;
+        position: absolute;
+        top: 25%
     }
 
     @media screen and (min-width: 750px) {

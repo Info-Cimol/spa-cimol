@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import Login from './routes/Login';
-import AlunoLogado from './routes/AlunoLogado';
+import Aluno from './routes/Aluno';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Secretaria from './routes/Secretaria';
 import Funcionario from './routes/Funcionario';
@@ -22,8 +22,8 @@ const router = createBrowserRouter([
         element: <UsuarioLogado><Login/></UsuarioLogado>
       },
       {
-        path: "/AlunoLogado",
-        element: <Private allowedRoles={["aluno"]}><AlunoLogado/></Private>
+        path: "/Aluno",
+        element: <Private allowedRoles={["aluno"]}><Aluno/></Private>
       },
       {
         path: "/Secretaria",  

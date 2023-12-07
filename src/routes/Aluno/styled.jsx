@@ -87,9 +87,14 @@ export const Container = styled.div`
 
         label{
             padding-left: 2%;
+            padding-bottom: 2%;
         }
     }
-    
+
+    .turno{
+        padding-bottom: 1.5%;
+    }
+
     .reservarBloqueado{
         color: red;
     }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosFecht = axios.create({
-    baseURL: 'https://api-merenda.vercel.app'
+    baseURL: 'http://localhost:5000'
 });
 
 export default axiosFecht;
