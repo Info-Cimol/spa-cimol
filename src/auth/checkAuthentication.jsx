@@ -30,7 +30,7 @@ export function UsuarioLogado({children}){
 
         if(userData){
             if(userData.user.perfil[0] === 'aluno'){
-                navigate('/AlunoLogado');
+                navigate('/Aluno');
             }
         }
     })

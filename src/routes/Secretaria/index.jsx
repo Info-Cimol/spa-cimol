@@ -28,7 +28,12 @@ function Secretaria(){
             const headers = createHeaders(userData);
 
             const response = await axiosFecht.get('/cardapio/',{}, {headers});
-            setCardapio(parseData(response.data));
+            const cardapioData = parseData(response.data);
+
+            const cardapioOrdenado = cardapioData.sort(
+                (a, b) => a.data.getTime() - b.data.getTime()
+            );
+            setCardapio(cardapioOrdenado);
             console.log(response.data)
             
         } catch (error) {
@@ -189,7 +194,7 @@ function Secretaria(){
                             </thead>
                             <tbody>
                                 {dataFiltrada.length > 0? (
-                                    dataFiltrada.map((item) =>(
+                                    dataFiltrada.slice(-5).map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
                                             <td>{`${String(item.data.getDate()+1).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
                                             <td>{item.nome}</td>
@@ -197,7 +202,7 @@ function Secretaria(){
                                         </tr>
                                     ))
                                 ) : (
-                                    cardapio.map((item) =>(
+                                    cardapio.slice(-5).map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
                                             <td>{`${String(item.data.getDate()+1).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
                                             <td>{item.nome}</td>
