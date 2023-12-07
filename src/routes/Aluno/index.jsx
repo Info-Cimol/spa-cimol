@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import ContainerTopo from '../../components/ContainerTopo';
 import {Container} from './styled';
 import { motion } from 'framer-motion';
@@ -13,12 +13,11 @@ function Aluno(){
   const carousel2 = useRef();
   const [width, setWidth] = useState(0);
   const [width2, setWidth2] = useState(0);
-  const hoje = new Date();
   const [cardapio, setCardapio] = useState();
   const [reservas, setReservas] = useState();
   const [reservaChecked, setReservaChecked] = useState(false);
   const [idCardapio, setIdCardapio] = useState();
-
+  const hoje = useMemo(() => new Date(), []);
   const img = imagem1;
 
   const fetchData = useCallback(async (setCardapio, setReservas) => {
@@ -27,17 +26,19 @@ function Aluno(){
       const headers = createHeaders(userData);
 
       const response = await axiosFecht.get('/cardapio/',{}, { headers });
-      setCardapio(response.data);
+      const cardapioData = parseData(response.data);
+      const cardapioFiltrado = cardapioData.filter((item) => item.data.getTime() >= hoje.getTime()).sort((a, b) => a.data.getTime() - b.data.getTime())
+      setCardapio(cardapioFiltrado);
 
       const responseReservas = await axiosFecht.get('/cardapio/reservas', { headers });
-      const reservasComDataConvertida = parseData(responseReservas.data);
-
-      setReservas(reservasComDataConvertida);
+      const reservasData = parseData(responseReservas.data);
+      const reservaFiltrada = reservasData.sort((a, b) => a.data.getTime() - b.data.getTime())
+      setReservas(reservaFiltrada);
       setWidth2(carousel2.current?.scrollWidth - carousel2.current?.offsetWidth);
     } catch (error) {
       console.log('Erro ao listar cardapio', error);
     }
-  },[]);
+  },[hoje]);
 
   useEffect(() =>{
 
@@ -47,7 +48,7 @@ function Aluno(){
 
     fetchData(setCardapio, setReservas);
     
-  }, [mostrarBotao, fetchData]);
+  }, [mostrarBotao, fetchData, reservas]);
 
   const getNomeDiaDaSemana = (dataDoCardapio) =>{
       if (!(dataDoCardapio instanceof Date)) {
@@ -194,7 +195,7 @@ function Aluno(){
               )}
             </>
             ):(
-              <p>Carregando cardapio...</p>
+              <p>Carregando cardápio...</p>
             )}
           </div>
           <div className='boxCardapio'>
