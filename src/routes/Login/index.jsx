@@ -18,8 +18,8 @@ function Login(){
     const handleFormSubmit = async (e) =>{
         e.preventDefault();
         setLoading(!loading);
-        try{
 
+        try{
             const response =  await axiosFecht.post('/user/login',{
                 email: login,
                 senha: password,
@@ -46,10 +46,10 @@ function Login(){
                     } 
                 }   
             }
-
         } catch(error){
             toast.error('usuario ou senha incorretos!')
             console.error('usuario ou senha incorretos', error);
+            setLoading(false); 
         }
     }
 
