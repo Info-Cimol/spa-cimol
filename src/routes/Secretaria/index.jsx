@@ -30,9 +30,7 @@ function Secretaria(){
             const response = await axiosFecht.get('/cardapio/',{}, {headers});
             const cardapioData = parseData(response.data);
 
-            const cardapioOrdenado = cardapioData.sort(
-                (a, b) => a.data.getTime() - b.data.getTime()
-            );
+            const cardapioOrdenado =  [...cardapioData].sort((a, b) => b.data.getTime() - a.data.getTime());
             setCardapio(cardapioOrdenado);
             console.log(response.data)
             
@@ -156,6 +154,7 @@ function Secretaria(){
             )}
             {newCardapio &&(
                 <div className="containerNew">
+                    <IoClose size={25} color="#646464" onClick={() => setNewCardapio(false)}/>
                     <div className="new">
                         <h3>Novo Cardápio</h3>
                     </div>
@@ -194,7 +193,7 @@ function Secretaria(){
                             </thead>
                             <tbody>
                                 {dataFiltrada.length > 0? (
-                                    dataFiltrada.slice(-5).map((item) =>(
+                                    dataFiltrada.slice(0, 5).map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
                                             <td>{`${String(item.data.getDate()+1).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
                                             <td>{item.nome}</td>
@@ -202,7 +201,7 @@ function Secretaria(){
                                         </tr>
                                     ))
                                 ) : (
-                                    cardapio.slice(-5).map((item) =>(
+                                    cardapio.slice(0, 5).map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
                                             <td>{`${String(item.data.getDate()+1).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
                                             <td>{item.nome}</td>

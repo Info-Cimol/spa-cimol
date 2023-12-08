@@ -130,6 +130,12 @@ export const Container = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        svg{
+            position: relative;
+            left: 40%;
+            bottom: 2%;
+        }
     }
 
     .new{

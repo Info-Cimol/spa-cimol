@@ -34,7 +34,7 @@ function Aluno(){
       const reservasData = parseData(responseReservas.data);
       const reservaFiltrada = reservasData.sort((a, b) => a.data.getTime() - b.data.getTime())
       setReservas(reservaFiltrada);
-      setWidth2(carousel2.current?.scrollWidth - carousel2.current?.offsetWidth);
+
     } catch (error) {
       console.log('Erro ao listar cardapio', error);
     }
@@ -44,11 +44,20 @@ function Aluno(){
 
     if (!mostrarBotao) {
       setWidth(carousel.current?.scrollWidth - carousel.current?.offsetWidth);
+      width2Observer.current.observe(carousel2.current);
     }
 
     fetchData(setCardapio, setReservas);
     
   }, [mostrarBotao, fetchData, reservas]);
+
+  const width2Observer = useRef(
+    new ResizeObserver((entries) =>{
+      for( let entry of entries){
+        setWidth2(entry.target.scrollWidth - entry.target.offsetWidth);
+      }
+    })
+  );
 
   const getNomeDiaDaSemana = (dataDoCardapio) =>{
       if (!(dataDoCardapio instanceof Date)) {
@@ -118,7 +127,7 @@ function Aluno(){
                   drag="x"
                   dragConstraints={{ right: 0, left: -width}}
                 >
-                  {cardapio.map((cardapio, index) => {
+                  {cardapio.slice(-5).map((cardapio, index) => {
                     const dataDoCardapio = new Date(cardapio.data);
                     if (isNaN(dataDoCardapio.getTime())) {
                       console.error(`Data inválida: ${cardapio.data}`);
@@ -207,7 +216,7 @@ function Aluno(){
               drag="x"
               dragConstraints={{ right: 0, left: -width2}}
               >
-                {reservas.map((reservas,index) =>(
+                {reservas.slice(-5).map((reservas,index) =>(
                     <motion.div className='item' key={index}>
                       <p>{`${getNomeDiaDaSemana(reservas.data)} ${String(reservas.data.getDate()+1).padStart(2, '0')}/${reservas.data.getMonth() +1}/${reservas.data.getFullYear()}`}</p>
                       <div className='containerCarrossel'>
