@@ -163,7 +163,7 @@ function Aluno(){
                               <label>Reservar</label>
                             </div>
                           ):(
-                            <div className='checkboxContainer'>
+                            <div className={width !== 0 ? 'checkboxContainer' : 'teste'}>
                               <input type="checkbox" disabled/>
                               <ImBlocked color='red' size={28}/>
                               <label className='reservarBloqueado'>Reservar</label>

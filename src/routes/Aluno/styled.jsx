@@ -67,6 +67,31 @@ export const Container = styled.div`
         }
     }
 
+    .teste{
+        display: flex;
+        position: relative;
+        padding-bottom: 3%;
+        
+        svg{
+            position: absolute;
+            left: 13px;
+            bottom: 7px;
+        }
+
+        label{
+            margin-left: 2%;
+        }
+    }
+
+    .teste input[type="checkbox"] {
+        appearance: none;
+        width: 26px;
+        height: 24px;
+        border: 1px solid #474947;
+        border-radius: 10px;
+        position: relative;
+    }
+
     .boxTurno{
         width: 60%;
         height: 17%;
