@@ -21,6 +21,7 @@ function Secretaria(){
     const [data, setData] = useState();
     const [nomeCardapio, setNomeCardapio] = useState();
     const [descricaoCardapio, setDescricaoCardapio] = useState();
+    const [editCardapio, setEditCardapio] = useState(false);
 
     const fetchData = useCallback(async (setCardapio) =>{
         try {
@@ -32,7 +33,6 @@ function Secretaria(){
 
             const cardapioOrdenado =  [...cardapioData].sort((a, b) => b.data.getTime() - a.data.getTime());
             setCardapio(cardapioOrdenado);
-            console.log(response.data)
             
         } catch (error) {
             console.log("Erro ao listar cardapio "+ error)
@@ -127,12 +127,37 @@ function Secretaria(){
     }
 
     const boxDescricao = (item) =>{
-        console.log(item)
         setDescricao(!descricao);
         setCardapioSelecionado(item);
         setTurnoManha(item.manha_count);
         setTurnoTarde(item.tarde_count);
         setTurnoNoite(item.noite_count);
+    }
+
+    const handleBtnEdit = () =>{
+        setEditCardapio(!editCardapio);
+        setDescricao(!descricao)
+    }
+
+    const handleEditar = async (e) =>{
+        e.preventDefault()
+        
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const headers = createHeaders(userData);
+
+        const response = await axiosFecht.put('/cardapio/editar/'+cardapioSelecionado.id_cardapio, {
+            data: cardapioSelecionado.data,
+            nome: cardapioSelecionado.nome,
+            descricao: cardapioSelecionado.descricao
+        }, {headers});
+
+        if(response.data.success === true){
+            fetchData(setCardapio);
+            setEditCardapio(false);
+            toast.success('Cardápio editado com sucesso!');
+        }else{
+            toast.error('Erro ao editar cardápio');
+        }
     }
 
     return(
@@ -148,7 +173,8 @@ function Secretaria(){
                         <p>Noite: {turnoNoite}</p>
                     </div>
                     <div className="buttonDescricao">
-                        <Link>Editar</Link><Link onClick={() => handleDelete(cardapioSelecionado.id_cardapio)}>Excluir</Link>
+                        <Link onClick={() => handleBtnEdit()}>Editar</Link>
+                        <Link onClick={() => handleDelete(cardapioSelecionado.id_cardapio)}>Excluir</Link>
                     </div>
                 </div>
             )}
@@ -167,6 +193,25 @@ function Secretaria(){
                             <label>Descrição</label>
                             <textarea onChange={(e) =>(setDescricaoCardapio(e.target.value))} required/>
                             <button className="btnCriar" onClick={handleCadastrar}>Criar</button>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {editCardapio &&(
+                <div className="containerNew">
+                    <IoClose size={25} color="#646464" onClick={() => setEditCardapio(false)}/>
+                    <div className="new">
+                        <h3>Editar Cardápio</h3>
+                    </div>
+                    <div className="formulario">
+                        <form>
+                            <label>Data</label>
+                            <input value={cardapioSelecionado.data ? cardapioSelecionado.data.toISOString().split('T')[0] : ''} type="date" onChange={(e) => setCardapioSelecionado({ ...cardapioSelecionado, data: new Date(e.target.value) })} required />
+                            <label>Prato</label>
+                            <input value={cardapioSelecionado.nome || ''} type="text" onChange={(e) => setCardapioSelecionado({ ...cardapioSelecionado, nome: e.target.value })} required/>
+                            <label>Descrição</label>
+                            <textarea value={cardapioSelecionado.descricao || ''} onChange={(e) => setCardapioSelecionado({ ...cardapioSelecionado, descricao: e.target.value })} required/>
+                            <button className="btnCriar" onClick={handleEditar}>Editar</button>
                         </form>
                     </div>
                 </div>
