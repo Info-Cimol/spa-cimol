@@ -6,6 +6,7 @@ import { ImBlocked } from 'react-icons/im'
 import imagem1 from '../../imagens/image1.jpg'
 import axiosFecht from '../../axios/config';
 import createHeaders from '../../auth/utils';
+import { toast } from 'react-toastify';
 
 function Aluno(){
   const [mostrarBotao, setMostrarBotao] = useState(true);
@@ -119,7 +120,11 @@ function Aluno(){
       const response = await axiosFecht.post('/cardapio/reservar/'+id_cardapio, {
         turno: turno
       }, {headers});
-      console.log(response);
+      if(response.data.deletado === true){
+        console.log('reserva removida');
+      }else{
+        toast.success('Reserva realizada com sucesso');
+      }
       fetchData(setCardapio, setReservas);
       setIdCardapio();
       
