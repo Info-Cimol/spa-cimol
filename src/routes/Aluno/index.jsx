@@ -34,6 +34,7 @@ function Aluno(){
       const reservasData = parseData(responseReservas.data);
       const reservaFiltrada = reservasData.sort((a, b) => a.data.getTime() - b.data.getTime())
       setReservas(reservaFiltrada);
+      console.log(JSON.stringify(reservaFiltrada, null, 2));
 
     } catch (error) {
       console.log('Erro ao listar cardapio', error);
@@ -49,7 +50,7 @@ function Aluno(){
 
     fetchData(setCardapio, setReservas);
     
-  }, [mostrarBotao, fetchData, reservas]);
+  }, [mostrarBotao, fetchData]);
 
   const width2Observer = useRef(
     new ResizeObserver((entries) =>{
@@ -226,7 +227,7 @@ function Aluno(){
                         </div>
                         <div className='checkboxContainer'>
                           <input type="checkbox" defaultChecked/>
-                          <label className='reservado'>Reservado</label>
+                          <label className='reservado'>Reservado: {reservas.turno}</label>
                         </div>
                       </div>
                     </motion.div>
