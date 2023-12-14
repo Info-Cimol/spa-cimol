@@ -17,6 +17,11 @@ function Aluno(){
   const [reservas, setReservas] = useState();
   const [reservaChecked, setReservaChecked] = useState(false);
   const [idCardapio, setIdCardapio] = useState();
+  const [turnosReservados, setTurnosReservados] = useState({
+    manha: false,
+    tarde: false,
+    noite: false,
+  });
   const hoje = useMemo(() => new Date(), []);
   const img = imagem1;
 
@@ -34,12 +39,25 @@ function Aluno(){
       const reservasData = parseData(responseReservas.data);
       const reservaFiltrada = reservasData.sort((a, b) => a.data.getTime() - b.data.getTime())
       setReservas(reservaFiltrada);
-      console.log(JSON.stringify(reservaFiltrada, null, 2));
 
+      const turnosReservados = {
+        manha: false,
+        tarde: false,
+        noite: false,
+      };
+  
+      reservasData.forEach((reserva) => {
+        if (reserva.id_cardapio === idCardapio) {
+          turnosReservados[reserva.turno] = true;
+        }
+      });
+  
+      setTurnosReservados(turnosReservados);
+      
     } catch (error) {
       console.log('Erro ao listar cardapio', error);
     }
-  },[hoje]);
+  },[hoje, idCardapio]);
 
   useEffect(() =>{
 
@@ -146,7 +164,8 @@ function Aluno(){
                         <div className='containerCarrossel'>
                           <div>
                             <img src={img} alt='text alt' />
-                            <p>{cardapio.nome}</p>
+                            <p>{cardapio.nome}:</p>
+                            <p>{cardapio.descricao}</p>
                           </div>
                           {podeReservar?(
                             <div className='checkboxContainer'>
@@ -154,10 +173,7 @@ function Aluno(){
                                 type="checkbox" 
                                 checked={reservado} 
                                 onChange={() =>{ 
-                                  if(reservado){
-                                    reservarCardapio(cardapio.id_cardapio);
-                                  }else{
-                                    setIdCardapio(cardapio.id_cardapio)}
+                                    setIdCardapio(cardapio.id_cardapio)
                                     setReservaChecked((prevReservaChecked) => !prevReservaChecked);
                                 }}
                               />
@@ -181,6 +197,7 @@ function Aluno(){
                     <p>Em qual turno deseja fazer a reservar:</p>
                     <div className='turno'>
                       <input 
+                      checked={turnosReservados.manha}
                         type="checkbox"
                         onChange={() => reservarCardapio(idCardapio, 'manha')}
                       />
@@ -188,6 +205,7 @@ function Aluno(){
                     </div>
                     <div className='turno'>
                       <input 
+                      checked={turnosReservados.tarde}
                         type="checkbox"
                         onChange={() => reservarCardapio(idCardapio, 'tarde')}
                       />
@@ -195,6 +213,7 @@ function Aluno(){
                     </div>
                     <div className='turno'> 
                       <input 
+                      checked={turnosReservados.noite}
                         type="checkbox"
                         onChange={() => reservarCardapio(idCardapio, 'noite')}
                       />
@@ -212,7 +231,7 @@ function Aluno(){
             <h1>Reservas</h1>
             {cardapio && reservas ?(
             <>
-            <motion.div ref={carousel2} className='carrossel' whileTap={{cursor: "grabbing"}}>
+            <motion.div ref={carousel2} className='carousel2' whileTap={{cursor: "grabbing"}}>
               <motion.div className='inner'
               drag="x"
               dragConstraints={{ right: 0, left: -width2}}
