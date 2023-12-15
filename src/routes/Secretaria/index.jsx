@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import createHeaders from "../../auth/utils";
 import axiosFecht from "../../axios/config";
 import { toast } from "react-toastify";
+import Alunos from "./alunos";
 
 function Secretaria(){
     const [mostrarBotao, setMostrarBotao] = useState(true);
@@ -22,6 +23,8 @@ function Secretaria(){
     const [nomeCardapio, setNomeCardapio] = useState();
     const [descricaoCardapio, setDescricaoCardapio] = useState();
     const [editCardapio, setEditCardapio] = useState(false);
+    const [secaoAlunos, setSecaoAlunos] = useState(false);
+    const userType = "secretaria";
 
     const fetchData = useCallback(async (setCardapio) =>{
         try {
@@ -67,6 +70,10 @@ function Secretaria(){
     const mostrarCardapio = () =>{
         setMostrarBotao(!mostrarBotao);
         fetchData(setCardapio)
+    }
+
+    const handleAlunos = () =>{
+        setSecaoAlunos(!secaoAlunos);
     }
 
     const handleInputChange = (event) => {
@@ -162,7 +169,12 @@ function Secretaria(){
 
     return(
         <Container>
-            <ContainerTopo/>
+            <ContainerTopo userType={userType} 
+                mostrarBotao={mostrarBotao} 
+                setMostrarBotao={setMostrarBotao}
+                secaoAlunos={secaoAlunos}
+                setSecaoAlunos={setSecaoAlunos}
+            />
             {descricao &&(
                 <div className="containerDescricao">
                     <IoClose size={20} onClick={() => setDescricao(false)}/>
@@ -216,9 +228,11 @@ function Secretaria(){
                     </div>
                 </div>
             )}
+            {secaoAlunos && <Alunos />}
             {mostrarBotao ?(
                 <div className='buttons'>
-                <button onClick={mostrarCardapio}>Cardápio</button>
+                    <button onClick={mostrarCardapio}>Cardápio</button>
+                    <button onClick={handleAlunos}>Alunos</button>
                 </div>
             ) : (
                 <div className="containerCardapio">

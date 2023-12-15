@@ -19,20 +19,6 @@ export const Container = styled.div`
         top: 36px;
     }
 
-    .bm-item {
-        display: block;
-        margin-bottom: 1rem;
-        font-size: 1.2rem;
-        color: #fff; 
-        text-decoration: none;
-        transition: color 0.3s;
-    }
-
-    .bm-item:hover {
-        color: #92867d; 
-    }
-
-
     @media screen and (min-width: 450px){
         .bm-burger-button {
             left: 90%;
@@ -51,7 +37,21 @@ export const Container = styled.div`
             top: 38px;
         }
     }
-
-    
-
 `
+
+const StyledTextButton = styled.button`
+    border: none;
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1.0rem;
+    color: #fff; 
+    text-decoration: none;
+    margin-bottom: 10%;
+    &:hover {
+        background-color:#FFBD59 ;
+    }
+`;
+
+export default StyledTextButton;

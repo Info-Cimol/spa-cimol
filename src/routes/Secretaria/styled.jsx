@@ -271,3 +271,55 @@ export const Container = styled.div`
     }
 
 `
+
+export const ContainerAluno = styled.div`
+    .container{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-color: #ffffff;
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tabelaAlunos{
+       width: 95%;
+       overflow-x: auto;
+    }
+
+    .tabela{
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tabela th, td{
+        border: 1px solid #575555;
+        padding: 4px;
+        text-align: center;
+    } 
+
+    .tabela thead {
+        font-weight: bold;
+        color: #302f2f;
+    }
+
+    .topoTabela{
+        width: 90%;
+        left: 2%;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 35%;
+
+        input{
+            border: 1px solid;
+            border-radius: 20px;
+            border-color: #646464;
+            font-size: 15px;
+            width: 150px;
+            padding: 2%;
+        }
+    }
+`

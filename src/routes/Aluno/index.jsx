@@ -25,6 +25,7 @@ function Aluno(){
   });
   const hoje = useMemo(() => new Date(), []);
   const img = imagem1;
+  const userType = "aluno"
 
   const fetchData = useCallback(async (setCardapio, setReservas) => {
     try {
@@ -135,7 +136,7 @@ function Aluno(){
 
   return(
     <Container>
-      <ContainerTopo/>
+      <ContainerTopo userType={userType} mostrarBotao={mostrarBotao} setMostrarBotao={setMostrarBotao}/>
       {mostrarBotao ?(
         <div className='buttons'>
           <button onClick={mostrarCardapio}>Cardápio</button>
