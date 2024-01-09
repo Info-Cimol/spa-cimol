@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosFecht = axios.create({
-    baseURL: 'https://api-merenda.vercel.app'
+    baseURL: 'https://api-thesis-track.vercel.app/'
 });
 
 export default axiosFecht;

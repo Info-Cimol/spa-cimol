@@ -7,7 +7,7 @@ import Aluno from './routes/Aluno';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Secretaria from './routes/Secretaria';
 import Funcionario from './routes/Funcionario';
-import ErrorPage from './routes/ErrorPage';
+import Professor from './routes/Professor';
 import { Private, UsuarioLogado } from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const router = createBrowserRouter([
   {
     element: <App />,
-    errorElement: <ErrorPage/>,
+
     children: [
       {
         path: "/",
@@ -32,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/Funcionario",
         element:<Private allowedRoles={["funcionario"]}><Funcionario/></Private> 
+      },
+      {
+        path: "/Professor",
+        element:<Private allowedRoles={["professor"]}><Professor/></Private> 
       }
     ],
   },
@@ -44,5 +48,3 @@ root.render(
     <RouterProvider router={router}/>
   </React.StrictMode>
 );
-
-
