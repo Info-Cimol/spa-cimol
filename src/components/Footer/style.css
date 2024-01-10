@@ -1,0 +1,26 @@
+footer{
+    height: 100%;
+    background-color: #1B2F4A !important;
+}
+.escritafooter {
+    margin-left: 3%;
+  }
+  .fixar-rodape {
+    height: 100%;
+    border-top: 1px solid #333;
+    bottom: 0;
+    left: 0;
+    background-color: #1B2F4A !important;
+    color: #fff !important;
+  
+  }
+  .deco a{
+    color: inherit !important;
+    text-decoration: none;
+    background-color: #fff !important ;
+    
+  }
+  .bi{
+    color: inherit !important;
+    text-decoration: none !important;
+  }

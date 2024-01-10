@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import './style.css'
 
 const HomePrincipal = () => {
   const [projects, setProjects] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const userType = Cookies.get('userType');
-  const userName = Cookies.get('userName') ;
+  const userType = localStorage.getItem('userType');
+  const userName = localStorage.getItem('userName') ;
  
   const searchProjects = async () => {
     try {
@@ -62,7 +60,7 @@ const HomePrincipal = () => {
               <h1 className="escreva fade-up">Olá {userName}, Desenvolva todos os seus projetos aqui na nossa plataforma</h1>
             </div>
             <div className="col-sm-4">
-              <img src="Images/image 40.png" className="imagem" alt="Imagem do Aluno" />
+              <img src="/Images/image 40.png" className="imagem" alt="Imagem do Aluno" />
             </div>
           </div>
 
@@ -72,7 +70,7 @@ const HomePrincipal = () => {
               <h1 className="escreva fade-up">Olá {userName}, Orientar seus alunos ficou mais fácil</h1>
             </div>
             <div className="col-sm-4">
-              <img src="Images/imagem7.png" className="imagem" alt="Imagem do Professor" />
+              <img src="/Images/imagem7.png" className="imagem" alt="Imagem do Professor" />
             </div>
           </div>
         </div>
