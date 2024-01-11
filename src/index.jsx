@@ -1,21 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom';
+import { Private} from './auth/checkAuthentication';
+import { ToastContainer } from 'react-toastify';
 import App from './App';
 import Header from './components/Header/index';
 import Footer from './components/Footer/index';
+import Login from './routes/Login';
+import Aluno from './routes/Aluno';
+import AlunoProjeto from './routes/Professor';
+import Secretaria from './routes/Secretaria';
+import Funcionario from './routes/Funcionario';
+import Professor from './routes/Professor';
+import VisualizaProjeto from './routes/Professor/projetoVisualiza';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './index.css';
-import Login from './routes/Login';
-import Aluno from './routes/Aluno';
-import AlunoProjeto from './routes/Professor';
-import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom';
-import Secretaria from './routes/Secretaria';
-import Funcionario from './routes/Funcionario';
-import Professor from './routes/Professor';
-import { Private} from './auth/checkAuthentication';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const UsuarioLogadoComHeader = () => {
@@ -23,7 +24,7 @@ const UsuarioLogadoComHeader = () => {
 
   const shouldRenderHeaderAndFooter = () => {
     // Especifique as rotas em que o Header e o Footer devem ser renderizados
-    const allowedRoutes = ['/Professor', '/Aluno/Projeto'];
+    const allowedRoutes = ['/Professor', '/Aluno/Projeto', '/Visualiza/Projeto',];
     return allowedRoutes.includes(location.pathname);
   };
 
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
         path: '/Funcionario',
         element: <Private allowedRoles={['funcionario']}><Funcionario /></Private>,
       },
+
       //Ferramenta Projeto
       {
         path: '/Professor',
@@ -64,6 +66,10 @@ const router = createBrowserRouter([
       {
         path: '/Aluno/Projeto',
         element: <Private allowedRoles={['aluno']}><AlunoProjeto /></Private>,
+      },
+      {
+        path: '/Visualiza/Projeto',
+        element: <VisualizaProjeto/>,
       },
     ],
   },

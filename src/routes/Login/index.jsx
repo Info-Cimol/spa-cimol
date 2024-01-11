@@ -69,7 +69,12 @@ function Login() {
     localStorage.setItem('userEmail', response.data.user.email);
     localStorage.setItem('id', response.data.user.id);
 
-    navigate('/Secretaria');
+    if (chooseOtherApp) {
+      navigate('/Professor');
+      toast.success('Bem vindo PP(a)!');
+    } else {
+      navigate('/Secretaria');
+    }
     window.location.reload();
     setLoading(true);
   };

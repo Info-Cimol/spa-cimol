@@ -80,7 +80,7 @@ const Header = () => {
   };
 
   const projetos = () => {
-    navigate('/projetos');
+    navigate('/Visualiza/Projeto');
     toggleSidebar();
   };
 
