@@ -69,7 +69,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/Visualiza/Projeto',
-        element: <VisualizaProjeto/>,
+        element: <Private allowedRoles={['aluno', 'professor']}><VisualizaProjeto/></Private>,
       },
     ],
   },

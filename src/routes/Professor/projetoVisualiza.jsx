@@ -1,42 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './projeto.css'
 
 const ProjectComponent = () => {
 
     const Navigate = useNavigate();
     const [userType] = useState(localStorage.getItem('userType') || 'default');
-    const [userId] = useState(localStorage.getItem('id') || null);
+    const [userId] = useState(localStorage.getItem('id'));
     const [projetosDoUsuario, setProjetosDoUsuario] = useState([]);
     const [semProjeto, setSemProjeto] = useState(false);
     const [pageTitle, setPageTitle] = useState('Meus Projetos');
     const token = localStorage.getItem('token');
 
-    const isPublic = (projeto) => (projeto.publico === 1 ? 'Projeto Público' : 'Projeto Privado');
-
-    const editarProjeto = (projeto) => {
-      console.log("Projeto ID:", projeto);
-      Navigate.push('/Editar/${projeto}');
-    };
-  
+ 
     const loadProjects = async () => {
       try {
-        let response;
-       
         const headers = {
           'x-access-token': token,
         };
-  
+    
+        let response;
+    
         if (userType === 'professor') {
-          response = await axios.get('https://api-thesis-track.vercel.app/projeto/orientador/${userId}', { headers });
-          console.log(response);
+          response = await axios.get('https://api-thesis-track.vercel.app/projeto/orientador/' + userId, { headers });
         } else if (userType === 'aluno') {
-          response = await axios.get('https://api-thesis-track.vercel.app/aluno/projetos/${userId}', { headers });
-          console.log(response);
+          response = await axios.get('https://api-thesis-track.vercel.app/aluno/projetos/' + userId, { headers });
         }
-  
+    
         setProjetosDoUsuario(response.data);
-        checkIfEmptyProjects();
+        checkIfEmptyProjects(); 
       } catch (error) {
         console.error('Erro ao carregar projetos:', error);
       }
@@ -47,17 +40,17 @@ const ProjectComponent = () => {
     };
   
     const checkIfEmptyProjects = () => {
-      if (projetosDoUsuario.length === 0) {
+      if (projetosDoUsuario.length === null) {
         setSemProjeto(true);
         console.log("Você não possui nenhum trabalho aqui.");
       }
     };
-  
+   
     const adicionar = () => {
       Navigate.push('/Adicionar');
     };
   
-    const getAutoresNome = (response) => {
+   /* const getAutoresNome = (response) => {
       try {
         const autores = JSON.parse(response.alunos);
         console.log(autores);
@@ -68,7 +61,7 @@ const ProjectComponent = () => {
         console.error('Error parsing autores:', error);
         return '';
       }
-    };
+    };*/
   
     const visualizar = (projeto, orientadorId) => {
      
@@ -82,7 +75,8 @@ const ProjectComponent = () => {
       return () => {
         window.removeEventListener('resize', updatePageTitle);
       };
-    }, [userType, userId, Navigate]);
+    }, 
+    );
   
     return (
       <div>
