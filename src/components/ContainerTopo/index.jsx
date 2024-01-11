@@ -8,7 +8,7 @@ function ContainerTopo({userType, setMostrarBotao, setSecaoAlunos}) {
     <Container>
         <div className='topo'>
           <div className='container1'>
-            <img src="../cimol2.png" alt='Cimol'/>
+            <img src="../cimol.png" alt='Cimol'/>
             <MenuHamburguer setMostrarBotao={setMostrarBotao} setSecaoAlunos={setSecaoAlunos} userType={userType} pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
           </div>
           <div className='container2'></div>

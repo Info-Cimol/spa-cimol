@@ -92,8 +92,8 @@ const HomePrincipal = () => {
           <div key={project.id_projeto} className="card col-sm-6 col-md-4 col-lg-3">
             <div className="card__img">
               <img
-                src={project.logo_projeto || "Images/Logo.png"}
-                style={{ height: '150px', objectFit: 'cover', borderRadius: '12px' }}
+                src={project.logo_projeto || "/Images/Logo.png"}
+                style={{ 'height': '150px', 'object-fit': 'cover', 'border-radius': '12px' }}
                 alt="Logo do Projeto"
               />
             </div>

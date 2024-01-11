@@ -101,10 +101,12 @@ const Header = () => {
   return (
     <div>
     {location.pathname !== '/login' && location.pathname !== '/cadastro' && location.pathname !== '/senha' && location.pathname !== '/enviar' && (
+   
       <div>
+       <header className='header'>
         <div className="navigation_header" id="navigation_header">
         <div className="logo_header ">
-  <img
+  <img 
     src="/Images/Logo.png"
     alt="Logo Cimol"
     className="img_logo_header img-fluid"
@@ -116,7 +118,7 @@ const Header = () => {
                 INÍCIO
               </button>
               <div>
-      <button className="itens_header col-md-2 col-sm-2" onClick={toggleMenu}>
+      <button className="itens_header col-md-10 col-sm-10" onClick={toggleMenu}>
         CURSOS
       </button>
       {isMenuOpen && (
@@ -219,6 +221,7 @@ const Header = () => {
             </div>
           )}
         </div>
+        </header>
       </div>
     )}
   </div>

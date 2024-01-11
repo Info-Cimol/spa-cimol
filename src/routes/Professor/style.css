@@ -66,7 +66,6 @@ body {
   gap: 20px; 
   max-width: 100%;
   margin-top: 20px;
- 
 }
 
 .card {
@@ -78,13 +77,14 @@ body {
   padding: 1.5em; 
   border-radius: 12px;
   text-align: center;
-  width: calc(33.33% - 20px);
+  width: calc(30% - 20px);
   box-sizing: border-box;
   margin-bottom: 15px;
   box-shadow: 0 10px 30px -7px #171e35;
   max-height: 100%; 
   border: 1px solid #ffffff;
   transition: transform 0.3s ease-in-out;
+  margin-left: 6px;
 }
 
 .card__img {

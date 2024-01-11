@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container } from './styled';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axiosFecht from '../../axios/config';
 import { toast } from 'react-toastify';
 
@@ -19,46 +19,20 @@ function Login() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(!loading);
-  
+
     try {
       const loginData = {
         email: login,
         senha: password,
       };
-  
+
       const response = await axiosFecht.post('/user/login', loginData);
-  
+
       if (response.data.auth === true) {
-        if (response.data.user.perfil.includes('professor') && !chooseOtherApp) {
-          localStorage.setItem('userData', JSON.stringify(response.data));
-          toast.success('Bem vindo(a)!');
-          navigate('/Secretaria');
-        } else if (response.data.user.perfil.includes('professor') && chooseOtherApp) {
-          navigate('/Professor');
-        } else if (userType === 'aluno') {
-          // Aqui você pode verificar a localização da página antes de redirecionar
-          if (window.location.pathname === '/primeiraPagina') {
-            navigate('/Secretaria');
-          } else {
-            navigate('/Aluno');
-          }
-        }
-  
-        if (
-          (userType === 'professor' && response.data.user.professor === 1) ||
-          (userType === 'aluno' && response.data.user.professor === 0)
-        ) {
-          localStorage.setItem('userData', JSON.stringify(response.data));
-          toast.success('Bem vindo(a)!');
-          axiosFecht.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('userType', userType);
-          localStorage.setItem('userName', response.data.user.nome);
-          localStorage.setItem('userEmail', response.data.user.email);
-          localStorage.setItem('id', response.data.user.id);
-  
-          window.location.reload();
-          setLoading(true);
+        if (response.data.user.perfil.includes('professor') || response.data.user.professor === 1) {
+          handleProfessorLogin(response);
+        } else if (response.data.user.perfil.includes('aluno') || response.data.user.professor === 0) {
+          handleAlunoLogin(response);
         } else {
           setLoading(false);
           console.log('Tipo de usuário inválido');
@@ -84,7 +58,42 @@ function Login() {
       }
     }
   };
-  
+
+  const handleProfessorLogin = (response) => {
+    localStorage.setItem('userData', JSON.stringify(response.data));
+    toast.success('Bem vindo(a)!');
+    axiosFecht.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('userType', userType);
+    localStorage.setItem('userName', response.data.user.nome);
+    localStorage.setItem('userEmail', response.data.user.email);
+    localStorage.setItem('id', response.data.user.id);
+
+    navigate('/Secretaria');
+    window.location.reload();
+    setLoading(true);
+  };
+
+  const handleAlunoLogin = (response) => {
+    localStorage.setItem('userData', JSON.stringify(response.data));
+    toast.success('Bem vindo Aluno(a)!');
+    axiosFecht.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('userType', userType);
+    localStorage.setItem('userName', response.data.user.nome);
+    localStorage.setItem('userEmail', response.data.user.email);
+    localStorage.setItem('id', response.data.user.id);
+
+    if (chooseOtherApp) {
+      navigate('/Aluno/Projeto');
+      toast.success('Bem vindo PP(a)!');
+    } else {
+      navigate('/Aluno');
+    }
+
+    window.location.reload();
+    setLoading(true);
+  };
 
   const handleAlterarSenha = async (e) => {
     e.preventDefault();
@@ -99,7 +108,7 @@ function Login() {
           if (userType === 'professor') {
             navigate('/Professor');
           } else if (userType === 'aluno') {
-            navigate('/Aluno');
+            navigate('/Aluno/Projeto');
           }
 
           toast.success('Senha alterada com sucesso!');
@@ -130,12 +139,11 @@ function Login() {
         <img src="/cimol.png" alt='Cimol' />
       </div>
       <div className='areaLogin'>
-        <h1>LOGIN</h1>
+        <i className="bi bi-person"></i>
         <form onSubmit={handleFormSubmit}>
-          <label>Login</label>
-          <input value={login} onChange={(e) => setLogin(e.target.value)} type='text' required />
-          <label>Senha</label>
-          <input value={password} onChange={(e) => setPassword(e.target.value)} type='password' required />
+          <input value={login} onChange={(e) => setLogin(e.target.value)} placeholder='E-mail' PLtype='text' required />
+          <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Senha' type='password' required />
+
           {chooseOtherApp && (
             <div className='d-flex justify-content-between'>
               <div className='form-check col-sm-6 ms-5'>
@@ -162,6 +170,7 @@ function Login() {
               </div>
             </div>
           )}
+
           {chooseOtherApp ? (
             <button onClick={switchApplication}>Confirmar</button>
           ) : (
@@ -171,10 +180,8 @@ function Login() {
             </>
           )}
         </form>
-        <p>
-          Ainda não fez <Link>cadrasto?</Link>
-        </p>
       </div>
+
       {firstLogin && (
         <div className='containerAlterarSenha'>
           <div className='areaLogin'>

@@ -2,10 +2,15 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   .topo {
-    background-color: #275faf;
+    background-color: #1B2F4A;
     height: 124px;
     display: flex;
     align-items: flex-end;
+  }
+
+  .bi.bi-person{
+font-size:40px
+margin-bottom: 100px;
   }
 
   .topo2 {
@@ -58,29 +63,32 @@ export const Container = styled.div`
       flex-direction: column;
       width: 80%;
 
-      label {
-        font-size: 1.2rem;
-        margin-bottom: 0.5%;
-      }
-
       input {
-        padding: 1.5%;
-        border-radius: 10px;
-        margin-bottom: 4%;
-        border: 1px solid;
-        font-size: 1rem;
+        font-size: 16px;
+        padding: 10px;
+        margin: 5px 5px 15px 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: all 0.3s ease-out;
       }
-
+      
       button {
         width: 50%;
         background-color: #d8a43d;
+        border: none;
         border-radius: 10px;
-        border: 1px solid;
-        padding: 1.5%;
+        padding: 10px; 
         font-size: 1.2rem;
-        font-weight: bold;
         align-self: center;
         margin-bottom: 5%;
+        cursor: pointer;
+        color: #fff; 
+        transition: background-color 0.3s ease-in-out; 
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      
+      button:hover {
+        background-color: #c19235; 
         cursor: pointer;
       }
     }

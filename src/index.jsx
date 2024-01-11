@@ -6,18 +6,15 @@ import Footer from './components/Footer/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
-import '@fortawesome/fontawesome-free/css/solid.min.css';
-import '@fortawesome/fontawesome-free/css/regular.min.css';
-import '@fortawesome/fontawesome-free/css/brands.min.css';
 import './index.css';
 import Login from './routes/Login';
 import Aluno from './routes/Aluno';
+import AlunoProjeto from './routes/Professor';
 import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom';
 import Secretaria from './routes/Secretaria';
 import Funcionario from './routes/Funcionario';
 import Professor from './routes/Professor';
-import { Private, UsuarioLogado } from './auth/checkAuthentication';
+import { Private} from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -26,18 +23,16 @@ const UsuarioLogadoComHeader = () => {
 
   const shouldRenderHeaderAndFooter = () => {
     // Especifique as rotas em que o Header e o Footer devem ser renderizados
-    const allowedRoutes = ['/Professor'];
+    const allowedRoutes = ['/Professor', '/Aluno/Projeto'];
     return allowedRoutes.includes(location.pathname);
   };
 
   return (
-    <UsuarioLogado>
       <div>
         {shouldRenderHeaderAndFooter() && <Header />}
         <App />
         {shouldRenderHeaderAndFooter() && <Footer />}
       </div>
-    </UsuarioLogado>
   );
 };
 
@@ -51,7 +46,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/Aluno',
-        element: <Private allowedRoles={['aluno']}><Aluno /></Private>,
+      element: <Private allowedRoles={['aluno']}><Aluno /></Private>,
       },
       {
         path: '/Secretaria',
@@ -61,9 +56,14 @@ const router = createBrowserRouter([
         path: '/Funcionario',
         element: <Private allowedRoles={['funcionario']}><Funcionario /></Private>,
       },
+      //Ferramenta Projeto
       {
         path: '/Professor',
         element: <Private allowedRoles={['professor']}><Professor /></Private>,
+      },
+      {
+        path: '/Aluno/Projeto',
+        element: <Private allowedRoles={['aluno']}><AlunoProjeto /></Private>,
       },
     ],
   },
