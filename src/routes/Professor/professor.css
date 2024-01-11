@@ -27,15 +27,6 @@ a {
    text-decoration: none;
 }
 
-body {
-   font-family: 'Open Sans', sans-serif;
-   font-size: 100%;
-   line-height: 1.6;
-   color: var(--clr-body);
-   background-color: var(--clr-bg);
-   align-items: center;
-}
-
 .search-box {
   display: flex;
   gap: 10px;

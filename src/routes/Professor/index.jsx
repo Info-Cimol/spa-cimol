@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './style.css'
+import './professor.css'
 
 const HomePrincipal = () => {
   const [projects, setProjects] = useState([]);

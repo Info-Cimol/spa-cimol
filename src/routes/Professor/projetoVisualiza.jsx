@@ -164,7 +164,7 @@ const ProjectComponent = () => {
                     />
                   ) : (
                     <img
-                      src="Images/Logo.png"
+                      src="/Images/Logo.png"
                       style={{ height: '140px', objectFit: 'cover', borderRadius: '12px' }}
                       alt="Logo Padrão"
                     />
