@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Container = styled.div`
 
     .bm-menu {
-        background-color: #275faf; 
+        background-color: #1B2F4A; 
         padding: 1.5rem;
     }
 

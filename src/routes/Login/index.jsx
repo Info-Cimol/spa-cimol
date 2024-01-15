@@ -7,14 +7,14 @@ import { toast } from 'react-toastify';
 function Login() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState('aluno');
+  const [userType] = useState('aluno','professor');
   const navigate = useNavigate();
   const [firstLogin] = useState(false);
   const [senhaAlterada, setSenhaAlterada] = useState('');
   const [confirmacaoDeSenha, setConfirmacaoDeSenha] = useState('');
   const [iduser] = useState('');
   const [loading, setLoading] = useState(false);
-  const [chooseOtherApp, setChooseOtherApp] = useState(false);
+  const [chooseOtherApp] = useState(false);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -129,12 +129,6 @@ function Login() {
     }
   };
 
-  const switchApplication = () => {
-    if (!chooseOtherApp) {
-      setChooseOtherApp(true);
-    }
-  };
-
   return (
     <Container>
       <div className='topo'>
@@ -149,41 +143,8 @@ function Login() {
           <input value={login} onChange={(e) => setLogin(e.target.value)} placeholder='E-mail' PLtype='text' required />
           <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Senha' type='password' required />
 
-          {chooseOtherApp && (
-            <div className='d-flex justify-content-between'>
-              <div className='form-check col-sm-6 ms-5'>
-                <input
-                  type='radio'
-                  id='professor'
-                  name='userType'
-                  value='professor'
-                  checked={userType === 'professor'}
-                  onChange={() => setUserType('professor')}
-                />
-                <label htmlFor='professor'>Professor</label>
-              </div>
-              <div className='form-check col-sm-6'>
-                <input
-                  type='radio'
-                  id='aluno'
-                  name='userType'
-                  value='aluno'
-                  checked={userType === 'aluno'}
-                  onChange={() => setUserType('aluno')}
-                />
-                <label htmlFor='aluno'>Aluno</label>
-              </div>
-            </div>
-          )}
+         <button>{loading ? 'Carregando...' : 'Entrar'}</button>
 
-          {chooseOtherApp ? (
-            <button onClick={switchApplication}>Confirmar</button>
-          ) : (
-            <>
-              <button onClick={switchApplication}>Trocar de Aplicação</button>
-              <button>{loading ? 'Carregando...' : 'Entrar'}</button>
-            </>
-          )}
         </form>
       </div>
 

@@ -8,7 +8,6 @@ const createHeaders = (userData) =>{
             "iduser": userData.user.id
         };
     }
-
     return {};
 }
 

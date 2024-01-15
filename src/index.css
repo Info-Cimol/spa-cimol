@@ -1,10 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inika&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inder&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Agbalumo&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inika&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 
- *::before,::after {
+
+ *,*::before,::after {
    box-sizing: border-box;
    margin: 0;
    padding: 0;

@@ -9,12 +9,12 @@ function ContainerTopo({userType, setMostrarBotao, setSecaoAlunos}) {
         <div className='topo'>
           <div className='container1'>
             <img src="../cimol.png" alt='Cimol'/>
-            <MenuHamburguer setMostrarBotao={setMostrarBotao} setSecaoAlunos={setSecaoAlunos} userType={userType} pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
+            
+      <MenuHamburguer setMostrarBotao={setMostrarBotao} setSecaoAlunos={setSecaoAlunos} userType={userType} pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
           </div>
           <div className='container2'></div>
         </div>
     </Container>
-    
   )
 }
 

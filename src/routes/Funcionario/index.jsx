@@ -1,9 +1,10 @@
 import React from "react";
 import { Container } from "./styled";
-import ContainerTopo from "../../components/ContainerTopo";
+import ContainerTopo from '../../components/ContainerTopo';
+import MenuHamburguer from '../../components/MenuHamburguer';
 import { useState } from "react";
 import {IoSearchOutline, IoClose} from "react-icons/io5"
-
+const userType = "funcionario";
 function Funcionario() {
     const [dados] = useState([
         {data: new Date(2023, 10, 12 ), cardapio: "Arroz com ovo", manha: 100, tarde: 50, noite: 40},
@@ -46,7 +47,8 @@ function Funcionario() {
 
     return(
         <Container>
-            <ContainerTopo/>
+           <ContainerTopo/>
+           <MenuHamburguer userType={userType}/>
             {descricao &&(
                 <div className="containerDescricao">
                     <IoClose size={20} onClick={() => setDescricao(false)}/>
@@ -95,7 +97,6 @@ function Funcionario() {
                                         </tr>
                                     ))
                                 )}
-                                
                             </tbody>
                         </table>
                     </div>

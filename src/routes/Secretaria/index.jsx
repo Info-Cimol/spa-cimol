@@ -260,6 +260,7 @@ function Secretaria(){
                                         </tr>
                                     ))
                                 ) : (
+                                    
                                     cardapio.slice(0, 5).map((item) =>(
                                         <tr key={item.data} onClick={() => boxDescricao(item)}>
                                             <td>{`${String(item.data.getDate()+1).padStart(2, '0')}/${item.data.getMonth()+1}/${item.data.getFullYear()}`}</td>
@@ -277,7 +278,6 @@ function Secretaria(){
             )}
         </Container>
     )
-    
 }
 
 export default Secretaria ;

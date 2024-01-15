@@ -12,7 +12,7 @@ export const Container = styled.div`
     }
 
     .container1{
-        background-color: #275faf;
+        background-color: #1B2F4A;
         height: 95%;
 
         img{

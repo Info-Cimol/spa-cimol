@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ContainerTopo from "../../../components/ContainerTopo";
+import MenuHamburguer from "../../../components/MenuHamburguer";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 import './projeto.css'
 
 const ProjectComponent = () => {
 
     const Navigate = useNavigate();
-    const [userType] = useState(localStorage.getItem('userType') || 'default');
     const [userId] = useState(localStorage.getItem('id'));
     const [projetosDoUsuario, setProjetosDoUsuario] = useState([]);
     const [semProjeto, setSemProjeto] = useState(false);
-    const [pageTitle, setPageTitle] = useState('Meus Projetos');
     const token = localStorage.getItem('token');
-
+    const userType = "professor";
  
     const loadProjects = async () => {
       try {
@@ -20,23 +23,13 @@ const ProjectComponent = () => {
           'x-access-token': token,
         };
     
-        let response;
-    
-        if (userType === 'professor') {
-          response = await axios.get('https://api-thesis-track.vercel.app/projeto/orientador/' + userId, { headers });
-        } else if (userType === 'aluno') {
-          response = await axios.get('https://api-thesis-track.vercel.app/aluno/projetos/' + userId, { headers });
-        }
+        let response = await axios.get('https://api-thesis-track.vercel.app/projeto/orientador/' + userId, { headers });
     
         setProjetosDoUsuario(response.data);
         checkIfEmptyProjects(); 
       } catch (error) {
         console.error('Erro ao carregar projetos:', error);
       }
-    };
-  
-    const updatePageTitle = () => {
-      setPageTitle(window.innerWidth <= 484 ? 'Projetos' : 'Meus Projetos');
     };
   
     const checkIfEmptyProjects = () => {
@@ -63,45 +56,18 @@ const ProjectComponent = () => {
       }
     };*/
   
-    const visualizar = (projeto, orientadorId) => {
-     
-    };
+ /*   const visualizar = (projeto, orientadorId) => { };*/
   
     useEffect(() => {
       loadProjects();
-      window.addEventListener('resize', updatePageTitle);
-      updatePageTitle();
-  
-      return () => {
-        window.removeEventListener('resize', updatePageTitle);
-      };
     }, 
     );
   
     return (
       <div>
-        {/* Seção do Aluno */}
-        {userType === 'aluno' && (
-          <div className="imagemFundo col-sm-6 col-md-12">
-            <div className="container" style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>
-              <div className="row align-items-center">
-                <div className="col-sm-4 col-md-6">
-                  <h1 className="escreva fade-up">Área do Aluno</h1>
-                  <p className="escritaProjetos fade-up mt-4">
-                    Esta é a sua área de projetos. Aqui, você pode criar, editar e excluir seus projetos em colaboração
-                    com seu orientador. Utilize este espaço para se organizar e receber orientação.
-                  </p>
-                </div>
-                <div className="col-md-6 col-sm-6">
-                  <img src="/Images/projetos.png" className="imagem img-fluid" alt="Imagem Projetos" />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-  
-        {/* Seção do Professor */}
-        {userType === 'professor' && (
+          <ContainerTopo />
+          <MenuHamburguer userType={userType}/>
+       
           <div className="imagemFundo col-sm-6 col-md-12">
             <div className="container" style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>
               <div className="row align-items-center">
@@ -118,14 +84,14 @@ const ProjectComponent = () => {
               </div>
             </div>
           </div>
-        )}
-  
+       
         <div>
-          <div className="container" style={{ display: 'flex' }}>
-            <h1 className="tituloProjetos col-sm-4 col-lg-4" onClick={adicionar}>
-              {pageTitle}
+          <div className="container-fluid">
+            <div className='row'>
+             <h1 className="tituloProjetos col-lg-4">
+              Meus Projetos
             </h1>
-            <div className="col-sm-4 col-lg-4 maisProjeto d-flex" onClick={adicionar}>
+            <div className="maisProjeto col-sm-10 col-lg-8" onClick={adicionar}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="38"
@@ -140,6 +106,8 @@ const ProjectComponent = () => {
                 />
               </svg>
             </div>
+            </div>
+           
           </div>
         </div>
         <hr className="linhaAzul" />
@@ -175,7 +143,7 @@ const ProjectComponent = () => {
                   <p className="card__desc">{projeto.titulo}</p>
                   <h2 className="card__desc">{projeto.publico ? 'Público' : 'Privado'}</h2>
                 </div>
-                <a href="#" className="card__btn" onClick={() => visualizar(projeto.id_projeto)}>
+               <a href="#" className="card__btn" /*onClick={() => visualizar(projeto.id_projeto)}*/>
                   Visualizar
                 </a>
               </div>

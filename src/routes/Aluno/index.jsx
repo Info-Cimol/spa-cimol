@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo} from 'react'
+import { useNavigate } from 'react-router-dom';
 import ContainerTopo from '../../components/ContainerTopo';
 import {Container} from './styled';
-import { motion } from 'framer-motion';
+import {motion } from 'framer-motion';
 import { ImBlocked } from 'react-icons/im'
 import imagem1 from '../../imagens/image1.jpg'
 import axiosFecht from '../../axios/config';
@@ -9,6 +10,7 @@ import createHeaders from '../../auth/utils';
 import { toast } from 'react-toastify';
 
 function Aluno(){
+  const navigate = useNavigate();
   const [mostrarBotao, setMostrarBotao] = useState(true);
   const carousel = useRef();
   const carousel2 = useRef();
@@ -23,9 +25,15 @@ function Aluno(){
     tarde: false,
     noite: false,
   });
+ 
+  const userName = localStorage.getItem('userName') ;
   const hoje = useMemo(() => new Date(), []);
   const img = imagem1;
   const userType = "aluno"
+
+  const redirecionarParaProjeto = () => {
+    navigate('/Aluno/Projeto');
+};
 
   const fetchData = useCallback(async (setCardapio, setReservas) => {
     try {
@@ -83,7 +91,7 @@ function Aluno(){
   const getNomeDiaDaSemana = (dataDoCardapio) =>{
       if (!(dataDoCardapio instanceof Date)) {
         console.error(`Valor inválido para data: ${dataDoCardapio}`);
-        return ''; // ou outra ação adequada
+        return ''; 
   }
 
     const diaDaSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sabado'];
@@ -137,9 +145,21 @@ function Aluno(){
   return(
     <Container>
       <ContainerTopo userType={userType} mostrarBotao={mostrarBotao} setMostrarBotao={setMostrarBotao}/>
+      
       {mostrarBotao ?(
-        <div className='buttons'>
-          <button onClick={mostrarCardapio}>Cardápio</button>
+        <div className='container-fluid'>
+           <div className='row'>
+           <div className='buttons'>
+<div className="col-sm-12">
+          <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
+                Olá estudante, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+          </h1>
+          </div>
+          <button className='button col-lg-6' onClick={mostrarCardapio}>Merenda</button>
+          <button className='button col-lg-6' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
+            </div>
+           </div>
+          
         </div>
       ) : (
         <div className='containerCardapio'>

@@ -1,0 +1,251 @@
+:root {
+  --clr-head: #171e35;
+  --clr-body: #6A6D78;
+  --clr-bg: #eaedf6;
+  --clr-border: #cfd4e7;
+  --clr-gray: #A1A7C0;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
+.cards {
+ display: flex;
+ justify-content: space-around;
+ gap: 20px; 
+ width: 100%;
+}
+
+.card {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ background-color: #1b2f4afa;
+ backdrop-filter: blur(80px);
+ padding: 1.5em; /* Reduzi o padding para diminuir a altura do card */
+ border-radius: 12px;
+ text-align: center;
+ width: calc(33.33% - 20px);
+ box-sizing: border-box;
+ margin-bottom: 20px; /* Adicionado um espaço inferior entre os cards */
+ box-shadow: 0 10px 30px -7px #171e35;
+ border: 1px solid #ffffff;
+ transition: transform 0.3s ease-in-out;
+ max-width: 80%;
+}
+.card__img {
+ filter: drop-shadow(0 4px 10px rgba(black, .4));
+ border-radius: 20px; 
+}
+
+.card__body {
+ margin: 1rem 0; /* Reduzi a margem inferior para diminuir a altura do corpo do card */
+}
+
+.card:hover {
+ transform: scale(1.05); /* Efeito de escala ao passar o mouse sobre o card */
+}
+
+.card__head {
+ color: var(--clr-head);
+ font-size: 1.375rem;
+ margin-bottom: 0;
+ font-weight: bold;
+ color: #fff;
+}
+
+.card__desc {
+ font-size: rem;
+ color: #fff;
+ 
+}
+
+.card__btn {
+ display: inline-block;
+ color: var(--clr-gray);
+ font-weight: bold;
+ font-size: 1rem;
+ padding: .6em 2em;
+ border: 2px solid var(--clr-border);
+ border-radius: 5px;
+ transition: all 250ms ease-in-out;
+ background-color: #fff;
+ color:#171e35;
+ transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card__btn:hover,
+.card__btn.active {
+
+ background-color: #ffffff;
+ box-shadow: 0 10px 17px -7px #ffffff;
+ color: #1b2f4a;
+}
+.card__btn.active {
+  background-color: #fff;
+  border: none;
+  color: #171e35;
+  box-shadow: 0 10px 17px -7px #1B2F4A;
+}
+
+@media (max-width:900px) {
+  .cards {
+     margin-top: 5vh;
+     display: grid;
+     grid-template-columns: 1fr;
+     max-width: 600px;
+     width: 100%;
+     gap: 2rem; 
+     justify-items: center;
+  }
+
+  .card {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     background-color: #1b2f4afa;
+     padding: 3.4em;
+     flex-grow: 1;
+     width: 90%;
+     max-height: 90%;
+  }
+
+  .card:nth-child(2) {
+     position: relative;
+     box-shadow: none;
+     margin: 0;
+  }
+} 
+
+.imagemFundo {
+ background-color: #1B2F4A;
+ max-width: 100%;
+ max-height: 75vh;
+}
+
+.imagemilustrada {
+ align-items: center;
+ margin-left:35rem;
+ width: 15vw;
+}
+
+.textAlter {
+ color: #3f3f3f;
+ font-family: Agbalumo;
+ font-size: 1.5vw;
+}
+
+.linhaAzul {
+ width: 100%;
+ height: 3px;
+ background-color: #1B2F4A;
+ margin-bottom: 2rem;
+ margin-top: 0.5rem
+}
+
+.escritaProjetos {
+ color: #fff;
+ font-size: 1.5vw;
+ font-family: 'Inder', sans-serif;
+ font-weight: 100;
+ max-width: 100%;
+ animation-duration: 5s;
+ animation-name: slidein;
+}
+
+.imagem {
+ width: 75%;
+ margin-top: 2rem;
+ margin-left: 5rem;
+}
+
+.maisProjeto{
+ margin-top:-3rem;
+margin-left:10rem;
+}
+
+.tituloProjetos {
+ font-family: 'Inika', serif;
+ margin-top: 5rem;
+ margin-left: 5rem;
+}
+
+.escreva{ font-family: 'Inika', serif;
+color: #fff;
+ margin-top: 5rem; 
+ font-size: 3rem; 
+ } 
+ @keyframes fade-in-down { 
+   0% { opacity: 0;
+    transform: translateX(-57px);
+     }
+      100% { opacity: 1; transform: translateX(0);
+       } 
+       } @keyframes slideUpFadeIn { from { opacity: 0; transform: translateY(50px); /* Altere a distância desejada do slide-up */ } to { opacity: 1; transform: translateY(0); } } .fade-up { animation: slideUpFadeIn 3s ease-in-out; }
+
+@media screen and (max-width: 636px) {
+ .imagem {
+   display: none;
+ }
+
+ .escreva {
+   font-size: 5vw;
+   width: 80vw;
+ }
+
+ .escritaProjetos {
+   font-size: 3vw;
+   width: 80vw;
+ }
+ .maisProjeto{
+   margin-top: -3rem;
+   margin-left:0;
+ }
+}
+
+@media screen and (max-width: 484px) {
+ .card {
+   margin-top: 3rem;
+ }
+ .imagemilustrada {
+ width: 25vw;
+}
+.textAlter{
+ font-size: 3vw;
+}
+ .escreva {
+   font-size: 7vw;
+   width: 100%;
+   text-align: center;
+ }
+
+ .escritaProjetos {
+   font-size: 4vw;
+   width: 100%;
+   text-align: center;
+ }
+
+ .maisProjeto {
+   margin-top: none;
+
+ }
+
+ .adicionar {
+   margin-right: 0rem;
+ }
+
+ .tituloProjetos {
+   font-size: 7vw;
+   margin-top: 3rem;
+ }
+
+ .row {
+   margin: 0 !important;
+ }
+}
