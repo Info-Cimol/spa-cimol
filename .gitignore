@@ -3,6 +3,9 @@
 /.pnp
 .pnp.js
 
+# Ignorar a pasta dist
+dist/
+
 # testing
 /coverage
 

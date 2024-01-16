@@ -16,7 +16,7 @@ export const Container = styled.div`
         width: 36px;
         height: 30px;
         left: 85%;
-        top: 36px;
+        top: 40px;
     }
 
     @media screen and (min-width: 450px){
@@ -34,7 +34,7 @@ export const Container = styled.div`
     @media screen and (min-width: 800px){
         .bm-burger-button {
             left: 93%;
-            top: 38px;
+            top: 30px;
         }
     }
 `

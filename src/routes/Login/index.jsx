@@ -61,7 +61,7 @@ function Login() {
 
   const handleProfessorLogin = (response) => {
     localStorage.setItem('userData', JSON.stringify(response.data));
-    toast.success('Bem vindo(a)!');
+   
     axiosFecht.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('userType', userType);
@@ -71,7 +71,7 @@ function Login() {
 
     if (chooseOtherApp) {
       navigate('/Professor');
-      toast.success('Bem vindo PP(a)!');
+    
     } else {
       navigate('/Secretaria');
     }
@@ -81,7 +81,7 @@ function Login() {
 
   const handleAlunoLogin = (response) => {
     localStorage.setItem('userData', JSON.stringify(response.data));
-    toast.success('Bem vindo Aluno(a)!');
+
     axiosFecht.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('userType', userType);
@@ -91,7 +91,7 @@ function Login() {
 
     if (chooseOtherApp) {
       navigate('/Aluno/Projeto');
-      toast.success('Bem vindo PP(a)!');
+    
     } else {
       navigate('/Aluno');
     }
@@ -138,7 +138,7 @@ function Login() {
         <img src="/cimol.png" alt='Cimol' />
       </div>
       <div className='areaLogin'>
-        <i className="bi bi-person"></i>
+        <i className="bi bi-person" style={{fontSize:'50px'}}></i>
         <form onSubmit={handleFormSubmit}>
           <input value={login} onChange={(e) => setLogin(e.target.value)} placeholder='E-mail' PLtype='text' required />
           <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Senha' type='password' required />

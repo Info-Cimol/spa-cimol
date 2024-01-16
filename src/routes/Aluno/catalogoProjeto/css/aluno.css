@@ -28,12 +28,12 @@
    align-items: center;
    background-color: #1b2f4afa;
    backdrop-filter: blur(80px);
-   padding: 1.5em; /* Reduzi o padding para diminuir a altura do card */
+   padding: 1.5em; 
    border-radius: 12px;
    text-align: center;
    width: calc(33.33% - 20px);
    box-sizing: border-box;
-   margin-bottom: 20px; /* Adicionado um espaço inferior entre os cards */
+   margin-bottom: 20px;
    box-shadow: 0 10px 30px -7px #171e35;
    border: 1px solid #ffffff;
    transition: transform 0.3s ease-in-out;
@@ -45,11 +45,11 @@
   }
   
   .card__body {
-   margin: 1rem 0; /* Reduzi a margem inferior para diminuir a altura do corpo do card */
+   margin: 1rem 0; 
   }
   
   .card:hover {
-   transform: scale(1.05); /* Efeito de escala ao passar o mouse sobre o card */
+   transform: scale(1.05); 
   }
   
   .card__head {
@@ -160,7 +160,7 @@
   }
   
   .imagem {
-   width: 75%;
+   width: 50%;
    margin-top: 2rem;
    margin-left: 5rem;
   }
@@ -187,7 +187,11 @@
        }
         100% { opacity: 1; transform: translateX(0);
          } 
-         } @keyframes slideUpFadeIn { from { opacity: 0; transform: translateY(50px); /* Altere a distância desejada do slide-up */ } to { opacity: 1; transform: translateY(0); } } .fade-up { animation: slideUpFadeIn 3s ease-in-out; }
+         } @keyframes slideUpFadeIn { from { opacity: 0; transform: translateY(50px); 
+        }
+         to { opacity: 1; transform: translateY(0); }
+         } 
+         .fade-up { animation: slideUpFadeIn 3s ease-in-out; }
   
   @media screen and (max-width: 636px) {
    .imagem {

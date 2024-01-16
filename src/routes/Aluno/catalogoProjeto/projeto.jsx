@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ContainerTopo from "../../../components/ContainerTopo";
-import MenuHamburguer from "../../../components/MenuHamburguer";
-import './projeto.css'
+import './css/projeto.css'
 
 const HomePrincipal = () => {
   const [projects, setProjects] = useState([]);
@@ -55,16 +54,16 @@ const HomePrincipal = () => {
   return (
     <div>
           <ContainerTopo userType={userType} />
-          <MenuHamburguer userType={userType}/>
+       
       <div className="imagemFundo col-sm-12">
         <div className="container">
           {/* Caso o aluno esteja logado ele direciona este texto e imagem */}
           <div className="row">
-            <div className="col-sm-8">
+            <div className="col-sm-6">
               <h1 className="escreva fade-up">Olá {userName}, Desenvolva todos os seus projetos aqui na nossa plataforma</h1>
             </div>
-            <div className="col-sm-4">
-              <img src="/Images/image 40.png" className="imagem" alt="Imagem do Aluno" />
+            <div className="col-sm-6">
+              <img src="/Images/image 40.png" className="imagem" alt="Imagem do Aluno Projeto" />
             </div>
           </div>
 

@@ -40,7 +40,7 @@ const ProjectComponent = () => {
     };
    
     const adicionar = () => {
-      Navigate.push('/Adicionar');
+      Navigate.push('/Adiciona/Projeto/Aluno');
     };
   
    /* const getAutoresNome = (response) => {
@@ -68,8 +68,8 @@ const ProjectComponent = () => {
           <ContainerTopo />
           <MenuHamburguer userType={userType}/>
        
-          <div className="imagemFundo col-sm-6 col-md-12">
-            <div className="container" style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>
+          <div className="imagemFundo col-sm-12">
+          <div className="container" style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>
               <div className="row align-items-center">
                 <div className="col-sm-4 col-md-6">
                   <h1 className="escreva fade-up">Área do Orientador</h1>
@@ -143,7 +143,7 @@ const ProjectComponent = () => {
                   <p className="card__desc">{projeto.titulo}</p>
                   <h2 className="card__desc">{projeto.publico ? 'Público' : 'Privado'}</h2>
                 </div>
-               <a href="#" className="card__btn" /*onClick={() => visualizar(projeto.id_projeto)}*/>
+               <a className="card__btn" /*onClick={() => visualizar(projeto.id_projeto)}*/>
                   Visualizar
                 </a>
               </div>

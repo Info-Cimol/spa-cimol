@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Private } from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 import App from './App';
 import Login from './routes/Login';
 import Aluno from './routes/Aluno';
@@ -12,14 +12,16 @@ import Funcionario from './routes/Funcionario';
 import Professor from './routes/Professor'
 
 import ProfessorProjeto from './routes/Professor/catalogoProjeto/projeto';
-import AlunoProjeto from './routes/Aluno/catalogoProjeto/projeto';
-
-import VisualizaProjetoProfessor from './routes/Professor/catalogoProjeto/projetoVisualiza';
 import VisualizaProjetoAluno from './routes/Aluno/catalogoProjeto/projetoVisualiza';
+
+import AlunoProjeto from './routes/Aluno/catalogoProjeto/projeto';
+import VisualizaProjetoProfessor from './routes/Professor/catalogoProjeto/projetoVisualiza';
+import AdicionaProjeto from './routes/Aluno/catalogoProjeto/adicionaProjeto';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
 const router = createBrowserRouter([
@@ -30,37 +32,52 @@ const router = createBrowserRouter([
         path: '/',
         element: <Login />
       },
+    
       {
         path: '/Aluno',
         element: <Private allowedRoles={['aluno']}><Aluno /></Private>,
       },
+     
       {
         path: '/Professor',
         element: <Private allowedRoles={['professor']}><Professor /></Private>,
       },
+    
       {
         path: '/Secretaria',
-        element: <Private allowedRoles={['professor']}><Secretaria /></Private>,
+        element: <Private allowedRoles={['secretaria']}><Secretaria /></Private>,
       },
+     
       {
         path: '/Funcionario',
-        element: /*<Private allowedRoles={['funcionario']}>*/<Funcionario />/*</Private>*/,
+        element: <Private allowedRoles={['funcionario']}>*/<Funcionario /></Private>,
       },
+
+      //-------------Ferramenta de catálogo de projeto------------------------
+
       {
         path: '/Professor/Projeto',
         element: <Private allowedRoles={['professor']}><ProfessorProjeto/></Private>,
       },
+     
+      {
+        path: '/Visualiza/Projeto/Professor',
+        element: <Private allowedRoles={['professor']}><VisualizaProjetoProfessor /></Private>,
+      },
+      
       {
         path: '/Aluno/Projeto',
         element: <Private allowedRoles={['aluno']}><AlunoProjeto /></Private>,
       },
+
       {
         path: '/Visualiza/Projeto/Aluno',
         element: <Private allowedRoles={['aluno']}><VisualizaProjetoAluno /></Private>,
       },
+
       {
-        path: '/Visualiza/Projeto/Professor',
-        element: <Private allowedRoles={['professor']}><VisualizaProjetoProfessor /></Private>,
+        path: '/Adiciona/Projeto/Aluno',
+        element: <Private allowedRoles={['aluno']}><AdicionaProjeto/></Private>,
       },
     ],
   },

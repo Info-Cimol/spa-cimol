@@ -56,14 +56,15 @@ const HomePrincipal = () => {
     <div>
           <ContainerTopo />
           <MenuHamburguer userType={userType}/>
+          
       <div className="imagemFundo col-sm-12">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-sm-8">
+            <div className="col-sm-6">
               <h1 className="escreva fade-up">Olá {userName}, Orientar seus alunos ficou mais fácil</h1>
             </div>
-            <div className="col-sm-4">
-              <img src="/Images/imagem7.png" className="imagem" alt="Imagem do orientador" />
+            <div className="col-sm-6">
+              <img src="/Images/imagem7.png" className="imagem-fluid" alt="Imagem do orientador" />
             </div>
           </div>
         </div>
@@ -82,7 +83,7 @@ const HomePrincipal = () => {
 
       <div className="cards row mt-5 mb-5">
         {projects.map((project, index) => (
-          <div key={project.id_projeto} className="card col-sm-6 col-md-4 col-lg-3">
+          <div key={project.id_projeto} className="card col-sm-6 col-md-4 col-lg-4">
             <div className="card__img">
               <img
                 src={project.logo_projeto || "/Images/Logo.png"}

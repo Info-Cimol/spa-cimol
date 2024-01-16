@@ -159,9 +159,9 @@ a {
  animation-name: slidein;
 }
 
-.imagem {
- width: 75%;
- margin-top: 2rem;
+.imagem-fluid {
+ width: 50%;
+ margin-top: 5rem;
  margin-left: 5rem;
 }
 
@@ -178,7 +178,7 @@ margin-left:10rem;
 
 .escreva{ font-family: 'Inika', serif;
 color: #fff;
- margin-top: 5rem; 
+ margin-top: 10rem; 
  font-size: 3rem; 
  } 
  @keyframes fade-in-down { 
@@ -190,7 +190,7 @@ color: #fff;
        } @keyframes slideUpFadeIn { from { opacity: 0; transform: translateY(50px); /* Altere a distância desejada do slide-up */ } to { opacity: 1; transform: translateY(0); } } .fade-up { animation: slideUpFadeIn 3s ease-in-out; }
 
 @media screen and (max-width: 636px) {
- .imagem {
+ .imagem-fluid {
    display: none;
  }
 

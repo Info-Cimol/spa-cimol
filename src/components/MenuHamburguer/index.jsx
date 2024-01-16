@@ -1,22 +1,25 @@
 import React from "react";
-import { slide as  Menu } from "react-burger-menu";
-import { Container } from "./styled";
-import StyledTextButton from "./styled";
+import { slide as Menu } from "react-burger-menu";
+import { Container} from "./styled.jsx";
 import { useNavigate } from "react-router-dom";
+import StyledTextButton from "./styled";
 
 const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
     const navigate = useNavigate();
 
-    const handleBottonSair =() =>{
-        localStorage.removeItem('userData');  
-        navigate('/')
+  /*const userName = localStorage.getItem('userName') ;
+  const userEmail = localStorage.getItem('userEmail') ;*/
+
+
+    const handleBottonSair = () => {
+        localStorage.removeItem('userData');
+        navigate('/');
     }
-    
+
     const handleBottonProjeto = () => {
         if (userType === "aluno") {
             navigate('/Aluno/Projeto');
-
-        } else if(userType === "professor"){
+        } else if (userType === "professor") {
             navigate('/Professor/Projeto');
         }
     }
@@ -37,17 +40,15 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
     const handleBottonProjetos = () => {
         if (userType === "aluno") {
             navigate('/Aluno/Projeto');
-
-        } else if(userType === "professor"){
+        } else if (userType === "professor") {
             navigate('/Professor/Projeto');
         }
     }
-    
-    const handleBottonMeusProjetos =() =>{
+
+    const handleBottonMeusProjetos = () => {
         if (userType === "aluno") {
             navigate('/Visualiza/Projeto/Aluno');
-
-        } else if(userType === "professor"){
+        } else if (userType === "professor") {
             navigate('/Visualiza/Projeto/Professor');
         }
     }
@@ -55,22 +56,24 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
     return (
         <Container>
             <Menu right width={100}>
-                {userType === "aluno" && (
-                    <>
-                        <StyledTextButton onClick={handleBottonCardapio}>Cardapio</StyledTextButton>
-                        <StyledTextButton onClick={handleBottonProjeto}>Projetos</StyledTextButton>
-                        <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
-                        <StyledTextButton className="menu-item" onClick={handleBottonSair} href="/">
-                            Deslogar
-                        </StyledTextButton>
-                    </>
-                )}
+              
                 {userType === "secretaria" && (
                     <>
                         <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
                         <StyledTextButton onClick={handleBottonAlunos}>Alunos</StyledTextButton>
                         <StyledTextButton className="menu-item" onClick={handleBottonSair}>
-                        Deslogar
+                            Sair
+                        </StyledTextButton>
+                    </>
+                )}
+                
+                {userType === "aluno" && (
+                    <>
+                        <StyledTextButton onClick={handleBottonCardapio}>Cardapio</StyledTextButton>
+                        <StyledTextButton onClick={handleBottonProjeto}>Projetos</StyledTextButton>
+                        <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
+                        <StyledTextButton className="menu-item" onClick={handleBottonSair}>
+                            Sair
                         </StyledTextButton>
                     </>
                 )}
@@ -86,6 +89,7 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
                         </StyledTextButton>
                     </>
                 )}
+                
                 {userType === "funcionario" && (
                     <>
                         <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>

@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ContainerTopo from "../../../components/ContainerTopo";
-import MenuHamburguer from "../../../components/MenuHamburguer";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-import './aluno.css'
+import './css/aluno.css';
 
 const ProjectComponent = () => {
-
     const Navigate = useNavigate();
     const [userType] = useState(localStorage.getItem('userType'));
     const [userId] = useState(localStorage.getItem('id'));
@@ -18,61 +16,45 @@ const ProjectComponent = () => {
     const token = localStorage.getItem('token');
 
     const loadProjects = async () => {
-      try {
-        const headers = {
-          'x-access-token': token,
-        };
-    
-        let response;
-    
-       response = await axios.get('https://api-thesis-track.vercel.app/aluno/projetos/' + userId, { headers });
-       
-        setProjetosDoUsuario(response.data);
-        checkIfEmptyProjects(); 
-      } catch (error) {
-        console.error('Erro ao carregar projetos:', error);
-      }
-    };
-  
-    const checkIfEmptyProjects = () => {
-      if (projetosDoUsuario.length === null) {
-        setSemProjeto(true);
-        console.log("Você não possui nenhum trabalho aqui.");
-      }
-    };
-   
-    const adicionar = () => {
-      Navigate.push('/Adicionar');
-    };
-  
-   /* const getAutoresNome = (response) => {
-      try {
-        const autores = JSON.parse(response.alunos);
-        console.log(autores);
-        if (autores && autores.length > 0) {
-          return autores.map((autor) => autor.nome).join(', ');
+        try {
+            const headers = {
+                'x-access-token': token,
+            };
+
+            let response;
+
+            response = await axios.get('https://api-thesis-track.vercel.app/aluno/projetos/' + userId, { headers });
+
+            setProjetosDoUsuario(response.data);
+            checkIfEmptyProjects();
+        } catch (error) {
+            console.error('Erro ao carregar projetos:', error);
         }
-      } catch (error) {
-        console.error('Error parsing autores:', error);
-        return '';
-      }
-    };*/
-  
- /*   const visualizar = (projeto, orientadorId) => { };*/
-  
+    };
+
+    const checkIfEmptyProjects = () => {
+        if (projetosDoUsuario.length === 0) {
+            setSemProjeto(true);
+            console.log("Você não possui nenhum trabalho aqui.");
+        }
+    };
+
+    const adicionar = () => {
+        Navigate('/Adiciona/Projeto/Aluno');
+    };
+
     useEffect(() => {
-      loadProjects();
-    }, 
-    );
-  
+        loadProjects();
+    }, );
+
     return (
       <div>
-          <ContainerTopo />
-          <MenuHamburguer userType={userType}/>
+          <ContainerTopo userType={userType}/>
+         
         {/* Seção do Aluno */}
-        {userType === 'aluno' && (
+       
           <div className="imagemFundo col-sm-6 col-md-12">
-            <div className="container" style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>
+            <div className="container-fluid" style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>
               <div className="row align-items-center">
                 <div className="col-sm-4 col-md-6">
                   <h1 className="escreva fade-up col-xs-12">Área do Aluno</h1>
@@ -87,8 +69,7 @@ const ProjectComponent = () => {
               </div>
             </div>
           </div>
-        )}
-  
+        
         <div>
           <div className="container-fluid">
             <div className='row'>
@@ -114,6 +95,7 @@ const ProjectComponent = () => {
            
           </div>
         </div>
+
         <hr className="linhaAzul" />
   
         <div className="fade-in-down cards mx-auto justify-content-between">
@@ -147,14 +129,14 @@ const ProjectComponent = () => {
                   <p className="card__desc">{projeto.titulo}</p>
                   <h2 className="card__desc">{projeto.publico ? 'Público' : 'Privado'}</h2>
                 </div>
-               <a href="#" className="card__btn" /*onClick={() => visualizar(projeto.id_projeto)}*/>
+               <a href="#Visualiza" className="card__btn" /*onClick={() => visualizar(projeto.id_projeto)}*/>
                   Visualizar
                 </a>
               </div>
             ))}
           </div>
         </div>
-      </div>
+    </div>
     );
   };
 
