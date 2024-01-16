@@ -7,41 +7,82 @@ import { toast } from 'react-toastify';
 function Login() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [userType] = useState('aluno','professor');
+  const [userType] = useState('');
   const navigate = useNavigate();
   const [firstLogin] = useState(false);
   const [senhaAlterada, setSenhaAlterada] = useState('');
   const [confirmacaoDeSenha, setConfirmacaoDeSenha] = useState('');
   const [iduser] = useState('');
   const [loading, setLoading] = useState(false);
-  const [chooseOtherApp] = useState(false);
 
+  const handleLogin = (response) => {
+    const userRoles = response.data.user.perfil;
+  
+    if (userRoles.length > 0) {
+      const allowedRoles = ["professor", "aluno", "secretaria", "merendeira", "admin"];
+      const intersection = userRoles.filter((role) => allowedRoles.includes(role));
+  
+      if (intersection.length > 0) {
+        const userRole = intersection[0];
+
+        localStorage.setItem('userRole', userRole);
+        localStorage.setItem('userData', JSON.stringify(response.data));
+   
+        axiosFecht.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userType', userType);
+        localStorage.setItem('userName', response.data.user.nome);
+        localStorage.setItem('userEmail', response.data.user.email);
+        localStorage.setItem('id', response.data.user.id);
+
+        switch (userRole) {
+          case "professor":
+            navigate('/Professor');
+            break;
+          case "aluno":
+            navigate('/Aluno');
+            break;
+          case "secretaria":
+            navigate('/Secretaria');
+            break;
+          case "merendeira":
+            navigate('/Merendeira');
+            break;
+          case "admin":
+            navigate('/Coodernador/Admin');
+            break;
+          default:
+            console.log('Tipo de usuário inválido');
+            toast.error('Tipo de usuário inválido');
+        }
+      } else {
+        console.log('Tipo de usuário inválido');
+        toast.error('Tipo de usuário inválido');
+      }
+    } else {
+      console.log('Usuário sem perfil atribuído');
+      toast.error('Usuário sem perfil atribuído');
+    }
+  };
+  
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(!loading);
-
+  
     try {
       const loginData = {
         email: login,
         senha: password,
       };
-
+  
       const response = await axiosFecht.post('/user/login', loginData);
-
+  
       if (response.data.auth === true) {
-        if (response.data.user.perfil.includes('professor') || response.data.user.professor === 1) {
-          handleProfessorLogin(response);
-        } else if (response.data.user.perfil.includes('aluno') || response.data.user.professor === 0) {
-          handleAlunoLogin(response);
-        } else {
-          setLoading(false);
-          console.log('Tipo de usuário inválido');
-          toast.error('Tipo de usuário inválido');
-        }
+        handleLogin(response);
       } else {
         setLoading(false);
-        console.log('Credenciais inválidas');
-        toast.error('Credenciais inválidas');
+        console.log('Falha na autenticação');
+        toast.error('Falha na autenticação');
       }
     } catch (error) {
       if (error.response) {
@@ -57,47 +98,6 @@ function Login() {
         toast.error('Erro de requisição');
       }
     }
-  };
-
-  const handleProfessorLogin = (response) => {
-    localStorage.setItem('userData', JSON.stringify(response.data));
-   
-    axiosFecht.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-    localStorage.setItem('token', response.data.token);
-    localStorage.setItem('userType', userType);
-    localStorage.setItem('userName', response.data.user.nome);
-    localStorage.setItem('userEmail', response.data.user.email);
-    localStorage.setItem('id', response.data.user.id);
-
-    if (chooseOtherApp) {
-      navigate('/Professor');
-    
-    } else {
-      navigate('/Secretaria');
-    }
-    window.location.reload();
-    setLoading(true);
-  };
-
-  const handleAlunoLogin = (response) => {
-    localStorage.setItem('userData', JSON.stringify(response.data));
-
-    axiosFecht.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-    localStorage.setItem('token', response.data.token);
-    localStorage.setItem('userType', userType);
-    localStorage.setItem('userName', response.data.user.nome);
-    localStorage.setItem('userEmail', response.data.user.email);
-    localStorage.setItem('id', response.data.user.id);
-
-    if (chooseOtherApp) {
-      navigate('/Aluno/Projeto');
-    
-    } else {
-      navigate('/Aluno');
-    }
-
-    window.location.reload();
-    setLoading(true);
   };
 
   const handleAlterarSenha = async (e) => {

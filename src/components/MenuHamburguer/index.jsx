@@ -19,7 +19,7 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
     const handleBottonProjeto = () => {
         if (userType === "aluno") {
             navigate('/Aluno/Projeto');
-        } else if (userType === "professor") {
+        } else if (userType === "professor"){
             navigate('/Professor/Projeto');
         }
     }

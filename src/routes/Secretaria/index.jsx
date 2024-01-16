@@ -24,6 +24,7 @@ function Secretaria(){
     const [descricaoCardapio, setDescricaoCardapio] = useState();
     const [editCardapio, setEditCardapio] = useState(false);
     const [secaoAlunos, setSecaoAlunos] = useState(false);
+    
     const userType = "secretaria";
 
     const fetchData = useCallback(async (setCardapio) =>{

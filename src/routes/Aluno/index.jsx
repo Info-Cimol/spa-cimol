@@ -147,19 +147,22 @@ function Aluno(){
       <ContainerTopo userType={userType} mostrarBotao={mostrarBotao} setMostrarBotao={setMostrarBotao}/>
       
       {mostrarBotao ?(
+
         <div className='container-fluid'>
            <div className='row'>
            <div className='buttons'>
-<div className="col-sm-12">
+            
+       <div className="col-sm-12">
           <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
                 Olá estudante, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
           </h1>
-          </div>
-          <button className='button col-lg-6' onClick={mostrarCardapio}>Merenda</button>
-          <button className='button col-lg-6' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
+       </div>
+                  <button className='button col-lg-6' onClick={mostrarCardapio}>Merenda</button>
+             
+                  <button className='button col-lg-6' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
             </div>
-           </div>
-          
+
+          </div>    
         </div>
       ) : (
         <div className='containerCardapio'>

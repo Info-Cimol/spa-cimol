@@ -16,11 +16,7 @@ import VisualizaProjetoAluno from './routes/Aluno/catalogoProjeto/projetoVisuali
 
 import AlunoProjeto from './routes/Aluno/catalogoProjeto/projeto';
 import VisualizaProjetoProfessor from './routes/Professor/catalogoProjeto/projetoVisualiza';
-import AdicionaProjeto from './routes/Aluno/catalogoProjeto/adicionaProjeto';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import '@fortawesome/fontawesome-free/css/all.css';
+//import AdicionaProjeto from './routes/Aluno/catalogoProjeto/adicionaProjeto';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
@@ -49,8 +45,8 @@ const router = createBrowserRouter([
       },
      
       {
-        path: '/Funcionario',
-        element: <Private allowedRoles={['funcionario']}>*/<Funcionario /></Private>,
+        path: '/Merendeira',
+        element: <Private allowedRoles={['merendeira']}><Funcionario /></Private>,
       },
 
       //-------------Ferramenta de catálogo de projeto------------------------
@@ -75,10 +71,10 @@ const router = createBrowserRouter([
         element: <Private allowedRoles={['aluno']}><VisualizaProjetoAluno /></Private>,
       },
 
-      {
+     /* {
         path: '/Adiciona/Projeto/Aluno',
         element: <Private allowedRoles={['aluno']}><AdicionaProjeto/></Private>,
-      },
+      },*/
     ],
   },
 ]);

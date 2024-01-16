@@ -26,7 +26,7 @@ const ProjectComponent = () => {
             response = await axios.get('https://api-thesis-track.vercel.app/aluno/projetos/' + userId, { headers });
 
             setProjetosDoUsuario(response.data);
-            checkIfEmptyProjects();
+            
         } catch (error) {
             console.error('Erro ao carregar projetos:', error);
         }
