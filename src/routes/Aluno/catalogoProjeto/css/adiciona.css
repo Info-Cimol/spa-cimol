@@ -1,16 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inika&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inder&display=swap');
-
 :root {
     --uib-size: 35px;
     --uib-speed: 0.8s;
     --uib-color: #fff;
     --background-color: #1B2F4A;
     --primary-color: #1b4a3c;
-}
-
-* {
-    border: none !important;
 }
 
 .animated-title {

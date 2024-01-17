@@ -11,7 +11,7 @@ function ContainerTopo({userType, setMostrarBotao, setSecaoAlunos}) {
    </div>
         <div className='topo'>
           <div className='containerTopo'>
-            <img id="cici" src="../cimol.png" alt='Cimol'/>
+            <img id="cici" src="/cimol.png" alt='Cimol'/>
             
       <MenuHamburguer setMostrarBotao={setMostrarBotao} setSecaoAlunos={setSecaoAlunos} userType={userType} pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
           </div>

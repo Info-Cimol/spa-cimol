@@ -3,9 +3,7 @@ import axiosFecht from '../../../axios/config';
 import { useNavigate } from 'react-router-dom';
 import ContainerTopo from "../../../components/ContainerTopo";
 import MenuHamburguer from "../../../components/MenuHamburguer";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import '@fortawesome/fontawesome-free/css/all.css';
+
 import './projeto.css'
 
 const ProjectComponent = () => {
@@ -15,7 +13,7 @@ const ProjectComponent = () => {
     const [projetosDoUsuario, setProjetosDoUsuario] = useState([]);
     const [semProjeto, setSemProjeto] = useState(false);
     const token = localStorage.getItem('token');
-    const userType = "professor";
+    const [userRole] = useState(localStorage.getItem('userRole'));
  
     const loadProjects = async () => {
       try {
@@ -65,8 +63,8 @@ const ProjectComponent = () => {
   
     return (
       <div>
-          <ContainerTopo />
-          <MenuHamburguer userType={userType}/>
+          <ContainerTopo userType={userRole} />
+          <MenuHamburguer userType={userRole}/>
        
           <div className="imagemFundo col-sm-12">
           <div className="container" style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>

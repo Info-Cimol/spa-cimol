@@ -40,17 +40,22 @@ export const Container = styled.div`
 `
 
 const StyledTextButton = styled.button`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     border: none;
     padding: 0;
     margin: 0;
     background-color: transparent;
     cursor: pointer;
-    font-size: 1.0rem;
+    font-size: 1rem;
     color: #fff; 
     text-decoration: none;
     margin-bottom: 10%;
+    transition: background-color 0.3s ease; 
+
     &:hover {
-        background-color:#FFBD59 ;
+        background-color: #FFBD59;
     }
 `;
 

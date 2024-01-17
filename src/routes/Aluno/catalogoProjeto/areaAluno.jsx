@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axiosFecht from '../../../axios/config';
 import { useNavigate } from 'react-router-dom';
 import ContainerTopo from "../../../components/ContainerTopo";
+import MenuHamburguer from "../../../components/MenuHamburguer";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -49,7 +50,8 @@ const ProjectComponent = () => {
 
     return (
       <div>
-          <ContainerTopo userType={userRole}/>
+          <ContainerTopo userType={userRole} />
+          <MenuHamburguer userType={userRole}/>
          
         {/* Seção do Aluno */}
        

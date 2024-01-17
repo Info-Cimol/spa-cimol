@@ -21,6 +21,24 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
         }
     }
 
+    const handleBottonHome = () => {
+        if (userType === "aluno") {
+            navigate('/Aluno/');
+        } else if (userType === "professor"){
+            navigate('/Professor/');
+        }
+        else if (userType === "secretaria"){
+            navigate('/Secretaria');
+        }
+        else if (userType === "admin"){
+            navigate('/Coodernador/Admin');
+        }
+        else if (userType === "merendeira"){
+            navigate('/Merendeira');
+        }
+    }
+
+
     const handleBottonCardapio = () => {
         if (userType === "aluno") {
             setMostrarBotao(false);
@@ -54,13 +72,14 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
 
     return (
         <Container>
-            <Menu right width={100}>
+            <Menu right width={150}>
               
                 {userType === "secretaria" && (
                     <>
+                        <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
                         <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
                         <StyledTextButton onClick={handleBottonAlunos}>Alunos</StyledTextButton>
-                        <StyledTextButton className="menu-item" onClick={handleBottonSair}>
+                        <StyledTextButton onClick={handleBottonSair}>
                             Sair
                         </StyledTextButton>
                     </>
@@ -68,9 +87,16 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
                 
                 {userType === "aluno" && (
                     <>
+                    <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
+
                         <StyledTextButton onClick={handleBottonCardapio}>Cardapio</StyledTextButton>
+                       
                         <StyledTextButton onClick={handleBottonProjeto}>Projetos</StyledTextButton>
-                        <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
+                       
+                        <StyledTextButton onClick={handleBottonMeusProjetos}>
+                            Meus Projetos
+                        </StyledTextButton>
+                      
                         <StyledTextButton className="menu-item" onClick={handleBottonSair}>
                             Sair
                         </StyledTextButton>
@@ -79,31 +105,39 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
 
                 {userType === "professor" && (
                     <>
+                       <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
+
                         <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
+                       
                         <StyledTextButton onClick={handleBottonProjetos}>Projetos</StyledTextButton>
+                       
                         <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
+                       
                         <StyledTextButton /*</>onClick={}*/>Provas</StyledTextButton>
-                        <StyledTextButton className="menu-item" onClick={handleBottonSair}>
+                        
+                        <StyledTextButton  onClick={handleBottonSair}>
                             Sair
                         </StyledTextButton>
                     </>
                 )}
                 
-                {userType === "funcionario" && (
+                {userType === "merendeira" && (
                     <>
+                        <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
                         <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
-                        <StyledTextButton className="menu-item" onClick={handleBottonSair}>
+                        <StyledTextButton  onClick={handleBottonSair}>
                             Sair
                         </StyledTextButton>
                     </>
                 )}
                  {userType === "admin" && (
                     <>
+                        <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
                         <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
                         <StyledTextButton onClick={handleBottonProjetos}>Projetos</StyledTextButton>
                         <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
                         <StyledTextButton /*</>onClick={}*/>Provas</StyledTextButton>
-                        <StyledTextButton className="menu-item" onClick={handleBottonSair}>
+                        <StyledTextButton onClick={handleBottonSair}>
                             Sair
                         </StyledTextButton>
                     </>

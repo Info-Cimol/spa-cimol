@@ -4,7 +4,7 @@ import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from '../../components/MenuHamburguer';
 import { useState } from "react";
 import {IoSearchOutline, IoClose} from "react-icons/io5"
-const userType = "funcionario";
+
 function Funcionario() {
     const [dados] = useState([
         {data: new Date(2023, 10, 12 ), cardapio: "Arroz com ovo", manha: 100, tarde: 50, noite: 40},
@@ -13,7 +13,7 @@ function Funcionario() {
         {data: new Date(2023, 10, 15 ), cardapio: "Carreteiro", manha: 110, tarde: 48, noite: 70}, 
         {data: new Date(2023, 10, 16 ), cardapio: "Omelete com batata", manha: 93, tarde: 75, noite: 60}, 
     ])
-
+    const [userRole] = useState(localStorage.getItem('userRole'));
     const [mostrarBotao, setMostrarBotao] = useState(true);
     const [inputValue, setInputValue] = useState('');
     const [descricao, setDescricao] = useState(false);
@@ -47,8 +47,9 @@ function Funcionario() {
 
     return(
         <Container>
-           <ContainerTopo/>
-           <MenuHamburguer userType={userType}/>
+            <ContainerTopo userType={userRole} />
+            <MenuHamburguer userType={userRole}/>
+            
             {descricao &&(
                 <div className="containerDescricao">
                     <IoClose size={20} onClick={() => setDescricao(false)}/>
