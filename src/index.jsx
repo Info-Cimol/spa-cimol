@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Private } from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
@@ -10,13 +10,14 @@ import Aluno from './routes/Aluno';
 import Secretaria from './routes/Secretaria';
 import Funcionario from './routes/Funcionario';
 import Professor from './routes/Professor'
-
+import Admin from './routes/Admin'
 import ProfessorProjeto from './routes/Professor/catalogoProjeto/projeto';
-import VisualizaProjetoAluno from './routes/Aluno/catalogoProjeto/projetoVisualiza';
+import VisualizaProjetoAluno from './routes/Aluno/catalogoProjeto/areaAluno';
 
 import AlunoProjeto from './routes/Aluno/catalogoProjeto/projeto';
-import VisualizaProjetoProfessor from './routes/Professor/catalogoProjeto/projetoVisualiza';
-//import AdicionaProjeto from './routes/Aluno/catalogoProjeto/adicionaProjeto';
+import VisualizaProjetoProfessor from './routes/Professor/catalogoProjeto/areaProfessor';
+import AdicionaProjeto from './routes/Aluno/catalogoProjeto/adicionaProjeto';
+import DetalhesProjeto from './routes/Aluno/catalogoProjeto/visualizaProjeto'
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
@@ -28,7 +29,12 @@ const router = createBrowserRouter([
         path: '/',
         element: <Login />
       },
-    
+   
+      {
+        path: '/Coodernador/Admin',
+        element: <Private allowedRoles={['admin']}><Admin /></Private>,
+      },
+      
       {
         path: '/Aluno',
         element: <Private allowedRoles={['aluno']}><Aluno /></Private>,
@@ -53,28 +59,33 @@ const router = createBrowserRouter([
 
       {
         path: '/Professor/Projeto',
-        element: <Private allowedRoles={['professor']}><ProfessorProjeto/></Private>,
+        element: <Private allowedRoles={['professor','admin']}><ProfessorProjeto/></Private>,
       },
      
       {
         path: '/Visualiza/Projeto/Professor',
-        element: <Private allowedRoles={['professor']}><VisualizaProjetoProfessor /></Private>,
+        element: <Private allowedRoles={['professor', 'admin']}><VisualizaProjetoProfessor /></Private>,
       },
       
       {
         path: '/Aluno/Projeto',
-        element: <Private allowedRoles={['aluno']}><AlunoProjeto /></Private>,
+        element: <Private allowedRoles={['aluno','admin']}><AlunoProjeto /></Private>,
       },
 
       {
         path: '/Visualiza/Projeto/Aluno',
-        element: <Private allowedRoles={['aluno']}><VisualizaProjetoAluno /></Private>,
+        element: <Private allowedRoles={['aluno','admin']}><VisualizaProjetoAluno /></Private>,
       },
 
-     /* {
-        path: '/Adiciona/Projeto/Aluno',
-        element: <Private allowedRoles={['aluno']}><AdicionaProjeto/></Private>,
-      },*/
+      {
+        path: '/Adiciona/Projeto',
+        element: <Private allowedRoles={['aluno', 'professor','admin']}><AdicionaProjeto/></Private>,
+      },
+
+      {
+        path: '/Projeto/Detalhes/:id',
+        element: <Private allowedRoles={['aluno', 'professor','admin']}><DetalhesProjeto/></Private>,
+      },
     ],
   },
 ]);

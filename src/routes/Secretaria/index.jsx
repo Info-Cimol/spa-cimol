@@ -176,6 +176,11 @@ function Secretaria(){
                 secaoAlunos={secaoAlunos}
                 setSecaoAlunos={setSecaoAlunos}
             />
+               <div className="col-sm-12">
+          <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
+                Olá supervisão, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+          </h1>
+       </div>
             {descricao &&(
                 <div className="containerDescricao">
                     <IoClose size={20} onClick={() => setDescricao(false)}/>

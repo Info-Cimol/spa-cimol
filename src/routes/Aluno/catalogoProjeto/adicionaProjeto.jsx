@@ -1,10 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './css/adiciona.css';
+import axiosFecht from '../../../axios/config';
+function AdicionarProjeto() {
+  const [errorMessages, setErrorMessages] = useState({
+    alunosSelecionados: '',
+    orientadorSelecionado: '',
+    titulo: '',
+    tema: '',
+    problema: '',
+    objetivo_geral: '',
+    resumo: '',
+    objetivo_especifico: '',
+    abstract: '',
+    ano_publicacao: '',
+  });
 
-const ProjectForm = () => {
-
-  const [loading, setLoading] = useState(false);
+  const [mensagem, setMensagem] = useState(false);
+  const [valueDeterminate, setValueDeterminate] = useState(50);
   const [projetoAdicionado, setProjetoAdicionado] = useState(false);
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
   const [alunoSelecionado, setAlunoSelecionado] = useState({ id: null });
@@ -20,11 +33,16 @@ const ProjectForm = () => {
   const [delimitacao, setDelimitacao] = useState('');
   const [problema, setProblema] = useState('');
   const [resumo, setResumo] = useState('');
-  const [logoProjeto, setLogoProjeto] = useState('');
-  const [objetivoGeral, setObjetivoGeral] = useState('');
+  const [objetivoGeral,] = useState('');
+  const [objetivoEspecifico,] = useState('');
+  const [urlProjeto,] = useState('');
+  const [set,] = useState('');
+
+  const [logo_projeto, setLogoProjeto] = useState('');
+  const [objetivo_geral, setObjetivoGeral] = useState('');
   const [abstract, setAbstract] = useState('');
-  const [objetivoEspecifico, setObjetivoEspecifico] = useState('');
-  const [anoPublicacao, setAnoPublicacao] = useState('');
+  const [objetivo_especifico, setObjetivoEspecifico] = useState('');
+  const [ano_publicacao, setAnoPublicacao] = useState('');
   const [autores, setAutores] = useState([]);
   const [imagens, setImagens] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
@@ -34,11 +52,10 @@ const ProjectForm = () => {
   const [logoAdicionada, setLogoAdicionada] = useState(false);
   const [mensagemErro, setMensagemErro] = useState(true);
   const [sucessoAdicao, setSucessoAdicao] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState('');
-  const [urlPdf, setUrlPdf] = useState('');
-
   const [menu, setMenu] = useState(false);
- 
+  
   const [charCount, setCharCount] = useState({
     titulo: 0,
     tema: 0,
@@ -51,11 +68,11 @@ const ProjectForm = () => {
     'titulo',
     'tema',
     'problema',
-    'objetivoGeral',
+    'objetivo_geral',
     'resumo',
-    'objetivoEspecifico',
+    'objetivo_especifico',
     'abstract',
-    'anoPublicacao',
+    'ano_publicacao',
   ];
 
   useEffect(() => {
@@ -63,30 +80,19 @@ const ProjectForm = () => {
     carregarProfessores();
   }, []);
 
+
   const limitCharCount = (field, limit) => {
-    let updatedField = field.length > limit ? field.substr(0, limit) : field;
-    setCharCount((prevCharCount) => ({ ...prevCharCount, [field]: updatedField.length }));
-    switch (field) {
-      case 'titulo':
-        setTitulo(updatedField);
-        break;
-      case 'tema':
-        setTema(updatedField);
-        break;
-      case 'delimitacao':
-        setDelimitacao(updatedField);
-        break;
-      
-      default:
-        break;
+    if (field.length > limit) {
+      set(field, field.substr(0, limit));
     }
+    setCharCount((prevCharCount) => ({ ...prevCharCount, [field]: field.length }));
   };
 
   const shouldHideDetails = (selectedItems) => (selectedItems.length === 0 ? 'auto' : true);
 
   const validateAlunosSelecionados = () => {
     if (alunosSelecionados.length > 3) {
-      setAlunosSelecionados((prevAlunosSelecionados) => prevAlunosSelecionados.slice(0, 3));
+      setAlunosSelecionados((prevAlunosSelecionados) => [...prevAlunosSelecionados].slice(0, -1));
     }
   };
 
@@ -108,7 +114,9 @@ const ProjectForm = () => {
         formData.append('resource_type', 'raw');
         formData.append('upload_preset', cloudinaryUploadPreset);
 
-        const cloudinaryResponse = await axios.post('https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/raw/upload', formData,
+        const cloudinaryResponse = await axios.post(
+          'https://api.cloudinary.com/v1_1/' + cloudinaryCloudName,'/raw/upload',
+          formData,
           {
             headers: {
               'Content-Type': 'multipart/form-data',
@@ -118,7 +126,7 @@ const ProjectForm = () => {
 
         if (cloudinaryResponse.status === 200 && cloudinaryResponse.data.secure_url) {
           const urlPdf = cloudinaryResponse.data.secure_url;
-          setUrlPdf(urlPdf);
+          setUrl(urlPdf);
           console.log(urlPdf);
           console.log(cloudinaryResponse.data.secure_url);
 
@@ -150,14 +158,16 @@ const ProjectForm = () => {
         formData.append('resource_type', 'raw');
         formData.append('upload_preset', cloudinaryUploadPreset);
 
-        uploadPromises.push(axios.post('https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/upload', formData));
+        uploadPromises.push(
+          axios.post('https://api.cloudinary.com/v1_1/' + cloudinaryCloudName,'/upload', formData)
+        );
       }
 
       Promise.all(uploadPromises)
         .then((responses) => {
           const imageUrls = responses.map((response) => response.data.secure_url);
           setLogoProjeto(imageUrls);
-          console.log(logoProjeto);
+          console.log(logo_projeto);
           setLogoAdicionada(true);
           setLoading(false);
         })
@@ -165,7 +175,7 @@ const ProjectForm = () => {
           console.error('Erro ao fazer upload de logo:', error);
         });
     } else {
-      console.warn('Nenhuma logo selecionado');
+      console.warn('Nenhuma logo selecionada');
     }
   };
 
@@ -178,27 +188,38 @@ const ProjectForm = () => {
 
   const adicionarProfessor = () => {
     if (professorSelecionado.id !== null) {
-      setProfessoresSelecionados((prevProfessoresSelecionados) => [...prevProfessoresSelecionados, professorSelecionado]);
+      setProfessoresSelecionados((prevProfessoresSelecionados) => [
+        ...prevProfessoresSelecionados,
+        professorSelecionado,
+      ]);
       setProfessorSelecionado({ id: null });
     }
   };
 
   const adicionarOrientador = () => {
     if (orientadorSelecionado.id !== null) {
-      setCoorientadoresSelecionados((prevCoorientadoresSelecionados) => [...prevCoorientadoresSelecionados, orientadorSelecionado]);
+      setCoorientadoresSelecionados((prevCoorientadoresSelecionados) => [
+        ...prevCoorientadoresSelecionados,
+        orientadorSelecionado,
+      ]);
       setOrientadorSelecionado({ id: null });
     }
   };
 
+  const alunosIds = alunosSelecionados?.map((aluno) => aluno.id) || [];
+  const professoresIds = professoresSelecionados?.map((professor) => professor.id) || [];
+  const orientadorIds = orientadorSelecionados?.map((professor) => professor.id) || [];
+
   const carregarAlunos = async () => {
     const token = localStorage.getItem('token');
-    console.log(token);
     const headers = {
       'x-access-token': token,
     };
 
     try {
-      const response = await axios.get('https://api-thesis-track.vercel.app/listar/alunos', { headers });
+      const response = await axiosFecht.get('/listar/alunos', {
+        headers,
+      });
       setAlunosDisponiveis(
         response.data.map((aluno) => ({
           id: aluno.pessoa_id_pessoa,
@@ -212,13 +233,14 @@ const ProjectForm = () => {
 
   const carregarProfessores = async () => {
     const token = localStorage.getItem('token');
-    console.log(token);
     const headers = {
       'x-access-token': token,
     };
+
     try {
-      const response = await axios.get('https://api-thesis-track.vercel.app/listar/orientador', { headers });
-      console.log(response);
+      const response = await axiosFecht.get('/listar/orientador', {
+        headers,
+      });
       setProfessoresDisponiveis(
         response.data.map((professor) => ({
           id: professor.pessoa_id_pessoa,
@@ -230,11 +252,10 @@ const ProjectForm = () => {
     }
   };
 
-  const projetos = async () => {
+  const adicionarProjeto = async () => {
     try {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      const token = localStorage.getItem('token');
       const alunosIds = alunosSelecionados.map((aluno) => ({ id: aluno.id }));
       const orientadorId = orientadorSelecionado.id;
       const cloudinaryCloudName = 'dzpbclwij';
@@ -243,132 +264,264 @@ const ProjectForm = () => {
 
       for (const field of requiredFields) {
         if (!eval(field) || (Array.isArray(eval(field)) && eval(field).length === 0)) {
-          setMensagemErro('Por favor, preencha o campo' + field.replace(/_/g, ' '));
+          setErrorMessages((prevErrorMessages) => ({
+            ...prevErrorMessages,
+            [field]: 'Por favor, preencha o campo' + field.replace(/_/g, ' '),
+          }));
+          setMensagem(true);
           setLoading(false);
           setTimeout(() => {
-            setMensagemErro('');
+            setErrorMessages((prevErrorMessages) => ({
+              ...prevErrorMessages,
+              [field]: '',
+            }));
+            setMensagem(false);
           }, 4000);
           return;
         }
       }
 
+      if (Object.values(errorMessages).some((message) => message !== '')) {
+        return;
+      }
+
       let uploadedImageUrls = [];
-      for (const file of logoProjeto) {
+      for (const file of logo_projeto) {
         const formData = new FormData();
         formData.append('resource_type', 'raw');
         formData.append('file', file);
         formData.append('upload_preset', cloudinaryUploadPreset);
-        console.log(formData);
-        const response = await axios.post('https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/upload', formData, {
-          headers: {
-            'Content-Type': 'application/pdf',
-          },
-        });
-        console.log(response);
-        console.log(formData);
+
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/' + cloudinaryCloudName,'/upload', formData,
+          {
+            headers: {
+              'Content-Type': 'application/pdf',
+            },
+          }
+        );
 
         if (response.status === 200 && response.data.secure_url) {
           uploadedImageUrls.push(response.data.secure_url);
         } else {
-          console.error('Erro ao fazer upload:', response.data);
-        }
-      }
-
-      const formData = {
-        titulo,
-        tema,
-        resumo,
-        problema,
-        abstract,
-        objetivoGeral,
-        objetivoEspecifico,
-        anoPublicacao,
-        alunos: alunosIds,
-        urlProjeto: url,
-        professores: [{ id: orientadorId }],
-        publico: isPrivate ? 0 : 1,
-        logoProjeto: uploadedImageUrls,
-        arquivo: urlPdf,
-      };
-      console.log(formData);
-
-      const headers = {
-        'x-access-token': token,
-      };
-      const response = await axios.post('https://api-thesis-track.vercel.app/projeto/adiciona', formData, { headers });
-      setLoading(false);
-      setProjetoAdicionado(true);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      if (response && response.status === 200 && response.data) {
-        console.log(response);
-        const projeto = response.data;
-        const projetoId = projeto.id_projeto;
-
-        // Navigate to the desired page using your router logic (add your router logic here)
-      } else {
         console.error('Resposta inválida:', response);
         setProjetoAdicionado(false);
       }
-    } 
-    catch (error) {
+    }
+    } catch (error) {
       console.error('Erro:', error);
-
       setMensagemErro('Ocorreu um erro ao adicionar o projeto. Por favor, tente novamente.');
     }
+  }; 
   
-    return (
+return (
+    <div>
+      {/* Seção de Título */}
       <div>
-        {/* Seção de Título */}
-        <div>
-          <div className="col-sm-12 container d-flex justify-content-center align-items-center">
-            <h1 className="tituloProjetos animated-title">ADICIONE SEU PROJETO</h1>
+        <div className="col-sm-12 container d-flex justify-content-center align-items-center">
+          <h1 className="tituloProjetos animated-title">ADICIONE SEU PROJETO</h1>
+        </div>
+      </div>
+
+      {/* Exibição do Spinner durante o carregamento */}
+      <div className="col-12">
+        {loading && (
+          <div id="loadingSpinner" className="loading-spinner">
+            <div className="three-body">
+              <div className="three-body__dot"></div>
+              <div className="three-body__dot"></div>
+              <div className="three-body__dot"></div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Alerta de projeto adicionado */}
+      <div className="col-12" id="projetoAdicionadoAlert">
+        {projetoAdicionado && (
+          <div className="alert success mensagem-container">
+            Projeto adicionado
+          </div>
+        )}
+      </div>
+
+      {/* Linha divisória */}
+      <hr className="linhaAzul" />
+
+      {/* Container principal */}
+      <div className="container d-flex align-items-center justify-content-center mx-auto">
+        {/* Linha de formulário */}
+        <div className="row">
+          {/* Seleção de Orientador */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <select
+              value={orientadorSelecionado}
+          
+              className="custom-select"
+            >
+              {/* Opções aqui */}
+            </select>
+          </div>
+
+          {/* Seleção de Alunos */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <select
+              value={alunosSelecionados}
+       
+              className="custom-select"
+              multiple
+            >
+              {/* Opções aqui */}
+            </select>
+          </div>
+
+          {/* Campo de Título */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <input
+              type="text"
+              value={titulo}
+             // onChange={handleTituloChange}
+              className="form-control"
+              placeholder="Título"
+            />
+            <div className="char-counter">{titulo.length}/200</div>
+          </div>
+
+          {/* Campo de Tema */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <input
+              type="text"
+              value={tema}
+              //onChange={handleTemaChange}
+              className="form-control"
+              placeholder="Tema"
+            />
+            <div className="char-counter">{tema.length}/100</div>
+          </div>
+
+          {/* Campo de Problema */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <textarea
+              value={problema}
+            //  onChange={handleProblemaChange}
+              className="form-control"
+              placeholder="Problema"
+              rows="4"
+            />
+            <div className="char-counter">{problema.length}/350</div>
+          </div>
+
+          {/* Campo de Objetivo Geral */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <textarea
+              value={objetivoGeral}
+              
+              className="form-control mensagem"
+              placeholder="Objetivo geral"
+              rows="4"
+            />
+            <div className="char-counter">{objetivoGeral.length}/300</div>
+          </div>
+
+          {/* Campo de Objetivo Específico */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <textarea
+              value={objetivoEspecifico}
+          
+              className="form-control"
+              placeholder="Objetivos específicos"
+            />
+            <div className="char-counter">{objetivoEspecifico.length}/350</div>
+          </div>
+
+          {/* Campo de Resumo */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <textarea
+              value={resumo}
+            
+              className="form-control mensagem"
+              placeholder="Resumo"
+              rows="4"
+              required
+            />
+            <div className="char-counter">{resumo.length}/400</div>
+          </div>
+
+          {/* Campo de Abstract */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <textarea
+              value={abstract}
+            
+              className="form-control"
+              placeholder="Abstract"
+            />
+            <div className="char-counter">{abstract.length}/400</div>
+          </div>
+
+          {/* Campo de URL do Projeto */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <input
+              type="text"
+              value={urlProjeto}
+         
+              className="form-control"
+              placeholder="URL do Projeto"
+            />
+          </div>
+
+          {/* Campo de Ano de Publicação com Menu de Data */}
+          <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            {/* Adicione seu componente de escolha de data aqui */}
+          </div>
+
+          {/* Upload de Arquivos */}
+          <div className="col-md-6 col-sm-6 align-self-center mt-5">
+            {/* Adicione seu componente de upload de arquivo aqui */}
+          </div>
+
+          {/* Botão de Adicionar PDF */}
+          <div className="col-md-6 col-sm-6 align-self-center mt-5">
+            {/* Adicione seu componente de upload de PDF aqui */}
+          </div>
+
+          {/* Exibição de mensagem de erro */}
+          <div className="col-md-6 col-sm-6 align-self-center mt-5">
+            {/* Adicione seus componentes de exibição de erro aqui */}
           </div>
         </div>
-    
-        {/* Exibição do Spinner durante o carregamento */}
-        <div className="col-12">
-          {loading && (
-            <div className="loading-spinner">
-              <div className="three-body">
-                <div className="three-body__dot"></div>
-                <div className="three-body__dot"></div>
-                <div className="three-body__dot"></div>
-              </div>
-            </div>
-          )}
-        </div>
-    
-        {/* Alerta de projeto adicionado */}
-        <div className="col-12" style={{ marginTop: '10px' }} hidden={!projetoAdicionado}>
-          <div style={{ color: 'green' }}>Projeto adicionado</div>
-        </div>
-    
-        {/* ... (other parts of your template) ... */}
-    
-        {/* Controle de Privacidade */}
-        <div style={{ marginTop: '10px' }}>
-          <label htmlFor="privacyToggle" className="toggle-label ms-5">
-            Tornar {isPrivate ? 'Público' : 'Privado'} ?
-          </label>
-          <checked
-            id="privacyToggle"
-            onChange={togglePrivacy}
-            className="toggle-checkbox ms-3"
-            checked={isPrivate}
-          />
-        </div>
-    
-       
-  
-        {/* Botão de Adicionar Projeto */}
-        <div className="float-end mb-5">
-          <button variant="contained" color="primary" onClick={projetos}>
-            Adicionar
+      </div>
+
+      {/* Controle de Privacidade */}
+      <div>
+        <label htmlFor="privacyToggle" className="toggle-label ms-5">
+          Tornar {isPrivate ? 'Público' : 'Privado'} ?
+        </label>
+        <input
+          type="checkbox"
+          id="privacyToggle"
+          onChange={togglePrivacy}
+          className="toggle-checkbox ms-3"
+          checked={isPrivate}
+        />
+      </div>
+
+      {/* Botão de Navegação de Voltar   */ }
+      <div className="row q-gutter-sm">
+        <div>
+          <button className="btn btn-sm btn-accent">
+            <i className="icon-arrow_back" />
           </button>
         </div>
       </div>
-    );
-};
-}
-export default ProjectForm;
+   
+      {/* Botão de Adicionar Projeto */}
+      <div className="float-end mb-5 ">
+        <button onClick={adicionarProjeto} className="btn color">
+          Adicionar
+        </button>
+      </div>
+    </div>
+  );
+  };
+ 
+export default AdicionarProjeto;

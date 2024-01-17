@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo} from 'react'
 import { useNavigate } from 'react-router-dom';
 import ContainerTopo from '../../components/ContainerTopo';
-import {Container} from './styled';
+import {Container} from '../Secretaria/styled';
 import {motion } from 'framer-motion';
 import { ImBlocked } from 'react-icons/im'
 import imagem1 from '../../imagens/image1.jpg'
@@ -9,7 +9,7 @@ import axiosFecht from '../../axios/config';
 import createHeaders from '../../auth/utils';
 import { toast } from 'react-toastify';
 
-function Aluno(){
+function Professor(){
   const navigate = useNavigate();
   const [mostrarBotao, setMostrarBotao] = useState(true);
   const carousel = useRef();
@@ -26,13 +26,12 @@ function Aluno(){
     noite: false,
   });
  
-  //const userName = localStorage.getItem('userName') ;
   const hoje = useMemo(() => new Date(), []);
   const img = imagem1;
-  const userType = "aluno"
+  const userRole = localStorage.setItem('userRole');
 
   const redirecionarParaProjeto = () => {
-    navigate('/Aluno/Projeto');
+    navigate('/Professor/Projeto');
 };
 
   const fetchData = useCallback(async (setCardapio, setReservas) => {
@@ -144,25 +143,23 @@ function Aluno(){
 
   return(
     <Container>
-      <ContainerTopo userType={userType} mostrarBotao={mostrarBotao} setMostrarBotao={setMostrarBotao}/>
+      <ContainerTopo userRole={userRole} mostrarBotao={mostrarBotao} setMostrarBotao={setMostrarBotao}/>
       
       {mostrarBotao ?(
-
         <div className='container-fluid'>
            <div className='row'>
            <div className='buttons'>
-            
-       <div className="col-sm-12">
+<div className="col-sm-12">
           <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
-                Olá estudante, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+                Olá administrador, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
           </h1>
-       </div>
-                  <button className='button col-lg-6' onClick={mostrarCardapio}>Merenda</button>
-             
-                  <button className='button col-lg-6' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
+          </div>
+          <button className='button col-lg-6' onClick={mostrarCardapio}>Merenda</button>
+          <button className='button col-lg-6' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
+          <button className='button col-lg-6' /*onClick={redirecionarParaProjeto}*/>Provas</button>
             </div>
-
-          </div>    
+           </div>
+          
         </div>
       ) : (
         <div className='containerCardapio'>
@@ -293,4 +290,4 @@ function Aluno(){
   )   
 }
 
-export default Aluno;
+export default Professor;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosFecht from '../../../axios/config';
 import ContainerTopo from "../../../components/ContainerTopo";
 import MenuHamburguer from "../../../components/MenuHamburguer";
 import './professor.css'
@@ -15,13 +15,13 @@ const HomePrincipal = () => {
     try {
       if (searchQuery && /^\d{4}$/.test(searchQuery)) {
         // Se a pesquisa contém um ano válido (4 dígitos numéricos), pesquise por ano
-        const response = await axios.get('https://api-thesis-track.vercel.app/buscar-projetos/ano/', {
+        const response = await axiosFecht.get('/buscar-projetos/ano/', {
           params: { ano: searchQuery },
         });
         setProjects(response.data.data);
       } else {
         // Caso contrário, pesquise por título
-        const response = await axios.get('https://api-thesis-track.vercel.app/buscar-projetos/', {
+        const response = await axiosFecht.get('/buscar-projetos/', {
           params: { titulo: searchQuery },
         });
         setProjects(response.data.data);
@@ -35,7 +35,7 @@ const HomePrincipal = () => {
 
   const loadProjects = async () => {
     try {
-      const response = await axios.get('https://api-thesis-track.vercel.app/projeto/listar');
+      const response = await axiosFecht.get('/projeto/listar');
       setProjects(response.data);
     } catch (error) {
       console.error('Erro ao carregar projetos:', error);

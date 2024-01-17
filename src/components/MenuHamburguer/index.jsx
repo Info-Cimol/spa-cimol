@@ -7,12 +7,9 @@ import StyledTextButton from "./styled";
 const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
     const navigate = useNavigate();
 
-  /*const userName = localStorage.getItem('userName') ;
-  const userEmail = localStorage.getItem('userEmail') ;*/
-
-
     const handleBottonSair = () => {
         localStorage.removeItem('userData');
+        
         navigate('/');
     }
 
@@ -29,6 +26,8 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
             setMostrarBotao(false);
         } else {
             setMostrarBotao(false);
+
+            
             setSecaoAlunos(false);
         }
     }
@@ -93,6 +92,17 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
                 {userType === "funcionario" && (
                     <>
                         <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
+                        <StyledTextButton className="menu-item" onClick={handleBottonSair}>
+                            Sair
+                        </StyledTextButton>
+                    </>
+                )}
+                 {userType === "admin" && (
+                    <>
+                        <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
+                        <StyledTextButton onClick={handleBottonProjetos}>Projetos</StyledTextButton>
+                        <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
+                        <StyledTextButton /*</>onClick={}*/>Provas</StyledTextButton>
                         <StyledTextButton className="menu-item" onClick={handleBottonSair}>
                             Sair
                         </StyledTextButton>
