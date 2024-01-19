@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container } from './styled';
 import { useNavigate } from 'react-router-dom';
 import axiosFecht from '../../axios/config';
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'; 
 
 function Login() {
   const [login, setLogin] = useState('');
@@ -10,7 +10,11 @@ function Login() {
   const [userTypes, setUserTypes] = useState([]);
   const [selectedUserType, setSelectedUserType] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   const navigate = useNavigate();
 
   const handleLogin = (response) => {
@@ -164,29 +168,55 @@ function Login() {
       <div className='areaLogin'>
         <i className="bi bi-person" style={{ fontSize: '50px' }}></i>
         <form onSubmit={handleFormSubmit}>
-          <input value={login} onChange={(e) => setLogin(e.target.value)} placeholder='E-mail' PLtype='text' required />
-          <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Senha' type='password' required />
 
+        <div className="input-group mb-3">
+  <span className="input-group-text align-items-center">
+    <i className="input-icon uil uil-at"></i>
+  </span>
+  
+  <input
+    value={login}
+    onChange={(e) => setLogin(e.target.value)}
+    type="text"
+    placeholder="E-mail"
+    required
+    className="form-control email-input"
+  />
+</div>
+
+
+<div className="input-group mb-3">
+  <span className="input-group-text"> <i class="input-icon uil uil-lock-alt"></i></span>
+  <input
+    name="logpass"
+    id="logpass"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    type="password"
+    placeholder="Senha"
+    required
+    className="form-control password-input"
+  /> 
+</div>
           {userTypes.length > 1 && (
-            <div style={{ marginTop: '15px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
-              <label style={{ fontWeight: 'bold' }}>Escolha um perfil:</label>
-              <div>
+              <div className="profile-selector-container">
+              <label className="profile-label">Selecione um perfil</label>
+             
                 {userTypes.map((type) => (
-                  <label key={type} style={{ display: 'block', margin: '5px 0' }}>
-                    <input
-                      type="radio"
-                      value={type}
-                      checked={selectedUserType === type}
-                      onChange={() => setSelectedUserType(type)}
-                    />
-                    {type}
-                  </label>
+             <label className="valor-label" key={type}>
+             <input
+               className="checkbox-input"
+               type="checkbox"  
+               value={type}
+               checked={selectedUserType.includes(type)}  
+               onChange={() => setSelectedUserType(type)}
+             />
+             <label className="checkbox-text">{type}</label>
+           </label>
+           
                 ))}
-              </div>
-              <button
-                style={{ marginTop: '10px', padding: '5px 10px', background: '#007BFF', color: '#fff', border: 'none', borderRadius: '3px', cursor: 'pointer' }}
-                onClick={handleProfileSelection}
-              >
+             
+              <button className="select-button" onClick={handleProfileSelection}>
                 Selecionar Perfil
               </button>
             </div>

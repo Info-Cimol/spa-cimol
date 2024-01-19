@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled, {keyframes} from "styled-components";
 
 const fadeIn = keyframes`
   from {
@@ -19,10 +19,12 @@ export const Container = styled.div`
     align-items: flex-end;
     animation: ${fadeIn} 5s ease; 
   }
+  Input{
+    border: none;
+  }
 
   .bi.bi-person{
-font-size:40px
-margin-bottom: 100px;
+    font-size:40px
   }
 
   .topo2 {
@@ -37,6 +39,7 @@ margin-bottom: 100px;
     left: 50%;
     transform: translate(-50%, -50%);
     animation: ${fadeIn} 1.8s ease; 
+    
     img {
       width: 90px;
     }
@@ -45,66 +48,104 @@ margin-bottom: 100px;
   .areaLogin {
     display: flex;
     flex-direction: column;
-    padding-top: 18%;
+    padding-top: 8%;
     align-items: center;
 
-    h1 {
-      margin-bottom: 2%;
-      font-weight: bold;
-      font-size: 2rem;
-    }
-
-    h2 {
-      top: 2%;
-      position: absolute;
-    }
-
-    p {
-      font-size: 1rem;
-      font-weight: 500;
-
-      a {
-        text-decoration: underline;
-        color: black;
+      .olho-senha{
         cursor: pointer;
+        margin-top: -10px;
       }
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      width: 80%;
-
-      input {
-        font-size: 16px;
-        padding: 10px;
-        margin: 5px 5px 15px 5px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        transition: all 0.3s ease-out;
-      }
+    
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;  
+        width: 80%;
+  
+        .profile-selector-container {
+          width: 100%;
+          align-items: center;
+          justify-content: center;
+          padding: 20px; 
+          border: 1px solid #ccc;
+          border-radius: 8px; 
+          transition: all 1s ease; 
+        }
+        
+        .profile-options {
+          margin-top: 15px; 
+        }
+        .valor-label {
+          display: flex;
+          align-items: center;
+          margin: 5px 0;
+        }
+        
+        .checkbox-input {
+          margin-right: 10px;
+          font-size: 1rem;
+        }
+         
+        .select-button {
+          margin-top: 15px;
+          padding: 10px 15px; 
+          background: #007BFF;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease; 
+        }
+        
+        .select-button:hover {
+          background-color: #0056b3; 
+        }
+        
+        input {
+          background-color: #fff;
+          font-size: 16px;
+          height: 3.5rem;
+          margin: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          transition: all 0.3s ease-out;
+        }
       
-      button {
-        width: 50%;
-        background-color: #d8a43d;
-        border: none;
-        border-radius: 10px;
-        padding: 10px; 
-        font-size: 1.2rem;
-        align-self: center;
-        margin-bottom: 5%;
-        cursor: pointer;
-        color: #fff; 
-        transition: background-color 0.3s ease-in-out; 
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
+        .input-group-text {
+          height: 3.5rem;
+          display: flex;
+          align-items: center;  
+          margin: 10px;
+          margin-right: 0.1px;
+     
+        }
       
-      button:hover {
-        background-color: #c19235; 
-        cursor: pointer;
+        span {
+          border: none;
+          background: #1B2F4A;
+          color: #fff;
+        }
+      
+        button {
+          width: 50%;
+          background-color: #d8a43d;
+          border: 0;
+          border-radius: 10px;
+          padding: 10px;
+          font-size: 1.2rem;
+          align-self: center;
+          margin-top: 20px;
+          cursor: pointer;
+          color: #fff;
+          transition: background-color 0.3s ease-in-out;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+      
+        button:hover {
+          background-color: #c19235;
+        }
       }
-    }
-  }
+    
 
   .containerAlterarSenha {
     width: 100%;
