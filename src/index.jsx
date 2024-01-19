@@ -18,7 +18,6 @@ import VisualizaProjetoProfessor from './routes/Professor/catalogoProjeto/areaPr
 import AdicionaProjeto from './routes/Aluno/catalogoProjeto/adicionaProjeto';
 import DetalhesProjeto from './routes/Aluno/catalogoProjeto/visualizaProjeto'
 import ProjetoHome from './routes/Aluno/catalogoProjeto/visualizaProjeto'
-
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
