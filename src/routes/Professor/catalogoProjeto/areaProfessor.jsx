@@ -40,22 +40,12 @@ const ProjectComponent = () => {
     const adicionar = () => {
       Navigate('/Adiciona/Projeto');
     };
-  
-   /* const getAutoresNome = (response) => {
-      try {
-        const autores = JSON.parse(response.alunos);
-        console.log(autores);
-        if (autores && autores.length > 0) {
-          return autores.map((autor) => autor.nome).join(', ');
-        }
-      } catch (error) {
-        console.error('Error parsing autores:', error);
-        return '';
-      }
-    };*/
-  
- /*   const visualizar = (projeto, orientadorId) => { };*/
-  
+
+    
+   const visualizar = (id) => {
+    Navigate('/Projeto/Detalhes/Area-Pessoa/' + id);
+  };
+   
     useEffect(() => {
       loadProjects();
     }, 
@@ -141,9 +131,10 @@ const ProjectComponent = () => {
                   <p className="card__desc">{projeto.titulo}</p>
                   <h2 className="card__desc">{projeto.publico ? 'Público' : 'Privado'}</h2>
                 </div>
-               <a href='#t' className="card__btn" /*onClick={() => visualizar(projeto.id_projeto)}*/>
+              
+                <button className="card__btn" onClick={() => visualizar(projeto.id_projeto)}>
                   Visualizar
-                </a>
+                </button>
               </div>
             ))}
           </div>

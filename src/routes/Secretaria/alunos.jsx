@@ -37,7 +37,6 @@ function Alunos (){
         setNomefiltrado(filtrarPesquisa);
     };
 
-
     return(
         <ContainerAluno>
             <div className="container">

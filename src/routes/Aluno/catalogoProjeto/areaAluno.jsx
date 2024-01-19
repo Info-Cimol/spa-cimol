@@ -10,12 +10,12 @@ import './css/aluno.css';
 
 const ProjectComponent = () => {
     const Navigate = useNavigate();
+    const [projetosDoUsuario, setProjetosDoUsuario] = useState([]);
+    const [semProjeto, /*setSemProjeto*/] = useState(false);
+
+    const token = localStorage.getItem('token');
     const [userRole] = useState(localStorage.getItem('userRole'));
     const [userId] = useState(localStorage.getItem('id'));
-    const [projetosDoUsuario, setProjetosDoUsuario] = useState([]);
-    const [semProjeto, setSemProjeto] = useState(false);
-    const token = localStorage.getItem('token');
-
     const loadProjects = async () => {
         try {
             const headers = {
@@ -33,16 +33,20 @@ const ProjectComponent = () => {
         }
     };
 
-    const checkIfEmptyProjects = () => {
+   /* const checkIfEmptyProjects = () => {
         if (projetosDoUsuario.length === 0) {
             setSemProjeto(true);
             console.log("Você não possui nenhum trabalho aqui.");
         }
-    };
+    };*/
 
     const adicionar = () => {
         Navigate('/Adiciona/Projeto');
     };
+
+   const visualizar = (id) => {
+  Navigate('/Projeto/Detalhes/Area-Pessoa/' + id);
+};
 
     useEffect(() => {
         loadProjects();
@@ -109,6 +113,7 @@ const ProjectComponent = () => {
   
           <div className="cards row mt-5 mb-5">
             {projetosDoUsuario.map((projeto) => (
+              
               <div key={projeto.id_projeto} className="card col-sm-6 col-md-4 col-lg-3">
                 <div className="card__img">
                   {projeto.logo_projeto ? (
@@ -125,14 +130,16 @@ const ProjectComponent = () => {
                     />
                   )}
                 </div>
+
                 <div className="card__body">
                   <h2 className="card__head">{projeto.tema}</h2>
                   <p className="card__desc">{projeto.titulo}</p>
                   <h2 className="card__desc">{projeto.publico ? 'Público' : 'Privado'}</h2>
                 </div>
-               <a href="#Visualiza" className="card__btn" /*onClick={() => visualizar(projeto.id_projeto)}*/>
+
+                <button className="card__btn" onClick={() => visualizar(projeto.id_projeto)}>
                   Visualizar
-                </a>
+                </button>
               </div>
             ))}
           </div>

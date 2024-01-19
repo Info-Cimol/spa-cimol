@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo} from 'react'
 import { useNavigate } from 'react-router-dom';
 import ContainerTopo from '../../components/ContainerTopo';
+import MenuHamburguer from '../../components/MenuHamburguer';
 import {Container} from '../Secretaria/styled';
 import {motion } from 'framer-motion';
 import { ImBlocked } from 'react-icons/im'
@@ -10,6 +11,7 @@ import createHeaders from '../../auth/utils';
 import { toast } from 'react-toastify';
 
 function Professor(){
+  const [userRole] = useState(localStorage.getItem('userRole'));
   const navigate = useNavigate();
   const [mostrarBotao, setMostrarBotao] = useState(true);
   const carousel = useRef();
@@ -28,7 +30,6 @@ function Professor(){
  
   const hoje = useMemo(() => new Date(), []);
   const img = imagem1;
-  const userRole = localStorage.setItem('userRole');
 
   const redirecionarParaProjeto = () => {
     navigate('/Professor/Projeto');
@@ -143,7 +144,8 @@ function Professor(){
 
   return(
     <Container>
-      <ContainerTopo userRole={userRole} mostrarBotao={mostrarBotao} setMostrarBotao={setMostrarBotao}/>
+      <ContainerTopo userType={userRole}/>
+      <MenuHamburguer userType={userRole}/>
       
       {mostrarBotao ?(
         <div className='container-fluid'>

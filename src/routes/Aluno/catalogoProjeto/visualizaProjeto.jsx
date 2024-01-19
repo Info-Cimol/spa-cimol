@@ -1,51 +1,57 @@
-import React, { useEffect, useState} from 'react';
-import { useNavigate } from "react-router-dom";
-import axiosFecht from '../../../axios/config';
-
-const ProjetoDetails = ({ match, location}) => {
-    const navigate = useNavigate();
+import React, { useState, useEffect } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './css/visualiza.css'
+const ProjetoDetails = () => {
+  const navigate = useNavigate();
+  const params = useParams();
+  const location = useLocation();
   const [projeto, setProjeto] = useState(null);
   const [projetoDeletado, setProjetoDeletado] = useState(false);
   const [loadingDelecao, setLoadingDelecao] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
 
-  const fetchProjeto = async (projetoId) => {
-    const userId = localStorage.getItem('id');
-    try {
-      const response = await axiosFecht.get('/projeto/listar/' + projetoId, '/pessoa/' + userId);
-      if (response.status === 200) {
-        setProjeto(response.data);
-        setCurrentUserId(localStorage.getItem('id'));
-      } else {
-        console.error('Status de resposta inesperado:', response.status);
+  useEffect(() => {
+    const fetchProjeto = async () => {
+      const userId =  localStorage.getItem('id');
+      try {
+        const response = await axios.get(`https://api-thesis-track.vercel.app/projeto/listar/${params.id}/pessoa/${userId}`);
+        
+        if (response.status === 200) {
+          setProjeto(response.data);
+          setCurrentUserId( localStorage.getItem('id'));
+        } else {
+          console.error('Status de resposta inesperado:', response.status);
+        }
+      } catch (error) {
+        console.error('Erro na solicitação:', error);
       }
-      return response;
-    } catch (error) {
-      console.error('Erro na solicitação:', error);
-      return null;
-    }
-  };
+    };
+
+    fetchProjeto();
+  }, [params.id]);
 
   const getAutoresNome = (projeto) => {
     try {
       const autores = JSON.parse(projeto.autores);
-  
+
       if (autores && Array.isArray(autores) && autores.length > 0) {
         const numeroDeAutores = autores.length;
-  
+
         if (numeroDeAutores === 1) {
-          return 'Autor:' + autores[0].nome;
+          return `Autor: ${autores[0].nome}`;
         } else if (numeroDeAutores === 2) {
-          return 'Autores:' + autores[0].nome + ' e ' + autores[1].nome;
+          return `Autores: ${autores[0].nome} e ${autores[1].nome}`;
         } else if (numeroDeAutores > 2) {
           const nomes = autores.map((autor) => autor.nome);
-          const autoresString = nomes.slice(0, -1).join(', ') + ' e ' + nomes.slice(-1);
-          return 'Autores:' + autoresString;
+          const autoresString = nomes.slice(0, -1).join(', ') + ` e ${nomes.slice(-1)}`;
+          return `Autores: ${autoresString}`;
         }
       }
     } catch (error) {
       console.error('Error parsing autores:', error);
     }
+
     return '';
   };
 
@@ -74,8 +80,8 @@ const ProjetoDetails = ({ match, location}) => {
 
       setLoadingDelecao(true);
 
-      const projetoId = match.params?.id;
-      const response = await axiosFecht.delete('/projeto/delete/' + projetoId, { headers });
+      const projetoId = params.id;
+      const response = await axios.delete('https://api-thesis-track.vercel.app/projeto/delete/' + projetoId, { headers });
 
       setTimeout(() => {
         setLoadingDelecao(false);
@@ -83,7 +89,7 @@ const ProjetoDetails = ({ match, location}) => {
           setProjetoDeletado(true);
           setTimeout(() => {
             setProjetoDeletado(false);
-            navigate("/Visualiza/Projeto/Aluno");
+            navigate("/projetos");
           }, 3000);
         }
       }, 2000);
@@ -94,15 +100,9 @@ const ProjetoDetails = ({ match, location}) => {
   };
 
   const editarProjeto = () => {
-    const projetoId = match.params?.id;
-    navigate('/Editar/' + projetoId);
+    const projetoId = params.id;
+    navigate(`/Editar/${projetoId}`);
   };
-
-  useEffect(() => {
-    const projetoId = match.params?.id;
-    const orientadorId = location.query.orientadorId;
-    fetchProjeto(projetoId);
-  }, [match.params?.id, location.query.orientadorId]);
 
   return (
     <div>
@@ -126,11 +126,9 @@ const ProjetoDetails = ({ match, location}) => {
                   </div>
                 </div>
               </div>
-              <div className="v-col" cols="12">
-                <div className="mensagem-container float-end" style={{ display: projetoDeletado ? 'block' : 'none' }}>
-                  Projeto deletado
-                </div>
-              </div>
+              <v-alert v-if={projetoDeletado} color="red" shaped type="info" class="mensagem-container float-end">
+                Projeto deletado
+              </v-alert>
             </div>
             <div className="v-row">
               <div className="v-col" cols="12" sm="4">
@@ -143,13 +141,96 @@ const ProjetoDetails = ({ match, location}) => {
                   Orientador: {getOrientadorNome(projeto) || ''}
                 </p>
               </div>
-              <div className="v-col" cols="12" sm="4">
+              <div className="v-col" cols='12' sm="4">
                 <p className="estiloEscrita"> Publicado em {projeto.ano_publicacao || ''}</p>
               </div>
             </div>
-            {/* ... Expansion panels and other sections ... */}
+            
             <div className="expansion align-items-center justify-content-center mx-auto" col="12">
-              {/* ... */}
+              <v-expansion-panels inset class="my-3 expansion">
+                <v-expansion-panel>
+                  <v-expansion-panel-header class="expansion-header fadeIn">
+                    <div class="title">O tema do projeto</div>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <div>
+                      <p>
+                        {projeto.tema || ''}
+                      </p>
+                    </div>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+              <v-expansion-panels inset class="my-3 ">
+                <v-expansion-panel>
+                  <v-expansion-panel-header class="expansion-header fadeIn">
+                    <div class="title">Problema</div>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <div>
+                      <p>
+                        {projeto.problema || ''}
+                      </p>
+                    </div>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+              <v-expansion-panels inset class="my-3 ">
+                <v-expansion-panel>
+                  <v-expansion-panel-header class="expansion-header">
+                    <div class="title">Objetivo geral</div>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <div>
+                      <p>
+                        {projeto.objetivo_geral || ''}
+                      </p>
+                    </div>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+              <v-expansion-panels inset class="my-3">
+                <v-expansion-panel>
+                  <v-expansion-panel-header class="expansion-header">
+                    <div class="title">Objetivos específicos</div>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <div>
+                      <p>
+                        {projeto.objetivo_especifico || ''}
+                      </p>
+                    </div>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+              <v-expansion-panels inset class="my-3">
+                <v-expansion-panel>
+                  <v-expansion-panel-header class="expansion-header">
+                    <div class="title">Resumo</div>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <div>
+                      <p>
+                        {projeto.resumo || ''}
+                      </p>
+                    </div>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+              <v-expansion-panels inset class="my-3">
+                <v-expansion-panel>
+                  <v-expansion-panel-header class="expansion-header">
+                    <div class="title">Abstract</div>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <div>
+                      <p>
+                        {projeto.abstract || ''}
+                      </p>
+                    </div>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
             </div>
             <div>
               <a
@@ -163,7 +244,6 @@ const ProjetoDetails = ({ match, location}) => {
                 </svg>
                 Visite o Projeto
               </a>
-  
               <a
                 href={projeto.arquivo && projeto.arquivo !== '' ? projeto.arquivo : undefined}
                 target="_blank"
@@ -194,7 +274,7 @@ const ProjetoDetails = ({ match, location}) => {
         </div>
       )}
     </div>
-  );
+  );  
 };
 
 export default ProjetoDetails;

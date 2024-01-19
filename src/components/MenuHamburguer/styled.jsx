@@ -46,13 +46,14 @@ const StyledTextButton = styled.button`
     border: none;
     padding: 0;
     margin: 0;
+    border-radius: 4px;
     background-color: transparent;
     cursor: pointer;
     font-size: 1rem;
     color: #fff; 
     text-decoration: none;
     margin-bottom: 10%;
-    transition: background-color 0.3s ease; 
+    transition: background-color 0.5s ease; 
 
     &:hover {
         background-color: #FFBD59;

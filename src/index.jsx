@@ -3,21 +3,22 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Private } from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
-
 import App from './App';
 import Login from './routes/Login';
 import Aluno from './routes/Aluno';
 import Secretaria from './routes/Secretaria';
-import Funcionario from './routes/Funcionario';
+import Merendeira from './routes/Merendeira';
 import Professor from './routes/Professor'
 import Admin from './routes/Admin'
+
 import ProfessorProjeto from './routes/Professor/catalogoProjeto/projeto';
 import VisualizaProjetoAluno from './routes/Aluno/catalogoProjeto/areaAluno';
-
 import AlunoProjeto from './routes/Aluno/catalogoProjeto/projeto';
 import VisualizaProjetoProfessor from './routes/Professor/catalogoProjeto/areaProfessor';
 import AdicionaProjeto from './routes/Aluno/catalogoProjeto/adicionaProjeto';
 import DetalhesProjeto from './routes/Aluno/catalogoProjeto/visualizaProjeto'
+import ProjetoHome from './routes/Aluno/catalogoProjeto/visualizaProjeto'
+
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
@@ -37,22 +38,22 @@ const router = createBrowserRouter([
       
       {
         path: '/Aluno',
-        element: <Private allowedRoles={['aluno']}><Aluno /></Private>,
+        element: <Private allowedRoles={['aluno', 'admin']}><Aluno /></Private>,
       },
      
       {
         path: '/Professor',
-        element: <Private allowedRoles={['professor']}><Professor /></Private>,
+        element: <Private allowedRoles={['professor', 'admin']}><Professor /></Private>,
       },
     
       {
         path: '/Secretaria',
-        element: <Private allowedRoles={['secretaria']}><Secretaria /></Private>,
+        element: <Private allowedRoles={['secretaria', 'admin']}><Secretaria /></Private>,
       },
      
       {
         path: '/Merendeira',
-        element: <Private allowedRoles={['merendeira']}><Funcionario /></Private>,
+        element: <Private allowedRoles={['merendeira', 'admin']}><Merendeira /></Private>,
       },
 
       //-------------Ferramenta de catálogo de projeto------------------------
@@ -83,8 +84,13 @@ const router = createBrowserRouter([
       },
 
       {
-        path: '/Projeto/Detalhes/:id',
+        path: '/Projeto/Detalhes/Area-Pessoa/:id',
         element: <Private allowedRoles={['aluno', 'professor','admin']}><DetalhesProjeto/></Private>,
+      },
+
+      {
+        path: '/Projeto/Detalhes/Home-Pessoa/:id',
+        element: <Private allowedRoles={['aluno', 'professor','admin']}><ProjetoHome/></Private>,
       },
     ],
   },

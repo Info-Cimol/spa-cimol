@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axiosFecht from '../../../axios/config';
 import ContainerTopo from "../../../components/ContainerTopo";
 import './css/projeto.css'
 
 const HomePrincipal = () => {
+  const Navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -41,10 +43,8 @@ const HomePrincipal = () => {
     }
   };
 
-  const visualizar = (projectId) => {
-    // Redirecionar para a página de visualização do projeto com o ID do projeto
-    // Certifique-se de que você tenha configurado as rotas corretamente no seu aplicativo React Router
-    // Exemplo: this.props.history.push(`/Visualizar/Projeto/${projectId}`);
+  const visualizar = (id) => {
+    Navigate('/Projeto/Detalhes/Home-Pessoa/' + id );
   };
 
   useEffect(() => {

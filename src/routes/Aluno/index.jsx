@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo} from 'react'
 import { useNavigate } from 'react-router-dom';
 import ContainerTopo from '../../components/ContainerTopo';
+import MenuHamburguer from "../../components/MenuHamburguer";
 import {Container} from './styled';
 import {motion } from 'framer-motion';
 import { ImBlocked } from 'react-icons/im'
@@ -29,7 +30,7 @@ function Aluno(){
   //const userName = localStorage.getItem('userName') ;
   const hoje = useMemo(() => new Date(), []);
   const img = imagem1;
-  const userType = "aluno"
+  const [userRole] = useState(localStorage.getItem('userRole'));
 
   const redirecionarParaProjeto = () => {
     navigate('/Aluno/Projeto');
@@ -144,8 +145,9 @@ function Aluno(){
 
   return(
     <Container>
-      <ContainerTopo userType={userType} mostrarBotao={mostrarBotao} setMostrarBotao={setMostrarBotao}/>
-      
+     
+      <ContainerTopo  userType={userRole}/>
+      <MenuHamburguer userType={userRole}/>
       {mostrarBotao ?(
 
         <div className='container-fluid'>

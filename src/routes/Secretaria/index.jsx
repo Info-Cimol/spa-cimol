@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Container } from "./styled";
 import ContainerTopo from "../../components/ContainerTopo";
+import MenuHamburguer from "../../components/MenuHamburguer";
 import {IoAddCircleOutline, IoSearchOutline, IoClose} from "react-icons/io5"
 import { Link } from "react-router-dom";
 import createHeaders from "../../auth/utils";
@@ -9,6 +10,7 @@ import { toast } from "react-toastify";
 import Alunos from "./alunos";
 
 function Secretaria(){
+    const [userRole] = useState(localStorage.getItem('userRole'));
     const [mostrarBotao, setMostrarBotao] = useState(true);
     const [inputValue, setInputValue] = useState('');
     const [newCardapio, setNewCardapio] = useState(false);
@@ -24,8 +26,6 @@ function Secretaria(){
     const [descricaoCardapio, setDescricaoCardapio] = useState();
     const [editCardapio, setEditCardapio] = useState(false);
     const [secaoAlunos, setSecaoAlunos] = useState(false);
-    
-    const userType = "secretaria";
 
     const fetchData = useCallback(async (setCardapio) =>{
         try {
@@ -170,12 +170,8 @@ function Secretaria(){
 
     return(
         <Container>
-            <ContainerTopo userType={userType} 
-                mostrarBotao={mostrarBotao} 
-                setMostrarBotao={setMostrarBotao}
-                secaoAlunos={secaoAlunos}
-                setSecaoAlunos={setSecaoAlunos}
-            />
+              <ContainerTopo userType={userRole} />
+            <MenuHamburguer userType={userRole}/>
                <div className="col-sm-12">
           <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
                 Olá supervisão, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
