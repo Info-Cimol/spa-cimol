@@ -68,14 +68,14 @@ a {
   padding: 1.5em; 
   border-radius: 12px;
   text-align: center;
-  width: calc(30% - 20px);
+  width: calc(33.33% - 20px);
   box-sizing: border-box;
   margin-bottom: 15px;
   box-shadow: 0 10px 30px -7px #171e35;
   max-height: 100%; 
   border: 1px solid #ffffff;
   transition: transform 0.3s ease-in-out;
-  margin-left: 6px;
+  margin-left: 8px;
 }
 
 .card__img {

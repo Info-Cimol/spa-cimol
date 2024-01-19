@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosFecht from '../../../axios/config';
-import ContainerTopo from "../../../components/ContainerTopo";
+import ContainerTopo from '../../../components/ContainerTopo';
+import MenuHamburguer from "../../../components/MenuHamburguer";
 import './css/projeto.css'
 
 const HomePrincipal = () => {
@@ -53,7 +54,8 @@ const HomePrincipal = () => {
 
   return (
     <div>
-          <ContainerTopo userType={userRole} />
+         <ContainerTopo  userType={userRole}/>
+         <MenuHamburguer userType={userRole}/>
        
       <div className="imagemFundo col-sm-12">
         <div className="container">
