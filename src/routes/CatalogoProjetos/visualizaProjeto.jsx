@@ -82,27 +82,32 @@ const ProjetoDetails = () => {
 
   const deletarProjeto = async () => {
     const token = localStorage.getItem('token');
+  
     try {
-      if (!projeto) {
+      // Adicione uma confirmação antes de prosseguir com a deleção
+      const confirmacao = window.confirm("Tem certeza que deseja excluir o projeto? Esta ação é irreversível.");
+  
+      if (!confirmacao || !params.id) {
+        // Se o usuário cancelar ou não houver um ID de projeto, retorne
         return;
       }
-
+  
       const headers = {
         'x-access-token': token,
       };
-
+  
       setLoadingDelecao(true);
-
+  
       const projetoId = params.id;
-      const response = await axiosFecht.delete('/projeto/delete/' + projetoId, { headers });
-
+      const response = await axiosFecht.delete(`/projeto/delete/${projetoId}`, { headers });
+  
       setTimeout(() => {
         setLoadingDelecao(false);
         if (response.status === 200) {
           setProjetoDeletado(true);
           setTimeout(() => {
             setProjetoDeletado(false);
-            navigate("/projetos");
+            navigate("/Area/Pessoa-Projeto");
           }, 3000);
         }
       }, 2000);
@@ -111,6 +116,7 @@ const ProjetoDetails = () => {
       setLoadingDelecao(false);
     }
   };
+  
 
   const editarProjeto = () => {
     const projetoId = params.id;
@@ -132,7 +138,7 @@ const ProjetoDetails = () => {
             </div>
           </div>
           <div className="row">
-          <div className="col-12 col-sm-4 col-xs-12">
+          <div className="col-12 col-sm-12 col-xs-12">
               <div className="loading-spinner" style={{ display: loadingDelecao ? 'block' : 'none' }}>
                 <div className="three-body">
                   <div className="three-body__dot"></div>
@@ -290,10 +296,11 @@ const ProjetoDetails = () => {
 <div className='container-fluid'>
   <div className="row">
     <div className="col-lg-12 col-xs-12 d-flex justify-end">
-      <button className="btn btn-primary botao-editar" onClick={editarProjeto} /*disabled={!canEditOrDelete}*/>
+      <button className="btn btn-primary botao-editar" onClick={editarProjeto} >
         Editar
       </button>
-      <button onClick={deletarProjeto} className="btn btn-danger ml-2" /*disabled={!canEditOrDelete}*/>
+
+      <button className="btn btn-danger ml-2" onClick={deletarProjeto}>
         Deletar Projeto
       </button>
     </div>

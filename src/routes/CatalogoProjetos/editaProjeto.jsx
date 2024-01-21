@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axiosFecht from '../../axios/config';
 import axios from 'axios';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
@@ -44,9 +45,7 @@ const EdicaoProjeto = () => {
         };
         const userId = localStorage.getItem('id');
 
-        const response = await axios.get(
-          `https://api-thesis-track.vercel.app/projeto/listar/${id}/pessoa/${userId}`,
-          { headers }
+        const response = await axiosFecht.get(`/projeto/listar/${id}/pessoa/${userId}`, { headers }
         );
 
         setProjetoEdit(response.data);
@@ -142,12 +141,12 @@ const EdicaoProjeto = () => {
   const carregarAlunos = async () => {
     const token = localStorage.getItem('token');
     const headers = {
-      'x-access-token': `${token}`,
+      'x-access-token': token,
     };
 
     try {
-      const response = await axios.get('https://api-thesis-track.vercel.app/listar/alunos', {
-        headers,
+      const response = await axiosFecht.get('/listar/alunos', headers, {
+      
       });
       setAlunosDisponiveis(
         response.data.map((aluno) => ({
@@ -163,12 +162,11 @@ const EdicaoProjeto = () => {
   const carregarProfessores = async () => {
     const token = localStorage.getItem('token');
     const headers = {
-      'x-access-token': `${token}`,
+      'x-access-token': token,
     };
 
     try {
-      const response = await axios.get('https://api-thesis-track.vercel.app/listar/orientador', {
-        headers,
+      const response = await axiosFecht.get('/listar/orientador', headers, {
       });
       setProfessoresDisponiveis(
         response.data.map((professor) => ({
@@ -193,11 +191,11 @@ const EdicaoProjeto = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const headers = {
-        'x-access-token': `${token}`,
+        'x-access-token': token,
       };
 
-      await axios.put(
-        `https://api-thesis-track.vercel.app/projeto/atualiza/${id}`,
+      await axiosFecht.put(
+        `/projeto/atualiza/${id}`,
         projetoEdit,
         { headers }
       );
@@ -256,10 +254,8 @@ const EdicaoProjeto = () => {
                 }
             }}
               
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
+            className="custom-textfield"
+            inputProps={{ maxLength: 50 }}
             />
           </div>   
          
@@ -318,30 +314,29 @@ const EdicaoProjeto = () => {
 
           <div className="col-md-10 col-sm-8 align-self-center shadow-lg">
           <TextareaAutosize
-  id="objetivo_especifico"
-  label="Objetivos Específicos"
-  variant="outlined"
-  multiline
-  value={projetoEdit.objetivo_especifico}
-  onChange={(e) => {
-    const inputValue = e.target.value;
+            id="objetivo_especifico"
+            label="Objetivos Específicos"
+            variant="outlined"
+            multiline
+            value={projetoEdit.objetivo_especifico}
+            onChange={(e) => {
+              const inputValue = e.target.value;
 
-    if (inputValue.length <= 400) {
-      setProjetoEdit({ ...projetoEdit, objetivo_especifico: inputValue });
-    }
-  }}
-  onKeyDown={(e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault(); 
-      setProjetoEdit((prev) => ({
-        ...prev,
-        objetivo_especifico: prev.objetivo_especifico + '\n', 
-      }));
-    }
-  }}
-  fullWidth
-/>
-
+              if (inputValue.length <= 400) {
+                setProjetoEdit({ ...projetoEdit, objetivo_especifico: inputValue });
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault(); 
+                setProjetoEdit((prev) => ({
+                  ...prev,
+                  objetivo_especifico: prev.objetivo_especifico + '\n', 
+                }));
+              }
+            }}
+            fullWidth
+          />
           </div>
 
           <div className="col-md-10 col-sm-8 align-self-center shadow-lg">

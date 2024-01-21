@@ -12,6 +12,8 @@ import './css/visualiza.css';
 const HomeProjeto = () => {
   const navigate = useNavigate();
   const params = useParams();
+  const [loadingDelecao, setLoadingDelecao] = useState(false);
+  const [projetoDeletado, setProjetoDeletado] = useState(false);
   const userRole = localStorage.getItem('userRole');
   const { id } = useParams();
   const [projeto, setProjeto] = useState(null);
@@ -90,6 +92,40 @@ const HomeProjeto = () => {
     }
   };
 
+  const deletarProjeto = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      if (!id) {
+        return;
+      }
+
+      const headers = {
+        'x-access-token': `${token}`
+      };
+
+      setLoadingDelecao(true);
+
+      const response = await axiosFecht.delete(`/projeto/delete/${id}`,headers, { 
+      });
+
+      console.log(response);
+
+      // Desativar o estado de carregamento após um curto atraso
+      setTimeout(() => {
+        setLoadingDelecao(false);
+        if (response.status === 200) {
+          setProjetoDeletado(true);
+          setTimeout(() => {
+            setProjetoDeletado(false);
+            navigate("/Area/Pessoa-Projeto");
+          }, 3000);
+        }
+      }, 2000);
+    } catch (error) {
+      console.error('Error:', error);
+      setLoadingDelecao(false);
+    }
+  };
   
   const editarProjeto = () => {
     const projetoId = params.id;
@@ -266,7 +302,7 @@ const HomeProjeto = () => {
 
       {/* Botão Deletar Projeto */}
       {userRole === "admin" && (
-        <button  className="btn btn-danger ml-2">
+        <button  className="btn btn-danger ml-2" onClick={deletarProjeto}>
           Deletar Projeto
         </button>
       )}
