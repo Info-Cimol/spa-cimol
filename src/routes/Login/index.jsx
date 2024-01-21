@@ -5,21 +5,15 @@ import axiosFecht from '../../axios/config';
 import { toast } from 'react-toastify'; 
 
 function Login() {
+  const navigate = useNavigate();
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [userTypes, setUserTypes] = useState([]);
   const [selectedUserType, setSelectedUserType] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-  const navigate = useNavigate();
-
+ 
   const handleLogin = (response) => {
     const userRoles = response.data.user.perfil;
-
     if (userRoles.length === 1) {
       const userRole = userRoles[0];
       saveUserData(response, userRole);
@@ -65,6 +59,7 @@ function Login() {
             // Caso incomum: usuário sem perfil atribuído
             console.log('Usuário sem perfil atribuído');
             toast.error('Usuário sem perfil atribuído');
+            navigate('/');
           }
         })
         .catch((error) => {
@@ -213,8 +208,7 @@ function Login() {
              />
              <label className="checkbox-text">{type}</label>
            </label>
-           
-                ))}
+))}
              
               <button className="select-button" onClick={handleProfileSelection}>
                 Selecionar Perfil

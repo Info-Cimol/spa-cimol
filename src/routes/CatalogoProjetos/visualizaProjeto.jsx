@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import ContainerTopo from '../../../components/ContainerTopo';
-import MenuHamburguer from "../../../components/MenuHamburguer";
+import axiosFecht from '../../axios/config';
+import ContainerTopo from '../../components/ContainerTopo';
+import MenuHamburguer from "../../components/MenuHamburguer";
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -17,12 +17,18 @@ const ProjetoDetails = () => {
   const [, setProjetoDeletado] = useState(false);
   const [loadingDelecao, setLoadingDelecao] = useState(false);
   const [setCurrentUserId] = useState(null);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchProjeto = async () => {
       const userId =  localStorage.getItem('id');
+      
+      const headers = {
+        'x-access-token': token,
+      };
+
       try {
-        const response = await axios.get(`https://api-thesis-track.vercel.app/projeto/listar/${params.id}/pessoa/${userId}`);
+        const response = await axiosFecht.get(`/projeto/listar/${params.id}/pessoa/${userId}`, { headers });
         
         if (response.status === 200) {
           setProjeto(response.data);
@@ -88,7 +94,7 @@ const ProjetoDetails = () => {
       setLoadingDelecao(true);
 
       const projetoId = params.id;
-      const response = await axios.delete('https://api-thesis-track.vercel.app/projeto/delete/' + projetoId, { headers });
+      const response = await axiosFecht.delete('/projeto/delete/' + projetoId, { headers });
 
       setTimeout(() => {
         setLoadingDelecao(false);
@@ -108,7 +114,7 @@ const ProjetoDetails = () => {
 
   const editarProjeto = () => {
     const projetoId = params.id;
-    navigate(`/Editar/${projetoId}`);
+    navigate(`/Edita/Projeto/${projetoId}`);
   };
 
   return (
@@ -176,7 +182,7 @@ const ProjetoDetails = () => {
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          Problema
+          Problema do Projeto
         </AccordionSummary>
         <AccordionDetails>
         {projeto.problema || ''}
@@ -218,7 +224,7 @@ const ProjetoDetails = () => {
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          Objetivo Geral
+          Objetivo Geral do Projeto
         </AccordionSummary>
         <AccordionDetails>
         {projeto.objetivo_geral || ''}
@@ -232,7 +238,7 @@ const ProjetoDetails = () => {
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          Objetivos Específicos
+          Objetivos Específicos do Projeto
         </AccordionSummary>
         <AccordionDetails>
         {projeto.objetivo_especifico || ''}

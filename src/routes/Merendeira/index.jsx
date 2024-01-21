@@ -49,7 +49,20 @@ function Funcionario() {
         <Container>
             <ContainerTopo userType={userRole} />
             <MenuHamburguer userType={userRole}/>
+            <div className='container-fluid'>
+           <div className='row'>
+           <div className='buttons'>
             
+       <div className="col-sm-12">
+          <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '5px' }}>
+                Olá merendeira, seja muito bem-vinda. Aqui você tem acesso a todos os cardápios da semana na ferramentas do Cimol.
+          </h1>
+       </div>
+              
+            </div>
+
+          </div>    
+        </div>
             {descricao &&(
                 <div className="containerDescricao">
                     <IoClose size={20} onClick={() => setDescricao(false)}/>

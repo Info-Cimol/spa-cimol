@@ -5,10 +5,9 @@
     --clr-border: #cfd4e7;
     --clr-gray: #A1A7C0;
   }
-  
-  img {
-    max-width: 100%;
-    display: block;
+
+  .img-fluid{
+      margin-top: 35px;
   }
   
   a {
@@ -160,8 +159,8 @@
   }
   
   .imagem {
-   width: 50%;
-   margin-top: 2rem;
+   max-width: 100%;
+   margin-top: 2.8rem;
    margin-left: 5rem;
   }
   
@@ -182,6 +181,7 @@
    margin-top: 5rem; 
    font-size: 3rem; 
    } 
+   
    @keyframes fade-in-down { 
      0% { opacity: 0;
       transform: translateX(-57px);
@@ -198,6 +198,9 @@
    .imagem {
      display: none;
    }
+   .img-fluid {
+    display: none;
+  }
   
    .escreva {
      font-size: 5vw;
@@ -238,7 +241,6 @@
   
    .maisProjeto {
      margin-top: none;
-  
    }
   
    .adicionar {

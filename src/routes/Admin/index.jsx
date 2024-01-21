@@ -151,7 +151,7 @@ function Professor(){
         <div className='container-fluid'>
            <div className='row'>
            <div className='buttons'>
-<div className="col-sm-12">
+        <div className="col-sm-12">
           <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
                 Olá administrador, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
           </h1>

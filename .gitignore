@@ -23,3 +23,22 @@ dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+yarn.lock
+
+# Editores
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Vim
+.vim/
+
+# Backup e Arquivos Temporários
+*.bak
+*.swp
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace

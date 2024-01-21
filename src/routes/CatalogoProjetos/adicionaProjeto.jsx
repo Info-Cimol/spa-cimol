@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './css/adiciona.css';
-import axiosFecht from '../../../axios/config';
+import axiosFecht from '../../axios/config';
 
 function AdicionarProjeto() {
   const [errorMessages, setErrorMessages] = useState({

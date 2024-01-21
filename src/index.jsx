@@ -4,20 +4,21 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Private } from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
 import App from './App';
+import ScrollToTopButton from './components/ScrollTop'
 import Login from './routes/Login';
 import Aluno from './routes/Aluno';
 import Secretaria from './routes/Secretaria';
 import Merendeira from './routes/Merendeira';
-import Professor from './routes/Professor'
-import Admin from './routes/Admin'
+import Professor from './routes/Professor';
+import Admin from './routes/Admin';
 
-import ProfessorProjeto from './routes/Professor/catalogoProjeto/projeto';
-import VisualizaProjetoAluno from './routes/Aluno/catalogoProjeto/areaAluno';
-import AlunoProjeto from './routes/Aluno/catalogoProjeto/projeto';
-import VisualizaProjetoProfessor from './routes/Professor/catalogoProjeto/areaProfessor';
-import AdicionaProjeto from './routes/Aluno/catalogoProjeto/adicionaProjeto';
-import DetalhesProjeto from './routes/Aluno/catalogoProjeto/visualizaProjeto'
-import ProjetoHome from './routes/Aluno/catalogoProjeto/visualizaProjeto'
+import ProjetoHomePessa from './routes/CatalogoProjetos/homeProjeto';
+import ProjetoHomeDetalhes from './routes/CatalogoProjetos/homeDetalhesProjeto';
+import AreaPessoaProjeto from './routes/CatalogoProjetos/areaPessoaProjeto';
+import VisualizaProjetoPessoa from './routes/CatalogoProjetos/visualizaProjeto';
+import AdicionaProjeto from './routes/CatalogoProjetos/adicionaProjeto';
+import EditaProjeto from './routes/CatalogoProjetos/editaProjeto';
+
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Login />
+        element: <Login />,
       },
    
       {
@@ -56,41 +57,42 @@ const router = createBrowserRouter([
       },
 
       //-------------Ferramenta de catálogo de projeto------------------------
-
-      {
-        path: '/Professor/Projeto',
-        element: <Private allowedRoles={['professor','admin']}><ProfessorProjeto/></Private>,
-      },
      
+      //Rota da home dos projetos, responsável por listar os projetos públicos e ainda possibilita a pesquisa dos mesmos, por título e ano
       {
-        path: '/Visualiza/Projeto/Professor',
-        element: <Private allowedRoles={['professor', 'admin']}><VisualizaProjetoProfessor /></Private>,
-      },
-      
-      {
-        path: '/Aluno/Projeto',
-        element: <Private allowedRoles={['aluno','admin']}><AlunoProjeto /></Private>,
+        path: '/Home/Pessoa-Projeto',
+        element: <Private allowedRoles={['aluno', 'professor', 'admin']}><ProjetoHomePessa /></Private>,
       },
 
+      //Rota apartir da home, que possibilita ver os projetos das pessoas pelo id do projetos
       {
-        path: '/Visualiza/Projeto/Aluno',
-        element: <Private allowedRoles={['aluno','admin']}><VisualizaProjetoAluno /></Private>,
+        path: '/Home/Pessoa-Projeto/Detalhes/:id',
+        element: <Private allowedRoles={['aluno', 'professor', 'admin']}><ProjetoHomeDetalhes/></Private>,
       },
 
-      {
-        path: '/Adiciona/Projeto',
-        element: <Private allowedRoles={['aluno', 'professor','admin']}><AdicionaProjeto/></Private>,
+       //Rota responsável pela área de administração dos projeos por parte de cada perfil de usuário
+       {
+        path: '/Area/Pessoa-Projeto',
+        element: <Private allowedRoles={['aluno', 'professor', 'admin']}><AreaPessoaProjeto/></Private>
       },
 
-      {
-        path: '/Projeto/Detalhes/Area-Pessoa/:id',
-        element: <Private allowedRoles={['aluno', 'professor','admin']}><DetalhesProjeto/></Private>,
-      },
+        //Rota responsável pela listagem dos projetos de cada indivíduo, que esteja relacionado ao projeto
+        {
+          path: '/Visualiza/Projeto-Pessoa/:id',
+          element: <Private allowedRoles={['aluno', 'professor', 'admin']}><VisualizaProjetoPessoa/></Private>
+        },
 
-      {
-        path: '/Projeto/Detalhes/Home-Pessoa/:id',
-        element: <Private allowedRoles={['aluno', 'professor','admin']}><ProjetoHome/></Private>,
-      },
+        //Rota responsável pela criação de projeto 
+        {
+          path: '/Adiciona/Projeto',
+          element: <Private allowedRoles={['aluno', 'professor', 'admin']}><AdicionaProjeto/></Private>
+        },
+
+         //Rota responsável pela edição de projetos pelo id 
+         {
+          path: '/Edita/Projeto/:id',
+          element: <Private allowedRoles={['aluno', 'professor', 'admin']}><EditaProjeto/></Private>
+        },
     ],
   },
 ]);
@@ -100,5 +102,6 @@ root.render(
   <React.StrictMode>
     <ToastContainer autoClose={3000} />
     <RouterProvider router={router} />
+    <ScrollToTopButton />
   </React.StrictMode>
 );

@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Inika&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inder&display=swap');
+
+.imagemFundo {
+    background-color: #1B2F4A;
+    max-width: 100%;
+    max-height: 75vh;
+}
+
+.mensagem-container {
+    position: fixed;
+    top: 20%;
+    left: 30px;
+    transform: translateY(-50%);
+    z-index: 999;
+    background-color: rgb(189, 14, 14)818 !important;
+    color: #fff !important;
+}
+
+.toggle-label {
+    font-weight: bold;
+}
+
+.toggle-checkbox {
+    width: 40px;
+    height: 20px;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #ccc;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.toggle-checkbox:checked {
+    background-color: #3498db;
+}
+
+.loading-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.cor {
+    color: #1b4a3c;
+}
+
+.custom-file-upload {
+    background-color: #1B2F4A;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background-color: #1B2F4A;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.toggle-checkbox::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    left: 0;
+    transition: 0.3s;
+}
+
+.toggle-checkbox:checked::before {
+    left: 20px;
+}
+
+.color {
+    background-color: #1B2F4A !important;
+    color: #fff !important;
+
+}
+
+.three-body {
+    --uib-size: 35px;
+    --uib-speed: 0.8s;
+    --uib-color: #ffffff;
+    position: relative;
+    display: inline-block;
+    height: var(--uib-size);
+    width: var(--uib-size);
+    animation: spin78236 calc(var(--uib-speed) * 2.5) infinite linear;
+}
+
+.three-body__dot {
+    position: absolute;
+    height: 100%;
+    width: 30%;
+}
+
+.three-body__dot:after {
+    content: '';
+    position: absolute;
+    height: 0%;
+    width: 100%;
+    padding-bottom: 100%;
+    background-color: var(--uib-color);
+    border-radius: 50%;
+}
+
+.three-body__dot:nth-child(1) {
+    bottom: 5%;
+    left: 0;
+    transform: rotate(60deg);
+    transform-origin: 50% 85%;
+}
+
+.three-body__dot:nth-child(1)::after {
+    bottom: 0;
+    left: 0;
+    animation: wobble1 var(--uib-speed) infinite ease-in-out;
+    animation-delay: calc(var(--uib-speed) * -0.3);
+}
+
+.three-body__dot:nth-child(2) {
+    bottom: 5%;
+    right: 0;
+    transform: rotate(-60deg);
+    transform-origin: 50% 85%;
+}
+
+.three-body__dot:nth-child(2)::after {
+    bottom: 0;
+    left: 0;
+    animation: wobble1 var(--uib-speed) infinite calc(var(--uib-speed) * -0.15) ease-in-out;
+}
+
+.three-body__dot:nth-child(3) {
+    bottom: -5%;
+    left: 0;
+    transform: translateX(116.666%);
+}
+
+.three-body__dot:nth-child(3)::after {
+    top: 0;
+    left: 0;
+    animation: wobble2 var(--uib-speed) infinite ease-in-out;
+}
+
+@keyframes spin78236 {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes wobble1 {
+
+    0%,
+    100% {
+        transform: translateY(0%) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-66%) scale(0.65);
+        opacity: 0.8;
+    }
+}
+
+@keyframes wobble2 {
+
+    0%,
+    100% {
+        transform: translateY(0%) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(66%) scale(0.65);
+        opacity: 0.8;
+    }
+}
+
+.container {
+    display: inline-block;
+}
+
+.linhaAzul {
+    width: 100%;
+    height: 3px;
+    background-color: #1B2F4A;
+}
+
+.tituloProjetos {
+    font-family: 'Inika', serif;
+    margin-top: 5rem;
+    margin-left: 5rem;
+}
+
+.input {
+    background-color: #f1eded48;
+    border-radius: 5px;
+    border-bottom: #7a7272 solid 2px;
+    box-shadow: #2e2626;
+}
+
+.custom-input {
+    min-height: 30vh !important;
+}
+
+@keyframes slidein {
+    from {
+        margin-left: 100%;
+        width: 200%;
+    }
+
+    to {
+        margin-left: 15%;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 430px) {
+    .tituloProjetos {
+        font-size: 6vw;
+    }
+
+    .input {
+        border: none !important;
+    }
+
+    .linhaAzul {
+        margin: 0;
+        width: 100%;
+    }
+}

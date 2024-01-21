@@ -25,36 +25,37 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
   const userName = localStorage.getItem('userName');
   const userRole = localStorage.getItem('userRole');
 
-  const handleAvatarClick = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   const handleBottonSair = () => {
     localStorage.removeItem('userData');
     navigate('/');
   };
 
-  const handleBottonProjeto = () => {
-    if (userType === "aluno") {
-      navigate('/Aluno/Projeto');
-    } else if (userType === "professor") {
-      navigate('/Professor/Projeto');
-    }
-  };
-
   const handleBottonHome = () => {
     if (userType === "aluno") {
       navigate('/Aluno/');
+
     } else if (userType === "professor") {
       navigate('/Professor/');
+
     } else if (userType === "secretaria") {
       navigate('/Secretaria');
+
     } else if (userType === "admin") {
       navigate('/Coodernador/Admin');
+
     } else if (userType === "merendeira") {
       navigate('/Merendeira');
     }
   };
+  
+  const handleBottonProjeto = () => {
+    if (userType === "aluno" || userType === "admin") {
+      navigate('/Home/Pessoa-Projeto');
+    } else if (userType === "professor" || userType === "admin") {
+      navigate('/Home/Pessoa-Projeto');
+    }
+  };
+  
 
   const handleBottonCardapio = () => {
     if (userType === "aluno") {
@@ -69,19 +70,11 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
     setSecaoAlunos(true);
   };
 
-  const handleBottonProjetos = () => {
-    if (userType === "aluno" && "admin") {
-      navigate('/Aluno/Projeto');
-    } else if (userType === "professor" && "admin") {
-      navigate('/Professor/Projeto');
-    }
-  };
-
   const handleBottonMeusProjetos = () => {
-    if (userType === "aluno" && "admin") {
-      navigate('/Visualiza/Projeto/Aluno');
-    } else if (userType === "professor" && "admin") {
-      navigate('/Visualiza/Projeto/Professor');
+    if (userType === "aluno" || userType === "admin") {
+      navigate('/Area/Pessoa-Projeto');
+    } else if (userType === "professor" || userType === "admin") {
+      navigate('/Area/Pessoa-Projeto');
     }
   };
 
@@ -126,6 +119,7 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
                 padding: '10px',
               }}
             >
+
               <MenuItem>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <Avatar sx={{ bgcolor: deepOrange[500], width: 50, height: 50, marginBottom: '10px', md: 6 }}>{userNameIni}</Avatar>
@@ -190,7 +184,7 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
           <>
             <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
             <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
-            <StyledTextButton onClick={handleBottonProjetos}>Projetos</StyledTextButton>
+            <StyledTextButton onClick={handleBottonProjeto}>Projetos</StyledTextButton>
             <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
             <StyledTextButton /*</>onClick={}*/>Provas</StyledTextButton>
           </>
@@ -205,9 +199,9 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
   
         {userType === "admin" && (
           <>
-            <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
+           <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
             <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
-            <StyledTextButton onClick={handleBottonProjetos}>Projetos</StyledTextButton>
+            <StyledTextButton onClick={handleBottonProjeto}>Projetos</StyledTextButton>
             <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
             <StyledTextButton /*</>onClick={}*/>Provas</StyledTextButton>
           </>

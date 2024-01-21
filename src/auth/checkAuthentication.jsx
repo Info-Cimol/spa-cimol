@@ -13,16 +13,17 @@ export function Private({ children, allowedRoles }) {
     const isAuthenticated = userRole && userData;
 
     if (!isAuthenticated || !allowedRoles.includes(userRole)) {
-
-       toast.error('Você não possui permissão para acessar esta rota.');
+      toast.error('Você não possui permissão para acessar esta rota.');
+      
       // Verifica se o usuário estava tentando acessar a rota protegida
       if (location.pathname !== '/') {
-       
         // Permanece na rota atual se não houver permissão
         navigate('/');
       }
     }
   }, [userRole, userData, allowedRoles, navigate, location]);
   
+  // Se o usuário tiver o perfil de admin, ele tem acesso a todas as rotas
+  // Este componente é usado para controle de acesso baseado em papéis
   return userRole ? children : null;
 }
