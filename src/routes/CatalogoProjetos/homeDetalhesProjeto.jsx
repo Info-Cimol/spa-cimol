@@ -297,21 +297,20 @@ const HomeProjeto = () => {
     <div className="col-lg-12 col-xs-12 d-flex justify-end">
       {/* Botão Editar */}
       {userRole === "admin" && (
-        <button className="btn btn-primary botao-editar ml-2" onClick={editarProjeto}>
+        <button className="color ml-2" onClick={editarProjeto}>
           Editar
         </button>
       )}
 
       {/* Botão Deletar Projeto */}
       {userRole === "admin" && (
-        <button  className="btn btn-danger botao-editar ml-2" onClick={deletarProjeto}>
+        <button  className="color ml-2" onClick={deletarProjeto}>
           Deletar Projeto
         </button>
       )}
     </div>
   </div>
 </div>
-
         </div>
     ) : (
       <div>

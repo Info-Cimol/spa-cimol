@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState} from "react";
 import { slide as Menu } from "react-burger-menu";
 import { Container } from "./styled.jsx";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [userNameIni] = localStorage.getItem('userName'); // Puxa a inicial da pessoa pelo nome no localstorage
-
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const userEmail = localStorage.getItem('userEmail');
   const userName = localStorage.getItem('userName');
   const userRole = localStorage.getItem('userRole');
@@ -83,6 +83,19 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
     setIsMenuOpen(false);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 768); // Adapte conforme necessário
+    };
+
+    handleResize(); // Configura o estado inicial com base no tamanho da tela
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   // Adiciona um evento de clique ao corpo para fechar o perfil quando clicar fora dele
   useEffect(() => {
     document.body.addEventListener('click', handleCloseProfile);
@@ -95,7 +108,7 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
 
   return (
     <Container>
-      <Menu right width={150} isOpen={isMenuOpen}>
+      <Menu right width={isSmallScreen ? "50%" : 150} isOpen={isMenuOpen}>
         <React.Fragment>
           <Tooltip title="Sua conta">
             <IconButton onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }} size="small">

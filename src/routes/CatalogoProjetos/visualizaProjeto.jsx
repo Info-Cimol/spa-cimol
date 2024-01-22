@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosFecht from '../../axios/config';
 import ContainerTopo from '../../components/ContainerTopo';
@@ -298,11 +298,11 @@ const ProjetoDetails = () => {
 <div className='container-fluid'>
   <div className="row">
     <div className="col-lg-12 col-xs-12 d-flex justify-end">
-      <button className="btn btn-primary botao-editar" onClick={editarProjeto} >
+      <button className="color" onClick={editarProjeto} >
         Editar
       </button>
 
-      <button className="btn btn-danger ml-2" onClick={deletarProjeto}>
+      <button className="color ml-2" onClick={deletarProjeto}>
         Deletar Projeto
       </button>
     </div>
