@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useParams, useNavigate} from 'react-router-dom';
-import Autocomplete from '@mui/material/Autocomplete';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
-import TextField from '@mui/material/TextField';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import { faFileImage, faFilePdf, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import axiosFecht from '../../axios/config';
 import axios from 'axios';
 import './css/editaProjeto.css';
@@ -27,18 +24,25 @@ const EdicaoProjeto = () => {
     logo_projeto: [],
     publico: 0,
   });
-
   const [loading, setLoading] = useState(false);
   const [mensagemSucesso, setMensagemSucesso] = useState(null);
+  const [isPrivate, setIsPrivate] = useState(projetoEdit.publico === 0);
   const [pdfAdicionado, setPdfAdicionado] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false);
   const [arquivoAdicionado, setArquivoAdicionado] = useState(false);
+  const fileInputLogoRef = useRef(null);
+  const fileInputPDFRef = useRef(null);
   const [projetoSalvo, setProjetoSalvo] = useState(false);
-  const [alunosSelecionados, setAlunosSelecionados] = useState([]);
-  const [alunoSelecionado, setAlunoSelecionado] = useState({ id: null });
  // const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
-  const [professoresDisponiveis, setProfessoresDisponiveis] = useState([]);
   const userRole = localStorage.getItem('userRole');
+
+  const togglePrivacy = () => {
+    setProjetoEdit((prevProjetoEdit) => ({
+      ...prevProjetoEdit,
+      publico: prevProjetoEdit.publico === 1 ? 0 : 1,
+    }));
+  
+    setIsPrivate((prevIsPrivate) => !prevIsPrivate);
+  };
 
   useEffect(() => {
     const fetchProjeto = async () => {
@@ -63,13 +67,8 @@ const EdicaoProjeto = () => {
     }
 
     //carregarAlunos();
-    carregarProfessores();
+    //carregarProfessores();
   }, [id]);
-
-  const togglePrivacy = () => {
-    setIsPrivate(!isPrivate);
-    projetoEdit.publico = isPrivate ? 0 : 1;
-  };
 
   const handleFile = async (event) => {
     try {
@@ -161,7 +160,7 @@ const EdicaoProjeto = () => {
     }
   };*/
 
-  const carregarProfessores = async () => {
+  /*const carregarProfessores = async () => {
     const token = localStorage.getItem('token');
     const headers = {
       'x-access-token': token,
@@ -178,7 +177,7 @@ const EdicaoProjeto = () => {
     } catch (error) {
       console.error('Erro ao carregar professores:', error);
     }
-  };
+  };*/
 
  /* const adicionarAluno = () => {
     if (alunoSelecionado.id !== null) {
@@ -274,7 +273,7 @@ const EdicaoProjeto = () => {
               onChange={(e) => {
                 const inputValue = e.target.value;
 
-                if (inputValue.length <= 250) {
+                if (inputValue.length <= 600) {
                 setProjetoEdit({ ...projetoEdit, titulo: inputValue });
                 }
             }}
@@ -290,7 +289,7 @@ const EdicaoProjeto = () => {
             onChange={(e) => {
                 const inputValue = e.target.value;
 
-                if (inputValue.length <= 400) {
+                if (inputValue.length <= 600) {
                 setProjetoEdit({ ...projetoEdit, tema: inputValue });
                 }
             }}
@@ -306,7 +305,7 @@ const EdicaoProjeto = () => {
             onChange={(e) => {
                 const inputValue = e.target.value;
 
-                if (inputValue.length <= 400) {
+                if (inputValue.length <= 600) {
                 setProjetoEdit({ ...projetoEdit, problema: inputValue });
                 }
             }}
@@ -322,7 +321,7 @@ const EdicaoProjeto = () => {
             onChange={(e) => {
                 const inputValue = e.target.value;
 
-                if (inputValue.length <= 400) {
+                if (inputValue.length <= 600) {
                 setProjetoEdit({ ...projetoEdit, objetivo_geral: inputValue });
                 }
             }}
@@ -339,7 +338,7 @@ const EdicaoProjeto = () => {
             onChange={(e) => {
               const inputValue = e.target.value;
 
-              if (inputValue.length <= 400) {
+              if (inputValue.length <= 600) {
                 setProjetoEdit({ ...projetoEdit, objetivo_especifico: inputValue });
               }
             }}
@@ -369,7 +368,6 @@ const EdicaoProjeto = () => {
                 setProjetoEdit({ ...projetoEdit, resumo: inputValue });
                 }
             }}
-            
             />
           </div>
 
@@ -386,25 +384,98 @@ const EdicaoProjeto = () => {
                 setProjetoEdit({ ...projetoEdit, abstract: inputValue });
                 }
             }}
-            
+            />
+          </div>
+
+          <div className="col-md-10 col-sm-8 align-self-center">
+          <TextareaAutosize className='input'
+            id="abstract"
+            label="abstract"
+            variant="outlined"
+            value={projetoEdit.url_projeto}
+            onChange={(e) => {
+                const inputValue = e.target.value;
+
+                if (inputValue.length <= 600) {
+                setProjetoEdit({ ...projetoEdit, url_projeto: inputValue });
+                }
+            }}
             />
           </div>
         </div>
       </div>
 
       <div>
-        <label htmlFor="privacyToggle" className="toggle-label ms-5">
-          Tornar {isPrivate ? 'Público' : 'Privado'} ?
-        </label>
-        <input
-          type="checkbox"
-          id="privacyToggle"
-          onChange={togglePrivacy}
-          className="toggle-checkbox ms-3"
-          checked={!isPrivate}
-        />
-      </div>
+  <label htmlFor="privacyToggle" className="toggle-label ms-5">
+    Tornar publico? {isPrivate ? '' : ''} ?
+  </label>
+  <input
+    type="checkbox"
+    id="privacyToggle"
+    onChange={() => togglePrivacy()}
+    className="toggle-checkbox ms-3"
+    checked={projetoEdit.publico}
+  />
+</div>
 
+      <div className='row'>
+  {/* Adicionar Logo */}
+  <div className="col-md-6 col-sm-6 align-self-center mt-5">
+    <label className="custom-file-upload">
+      <input
+        type="file"
+        ref={fileInputLogoRef}
+        id="fileInputLogo"
+        name="file"
+        multiple
+        onChange={handleFileUpload}
+      />
+      <span>
+        <FontAwesomeIcon icon={faFileImage} />
+        {' '}{projetoEdit.logo_projeto || 'Adicionar logo'}
+      </span>
+    </label>
+  </div>
+
+  {/* Exibir mensagem de sucesso para Logo */}
+  {arquivoAdicionado && (
+    <div className="col-md-6">
+      <div className="alert alert-success" role="alert">
+        <FontAwesomeIcon icon={faCheckCircle} />{' '}
+        Logo adicionada com sucesso
+      </div>
+    </div>
+  )}
+
+  {/* Adicionar PDF */}
+  <div className="col-md-6 col-sm-6 align-self-center mt-5">
+    <label className="custom-file-upload">
+      <input
+        type="file"
+        ref={fileInputPDFRef}
+        id="fileInputPDF"
+        name="file"
+        onChange={handleFile}
+        accept=".pdf"
+      />
+      <span>
+        <FontAwesomeIcon icon={faFilePdf} />
+        {' '}{projetoEdit.arquivo || 'Adicionar PDF'}
+      </span>
+    </label>
+  </div>
+
+  {/* Exibir mensagem de sucesso para PDF */}
+  {pdfAdicionado && (
+    <div className="col-md-6">
+      <div className="alert alert-success" role="alert">
+        <FontAwesomeIcon icon={faCheckCircle} />{' '}
+        PDF adicionado com sucesso
+      </div>
+    </div>
+  )}
+</div>
+      
       <div className="float-end mb-5 me-5">
         <button className="color" onClick={editarProjeto} disabled={loading}>
           {loading ? (
