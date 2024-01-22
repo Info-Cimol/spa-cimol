@@ -154,72 +154,77 @@ function Login() {
 
   return (
     <Container>
-      <div className='topo'>
-        <div className='topo2'></div>
-      </div>
-      <div className='imgCentral'>
-        <img src="/cimol.png" alt='Cimol' />
-      </div>
-      <div className='areaLogin'>
-        <i className="bi bi-person" style={{ fontSize: '50px' }}></i>
-        <form className='form' onSubmit={handleFormSubmit}>
-
-        <div className="input-group mb-3">
-  <span className="input-group-text align-items-center">
-    <i className="input-icon uil uil-at"></i>
-  </span>
+    <div className="topo">
+      <div className="topo2"></div>
+    </div>
   
-  <input
-    value={login}
-    onChange={(e) => setLogin(e.target.value)}
-    type="text"
-    placeholder="E-mail"
-    required
-    className="form-control email-input"
-  />
-</div>
-
-
-<div className="input-group mb-3">
-  <span className="input-group-text"> <i class="input-icon uil uil-lock-alt"></i></span>
-  <input
-    name="logpass"
-    id="logpass"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    type="password"
-    placeholder="Senha"
-    required
-    className="form-control password-input"
-  /> 
-</div>
-          {userTypes.length > 1 && (
-              <div className="profile-selector-container">
-              <label className="profile-label">Selecione um perfil</label>
-             
-                {userTypes.map((type) => (
-             <label className="valor-label" key={type}>
-             <input
-               className="checkbox-input"
-               type="checkbox"  
-               value={type}
-               checked={selectedUserType.includes(type)}  
-               onChange={() => setSelectedUserType(type)}
-             />
-             <label className="checkbox-text">{type}</label>
-           </label>
-))}
-             
-              <button className="select-button" onClick={handleProfileSelection}>
-                Selecionar Perfil
-              </button>
-            </div>
-          )}
-
-          <button>{loading ? 'Carregando...' : 'Entrar'}</button>
-        </form>
-      </div>
-    </Container>
+    <div className="imgCentral">
+      <img src="/cimol.png" alt="Cimol" />
+    </div>
+  
+    <div className="areaLogin">
+      <i className="bi bi-person" style={{ fontSize: '50px' }}></i>
+      <form className="formulario-login" onSubmit={handleFormSubmit}>
+        <div className="input-group mb-3">
+          <span className="input-group-text align-items-center">
+            <i className="input-icon uil uil-at"></i>
+          </span>
+  
+          <input
+            value={login}
+            onChange={(e) => setLogin(e.target.value)}
+            type="text"
+            placeholder="E-mail"
+            required
+            className="form-control email-input"
+          />
+        </div>
+  
+        <div className="input-group mb-3">
+          <span className="input-group-text">
+            <i className="input-icon uil uil-lock-alt"></i>
+          </span>
+          <input
+            name="logpass"
+            id="logpass"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            placeholder="Senha"
+            required
+            className="form-control password-input"
+          />
+        </div>
+  
+        {userTypes.length > 1 && (
+          <div className="profile-selector-container">
+            <label className="profile-label">Selecione um perfil</label>
+  
+            {userTypes.map((type) => (
+              <label className="valor-label" key={type}>
+                <input
+                  className="checkbox-input"
+                  type="checkbox"
+                  value={type}
+                  checked={selectedUserType.includes(type)}
+                  onChange={() => setSelectedUserType(type)}
+                />
+                <label className="checkbox-text">{type}</label>
+              </label>
+            ))}
+  
+            <button className="select-button" onClick={handleProfileSelection}>
+              Selecionar Perfil
+            </button>
+          </div>
+        )}
+  
+        <button className="btn btn-primary">
+          {loading ? 'Carregando...' : 'Entrar'}
+        </button>
+      </form>
+    </div>
+  </Container>
   );
 }
 

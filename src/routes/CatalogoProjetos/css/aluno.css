@@ -223,6 +223,7 @@
   }
   
   @media screen and (max-width: 645px) {
+    
    .card {
      margin-top: 3rem;
    }

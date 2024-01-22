@@ -18,18 +18,14 @@ export const Container = styled.div`
     animation: ${fadeIn} 5s ease;
   }
 
-  Input {
-    border: none;
-  }
-
-  .bi.bi-person {
-    font-size: 40px;
-  }
-
   .topo2 {
     background-color: #ffbd59;
     width: 100%;
     height: 6%;
+  }
+
+  .Input {
+    border: none;
   }
 
   .imgCentral {
@@ -49,15 +45,13 @@ export const Container = styled.div`
     flex-direction: column;
     padding-top: 8%;
     align-items: center;
-  }
-    
 
-    .form {
+    .formulario-login {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 50%;
-      max-width:50%;
+      width: 60%; 
+      margin-top: 2rem;
 
       .profile-selector-container {
         width: 100%;
@@ -124,7 +118,7 @@ export const Container = styled.div`
       }
 
       button {
-        max-width:30%;
+        max-width: 30%;
         width: 50%;
         background-color: #d8a43d;
         border: 0;
@@ -143,7 +137,7 @@ export const Container = styled.div`
         background-color: #c19235;
       }
     }
-  
+  }
 
   .containerAlterarSenha {
     width: 100%;
@@ -154,16 +148,18 @@ export const Container = styled.div`
     top: 25%;
   }
 
-  @media screen and (min-width: 465px) {
+  @media screen and (max-width: 480px) {
     .areaLogin {
-      padding-top: 1rem;    
-  }
+      padding-top: 1rem;
 
-  .form {
-    width: 80%;
-    max-width:80%;
-  }
-  .bi.bi-person{
-        margin-top: 6rem
+      .formulario-login {
+        width: 80%;
+        margin-top: 2rem;
       }
+     
+    }
+     .bi.bi-person{
+        margin-top: 5rem;
+      }
+  }
 `;
