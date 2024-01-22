@@ -162,7 +162,7 @@ function Login() {
       </div>
       <div className='areaLogin'>
         <i className="bi bi-person" style={{ fontSize: '50px' }}></i>
-        <form onSubmit={handleFormSubmit}>
+        <form className='form' onSubmit={handleFormSubmit}>
 
         <div className="input-group mb-3">
   <span className="input-group-text align-items-center">
