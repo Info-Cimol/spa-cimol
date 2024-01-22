@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axiosFecht from '../../axios/config';
-import axios from 'axios';
+import { useParams, useNavigate} from 'react-router-dom';
+import Autocomplete from '@mui/material/Autocomplete';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
 import TextField from '@mui/material/TextField';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import axiosFecht from '../../axios/config';
+import axios from 'axios';
 import './css/editaProjeto.css';
 
 const EdicaoProjeto = () => {
-  const userRole = localStorage.getItem('userRole');
+  const navigate = useNavigate();
   const { id } = useParams();
   const [projetoEdit, setProjetoEdit] = useState({
     titulo: '',
@@ -21,6 +25,7 @@ const EdicaoProjeto = () => {
     abstract: '',
     arquivo: '',
     logo_projeto: [],
+    publico: 0,
   });
 
   const [loading, setLoading] = useState(false);
@@ -29,12 +34,11 @@ const EdicaoProjeto = () => {
   const [isPrivate, setIsPrivate] = useState(false);
   const [arquivoAdicionado, setArquivoAdicionado] = useState(false);
   const [projetoSalvo, setProjetoSalvo] = useState(false);
-
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
   const [alunoSelecionado, setAlunoSelecionado] = useState({ id: null });
-
-  const [setAlunosDisponiveis] = useState([]);
-  const [setProfessoresDisponiveis] = useState([]);
+ // const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
+  const [professoresDisponiveis, setProfessoresDisponiveis] = useState([]);
+  const userRole = localStorage.getItem('userRole');
 
   useEffect(() => {
     const fetchProjeto = async () => {
@@ -45,10 +49,10 @@ const EdicaoProjeto = () => {
         };
         const userId = localStorage.getItem('id');
 
-        const response = await axiosFecht.get(`/projeto/listar/${id}/pessoa/${userId}`, { headers }
-        );
+        const response = await axiosFecht.get(`/projeto/listar/${id}/pessoa/${userId}`, { headers });
 
         setProjetoEdit(response.data);
+        setIsPrivate(response.data.publico === 0);
       } catch (error) {
         console.error('Erro ao buscar projeto:', error);
       }
@@ -58,7 +62,7 @@ const EdicaoProjeto = () => {
       fetchProjeto();
     }
 
-    carregarAlunos();
+    //carregarAlunos();
     carregarProfessores();
   }, [id]);
 
@@ -138,16 +142,14 @@ const EdicaoProjeto = () => {
     }
   };
 
-  const carregarAlunos = async () => {
+  /*const carregarAlunos = async () => {
     const token = localStorage.getItem('token');
     const headers = {
       'x-access-token': token,
     };
 
     try {
-      const response = await axiosFecht.get('/listar/alunos', headers, {
-      
-      });
+      const response = await axiosFecht.get('/listar/alunos/', { headers });
       setAlunosDisponiveis(
         response.data.map((aluno) => ({
           id: aluno.matricula_aluno,
@@ -157,7 +159,7 @@ const EdicaoProjeto = () => {
     } catch (error) {
       console.error('Erro ao carregar alunos:', error);
     }
-  };
+  };*/
 
   const carregarProfessores = async () => {
     const token = localStorage.getItem('token');
@@ -166,8 +168,7 @@ const EdicaoProjeto = () => {
     };
 
     try {
-      const response = await axiosFecht.get('/listar/orientador', headers, {
-      });
+      const response = await axiosFecht.get('/listar/orientador/', { headers });
       setProfessoresDisponiveis(
         response.data.map((professor) => ({
           id: professor.pessoa_id_pessoa,
@@ -179,13 +180,18 @@ const EdicaoProjeto = () => {
     }
   };
 
-  const adicionarAluno = () => {
+ /* const adicionarAluno = () => {
     if (alunoSelecionado.id !== null) {
       setAlunosSelecionados([...alunosSelecionados, alunoSelecionado]);
       setAlunoSelecionado({ id: null });
     }
   };
 
+  const handleOrientadorChange = (_, newValue) => {
+    const orientadoresNomes = newValue.map((orientador) => orientador.nome);
+    setProjetoEdit({ ...projetoEdit, orientadores: orientadoresNomes });
+  };*/
+  
   const editarProjeto = async () => {
     try {
       setLoading(true);
@@ -194,17 +200,14 @@ const EdicaoProjeto = () => {
         'x-access-token': token,
       };
 
-      await axiosFecht.put(
-        `/projeto/atualiza/${id}`,
-        projetoEdit,
-        { headers }
-      );
+      await axiosFecht.put(`/projeto/atualiza/${id}`, projetoEdit, { headers });
 
       setTimeout(() => {
         setProjetoSalvo(true);
         setLoading(false);
       }, 4000);
       setMensagemSucesso('Projeto editado com sucesso');
+      navigate('/Visualiza/Projeto-Pessoa/' + id)
     } catch (error) {
       console.error('Erro ao editar projeto:', error);
       setLoading(false);
@@ -215,8 +218,9 @@ const EdicaoProjeto = () => {
     <div>
       <ContainerTopo  userType={userRole}/>
       <MenuHamburguer userType={userRole}/>
+      
       <div className="col-sm-6 container">
-        <h1 className="tituloProjetos d-flex">EDIÇÃO DE PROJETO</h1>
+        <h1 className="tituloProjetos">EDIÇÃO DE PROJETO</h1>
       </div>
       <hr className="linhaAzul" />
 
@@ -238,14 +242,16 @@ const EdicaoProjeto = () => {
         </div>
       )}
 
-      <div className="container-fluid align-items-center justify-content-center mx-auto d-flex ">
+      <div className="container-fluid align-items-center justify-content-center d-flex ">
         <div className="row">
-          <div className="col-md-10 col-sm-8 align-self-center shadow-lg">
-          <TextField
+          
+           {/* Seleção de Orientador 
+           <div className="col-md-10 col-sm-8 align-self-center mt-5">
+           <TextField
               id="titulo"
               label="Título"
               variant="outlined"
-              value={projetoEdit.titulo}
+              value={projetoEdit.orientadores}
               onChange={(e) => {
                 const inputValue = e.target.value;
 
@@ -257,12 +263,28 @@ const EdicaoProjeto = () => {
             className="custom-textfield"
             inputProps={{ maxLength: 50 }}
             />
-          </div>   
+            </div>*/}
+
+          <div className="col-md-10 col-sm-8 align-self-center">
+          <TextareaAutosize className='input'
+              id="titulo"
+              label="Título"
+              variant="outlined"
+              value={projetoEdit.titulo}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+
+                if (inputValue.length <= 250) {
+                setProjetoEdit({ ...projetoEdit, titulo: inputValue });
+                }
+            }}
+            />
+          </div>  
          
-          <div className="col-md-10 col-sm-8 align-self-center shadow-lg">
-          <TextareaAutosize
+          <div className="col-md-10 col-sm-8 align-self-center">
+          <TextareaAutosize className='input'
             id="tema"
-            label="Tema"
+            aria-label="Tema"
             variant="outlined"
             value={projetoEdit.tema}
             onChange={(e) => {
@@ -272,13 +294,11 @@ const EdicaoProjeto = () => {
                 setProjetoEdit({ ...projetoEdit, tema: inputValue });
                 }
             }}
-            fullWidth
-            rowsMin={3}
             />
           </div>
 
-          <div className="col-md-10 col-sm-8 align-self-center shadow-lg">
-          <TextareaAutosize
+          <div className="col-md-10 col-sm-8 align-self-center">
+          <TextareaAutosize className='input'
             id="problema"
             label="problema"
             variant="outlined"
@@ -290,13 +310,11 @@ const EdicaoProjeto = () => {
                 setProjetoEdit({ ...projetoEdit, problema: inputValue });
                 }
             }}
-            fullWidth
-            rowsMin={3}
             />
           </div>
 
-          <div className="col-md-10 col-sm-8 align-self-center shadow-lg">
-          <TextareaAutosize
+          <div className="col-md-10 col-sm-8 align-self-center">
+          <TextareaAutosize className='input'
             id="objetivo_geral"
             label="objetivo_geral"
             variant="outlined"
@@ -308,12 +326,11 @@ const EdicaoProjeto = () => {
                 setProjetoEdit({ ...projetoEdit, objetivo_geral: inputValue });
                 }
             }}
-            fullWidth
             />
           </div>
 
-          <div className="col-md-10 col-sm-8 align-self-center shadow-lg">
-          <TextareaAutosize
+          <div className="col-md-10 col-sm-8 align-self-center">
+          <TextareaAutosize className='input'
             id="objetivo_especifico"
             label="Objetivos Específicos"
             variant="outlined"
@@ -335,12 +352,12 @@ const EdicaoProjeto = () => {
                 }));
               }
             }}
-            fullWidth
+            
           />
           </div>
 
-          <div className="col-md-10 col-sm-8 align-self-center shadow-lg">
-          <TextareaAutosize
+          <div className="col-md-10 col-sm-8 align-self-center">
+          <TextareaAutosize className='input'
             id="resumo"
             label="resumo"
             variant="outlined"
@@ -352,12 +369,12 @@ const EdicaoProjeto = () => {
                 setProjetoEdit({ ...projetoEdit, resumo: inputValue });
                 }
             }}
-            fullWidth
+            
             />
           </div>
 
-          <div className="col-md-10 col-sm-8 align-self-center shadow-lg">
-          <TextareaAutosize
+          <div className="col-md-10 col-sm-8 align-self-center">
+          <TextareaAutosize className='input'
             id="abstract"
             label="abstract"
             variant="outlined"
@@ -369,7 +386,7 @@ const EdicaoProjeto = () => {
                 setProjetoEdit({ ...projetoEdit, abstract: inputValue });
                 }
             }}
-            fullWidth
+            
             />
           </div>
         </div>

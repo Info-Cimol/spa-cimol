@@ -12,12 +12,13 @@ import './css/visualiza.css';
 const HomeProjeto = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const [loadingDelecao, setLoadingDelecao] = useState(false);
-  const [projetoDeletado, setProjetoDeletado] = useState(false);
+  const [setLoadingDelecao] = useState(false);
+  const [setProjetoDeletado] = useState(false);
   const userRole = localStorage.getItem('userRole');
   const { id } = useParams();
   const [projeto, setProjeto] = useState(null);
   const token = localStorage.getItem('token');
+  
   const fetchProjeto = async (projetoId) => {
     try {
       const headers = {

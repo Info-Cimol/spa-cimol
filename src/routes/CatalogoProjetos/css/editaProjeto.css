@@ -1,12 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inika&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inder&display=swap');
 
-.imagemFundo {
-    background-color: #1B2F4A;
-    max-width: 100%;
-    max-height: 75vh;
-}
-
 .mensagem-container {
     position: fixed;
     top: 20%;
@@ -65,10 +59,6 @@
 
 .custom-file-upload:hover {
     background-color: #1B2F4A;
-}
-
-input[type="file"] {
-    display: none;
 }
 
 .toggle-checkbox::before {
@@ -197,7 +187,9 @@ input[type="file"] {
 }
 
 .container {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .linhaAzul {
@@ -208,21 +200,29 @@ input[type="file"] {
 
 .tituloProjetos {
     font-family: 'Inika', serif;
-    margin-top: 5rem;
+    margin-top: 7rem;
+    margin-right: 7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-left: 5rem;
-}
-
-.input {
-    background-color: #f1eded48;
-    border-radius: 5px;
-    border-bottom: #7a7272 solid 2px;
-    box-shadow: #2e2626;
-}
-
-.custom-input {
-    min-height: 30vh !important;
-}
-
+    max-width: 100%;
+    width: 100%;
+    color: #111; 
+    padding: 20px; 
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    border-radius: 5px; 
+    box-shadow: 0 4px 8px rgba(124, 108, 108, 0.1);
+    transition: background-color 0.3s ease; 
+  }
+  
 @keyframes slidein {
     from {
         margin-left: 100%;
@@ -235,13 +235,16 @@ input[type="file"] {
     }
 }
 
-@media screen and (max-width: 430px) {
+@media screen and (max-width: 645px) {
     .tituloProjetos {
         font-size: 6vw;
     }
 
     .input {
-        border: none !important;
+        display: flex;
+    align-items: center;
+    justify-content: center;
+       margin-left: 0px;
     }
 
     .linhaAzul {
