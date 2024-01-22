@@ -18,7 +18,6 @@ const HomeProjeto = () => {
   const { id } = useParams();
   const [projeto, setProjeto] = useState(null);
   const token = localStorage.getItem('token');
-  
   const fetchProjeto = async (projetoId) => {
     try {
       const headers = {
@@ -255,6 +254,7 @@ const HomeProjeto = () => {
         <div>
   {projeto.url_projeto && (
     <a
+    className='estiloEscritaGrande'
       href={projeto.url_projeto}
       style={{ color: '#1B2F4A', textDecoration: 'none', display: 'flex', alignItems: 'center' }}
     >
@@ -274,6 +274,7 @@ const HomeProjeto = () => {
 
   {projeto.arquivo && (
     <a
+    className='estiloEscritaGrande'
       href={projeto.arquivo}
       style={{ color: '#1B2F4A', textDecoration: 'none', display: 'flex', alignItems: 'center' }}
     >
@@ -296,14 +297,14 @@ const HomeProjeto = () => {
     <div className="col-lg-12 col-xs-12 d-flex justify-end">
       {/* Botão Editar */}
       {userRole === "admin" && (
-        <button className="btn btn-primary botao-editar" onClick={editarProjeto}>
+        <button className="btn btn-primary botao-editar ml-2" onClick={editarProjeto}>
           Editar
         </button>
       )}
 
       {/* Botão Deletar Projeto */}
       {userRole === "admin" && (
-        <button  className="btn btn-danger ml-2" onClick={deletarProjeto}>
+        <button  className="btn btn-danger botao-editar ml-2" onClick={deletarProjeto}>
           Deletar Projeto
         </button>
       )}

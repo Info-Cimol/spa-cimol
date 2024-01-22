@@ -13,12 +13,20 @@
   margin: 20px 0;
 }
 
+.estiloEscritaGrande {
+  font-family: 'Brygada 1918', serif;
+  width: 100%;
+  font-size: 1.3rem;
+  text-align: start;
+}
+
 .expansion {
   margin-top: 50px;
 }
 
 .estiloEscrita {
   font-family: 'Times New Roman', Times, serif;
+  padding: 10px;
   font-size: 1.2rem;
   display: flex;
   flex-wrap: wrap;

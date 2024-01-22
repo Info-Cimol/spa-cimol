@@ -407,7 +407,7 @@ const EdicaoProjeto = () => {
 
       <div>
   <label htmlFor="privacyToggle" className="toggle-label ms-5">
-    Tornar publico? {isPrivate ? '' : ''} ?
+    Tornar Público {isPrivate ? '' : ''} ?
   </label>
   <input
     type="checkbox"
