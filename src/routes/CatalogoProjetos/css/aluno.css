@@ -194,7 +194,8 @@
          } 
          .fade-up { animation: slideUpFadeIn 3s ease-in-out; }
   
-  @media screen and (max-width: 636px) {
+ 
+         @media screen and (max-width: 636px) {
    .imagem {
      display: none;
    }
@@ -203,13 +204,17 @@
   }
   
    .escreva {
+    margin-top: 7rem;
      font-size: 5vw;
-     width: 80vw;
+     width: 100%;
+     max-width: 100%;
    }
   
    .escritaProjetos {
+    margin-top: 2rem;
      font-size: 3vw;
-     width: 80vw;
+     width: 100%;
+     max-width: 100%;
    }
    .maisProjeto{
      margin-top: -3rem;
@@ -217,7 +222,7 @@
    }
   }
   
-  @media screen and (max-width: 484px) {
+  @media screen and (max-width: 645px) {
    .card {
      margin-top: 3rem;
    }
@@ -249,7 +254,8 @@
   
    .tituloProjetos {
      font-size: 7vw;
-     margin-top: 3rem;
+     margin-top: 2rem;
+     margin-left: 0rem;
    }
   
    .row {

@@ -59,6 +59,7 @@ const HomePrincipal = () => {
        
          <div className="imagemFundo col-sm-12">
          <div className="container">
+ 
   {/* Caso o aluno esteja logado ele direciona este texto e imagem */}
   {userRole === "aluno" && (
     <div className="row">

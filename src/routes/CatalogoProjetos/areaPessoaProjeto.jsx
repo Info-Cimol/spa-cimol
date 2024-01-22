@@ -124,7 +124,7 @@ const ProjectComponent = () => {
                 <h1 className="escreva fade-up">Área do Administrador</h1>
                 <p className="escritaProjetos fade-up mt-6">
                 Esta é sua área de administração. Aqui você terá o controle total, podendo impactar positivamente em todos os aspectos da plataforma.
-          Utilize este espaço para gerenciar usuários, configurar permissões e garantir o bom funcionamento do sistema.
+                Utilize este espaço para gerenciar usuários, configurar permissões e garantir o bom funcionamento do sistema.
                 </p>
               </div>
               <div className="col-md-6 col-sm-6">
@@ -138,10 +138,10 @@ const ProjectComponent = () => {
       <div>
         <div className="container-fluid">
           <div className='row'>
-            <h1 className="tituloProjetos col-lg-4">
+            <h1 className="tituloProjetos col-lg-4 col-xs-4 ">
               Meus Projetos
             </h1>
-            <div className="maisProjeto col-sm-10 col-lg-8" onClick={adicionar}>
+            <div className="maisProjeto col-sm-10 col-lg-8 col-xs-8" onClick={adicionar}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="38"

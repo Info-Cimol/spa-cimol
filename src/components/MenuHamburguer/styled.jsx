@@ -16,7 +16,7 @@ export const Container = styled.div`
         width: 36px;
         height: 30px;
         left: 85%;
-        top: 40px;
+        top: 25px;
     }
 
     @media screen and (min-width: 450px){

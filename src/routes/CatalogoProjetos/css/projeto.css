@@ -202,7 +202,13 @@ html, body {
   margin-top: 2rem;
 }
 
-.escreva{ font-family: 'Inika', serif; color: #fff; margin-top: 5rem; font-size: 4rem; } @keyframes fade-in-down { 0% { opacity: 0; transform: translateX(-57px); } 100% { opacity: 1; transform: translateX(0); } } @keyframes slideUpFadeIn { from { opacity: 0; transform: translateY(50px); /* Altere a distância desejada do slide-up */ } to { opacity: 1; transform: translateY(0); } } .fade-up { animation: slideUpFadeIn 3s ease-in-out; }
+.escreva{ 
+  font-family: 'Inika', serif; 
+  color: #fff; 
+  margin-top: 5rem; 
+  font-size: 4rem;
+ } 
+ @keyframes fade-in-down { 0% { opacity: 0; transform: translateX(-57px); } 100% { opacity: 1; transform: translateX(0); } } @keyframes slideUpFadeIn { from { opacity: 0; transform: translateY(50px); /* Altere a distância desejada do slide-up */ } to { opacity: 1; transform: translateY(0); } } .fade-up { animation: slideUpFadeIn 3s ease-in-out; }
 
 .cardsTela {
   display: flex;
@@ -224,7 +230,7 @@ html, body {
   }
 }
 
-@media screen and (max-width: 636px) {
+@media screen and (max-width: 645px) {
   .imagem {
     display: none;
   }
@@ -232,6 +238,7 @@ html, body {
   .escreva {
     font-size: 12vw;
     width: 100%;
+    margin-top: 6rem;
   }
 }
 
