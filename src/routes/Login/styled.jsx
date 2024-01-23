@@ -10,6 +10,8 @@ const fadeIn = keyframes`
 `;
 
 export const Container = styled.div`
+
+
   .topo {
     background-color: #1b2f4a;
     height: 124px;
@@ -78,9 +80,9 @@ export const Container = styled.div`
       }
 
       .select-button {
-        width: 100%;
+        width: 200px;
+        height: auto;
         margin-top: 15px;
-        padding: 10px 15px;
         background: #007bff;
         color: #fff;
         border: none;
@@ -118,8 +120,7 @@ export const Container = styled.div`
       }
 
       button {
-        max-width: 30%;
-        width: 50%;
+        width: 200px;
         background-color: #d8a43d;
         border: 0;
         border-radius: 10px;

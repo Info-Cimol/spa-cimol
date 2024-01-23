@@ -8,6 +8,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import DatePicker from 'react-datepicker';
+import './css/adiciona.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const AdicionaProjetoComponent = () => {
@@ -206,7 +207,7 @@ const AdicionaProjetoComponent = () => {
       };
     
     const token = localStorage.getItem('token');
-    
+
     const headers = {
       'x-access-token': token,
     };
@@ -233,7 +234,10 @@ const AdicionaProjetoComponent = () => {
     <div>
       <ContainerTopo userType={userRole}/>
       <MenuHamburguer userType={userRole}/>
-
+      <div className="col-sm-12 container">
+        <h1 className="tituloProjetos">ADICIONE UM PROJETO</h1>
+      </div>
+      <hr className="linhaAzul" />
       {loading && <p>Carregando...</p>}
       
       {mensagemErro && (
@@ -254,7 +258,7 @@ const AdicionaProjetoComponent = () => {
             
             <div className="col-md-10 col-sm-8 align-self-center mt-5">
               {/* Seleção de Orientador */}
-              <Autocomplete
+              <Autocomplete className='input-complete'
                 value={orientadorSelecionado}
                 onChange={(event, newValue) => setOrientadorSelecionado(newValue)}
                 options={professoresDisponiveis}
