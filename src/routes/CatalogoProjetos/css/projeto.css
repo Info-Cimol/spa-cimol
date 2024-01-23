@@ -178,25 +178,6 @@ html, body {
   width: 100%;
 }
 
-
-.elevate-12 {
-  transform: translateY(50px);
-}
-
-.escrita {
-  color: #fff !important;
-}
-
-.escritarfooter {
-  color: #fff !important;
-}
-
-.fade-in-down {
-  opacity: 0;
-  transform: translateY(-50px);
-  animation: fade-in-down 1s forwards;
-}
-
 .imagem {
   max-width: 100%;
   width: 75%;
@@ -207,8 +188,9 @@ html, body {
   font-family: 'Inika', serif; 
   color: #fff; 
   font-size: 4rem;
+  margin-top: 2rem;
  } 
- 
+
  @keyframes fade-in-down { 0% { opacity: 0; transform: translateX(-57px); } 100% { opacity: 1; transform: translateX(0); } } @keyframes slideUpFadeIn { from { opacity: 0; transform: translateY(50px); /* Altere a distância desejada do slide-up */ } to { opacity: 1; transform: translateY(0); } } .fade-up { animation: slideUpFadeIn 3s ease-in-out; }
 
 .cardsTela {
@@ -244,6 +226,7 @@ html, body {
 }
 
 @media screen and (max-width: 484px) {
+
   .card {
     margin-top:3rem !important;
     justify-content: center !important;

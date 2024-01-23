@@ -86,12 +86,12 @@ const HomePrincipal = () => {
 
   {/* Caso o admin esteja logado ele direciona este texto e imagem */}
   {userRole === "admin" && (
-    <div className="row">
+     <div className="row align-items-center">
       <div className="col-sm-6">
         <h1 className="escreva fade-up">Olá {userName}, aqui você controla quem permanece e quem é retirado</h1>
       </div>
       <div className="col-sm-6">
-        <img src="/Images/image 40.png" className="imagem" alt="Imagem do Aluno Projeto" />
+        <img src="/Images/alunos4.png" className="imagem" alt="Imagem do Admin Projeto" />
       </div>
     </div>
   )}
