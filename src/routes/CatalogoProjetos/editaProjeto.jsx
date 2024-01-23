@@ -385,17 +385,17 @@ const EdicaoProjeto = () => {
       </div>
 
       <div>
-  <label htmlFor="privacyToggle" className="toggle-label ms-5">
-    Tornar Público {isPrivate ? '' : ''} ?
-  </label>
-  <input
-    type="checkbox"
-    id="privacyToggle"
-    onChange={() => togglePrivacy()}
-    className="toggle-checkbox ms-3"
-    checked={projetoEdit.publico}
-  />
-</div>
+        <label htmlFor="privacyToggle" className="toggle-label ms-5">
+          Tornar Público {isPrivate ? '' : ''} ?
+        </label>
+        <input
+          type="checkbox"
+          id="privacyToggle"
+          onChange={() => togglePrivacy()}
+          className="toggle-checkbox ms-3"
+          checked={projetoEdit.publico}
+        />
+      </div>
 
       <div className='row'>
   {/* Adicionar Logo */}

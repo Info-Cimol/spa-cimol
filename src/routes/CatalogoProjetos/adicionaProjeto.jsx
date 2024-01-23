@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import axiosFecht from '../../axios/config';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import {faFileImage, faFilePdf, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import './css/adiciona.css';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -15,7 +17,6 @@ const AdicionaProjetoComponent = () => {
   const navigate = useNavigate();
   const [projetoAdicionado, setProjetoAdicionado] = useState(false);
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
-  const [isPrivate] = useState('');
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [orientadorSelecionado, setOrientadorSelecionado] = useState(null);
   const [titulo, setTitulo] = useState('');
@@ -26,16 +27,19 @@ const AdicionaProjetoComponent = () => {
   const [objetivo_geral, setObjetivoGeral] = useState('');
   const [abstract, setAbstract] = useState('');
   const [objetivo_especifico, setObjetivoEspecifico] = useState('');
-  const [autores, setAutores] = useState([]);
   const [pdfAdicionado, setPdfAdicionado] = useState(false);
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [professoresDisponiveis, setProfessoresDisponiveis] = useState([]);
   const [logoAdicionada, setLogoAdicionada] = useState(false);
   const [mensagemErro, setMensagemErro] = useState(false);
   const [sucessoAdicao, setSucessoAdicao] = useState(false);
+  const [arquivoAdicionado, setArquivoAdicionado] = useState(false);
+  const fileInputLogoRef = useRef(null);
+  const fileInputPDFRef = useRef(null);
+  const [projetoSalvo, setProjetoSalvo] = useState(false);
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState('');
-  const [menuAberto, setMenuAberto] = useState(false);
+
   const [publico, setPublico] = useState(false); 
 
   const handleToggle = () => {
@@ -47,12 +51,6 @@ const AdicionaProjetoComponent = () => {
 
   const handleChange = (date) => {
     setAnoPublicacao(date);
-  };
-
-
-  const handleDateChange = (date) => {
-    setAnoPublicacao(date);
-    setMenuAberto(false);
   };
 
   useEffect(() => {
@@ -135,20 +133,23 @@ const AdicionaProjetoComponent = () => {
   };
 
   const adicionarAluno = () => {
-    if (alunoSelecionado && alunoSelecionado.id !== null) {
+    if (alunoSelecionado && alunosDisponiveis.some((aluno) => aluno.id === alunoSelecionado.id)) {
       setAlunosSelecionados([...alunosSelecionados, alunoSelecionado]);
       setAlunoSelecionado(null);
     }
-  };
+  };  
 
   const carregarAlunos = async () => {
+
+    try {
+
     const token = localStorage.getItem('token');
     const headers = {
       'x-access-token': token,
     };
 
-    try {
       const response = await axiosFecht.get('/listar/alunos/', { headers });
+      
       setAlunosDisponiveis(
         response.data.map((aluno) => ({
           id: aluno.pessoa_id_pessoa,
@@ -180,18 +181,16 @@ const AdicionaProjetoComponent = () => {
   };
 
   const adicionarProjeto = async () => {
-   
+
+   const token = localStorage.getItem('token');
+
+    const headers = {
+      'x-access-token': token,
+    };
+
     try {
-      if (!orientadorSelecionado || !orientadorSelecionado.id) {
-        throw new Error('Selecione um orientador.');
-      }
-
-      if (alunosSelecionados.length < 1) {
-        throw new Error('Selecione pelo menos um aluno.');
-      }
-
       const projetoData = {
-        orientadores: [orientadorSelecionado],
+        orientadores: orientadorSelecionado,
         autores: alunosSelecionados,
         titulo,
         tema,
@@ -201,24 +200,19 @@ const AdicionaProjetoComponent = () => {
         abstract,
         objetivo_especifico,
         anoPublicacao,
+        arquivo: arquivoAdicionado,
         logo_projeto: logoProjeto,
         publico: publico ? 1 : 0, 
         url_projeto: url,
       };
     
-    const token = localStorage.getItem('token');
-
-    const headers = {
-      'x-access-token': token,
-    };
-      // Fazer a requisição POST para adicionar o projeto
       const response = await axiosFecht.post('/projeto/adiciona', projetoData, {headers});
 
       if (response.status === 200) {
         setMensagemErro(false);
         setSucessoAdicao(true);
         setProjetoAdicionado(true);
-        navigate('/Area/Pessoa-Projeto')
+        navigate('/Area/Pessoa-Projeto');
       } else {
         setMensagemErro(true);
         setSucessoAdicao(false);
@@ -234,10 +228,12 @@ const AdicionaProjetoComponent = () => {
     <div>
       <ContainerTopo userType={userRole}/>
       <MenuHamburguer userType={userRole}/>
+
       <div className="col-sm-12 container">
         <h1 className="tituloProjetos">ADICIONE UM PROJETO</h1>
       </div>
       <hr className="linhaAzul" />
+
       {loading && <p>Carregando...</p>}
       
       {mensagemErro && (
@@ -258,13 +254,13 @@ const AdicionaProjetoComponent = () => {
             
             <div className="col-md-10 col-sm-8 align-self-center mt-5">
               {/* Seleção de Orientador */}
-              <Autocomplete className='input-complete'
-                value={orientadorSelecionado}
-                onChange={(event, newValue) => setOrientadorSelecionado(newValue)}
-                options={professoresDisponiveis}
-                getOptionLabel={(option) => option.nome}
-                renderInput={(params) => <TextField {...params} label="Selecione um orientador" />}
-              />
+              <Autocomplete
+                  value={orientadorSelecionado}
+                  onChange={(event, newValue) => setOrientadorSelecionado(newValue)}
+                  options={professoresDisponiveis}
+                  getOptionLabel={(option) => option.nome}
+                  renderInput={(params) => <TextField {...params} label="Selecione um orientador" />}
+                />
             </div>
   
             <div className="col-md-10 col-sm-8 align-self-center mt-5">
@@ -402,6 +398,63 @@ const AdicionaProjetoComponent = () => {
         onChange={handleToggle} 
       />
     </div>
+
+    <div className='row'>
+
+  {/* Adicionar Logo */}
+  <div className="col-md-6 col-sm-6 align-self-center mt-5">
+    <label className="custom-file-upload">
+      <input
+        type="file"
+        ref={fileInputLogoRef}
+        id="fileInputLogo"
+        name="file"
+        multiple
+        onChange={handleFileUpload}
+      />
+      <span>
+        <FontAwesomeIcon icon={faFileImage} />
+      </span>
+    </label>
+  </div>
+
+  {/* Exibir mensagem de sucesso para Logo */}
+  {arquivoAdicionado && (
+    <div className="col-md-6">
+      <div className="alert alert-success" role="alert">
+        <FontAwesomeIcon icon={faCheckCircle} />{' '}
+        Logo adicionada com sucesso
+      </div>
+    </div>
+  )}
+
+  {/* Adicionar PDF */}
+  <div className="col-md-6 col-sm-6 align-self-center mt-5">
+    <label className="custom-file-upload">
+      <input
+        type="file"
+        ref={fileInputPDFRef}
+        id="fileInputPDF"
+        name="file"
+        onChange={handleFile}
+        accept=".pdf"
+      />
+      <span>
+        <FontAwesomeIcon icon={faFilePdf} />
+      </span>
+    </label>
+  </div>
+
+  {/* Exibir mensagem de sucesso para PDF */}
+  {pdfAdicionado && (
+    <div className="col-md-6">
+      <div className="alert alert-success" role="alert">
+        <FontAwesomeIcon icon={faCheckCircle} />{' '}
+        PDF adicionado com sucesso
+      </div>
+    </div>
+  )}
+</div>
             {/* Botão de Adicionar Projeto */}
             <div className="col-md-10 col-sm-8 align-self-center mt-5">
               <Button variant="contained" color="primary" onClick={adicionarProjeto}>
