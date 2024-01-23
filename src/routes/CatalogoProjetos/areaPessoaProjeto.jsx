@@ -69,7 +69,7 @@ const ProjectComponent = () => {
   };
 
   const visualizar = (id) => {
-    Navigate('/Visualiza/Projeto-Pessoa/' + id);
+    Navigate('/Visualiza/Projeto/' + id);
   };
 
   useEffect(() => {

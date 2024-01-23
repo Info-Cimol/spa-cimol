@@ -32,7 +32,7 @@ function Professor(){
   const [userRole] = useState(localStorage.getItem('userRole'));
 
   const redirecionarParaProjeto = () => {
-    navigate('/Professor/Projeto');
+    navigate('/Projeto');
 };
 
   const fetchData = useCallback(async (setCardapio, setReservas) => {

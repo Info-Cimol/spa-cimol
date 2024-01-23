@@ -50,13 +50,12 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
   
   const handleBottonProjeto = () => {
     if (userType === "aluno" || userType === "admin") {
-      navigate('/Home/Pessoa-Projeto');
+      navigate('/Projeto');
     } else if (userType === "professor" || userType === "admin") {
-      navigate('/Home/Pessoa-Projeto');
+      navigate('/Projeto');
     }
   };
   
-
   const handleBottonCardapio = () => {
     if (userType === "aluno") {
       setMostrarBotao(false);
@@ -72,23 +71,22 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
 
   const handleBottonMeusProjetos = () => {
     if (userType === "aluno" || userType === "admin") {
-      navigate('/Area/Pessoa-Projeto');
+      navigate('/Area/Projeto');
     } else if (userType === "professor" || userType === "admin") {
-      navigate('/Area/Pessoa-Projeto');
+      navigate('/Area/Projeto');
     }
   };
 
-  // Função para fechar a tela do perfil
   const handleCloseProfile = () => {
     setIsMenuOpen(false);
   };
 
   useEffect(() => {
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth <= 768); // Adapte conforme necessário
+      setIsSmallScreen(window.innerWidth <= 768); 
     };
 
-    handleResize(); // Configura o estado inicial com base no tamanho da tela
+    handleResize(); 
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -96,11 +94,9 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
     };
   }, []);
 
-  // Adiciona um evento de clique ao corpo para fechar o perfil quando clicar fora dele
   useEffect(() => {
     document.body.addEventListener('click', handleCloseProfile);
 
-    // Remove o evento ao desmontar o componente
     return () => {
       document.body.removeEventListener('click', handleCloseProfile);
     };

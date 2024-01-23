@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {useNavigate} from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import axiosFecht from '../../axios/config';
 import ContainerTopo from '../../components/ContainerTopo';
-import MenuHamburguer from "../../components/MenuHamburguer";
+import MenuHamburguer from '../../components/MenuHamburguer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {faFileImage, faFilePdf, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faFileImage, faFilePdf, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import './css/adiciona.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const AdicionaProjetoComponent = () => {
+
   const navigate = useNavigate();
   const [projetoAdicionado, setProjetoAdicionado] = useState(false);
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
@@ -32,19 +32,16 @@ const AdicionaProjetoComponent = () => {
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [professoresDisponiveis, setProfessoresDisponiveis] = useState([]);
   const [setLogoAdicionada] = useState(false);
-  const [mensagemErro, setMensagemErro] = useState(false);
-  const [sucessoAdicao, setSucessoAdicao] = useState(false);
   const [arquivoAdicionado] = useState(false);
   const fileInputLogoRef = useRef(null);
   const fileInputPDFRef = useRef(null);
-  const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState('');
-  const [publico, setPublico] = useState(false); 
-
-  const handleToggle = () => {
-    setPublico(!publico); // Inverte o valor de publico ao ser chamada
-  };
+  const [publico, setPublico] = useState(false);
   const userRole = localStorage.getItem('userRole');
+ 
+  const handleToggle = () => {
+    setPublico(!publico); 
+  };
 
   const [anoPublicacao, setAnoPublicacao] = useState(null);
 
@@ -57,14 +54,12 @@ const AdicionaProjetoComponent = () => {
     carregarProfessores();
   }, []);
 
-
   const handleFile = async (event) => {
     try {
-      setLoading(true);
       const file = event.target.files[0];
       const cloudinaryCloudName = 'dzpbclwij';
       const cloudinaryUploadPreset = 'bdsmg4su';
-      
+
       if (file) {
         const formData = new FormData();
         formData.append('file', file);
@@ -86,7 +81,6 @@ const AdicionaProjetoComponent = () => {
 
           setUrl(urlPdf);
           setPdfAdicionado(true);
-          setLoading(false);
         } else {
           console.error('Erro ao fazer upload do PDF:', cloudinaryResponse.data);
         }
@@ -99,7 +93,6 @@ const AdicionaProjetoComponent = () => {
   };
 
   const handleFileUpload = async (event) => {
-    setLoading(true);
     const files = event.target.files;
 
     if (files.length > 0) {
@@ -121,32 +114,29 @@ const AdicionaProjetoComponent = () => {
           const imageUrls = responses.map((response) => response.data.secure_url);
           setLogoProjeto(imageUrls);
           setLogoAdicionada(true);
-          setLoading(false);
         })
         .catch((error) => {
           console.error('Erro ao fazer upload de logo:', error);
         });
     } else {
-      console.warn('Nenhuma logo selecionado');
+      console.warn('Nenhuma logo selecionada');
     }
   };
 
-
   const carregarAlunos = async () => {
-
     try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'x-access-token': token,
+      };
 
-    const token = localStorage.getItem('token');
-    const headers = {
-      'x-access-token': token,
-    };
+      const response = await axiosFecht.get('/listar/alunos', { headers });
 
-      const response = await axiosFecht.get('/listar/alunos/', { headers });
-      
       setAlunosDisponiveis(
-        response.data.map((aluno) => ({
+        response.data.map((aluno, index) => ({
           id: aluno.pessoa_id_pessoa,
           nome: aluno.nome_aluno,
+          key: `${aluno.pessoa_id_pessoa}_${index}`,  
         }))
       );
     } catch (error) {
@@ -161,7 +151,8 @@ const AdicionaProjetoComponent = () => {
     };
 
     try {
-      const response = await axiosFecht.get('/listar/orientador/', { headers });
+      const response = await axiosFecht.get('/listar/orientador', { headers });
+
       setProfessoresDisponiveis(
         response.data.map((professor) => ({
           id: professor.pessoa_id_pessoa,
@@ -174,17 +165,17 @@ const AdicionaProjetoComponent = () => {
   };
 
   const adicionarProjeto = async () => {
-
-   const token = localStorage.getItem('token');
-
+    const token = localStorage.getItem('token');
+    const alunosIds = this.alunosSelecionados.map(aluno => ({ "id": aluno.id }));
+    const orientadorId = this.orientadorSelecionado.id;
     const headers = {
       'x-access-token': token,
     };
 
     try {
       const projetoData = {
-        orientadores: orientadorSelecionado,
-        autores: alunosSelecionados,
+        orientadores: alunosIds,
+        autores: [{ "id": orientadorId }],
         titulo,
         tema,
         problema,
@@ -193,105 +184,61 @@ const AdicionaProjetoComponent = () => {
         abstract,
         objetivo_especifico,
         logo_projeto: logoProjeto,
-        publico: publico ? 1 : 0, 
+        publico: publico ? 1 : 0,
         url_projeto: url,
       };
-    
-      const response = await axiosFecht.post('/projeto/adiciona', projetoData, {headers});
+
+      const response = await axiosFecht.post('/projeto/adiciona', projetoData, { headers });
 
       if (response.status === 200) {
-        setMensagemErro(false);
-        setSucessoAdicao(true);
         setProjetoAdicionado(true);
         navigate('/Area/Pessoa-Projeto');
-      } else {
-        setMensagemErro(true);
-        setSucessoAdicao(false);
       }
     } catch (error) {
       console.error('Erro ao adicionar projeto:', error);
-      setMensagemErro(true);
-      setSucessoAdicao(false);
     }
   };
 
-   // Função para exibir toast de sucesso
-   const exibirToastSucesso = () => {
-    toast.success('Projeto adicionado com sucesso!', {
-      position: "top-right",
-      autoClose: 3000, 
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
+  return (
+    <div>
+      <ContainerTopo userType={userRole} />
+      <MenuHamburguer userType={userRole} />
 
-  /* Função para exibir toast de erro
-  const exibirToastErro = (mensagem) => {
-    toast.error(`Erro ao adicionar o projeto: ${mensagem}`, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };*/
+      <div className="col-sm-12 container">
+        <h1 className="tituloProjetos">ADICIONAR PROJETO</h1>
+      </div>
+      <hr className="linhaAzul" />
 
-   useEffect(() => {
-    if (sucessoAdicao) {
-      exibirToastSucesso();
-    }
-  }, [sucessoAdicao]);
+      {!projetoAdicionado && (
+        <div className="container d-flex align-items-center justify-content-center mx-auto">
+          <div className="row">
 
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Seleção de Orientador */}
+              <Autocomplete
+                getOptionLabel={(option) => option.nome}
+                getOptionValue={(option) => option.id}
+                value={orientadorSelecionado}
+                onChange={(event, newValue) => setOrientadorSelecionado(newValue)}
+                options={professoresDisponiveis}
+                renderInput={(params) => <TextField {...params} label="Selecione um orientador" />}
+              />
+            </div>
 
-/*  useEffect(() => {
-    if (mensagemErro) {
-      exibirToastErro('Por favor, tente novamente.');
-    }
-  }, [mensagemErro]);*/
-
-return (
-  <div>
-  <ContainerTopo userType={userRole}/>
-  <MenuHamburguer userType={userRole}/>
-
-  <div className="col-sm-12 container">
-    <h1 className="tituloProjetos">ADICIONAR PROJETO</h1>
-  </div>
-  <hr className="linhaAzul" />
-
-  {!projetoAdicionado && (
-    <div className="container d-flex align-items-center justify-content-center mx-auto">
-      <div className="row">
-        
-        <div className="col-md-10 col-sm-8 align-self-center mt-5">
-          {/* Seleção de Orientador */}
-          <Autocomplete
-              value={orientadorSelecionado}
-              onChange={(event, newValue) => setOrientadorSelecionado(newValue)}
-              options={professoresDisponiveis}
-              getOptionLabel={(option) => option.nome}
-              renderInput={(params) => <TextField {...params} label="Selecione um orientador" />}
-            />
-        </div>
-
-        <div className="col-md-10 col-sm-8 align-self-center mt-5">
-          {/* Seleção de Alunos */}
-          <Autocomplete
-            multiple
-            value={alunosSelecionados}
-            onChange={(event, newValue) => setAlunosSelecionados(newValue)}
-            options={alunosDisponiveis}
-            getOptionLabel={(option) => option.nome}
-            renderInput={(params) => (
-              <TextField {...params} label="Selecione um aluno" />
-            )}
-          />
-        </div>
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+        {/* Seleção de Alunos */}
+        <Autocomplete
+          getOptionLabel={(option) => option.nome}
+          getOptionValue={(option) => option.id}
+          multiple
+          value={alunosSelecionados}
+          onChange={(event, newValue) => setAlunosSelecionados(newValue)}
+          options={alunosDisponiveis}
+          renderInput={(params) => (
+            <TextField {...params} label="Selecione um aluno" />
+          )}
+        />
+      </div>
 
         <div className="col-md-10 col-sm-8 align-self-center mt-5">
           {/* Campo de Título */}

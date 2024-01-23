@@ -45,7 +45,7 @@ const HomePrincipal = () => {
   };
 
   const visualizar = (id) => {
-    Navigate('/Home/Pessoa-Projeto/Detalhes/' + id );
+    Navigate('/Projeto/' + id );
   };
 
   useEffect(() => {

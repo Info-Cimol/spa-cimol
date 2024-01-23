@@ -60,25 +60,25 @@ const router = createBrowserRouter([
      
       //Rota da home dos projetos, responsável por listar os projetos públicos e ainda possibilita a pesquisa dos mesmos, por título e ano
       {
-        path: '/Home/Pessoa-Projeto',
+        path: '/Projeto',
         element: <Private allowedRoles={['aluno', 'professor', 'admin']}><ProjetoHomePessa /></Private>,
       },
 
       //Rota apartir da home, que possibilita ver os projetos das pessoas pelo id do projetos
       {
-        path: '/Home/Pessoa-Projeto/Detalhes/:id',
+        path: '/Projeto/:id',
         element: <Private allowedRoles={['aluno', 'professor', 'admin']}><ProjetoHomeDetalhes/></Private>,
       },
 
        //Rota responsável pela área de administração dos projeos por parte de cada perfil de usuário
        {
-        path: '/Area/Pessoa-Projeto',
+        path: '/Area/Projeto',
         element: <Private allowedRoles={['aluno', 'professor', 'admin']}><AreaPessoaProjeto/></Private>
       },
 
         //Rota responsável pela listagem dos projetos de cada indivíduo, que esteja relacionado ao projeto
         {
-          path: '/Visualiza/Projeto-Pessoa/:id',
+          path: '/Visualiza/Projeto/:id',
           element: <Private allowedRoles={['aluno', 'professor', 'admin']}><VisualizaProjetoPessoa/></Private>
         },
 
