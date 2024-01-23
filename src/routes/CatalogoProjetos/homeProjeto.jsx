@@ -62,24 +62,24 @@ const HomePrincipal = () => {
  
   {/* Caso o aluno esteja logado ele direciona este texto e imagem */}
   {userRole === "aluno" && (
-    <div className="row">
-      <div className="col-sm-6">
+    <div className="row align-items-center">
+       <div className="col-sm-6 col-md-6">
         <h1 className="escreva fade-up">Olá {userName}, Desenvolva todos os seus projetos aqui na nossa plataforma</h1>
       </div>
-      <div className="col-sm-6">
-        <img src="/Images/image 40.png" className="imagem" alt="Imagem do Aluno Projeto" />
+      <div className="col-md-6 col-sm-6">
+        <img src="/Images/image 40.png" className=" img-fluid" alt="Imagem do Aluno Projeto" />
       </div>
     </div>
   )}
 
   {/* Caso o professor esteja logado ele direciona este texto e imagem */}
   {userRole === "professor" && (
-    <div className="row">
+      <div className="row align-items-center">
       <div className="col-sm-6">
         <h1 className="escreva fade-up">Olá {userName}, Orientar seus alunos ficou mais fácil</h1>
       </div>
       <div className="col-sm-6">
-        <img src="/Images/image 40.png" className="imagem" alt="Imagem do Aluno Projeto" />
+        <img src="/Images/imagem6.png" className="imagem" alt="Imagem do Aluno Projeto" />
       </div>
     </div>
   )}

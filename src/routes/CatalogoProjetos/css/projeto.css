@@ -206,9 +206,9 @@ html, body {
 .escreva{ 
   font-family: 'Inika', serif; 
   color: #fff; 
-  margin-top: 5rem; 
   font-size: 4rem;
  } 
+ 
  @keyframes fade-in-down { 0% { opacity: 0; transform: translateX(-57px); } 100% { opacity: 1; transform: translateX(0); } } @keyframes slideUpFadeIn { from { opacity: 0; transform: translateY(50px); /* Altere a distância desejada do slide-up */ } to { opacity: 1; transform: translateY(0); } } .fade-up { animation: slideUpFadeIn 3s ease-in-out; }
 
 .cardsTela {
