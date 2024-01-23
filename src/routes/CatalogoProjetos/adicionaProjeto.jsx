@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {useNavigate} from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import axiosFecht from '../../axios/config';
 import ContainerTopo from '../../components/ContainerTopo';
@@ -17,7 +19,6 @@ const AdicionaProjetoComponent = () => {
   const navigate = useNavigate();
   const [projetoAdicionado, setProjetoAdicionado] = useState(false);
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
-  const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [orientadorSelecionado, setOrientadorSelecionado] = useState(null);
   const [titulo, setTitulo] = useState('');
   const [tema, setTema] = useState('');
@@ -30,16 +31,14 @@ const AdicionaProjetoComponent = () => {
   const [pdfAdicionado, setPdfAdicionado] = useState(false);
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [professoresDisponiveis, setProfessoresDisponiveis] = useState([]);
-  const [logoAdicionada, setLogoAdicionada] = useState(false);
+  const [setLogoAdicionada] = useState(false);
   const [mensagemErro, setMensagemErro] = useState(false);
   const [sucessoAdicao, setSucessoAdicao] = useState(false);
-  const [arquivoAdicionado, setArquivoAdicionado] = useState(false);
+  const [arquivoAdicionado] = useState(false);
   const fileInputLogoRef = useRef(null);
   const fileInputPDFRef = useRef(null);
-  const [projetoSalvo, setProjetoSalvo] = useState(false);
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState('');
-
   const [publico, setPublico] = useState(false); 
 
   const handleToggle = () => {
@@ -132,12 +131,6 @@ const AdicionaProjetoComponent = () => {
     }
   };
 
-  const adicionarAluno = () => {
-    if (alunoSelecionado && alunosDisponiveis.some((aluno) => aluno.id === alunoSelecionado.id)) {
-      setAlunosSelecionados([...alunosSelecionados, alunoSelecionado]);
-      setAlunoSelecionado(null);
-    }
-  };  
 
   const carregarAlunos = async () => {
 
@@ -199,8 +192,6 @@ const AdicionaProjetoComponent = () => {
         resumo,
         abstract,
         objetivo_especifico,
-        anoPublicacao,
-        arquivo: arquivoAdicionado,
         logo_projeto: logoProjeto,
         publico: publico ? 1 : 0, 
         url_projeto: url,
@@ -224,254 +215,272 @@ const AdicionaProjetoComponent = () => {
     }
   };
 
-  return (
-    <div>
-      <ContainerTopo userType={userRole}/>
-      <MenuHamburguer userType={userRole}/>
+   // Função para exibir toast de sucesso
+   const exibirToastSucesso = () => {
+    toast.success('Projeto adicionado com sucesso!', {
+      position: "top-right",
+      autoClose: 3000, 
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
 
-      <div className="col-sm-12 container">
-        <h1 className="tituloProjetos">ADICIONE UM PROJETO</h1>
-      </div>
-      <hr className="linhaAzul" />
+  /* Função para exibir toast de erro
+  const exibirToastErro = (mensagem) => {
+    toast.error(`Erro ao adicionar o projeto: ${mensagem}`, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };*/
 
-      {loading && <p>Carregando...</p>}
-      
-      {mensagemErro && (
-        <div>
-          <p>Ocorreu um erro ao adicionar o projeto. Por favor, tente novamente.</p>
-        </div>
-      )}
-  
-      {sucessoAdicao && (
-        <div>
-          <p>Projeto adicionado com sucesso!</p>
-        </div>
-      )}
-  
-      {!projetoAdicionado && (
-        <div className="container d-flex align-items-center justify-content-center mx-auto">
-          <div className="row">
-            
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              {/* Seleção de Orientador */}
-              <Autocomplete
-                  value={orientadorSelecionado}
-                  onChange={(event, newValue) => setOrientadorSelecionado(newValue)}
-                  options={professoresDisponiveis}
-                  getOptionLabel={(option) => option.nome}
-                  renderInput={(params) => <TextField {...params} label="Selecione um orientador" />}
-                />
-            </div>
-  
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              {/* Seleção de Alunos */}
-              <Autocomplete
-                multiple
-                value={alunosSelecionados}
-                onChange={(event, newValue) => setAlunosSelecionados(newValue)}
-                options={alunosDisponiveis}
-                getOptionLabel={(option) => option.nome}
-                renderInput={(params) => (
-                  <TextField {...params} label="Selecione um aluno" />
-                )}
-              />
-            </div>
-  
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              {/* Campo de Título */}
-              <TextField
-                label="Título"
-                variant="outlined"
-                fullWidth
-                value={titulo}
-                onChange={(event) => setTitulo(event.target.value)}
-              />
-            </div>
-  
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              {/* Campo de Tema */}
-              <TextField
-                label="Tema"
-                variant="outlined"
-                fullWidth
-                value={tema}
-                onChange={(event) => setTema(event.target.value)}
-              />
-            </div>
-  
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              {/* Campo de Problema */}
-              <TextField
-                label="Problema"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={4}
-                value={problema}
-                onChange={(event) => setProblema(event.target.value)}
-              />
-            </div>
-  
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              {/* Campo de Objetivo Geral */}
-              <TextField
-                label="Objetivo Geral"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={4}
-                value={objetivo_geral}
-                onChange={(event) => setObjetivoGeral(event.target.value)}
-              />
-            </div>
-  
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              {/* Campo de Objetivo Específico */}
-              <TextField
-                label="Objetivo Específico"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={4}
-                value={objetivo_especifico}
-                onChange={(event) => setObjetivoEspecifico(event.target.value)}
-              />
-            </div>
-  
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              {/* Campo de Resumo */}
-              <TextField
-                label="Resumo"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={4}
-                value={resumo}
-                onChange={(event) => setResumo(event.target.value)}
-              />
-            </div>
-  
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              {/* Campo de Abstract */}
-              <TextField
-                label="Abstract"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={4}
-                value={abstract}
-                onChange={(event) => setAbstract(event.target.value)}
-              />
-            </div>
-  
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              {/* Campo de URL do Projeto */}
-              <TextField
-                label="URL do Projeto"
-                variant="outlined"
-                fullWidth
-                value={url}
-                onChange={(event) => setUrl(event.target.value)}
-              />
-            </div>
-  
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-      <DatePicker
-        selected={anoPublicacao}
-        onChange={handleChange}
-        dateFormat="yyyy"
-        showYearPicker
-        placeholderText="Ano de Publicação"
-        className="form-control"
-      />
-    </div>
+   useEffect(() => {
+    if (sucessoAdicao) {
+      exibirToastSucesso();
+    }
+  }, [sucessoAdicao]);
 
-    <div>
-      <label htmlFor="privacyToggle" className="toggle-label ms-5">
-      Tornar Público {publico ? '' : ''} ?
-      </label>
-      <input
-        type="checkbox"
-        id="privacyToggle"
-        className="toggle-checkbox ms-3"
-        value={publico}
-        onChange={handleToggle} 
-      />
-    </div>
 
-    <div className='row'>
+/*  useEffect(() => {
+    if (mensagemErro) {
+      exibirToastErro('Por favor, tente novamente.');
+    }
+  }, [mensagemErro]);*/
 
-  {/* Adicionar Logo */}
-  <div className="col-md-6 col-sm-6 align-self-center mt-5">
-    <label className="custom-file-upload">
-      <input
-        type="file"
-        ref={fileInputLogoRef}
-        id="fileInputLogo"
-        name="file"
-        multiple
-        onChange={handleFileUpload}
-      />
-      <span>
-        <FontAwesomeIcon icon={faFileImage} />
-      </span>
-    </label>
+return (
+  <div>
+  <ContainerTopo userType={userRole}/>
+  <MenuHamburguer userType={userRole}/>
+
+  <div className="col-sm-12 container">
+    <h1 className="tituloProjetos">ADICIONAR PROJETO</h1>
   </div>
+  <hr className="linhaAzul" />
 
-  {/* Exibir mensagem de sucesso para Logo */}
-  {arquivoAdicionado && (
-    <div className="col-md-6">
-      <div className="alert alert-success" role="alert">
-        <FontAwesomeIcon icon={faCheckCircle} />{' '}
-        Logo adicionada com sucesso
-      </div>
-    </div>
-  )}
+  {!projetoAdicionado && (
+    <div className="container d-flex align-items-center justify-content-center mx-auto">
+      <div className="row">
+        
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          {/* Seleção de Orientador */}
+          <Autocomplete
+              value={orientadorSelecionado}
+              onChange={(event, newValue) => setOrientadorSelecionado(newValue)}
+              options={professoresDisponiveis}
+              getOptionLabel={(option) => option.nome}
+              renderInput={(params) => <TextField {...params} label="Selecione um orientador" />}
+            />
+        </div>
 
-  {/* Adicionar PDF */}
-  <div className="col-md-6 col-sm-6 align-self-center mt-5">
-    <label className="custom-file-upload">
-      <input
-        type="file"
-        ref={fileInputPDFRef}
-        id="fileInputPDF"
-        name="file"
-        onChange={handleFile}
-        accept=".pdf"
-      />
-      <span>
-        <FontAwesomeIcon icon={faFilePdf} />
-      </span>
-    </label>
-  </div>
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          {/* Seleção de Alunos */}
+          <Autocomplete
+            multiple
+            value={alunosSelecionados}
+            onChange={(event, newValue) => setAlunosSelecionados(newValue)}
+            options={alunosDisponiveis}
+            getOptionLabel={(option) => option.nome}
+            renderInput={(params) => (
+              <TextField {...params} label="Selecione um aluno" />
+            )}
+          />
+        </div>
 
-  {/* Exibir mensagem de sucesso para PDF */}
-  {pdfAdicionado && (
-    <div className="col-md-6">
-      <div className="alert alert-success" role="alert">
-        <FontAwesomeIcon icon={faCheckCircle} />{' '}
-        PDF adicionado com sucesso
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          {/* Campo de Título */}
+          <TextField
+            label="Título"
+            variant="outlined"
+            fullWidth
+            value={titulo}
+            onChange={(event) => setTitulo(event.target.value)}
+          />
+        </div>
+
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          {/* Campo de Tema */}
+          <TextField
+            label="Tema"
+            variant="outlined"
+            fullWidth
+            value={tema}
+            onChange={(event) => setTema(event.target.value)}
+          />
+        </div>
+
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          {/* Campo de Problema */}
+          <TextField
+            label="Problema"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={4}
+            value={problema}
+            onChange={(event) => setProblema(event.target.value)}
+          />
+        </div>
+
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          {/* Campo de Objetivo Geral */}
+          <TextField
+            label="Objetivo Geral"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={4}
+            value={objetivo_geral}
+            onChange={(event) => setObjetivoGeral(event.target.value)}
+          />
+        </div>
+
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          {/* Campo de Objetivo Específico */}
+          <TextField
+            label="Objetivo Específico"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={4}
+            value={objetivo_especifico}
+            onChange={(event) => setObjetivoEspecifico(event.target.value)}
+          />
+        </div>
+
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          {/* Campo de Resumo */}
+          <TextField
+            label="Resumo"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={4}
+            value={resumo}
+            onChange={(event) => setResumo(event.target.value)}
+          />
+        </div>
+
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          {/* Campo de Abstract */}
+          <TextField
+            label="Abstract"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={4}
+            value={abstract}
+            onChange={(event) => setAbstract(event.target.value)}
+          />
+        </div>
+
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          {/* Campo de URL do Projeto */}
+          <TextField
+            label="URL do Projeto"
+            variant="outlined"
+            fullWidth
+            value={url}
+            onChange={(event) => setUrl(event.target.value)}
+          />
+        </div>
+
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+            <DatePicker
+              selected={anoPublicacao}
+              onChange={handleChange}
+              dateFormat="yyyy"
+              showYearPicker
+              placeholderText="Ano de Publicação"
+              className="form-control"
+            />
+       </div>
+
+          <div>
+            <label htmlFor="privacyToggle" className="toggle-label ms-5">
+            Tornar Público {publico ? '' : ''} ?
+            </label>
+            <input
+              type="checkbox"
+              id="privacyToggle"
+              className="toggle-checkbox ms-3"
+              value={publico}
+              onChange={handleToggle} 
+            />
+          </div>
+
+          <div className='row'>
+          {/* Adicionar Logo */}
+          <div className="col-md-6 col-sm-6 align-self-center mt-5">
+          <label className="custom-file">
+            <input
+              type="file"
+              ref={fileInputLogoRef}
+              id="fileInputLogo"
+              name="file"
+              multiple
+              onChange={handleFileUpload}
+            />
+            <span>
+              <FontAwesomeIcon icon={faFileImage} />
+            </span>
+          </label>
+          </div>
+
+          {/* Exibir mensagem de sucesso para Logo */}
+          {arquivoAdicionado && (
+          <div className="col-md-6 col-sm-6 align-self-center mt-5">
+            <div className="alert alert-success" role="alert">
+              <FontAwesomeIcon icon={faCheckCircle} />{' '}
+              Logo adicionada com sucesso
+            </div>
+          </div>
+          )}
+
+          {/* Adicionar PDF */}
+          <div className="col-md-6 col-sm-6 align-self-center mt-5">
+          <label className="custom-file">
+            <input
+              type="file"
+              ref={fileInputPDFRef}
+              id="fileInputPDF"
+              name="file"
+              onChange={handleFile}
+              accept=".pdf"
+            />
+            <span>
+              <FontAwesomeIcon icon={faFilePdf} />
+            </span>
+          </label>
+          </div>
+
+          {/* Exibir mensagem de sucesso para PDF */}
+          {pdfAdicionado && (
+          <div className="col-md-6 col-sm-6 align-self-center mt-5">
+            <div className="alert alert-success" role="alert">
+              <FontAwesomeIcon icon={faCheckCircle} />{' '}
+              PDF adicionado com sucesso
+            </div>
+          </div>
+          )}
+          </div>
+        {/* Botão de Adicionar Projeto */}
+        <div className="col-md-10 col-sm-8 align-self-center mt-5">
+          <Button variant="contained" color="primary" onClick={adicionarProjeto}>
+            Adicionar Projeto
+          </Button>
+        </div>
       </div>
     </div>
   )}
 </div>
-            {/* Botão de Adicionar Projeto */}
-            <div className="col-md-10 col-sm-8 align-self-center mt-5">
-              <Button variant="contained" color="primary" onClick={adicionarProjeto}>
-                Adicionar Projeto
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-  
-      {projetoAdicionado && (
-        <div>
-          <p>Projeto Adicionado com Sucesso!</p>
-        </div>
-      )}
-    </div>
-  );
+);
 };
 
 export default AdicionaProjetoComponent;

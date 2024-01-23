@@ -62,7 +62,7 @@
     box-shadow: 0 8px 8px rgba(124, 108, 108, 0.1);
 }
 
-.custom-file-upload {
+  .custom-file-upload {
     display: flex;
     align-items: center;
     justify-content: space-between;
