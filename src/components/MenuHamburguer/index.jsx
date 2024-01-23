@@ -32,19 +32,19 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
 
   const handleBottonHome = () => {
     if (userType === "aluno") {
-      navigate('/Aluno/');
+      navigate('/Home');
 
     } else if (userType === "professor") {
-      navigate('/Professor/');
+      navigate('/Home');
 
     } else if (userType === "secretaria") {
-      navigate('/Secretaria');
+      navigate('/Home');
 
     } else if (userType === "admin") {
-      navigate('/Coodernador/Admin');
+      navigate('/Home');
 
     } else if (userType === "merendeira") {
-      navigate('/Merendeira');
+      navigate('/Home');
     }
   };
   

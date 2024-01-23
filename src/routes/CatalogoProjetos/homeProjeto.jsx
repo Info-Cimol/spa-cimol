@@ -96,7 +96,6 @@ const HomePrincipal = () => {
     </div>
   )}
 </div>
-
 </div>
 
       {/* Barra de Pesquisa com Dropdown */}

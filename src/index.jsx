@@ -5,20 +5,14 @@ import { Private } from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
 import App from './App';
 import ScrollToTopButton from './components/ScrollTop'
+import Home from './routes/Aluno';
 import Login from './routes/Login';
-import Aluno from './routes/Aluno';
-import Secretaria from './routes/Secretaria';
-import Merendeira from './routes/Merendeira';
-import Professor from './routes/Professor';
-import Admin from './routes/Admin';
-
 import ProjetoHomePessa from './routes/CatalogoProjetos/homeProjeto';
 import ProjetoHomeDetalhes from './routes/CatalogoProjetos/homeDetalhesProjeto';
 import AreaPessoaProjeto from './routes/CatalogoProjetos/areaPessoaProjeto';
 import VisualizaProjetoPessoa from './routes/CatalogoProjetos/visualizaProjeto';
 import AdicionaProjeto from './routes/CatalogoProjetos/adicionaProjeto';
 import EditaProjeto from './routes/CatalogoProjetos/editaProjeto';
-
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
@@ -32,28 +26,8 @@ const router = createBrowserRouter([
       },
    
       {
-        path: '/Coodernador/Admin',
-        element: <Private allowedRoles={['admin']}><Admin /></Private>,
-      },
-      
-      {
-        path: '/Aluno',
-        element: <Private allowedRoles={['aluno', 'admin']}><Aluno /></Private>,
-      },
-     
-      {
-        path: '/Professor',
-        element: <Private allowedRoles={['professor', 'admin']}><Professor /></Private>,
-      },
-    
-      {
-        path: '/Secretaria',
-        element: <Private allowedRoles={['secretaria', 'admin']}><Secretaria /></Private>,
-      },
-     
-      {
-        path: '/Merendeira',
-        element: <Private allowedRoles={['merendeira', 'admin']}><Merendeira /></Private>,
+        path: '/Home',
+        element: <Private allowedRoles={['aluno', 'professor', 'admin', 'merendeira', 'secretaria']}><Home /></Private>,
       },
 
       //-------------Ferramenta de catálogo de projeto------------------------

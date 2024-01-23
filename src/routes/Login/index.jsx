@@ -97,19 +97,19 @@ function Login() {
   
     switch (userType) {
       case "professor":
-        navigate('/Professor');
+        navigate('/Home');
         break;
       case "aluno":
-        navigate('/Aluno');
+        navigate('/Home');
         break;
       case "secretaria":
-        navigate('/Secretaria');
+        navigate('/Home');
         break;
       case "merendeira":
-        navigate('/Merendeira');
+        navigate('/Home');
         break;
       case "admin":
-        navigate('/Coodernador/Admin');
+        navigate('/Home');
         break;
       default:
         console.log('Tipo de usuário inválido');

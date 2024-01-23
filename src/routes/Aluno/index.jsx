@@ -27,7 +27,6 @@ function Aluno(){
     noite: false,
   });
  
-  //const userName = localStorage.getItem('userName') ;
   const hoje = useMemo(() => new Date(), []);
   const img = imagem1;
   const [userRole] = useState(localStorage.getItem('userRole'));
@@ -145,28 +144,75 @@ function Aluno(){
 
   return(
     <Container>
-     
       <ContainerTopo  userType={userRole}/>
       <MenuHamburguer userType={userRole}/>
-      {mostrarBotao ?(
 
+      {mostrarBotao ?(
         <div className='container-fluid'>
            <div className='row'>
            <div className='buttons'>
-            
-       <div className="col-sm-12">
-          <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
-                Olá estudante, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
-          </h1>
-       </div>
-                  <button className='button col-lg-6' onClick={mostrarCardapio}>Merenda</button>
-             
-                  <button className='button col-lg-6' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
-            </div>
+           {userRole === 'aluno' && (
+                 <div className="col-sm-12">
+                      <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
+                            Olá estudante, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+                      </h1>
+                      <button className='button col-lg-6' onClick={mostrarCardapio}>Merenda</button>
+          <button className='button col-lg-6' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
 
+                  </div>
+           )}
+
+          {userRole === 'professor' && (
+                 <div className="col-sm-12">
+                      <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
+                            Olá professor, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+                      </h1>
+                      <button className='button col-lg-6' onClick={mostrarCardapio}>Merenda</button>
+          <button className='button col-lg-6' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
+          <button className='button col-lg-6' /*onClick={redirecionarParaProjeto}*/>Provas</button>
+                  </div>
+           )}
+
+           {userRole === 'admin' && (
+                 <div className="col-sm-12">
+                      <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
+                            Olá administrador, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+                      </h1>
+                      <button className='button col-lg-6' onClick={mostrarCardapio}>Merenda</button>
+          <button className='button col-lg-6' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
+          <button className='button col-lg-6' /*onClick={redirecionarParaProjeto}*/>Provas</button>
+                  </div>
+           )}
+
+         {userRole === 'merendeira' && (
+                 <div className="col-sm-12">
+                      <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
+                            Olá merendeira, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+                      </h1>
+                      <div className="row">
+                      <button className='button col-lg-6' onClick={mostrarCardapio}>
+                        Cardápio
+                      </button>
+                </div>
+              </div>
+           )}
+
+            {userRole === 'secretaria' && (
+              <div className="col-sm-12">
+                <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
+                  Olá supervisor, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+                </h1>
+                <div className="row">
+                <button className='button col-lg-6' onClick={mostrarCardapio}>Cardápio</button>
+                <button className='button col-lg-6' >Alunos</button>
+                </div>
+              </div>
+            )} 
+            </div>
           </div>    
         </div>
-      ) : (
+        ) : (
+
         <div className='containerCardapio'>
           <div className='boxCardapio'>
             <h1>Cardápio da semana</h1>
@@ -181,7 +227,7 @@ function Aluno(){
                     const dataDoCardapio = new Date(cardapio.data);
                     if (isNaN(dataDoCardapio.getTime())) {
                       console.error(`Data inválida: ${cardapio.data}`);
-                      return null; // ou faça algo para lidar com datas inválidas
+                      return null;
                     }
 
                     const diferencaEmMilissegundos = dataDoCardapio - hoje;

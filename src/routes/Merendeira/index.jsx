@@ -6,6 +6,7 @@ import { useState } from "react";
 import {IoSearchOutline, IoClose} from "react-icons/io5"
 
 function Funcionario() {
+
     const [dados] = useState([
         {data: new Date(2023, 10, 12 ), cardapio: "Arroz com ovo", manha: 100, tarde: 50, noite: 40},
         {data: new Date(2023, 10, 13 ), cardapio: "Arroz com feijão", manha: 80, tarde: 70, noite: 50},
@@ -13,6 +14,7 @@ function Funcionario() {
         {data: new Date(2023, 10, 15 ), cardapio: "Carreteiro", manha: 110, tarde: 48, noite: 70}, 
         {data: new Date(2023, 10, 16 ), cardapio: "Omelete com batata", manha: 93, tarde: 75, noite: 60}, 
     ])
+
     const [userRole] = useState(localStorage.getItem('userRole'));
     const [mostrarBotao, setMostrarBotao] = useState(true);
     const [inputValue, setInputValue] = useState('');
@@ -47,22 +49,20 @@ function Funcionario() {
 
     return(
         <Container>
-            <ContainerTopo userType={userRole} />
-            <MenuHamburguer userType={userRole}/>
             <div className='container-fluid'>
            <div className='row'>
            <div className='buttons'>
             
-       <div className="col-sm-12">
-          <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '5px' }}>
-                Olá merendeira, seja muito bem-vinda. Aqui você tem acesso a todos os cardápios da semana na ferramentas do Cimol.
-          </h1>
-       </div>
-              
+            <div className="col-sm-12">
+                <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '5px' }}>
+                        Olá merendeira, seja muito bem-vinda. Aqui você tem acesso a todos os cardápios da semana na ferramentas do Cimol.
+                </h1>
             </div>
+                    
+                    </div>
 
-          </div>    
-        </div>
+                </div>    
+                </div>
             {descricao &&(
                 <div className="containerDescricao">
                     <IoClose size={20} onClick={() => setDescricao(false)}/>
