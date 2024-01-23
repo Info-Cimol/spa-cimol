@@ -65,7 +65,7 @@ const ProjectComponent = () => {
   };  */
 
   const adicionar = () => {
-    Navigate('');
+    Navigate('/Adiciona/Projeto');
   };
 
   const visualizar = (id) => {

@@ -4,7 +4,7 @@ import { useParams, useNavigate} from 'react-router-dom';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-import { faFileImage, faFilePdf, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import {faFileImage, faFilePdf, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import axiosFecht from '../../axios/config';
 import axios from 'axios';
 import './css/editaProjeto.css';
@@ -243,27 +243,6 @@ const EdicaoProjeto = () => {
 
       <div className="container-fluid align-items-center justify-content-center d-flex ">
         <div className="row">
-          
-           {/* Seleção de Orientador 
-           <div className="col-md-10 col-sm-8 align-self-center mt-5">
-           <TextField
-              id="titulo"
-              label="Título"
-              variant="outlined"
-              value={projetoEdit.orientadores}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-
-                if (inputValue.length <= 250) {
-                setProjetoEdit({ ...projetoEdit, titulo: inputValue });
-                }
-            }}
-              
-            className="custom-textfield"
-            inputProps={{ maxLength: 50 }}
-            />
-            </div>*/}
-
           <div className="col-md-10 col-sm-8 align-self-center">
           <TextareaAutosize className='input'
               id="titulo"
@@ -487,7 +466,7 @@ const EdicaoProjeto = () => {
               </div>
             </div>
           ) : (
-            <span>Salvar</span>
+            <span className='custom-button'>Salvar</span>
           )}
         </button>
       </div>

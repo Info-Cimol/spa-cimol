@@ -1,80 +1,58 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import './css/adiciona.css';
 import axiosFecht from '../../axios/config';
+import ContainerTopo from '../../components/ContainerTopo';
+import MenuHamburguer from "../../components/MenuHamburguer";
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-function AdicionarProjeto() {
-  const [errorMessages, setErrorMessages] = useState({
-    alunosSelecionados: '',
-    orientadorSelecionado: '',
-    titulo: '',
-    tema: '',
-    problema: '',
-    objetivo_geral: '',
-    resumo: '',
-    objetivo_especifico: '',
-    abstract: '',
-    ano_publicacao: '',
-  });
-
-  const [mensagem, setMensagem] = useState(false);
-  const [valueDeterminate, setValueDeterminate] = useState(50);
+const AdicionaProjetoComponent = () => {
+  const navigate = useNavigate();
   const [projetoAdicionado, setProjetoAdicionado] = useState(false);
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
-  const [alunoSelecionado, setAlunoSelecionado] = useState({ id: null });
-  const [professoresSelecionados, setProfessoresSelecionados] = useState([]);
-  const [professorSelecionado, setProfessorSelecionado] = useState({ id: null });
-  const [orientadorSelecionados, setOrientadorSelecionados] = useState([]);
-  const [coorientadoresSelecionados, setCoorientadoresSelecionados] = useState([]);
-  const [orientadoresSelecionados, setOrientadoresSelecionados] = useState([]);
+  const [isPrivate] = useState('');
+  const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [orientadorSelecionado, setOrientadorSelecionado] = useState(null);
-  const [novoAutor, setNovoAutor] = useState('');
   const [titulo, setTitulo] = useState('');
   const [tema, setTema] = useState('');
-  const [delimitacao, setDelimitacao] = useState('');
   const [problema, setProblema] = useState('');
   const [resumo, setResumo] = useState('');
-  const [objetivoGeral,] = useState('');
-  const [objetivoEspecifico,] = useState('');
-  const [urlProjeto,] = useState('');
-  const [set,] = useState('');
-
-  const [logo_projeto, setLogoProjeto] = useState('');
+  const [logoProjeto, setLogoProjeto] = useState([]);
   const [objetivo_geral, setObjetivoGeral] = useState('');
   const [abstract, setAbstract] = useState('');
   const [objetivo_especifico, setObjetivoEspecifico] = useState('');
-  const [ano_publicacao, setAnoPublicacao] = useState('');
   const [autores, setAutores] = useState([]);
-  const [imagens, setImagens] = useState([]);
-  const [isPrivate, setIsPrivate] = useState(false);
   const [pdfAdicionado, setPdfAdicionado] = useState(false);
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [professoresDisponiveis, setProfessoresDisponiveis] = useState([]);
   const [logoAdicionada, setLogoAdicionada] = useState(false);
-  const [mensagemErro, setMensagemErro] = useState(true);
+  const [mensagemErro, setMensagemErro] = useState(false);
   const [sucessoAdicao, setSucessoAdicao] = useState(false);
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState('');
-  const [menu, setMenu] = useState(false);
-  
-  const [charCount, setCharCount] = useState({
-    titulo: 0,
-    tema: 0,
-    delimitacao: 0,
-  });
+  const [menuAberto, setMenuAberto] = useState(false);
+  const [publico, setPublico] = useState(false); 
 
-  const requiredFields = [
-    'alunosSelecionados',
-    'orientadorSelecionado',
-    'titulo',
-    'tema',
-    'problema',
-    'objetivo_geral',
-    'resumo',
-    'objetivo_especifico',
-    'abstract',
-    'ano_publicacao',
-  ];
+  const handleToggle = () => {
+    setPublico(!publico); // Inverte o valor de publico ao ser chamada
+  };
+  const userRole = localStorage.getItem('userRole');
+
+  const [anoPublicacao, setAnoPublicacao] = useState(null);
+
+  const handleChange = (date) => {
+    setAnoPublicacao(date);
+  };
+
+
+  const handleDateChange = (date) => {
+    setAnoPublicacao(date);
+    setMenuAberto(false);
+  };
 
   useEffect(() => {
     carregarAlunos();
@@ -82,33 +60,13 @@ function AdicionarProjeto() {
   }, []);
 
 
-  const limitCharCount = (field, limit) => {
-    if (field.length > limit) {
-      set(field, field.substr(0, limit));
-    }
-    setCharCount((prevCharCount) => ({ ...prevCharCount, [field]: field.length }));
-  };
-
-  const shouldHideDetails = (selectedItems) => (selectedItems.length === 0 ? 'auto' : true);
-
-  const validateAlunosSelecionados = () => {
-    if (alunosSelecionados.length > 3) {
-      setAlunosSelecionados((prevAlunosSelecionados) => [...prevAlunosSelecionados].slice(0, -1));
-    }
-  };
-
-  const togglePrivacy = () => {
-    setIsPrivate((prevIsPrivate) => !prevIsPrivate);
-    console.log(isPrivate);
-  };
-
   const handleFile = async (event) => {
     try {
       setLoading(true);
       const file = event.target.files[0];
       const cloudinaryCloudName = 'dzpbclwij';
       const cloudinaryUploadPreset = 'bdsmg4su';
-
+      
       if (file) {
         const formData = new FormData();
         formData.append('file', file);
@@ -116,7 +74,7 @@ function AdicionarProjeto() {
         formData.append('upload_preset', cloudinaryUploadPreset);
 
         const cloudinaryResponse = await axios.post(
-          'https://api.cloudinary.com/v1_1/' + cloudinaryCloudName,'/raw/upload',
+          `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/raw/upload`,
           formData,
           {
             headers: {
@@ -127,10 +85,8 @@ function AdicionarProjeto() {
 
         if (cloudinaryResponse.status === 200 && cloudinaryResponse.data.secure_url) {
           const urlPdf = cloudinaryResponse.data.secure_url;
-          setUrl(urlPdf);
-          console.log(urlPdf);
-          console.log(cloudinaryResponse.data.secure_url);
 
+          setUrl(urlPdf);
           setPdfAdicionado(true);
           setLoading(false);
         } else {
@@ -144,7 +100,7 @@ function AdicionarProjeto() {
     }
   };
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload = async (event) => {
     setLoading(true);
     const files = event.target.files;
 
@@ -156,19 +112,16 @@ function AdicionarProjeto() {
       for (const file of files) {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('resource_type', 'raw');
+        formData.append('resource_type', 'image');
         formData.append('upload_preset', cloudinaryUploadPreset);
 
-        uploadPromises.push(
-          axios.post('https://api.cloudinary.com/v1_1/' + cloudinaryCloudName,'/upload', formData)
-        );
+        uploadPromises.push(axios.post(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/upload`, formData));
       }
 
       Promise.all(uploadPromises)
         .then((responses) => {
           const imageUrls = responses.map((response) => response.data.secure_url);
           setLogoProjeto(imageUrls);
-          console.log(logo_projeto);
           setLogoAdicionada(true);
           setLoading(false);
         })
@@ -176,40 +129,16 @@ function AdicionarProjeto() {
           console.error('Erro ao fazer upload de logo:', error);
         });
     } else {
-      console.warn('Nenhuma logo selecionada');
+      console.warn('Nenhuma logo selecionado');
     }
   };
 
   const adicionarAluno = () => {
-    if (alunoSelecionado.id !== null) {
-      setAlunosSelecionados((prevAlunosSelecionados) => [...prevAlunosSelecionados, alunoSelecionado]);
-      setAlunoSelecionado({ id: null });
+    if (alunoSelecionado && alunoSelecionado.id !== null) {
+      setAlunosSelecionados([...alunosSelecionados, alunoSelecionado]);
+      setAlunoSelecionado(null);
     }
   };
-
-  const adicionarProfessor = () => {
-    if (professorSelecionado.id !== null) {
-      setProfessoresSelecionados((prevProfessoresSelecionados) => [
-        ...prevProfessoresSelecionados,
-        professorSelecionado,
-      ]);
-      setProfessorSelecionado({ id: null });
-    }
-  };
-
-  const adicionarOrientador = () => {
-    if (orientadorSelecionado.id !== null) {
-      setCoorientadoresSelecionados((prevCoorientadoresSelecionados) => [
-        ...prevCoorientadoresSelecionados,
-        orientadorSelecionado,
-      ]);
-      setOrientadorSelecionado({ id: null });
-    }
-  };
-
-  const alunosIds = alunosSelecionados?.map((aluno) => aluno.id) || [];
-  const professoresIds = professoresSelecionados?.map((professor) => professor.id) || [];
-  const orientadorIds = orientadorSelecionados?.map((professor) => professor.id) || [];
 
   const carregarAlunos = async () => {
     const token = localStorage.getItem('token');
@@ -218,9 +147,7 @@ function AdicionarProjeto() {
     };
 
     try {
-      const response = await axiosFecht.get('/listar/alunos', {
-        headers,
-      });
+      const response = await axiosFecht.get('/listar/alunos/', { headers });
       setAlunosDisponiveis(
         response.data.map((aluno) => ({
           id: aluno.pessoa_id_pessoa,
@@ -239,9 +166,7 @@ function AdicionarProjeto() {
     };
 
     try {
-      const response = await axiosFecht.get('/listar/orientador', {
-        headers,
-      });
+      const response = await axiosFecht.get('/listar/orientador/', { headers });
       setProfessoresDisponiveis(
         response.data.map((professor) => ({
           id: professor.pessoa_id_pessoa,
@@ -254,275 +179,242 @@ function AdicionarProjeto() {
   };
 
   const adicionarProjeto = async () => {
+   
     try {
-      setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      const alunosIds = alunosSelecionados.map((aluno) => ({ id: aluno.id }));
-      const orientadorId = orientadorSelecionado.id;
-      const cloudinaryCloudName = 'dzpbclwij';
-      const cloudinaryUploadPreset = 'atk1tfs8';
-      setSucessoAdicao(true);
-
-      for (const field of requiredFields) {
-        if (!eval(field) || (Array.isArray(eval(field)) && eval(field).length === 0)) {
-          setErrorMessages((prevErrorMessages) => ({
-            ...prevErrorMessages,
-            [field]: 'Por favor, preencha o campo' + field.replace(/_/g, ' '),
-          }));
-          setMensagem(true);
-          setLoading(false);
-          setTimeout(() => {
-            setErrorMessages((prevErrorMessages) => ({
-              ...prevErrorMessages,
-              [field]: '',
-            }));
-            setMensagem(false);
-          }, 4000);
-          return;
-        }
+      if (!orientadorSelecionado || !orientadorSelecionado.id) {
+        throw new Error('Selecione um orientador.');
       }
 
-      if (Object.values(errorMessages).some((message) => message !== '')) {
-        return;
+      if (alunosSelecionados.length < 1) {
+        throw new Error('Selecione pelo menos um aluno.');
       }
 
-      let uploadedImageUrls = [];
-      for (const file of logo_projeto) {
-        const formData = new FormData();
-        formData.append('resource_type', 'raw');
-        formData.append('file', file);
-        formData.append('upload_preset', cloudinaryUploadPreset);
+      const projetoData = {
+        orientadores: [orientadorSelecionado],
+        autores: alunosSelecionados,
+        titulo,
+        tema,
+        problema,
+        objetivo_geral,
+        resumo,
+        abstract,
+        objetivo_especifico,
+        anoPublicacao,
+        logo_projeto: logoProjeto,
+        publico: publico ? 1 : 0, 
+        url_projeto: url,
+      };
+    
+    const token = localStorage.getItem('token');
+    
+    const headers = {
+      'x-access-token': token,
+    };
+      // Fazer a requisição POST para adicionar o projeto
+      const response = await axiosFecht.post('/projeto/adiciona', projetoData, {headers});
 
-        const response = await axios.post(
-          'https://api.cloudinary.com/v1_1/' + cloudinaryCloudName,'/upload', formData,
-          {
-            headers: {
-              'Content-Type': 'application/pdf',
-            },
-          }
-        );
-
-        if (response.status === 200 && response.data.secure_url) {
-          uploadedImageUrls.push(response.data.secure_url);
-        } else {
-        console.error('Resposta inválida:', response);
-        setProjetoAdicionado(false);
+      if (response.status === 200) {
+        setMensagemErro(false);
+        setSucessoAdicao(true);
+        setProjetoAdicionado(true);
+        navigate('/Area/Pessoa-Projeto')
+      } else {
+        setMensagemErro(true);
+        setSucessoAdicao(false);
       }
-    }
     } catch (error) {
-      console.error('Erro:', error);
-      setMensagemErro('Ocorreu um erro ao adicionar o projeto. Por favor, tente novamente.');
+      console.error('Erro ao adicionar projeto:', error);
+      setMensagemErro(true);
+      setSucessoAdicao(false);
     }
-  }; 
-  
-return (
-    <div>
-      {/* Seção de Título */}
-      <div>
-        <div className="col-sm-12 container d-flex justify-content-center align-items-center">
-          <h1 className="tituloProjetos animated-title">ADICIONE SEU PROJETO</h1>
-        </div>
-      </div>
+  };
 
-      {/* Exibição do Spinner durante o carregamento */}
-      <div className="col-12">
-        {loading && (
-          <div id="loadingSpinner" className="loading-spinner">
-            <div className="three-body">
-              <div className="three-body__dot"></div>
-              <div className="three-body__dot"></div>
-              <div className="three-body__dot"></div>
+  return (
+    <div>
+      <ContainerTopo userType={userRole}/>
+      <MenuHamburguer userType={userRole}/>
+
+      {loading && <p>Carregando...</p>}
+      
+      {mensagemErro && (
+        <div>
+          <p>Ocorreu um erro ao adicionar o projeto. Por favor, tente novamente.</p>
+        </div>
+      )}
+  
+      {sucessoAdicao && (
+        <div>
+          <p>Projeto adicionado com sucesso!</p>
+        </div>
+      )}
+  
+      {!projetoAdicionado && (
+        <div className="container d-flex align-items-center justify-content-center mx-auto">
+          <div className="row">
+            
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Seleção de Orientador */}
+              <Autocomplete
+                value={orientadorSelecionado}
+                onChange={(event, newValue) => setOrientadorSelecionado(newValue)}
+                options={professoresDisponiveis}
+                getOptionLabel={(option) => option.nome}
+                renderInput={(params) => <TextField {...params} label="Selecione um orientador" />}
+              />
+            </div>
+  
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Seleção de Alunos */}
+              <Autocomplete
+                multiple
+                value={alunosSelecionados}
+                onChange={(event, newValue) => setAlunosSelecionados(newValue)}
+                options={alunosDisponiveis}
+                getOptionLabel={(option) => option.nome}
+                renderInput={(params) => (
+                  <TextField {...params} label="Selecione um aluno" />
+                )}
+              />
+            </div>
+  
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Campo de Título */}
+              <TextField
+                label="Título"
+                variant="outlined"
+                fullWidth
+                value={titulo}
+                onChange={(event) => setTitulo(event.target.value)}
+              />
+            </div>
+  
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Campo de Tema */}
+              <TextField
+                label="Tema"
+                variant="outlined"
+                fullWidth
+                value={tema}
+                onChange={(event) => setTema(event.target.value)}
+              />
+            </div>
+  
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Campo de Problema */}
+              <TextField
+                label="Problema"
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={4}
+                value={problema}
+                onChange={(event) => setProblema(event.target.value)}
+              />
+            </div>
+  
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Campo de Objetivo Geral */}
+              <TextField
+                label="Objetivo Geral"
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={4}
+                value={objetivo_geral}
+                onChange={(event) => setObjetivoGeral(event.target.value)}
+              />
+            </div>
+  
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Campo de Objetivo Específico */}
+              <TextField
+                label="Objetivo Específico"
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={4}
+                value={objetivo_especifico}
+                onChange={(event) => setObjetivoEspecifico(event.target.value)}
+              />
+            </div>
+  
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Campo de Resumo */}
+              <TextField
+                label="Resumo"
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={4}
+                value={resumo}
+                onChange={(event) => setResumo(event.target.value)}
+              />
+            </div>
+  
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Campo de Abstract */}
+              <TextField
+                label="Abstract"
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={4}
+                value={abstract}
+                onChange={(event) => setAbstract(event.target.value)}
+              />
+            </div>
+  
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              {/* Campo de URL do Projeto */}
+              <TextField
+                label="URL do Projeto"
+                variant="outlined"
+                fullWidth
+                value={url}
+                onChange={(event) => setUrl(event.target.value)}
+              />
+            </div>
+  
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+      <DatePicker
+        selected={anoPublicacao}
+        onChange={handleChange}
+        dateFormat="yyyy"
+        showYearPicker
+        placeholderText="Ano de Publicação"
+        className="form-control"
+      />
+    </div>
+
+    <div>
+      <label htmlFor="privacyToggle" className="toggle-label ms-5">
+      Tornar Público {publico ? '' : ''} ?
+      </label>
+      <input
+        type="checkbox"
+        id="privacyToggle"
+        className="toggle-checkbox ms-3"
+        value={publico}
+        onChange={handleToggle} 
+      />
+    </div>
+            {/* Botão de Adicionar Projeto */}
+            <div className="col-md-10 col-sm-8 align-self-center mt-5">
+              <Button variant="contained" color="primary" onClick={adicionarProjeto}>
+                Adicionar Projeto
+              </Button>
             </div>
           </div>
-        )}
-      </div>
-
-      {/* Alerta de projeto adicionado */}
-      <div className="col-12" id="projetoAdicionadoAlert">
-        {projetoAdicionado && (
-          <div className="alert success mensagem-container">
-            Projeto adicionado
-          </div>
-        )}
-      </div>
-
-      {/* Linha divisória */}
-      <hr className="linhaAzul" />
-
-      {/* Container principal */}
-      <div className="container d-flex align-items-center justify-content-center mx-auto">
-        {/* Linha de formulário */}
-        <div className="row">
-          {/* Seleção de Orientador */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <select
-              value={orientadorSelecionado}
-          
-              className="custom-select"
-            >
-              {/* Opções aqui */}
-            </select>
-          </div>
-
-          {/* Seleção de Alunos */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <select
-              value={alunosSelecionados}
-       
-              className="custom-select"
-              multiple
-            >
-              {/* Opções aqui */}
-            </select>
-          </div>
-
-          {/* Campo de Título */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <input
-              type="text"
-              value={titulo}
-             // onChange={handleTituloChange}
-              className="form-control"
-              placeholder="Título"
-            />
-            <div className="char-counter">{titulo.length}/200</div>
-          </div>
-
-          {/* Campo de Tema */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <input
-              type="text"
-              value={tema}
-              //onChange={handleTemaChange}
-              className="form-control"
-              placeholder="Tema"
-            />
-            <div className="char-counter">{tema.length}/100</div>
-          </div>
-
-          {/* Campo de Problema */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <textarea
-              value={problema}
-            //  onChange={handleProblemaChange}
-              className="form-control"
-              placeholder="Problema"
-              rows="4"
-            />
-            <div className="char-counter">{problema.length}/350</div>
-          </div>
-
-          {/* Campo de Objetivo Geral */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <textarea
-              value={objetivoGeral}
-              
-              className="form-control mensagem"
-              placeholder="Objetivo geral"
-              rows="4"
-            />
-            <div className="char-counter">{objetivoGeral.length}/300</div>
-          </div>
-
-          {/* Campo de Objetivo Específico */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <textarea
-              value={objetivoEspecifico}
-          
-              className="form-control"
-              placeholder="Objetivos específicos"
-            />
-            <div className="char-counter">{objetivoEspecifico.length}/350</div>
-          </div>
-
-          {/* Campo de Resumo */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <textarea
-              value={resumo}
-            
-              className="form-control mensagem"
-              placeholder="Resumo"
-              rows="4"
-              required
-            />
-            <div className="char-counter">{resumo.length}/400</div>
-          </div>
-
-          {/* Campo de Abstract */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <textarea
-              value={abstract}
-            
-              className="form-control"
-              placeholder="Abstract"
-            />
-            <div className="char-counter">{abstract.length}/400</div>
-          </div>
-
-          {/* Campo de URL do Projeto */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <input
-              type="text"
-              value={urlProjeto}
-         
-              className="form-control"
-              placeholder="URL do Projeto"
-            />
-          </div>
-
-          {/* Campo de Ano de Publicação com Menu de Data */}
-          <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            {/* Adicione seu componente de escolha de data aqui */}
-          </div>
-
-          {/* Upload de Arquivos */}
-          <div className="col-md-6 col-sm-6 align-self-center mt-5">
-            {/* Adicione seu componente de upload de arquivo aqui */}
-          </div>
-
-          {/* Botão de Adicionar PDF */}
-          <div className="col-md-6 col-sm-6 align-self-center mt-5">
-            {/* Adicione seu componente de upload de PDF aqui */}
-          </div>
-
-          {/* Exibição de mensagem de erro */}
-          <div className="col-md-6 col-sm-6 align-self-center mt-5">
-            {/* Adicione seus componentes de exibição de erro aqui */}
-          </div>
         </div>
-      </div>
-
-      {/* Controle de Privacidade */}
-      <div>
-        <label htmlFor="privacyToggle" className="toggle-label ms-5">
-          Tornar {isPrivate ? 'Público' : 'Privado'} ?
-        </label>
-        <input
-          type="checkbox"
-          id="privacyToggle"
-          onChange={togglePrivacy}
-          className="toggle-checkbox ms-3"
-          checked={isPrivate}
-        />
-      </div>
-
-      {/* Botão de Navegação de Voltar   */ }
-      <div className="row q-gutter-sm">
+      )}
+  
+      {projetoAdicionado && (
         <div>
-          <button className="btn btn-sm btn-accent">
-            <i className="icon-arrow_back" />
-          </button>
+          <p>Projeto Adicionado com Sucesso!</p>
         </div>
-      </div>
-   
-      {/* Botão de Adicionar Projeto */}
-      <div className="float-end mb-5 ">
-        <button onClick={adicionarProjeto} className="btn color">
-          Adicionar
-        </button>
-      </div>
+      )}
     </div>
   );
-  };
- 
-export default AdicionarProjeto;
+};
+
+export default AdicionaProjetoComponent;
