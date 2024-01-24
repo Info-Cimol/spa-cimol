@@ -107,7 +107,7 @@ const ProjetoDetails = () => {
           setProjetoDeletado(true);
           setTimeout(() => {
             setProjetoDeletado(false);
-            navigate("/Area/Pessoa-Projeto");
+            navigate("/Area/Projeto");
           }, 3000);
         }
       }, 2000);
@@ -117,7 +117,6 @@ const ProjetoDetails = () => {
     }
   };
   
-
   const editarProjeto = () => {
     const projetoId = params.id;
     navigate(`/Edita/Projeto/${projetoId}`);
@@ -137,17 +136,16 @@ const ProjetoDetails = () => {
               </h1>
             </div>
           </div>
-          <div className="row">
-          <div className="col-12 col-sm-12 col-xs-12">
-              <div className="loading-spinner" style={{ display: loadingDelecao ? 'block' : 'none' }}>
-                <div className="three-body">
-                  <div className="three-body__dot"></div>
-                  <div className="three-body__dot"></div>
-                  <div className="three-body__dot"></div>
-                </div>
-              </div>
-            </div>
+          
+          {loadingDelecao && (
+        <div className="loading-spinner">
+          <div className="three-body">
+            <div className="three-body__dot"></div>
+            <div className="three-body__dot"></div>
+            <div className="three-body__dot"></div>
           </div>
+        </div>
+      )}
           <div className="row">
           <div className="col-12 col-sm-4 col-xs-12">
               <p className="estiloEscrita">

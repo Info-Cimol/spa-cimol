@@ -65,17 +65,14 @@ const EdicaoProjeto = () => {
     if (id) {
       fetchProjeto();
     }
-
-    //carregarAlunos();
-    //carregarProfessores();
   }, [id]);
 
   const handleFile = async (event) => {
     try {
       setLoading(true);
       const file = event.target.files[0];
-      const cloudinaryCloudName = 'dzpbclwij';
-      const cloudinaryUploadPreset = 'bdsmg4su';
+      const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
+      const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
       if (file) {
         const formData = new FormData();
         formData.append('file', file);
@@ -111,8 +108,8 @@ const EdicaoProjeto = () => {
     const files = event.target.files;
 
     if (files.length > 0) {
-      const cloudinaryCloudName = 'dzpbclwij';
-      const cloudinaryUploadPreset = 'bdsmg4su';
+      const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
+      const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
       const uploadPromises = [];
       setLoading(true);
 
@@ -140,56 +137,6 @@ const EdicaoProjeto = () => {
       console.warn('Nenhuma logo selecionado');
     }
   };
-
-  /*const carregarAlunos = async () => {
-    const token = localStorage.getItem('token');
-    const headers = {
-      'x-access-token': token,
-    };
-
-    try {
-      const response = await axiosFecht.get('/listar/alunos/', { headers });
-      setAlunosDisponiveis(
-        response.data.map((aluno) => ({
-          id: aluno.matricula_aluno,
-          nome: aluno.nome_aluno,
-        }))
-      );
-    } catch (error) {
-      console.error('Erro ao carregar alunos:', error);
-    }
-  };*/
-
-  /*const carregarProfessores = async () => {
-    const token = localStorage.getItem('token');
-    const headers = {
-      'x-access-token': token,
-    };
-
-    try {
-      const response = await axiosFecht.get('/listar/orientador/', { headers });
-      setProfessoresDisponiveis(
-        response.data.map((professor) => ({
-          id: professor.pessoa_id_pessoa,
-          nome: professor.nome_professor,
-        }))
-      );
-    } catch (error) {
-      console.error('Erro ao carregar professores:', error);
-    }
-  };*/
-
- /* const adicionarAluno = () => {
-    if (alunoSelecionado.id !== null) {
-      setAlunosSelecionados([...alunosSelecionados, alunoSelecionado]);
-      setAlunoSelecionado({ id: null });
-    }
-  };
-
-  const handleOrientadorChange = (_, newValue) => {
-    const orientadoresNomes = newValue.map((orientador) => orientador.nome);
-    setProjetoEdit({ ...projetoEdit, orientadores: orientadoresNomes });
-  };*/
   
   const editarProjeto = async () => {
     try {
@@ -206,7 +153,7 @@ const EdicaoProjeto = () => {
         setLoading(false);
       }, 4000);
       setMensagemSucesso('Projeto editado com sucesso');
-      navigate('/Visualiza/Projeto-Pessoa/' + id)
+      navigate('/Projeto/' + id)
     } catch (error) {
       console.error('Erro ao editar projeto:', error);
       setLoading(false);
@@ -398,62 +345,62 @@ const EdicaoProjeto = () => {
       </div>
 
       <div className='row'>
-  {/* Adicionar Logo */}
-  <div className="col-md-6 col-sm-6 align-self-center mt-5">
-    <label className="custom-file-upload">
-      <input
-        type="file"
-        ref={fileInputLogoRef}
-        id="fileInputLogo"
-        name="file"
-        multiple
-        onChange={handleFileUpload}
-      />
-      <span>
-        <FontAwesomeIcon icon={faFileImage} />
-        {' '}{projetoEdit.logo_projeto || 'Adicionar logo'}
-      </span>
-    </label>
-  </div>
-
-  {/* Exibir mensagem de sucesso para Logo */}
-  {arquivoAdicionado && (
-    <div className="col-md-6">
-      <div className="alert alert-success" role="alert">
-        <FontAwesomeIcon icon={faCheckCircle} />{' '}
-        Logo adicionada com sucesso
+        {/* Adicionar Logo */}
+        <div className="col-md-6 col-sm-6 align-self-center mt-5">
+          <label className="custom-file-upload">
+            <input
+              type="file"
+              ref={fileInputLogoRef}
+              id="fileInputLogo"
+              name="file"
+              multiple
+              onChange={handleFileUpload}
+            />
+            <span>
+              <FontAwesomeIcon icon={faFileImage} />
+              {' '}{projetoEdit.logo_projeto || 'Adicionar logo'}
+            </span>
+          </label>
       </div>
-    </div>
-  )}
 
-  {/* Adicionar PDF */}
-  <div className="col-md-6 col-sm-6 align-self-center mt-5">
-    <label className="custom-file-upload">
-      <input
-        type="file"
-        ref={fileInputPDFRef}
-        id="fileInputPDF"
-        name="file"
-        onChange={handleFile}
-        accept=".pdf"
-      />
-      <span>
-        <FontAwesomeIcon icon={faFilePdf} />
-        {' '}{projetoEdit.arquivo || 'Adicionar PDF'}
-      </span>
-    </label>
-  </div>
+        {/* Exibir mensagem de sucesso para Logo */}
+        {arquivoAdicionado && (
+          <div className="col-md-6">
+            <div className="alert alert-success" role="alert">
+              <FontAwesomeIcon icon={faCheckCircle} />{' '}
+              Logo adicionada com sucesso
+            </div>
+          </div>
+        )}
 
-  {/* Exibir mensagem de sucesso para PDF */}
-  {pdfAdicionado && (
-    <div className="col-md-6">
-      <div className="alert alert-success" role="alert">
-        <FontAwesomeIcon icon={faCheckCircle} />{' '}
-        PDF adicionado com sucesso
-      </div>
-    </div>
-  )}
-</div>
+          {/* Adicionar PDF */}
+        <div className="col-md-6 col-sm-6 align-self-center mt-5">
+            <label className="custom-file-upload">
+              <input
+                type="file"
+                ref={fileInputPDFRef}
+                id="fileInputPDF"
+                name="file"
+                onChange={handleFile}
+                accept=".pdf"
+              />
+              <span>
+                <FontAwesomeIcon icon={faFilePdf} />
+                {' '}{projetoEdit.arquivo || 'Adicionar PDF'}
+              </span>
+            </label>
+        </div>
+
+          {/* Exibir mensagem de sucesso para PDF */}
+          {pdfAdicionado && (
+            <div className="col-md-6">
+              <div className="alert alert-success" role="alert">
+                <FontAwesomeIcon icon={faCheckCircle} />{' '}
+                PDF adicionado com sucesso
+              </div>
+            </div>
+          )}
+        </div>
       
       <div className="float-end mb-5 me-5">
         <button className="color" onClick={editarProjeto} disabled={loading}>

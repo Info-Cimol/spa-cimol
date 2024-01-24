@@ -57,8 +57,8 @@ const AdicionaProjetoComponent = () => {
   const handleFile = async (event) => {
     try {
       const file = event.target.files[0];
-      const cloudinaryCloudName = 'dzpbclwij';
-      const cloudinaryUploadPreset = 'bdsmg4su';
+      const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
+      const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
 
       if (file) {
         const formData = new FormData();
@@ -96,8 +96,8 @@ const AdicionaProjetoComponent = () => {
     const files = event.target.files;
 
     if (files.length > 0) {
-      const cloudinaryCloudName = 'dzpbclwij';
-      const cloudinaryUploadPreset = 'bdsmg4su';
+      const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
+      const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
       const uploadPromises = [];
 
       for (const file of files) {
@@ -165,17 +165,17 @@ const AdicionaProjetoComponent = () => {
   };
 
   const adicionarProjeto = async () => {
-    const token = localStorage.getItem('token');
-    const alunosIds = this.alunosSelecionados.map(aluno => ({ "id": aluno.id }));
-    const orientadorId = this.orientadorSelecionado.id;
-    const headers = {
-      'x-access-token': token,
-    };
-
     try {
+      const token = localStorage.getItem('token');
+      const alunosIds = alunosSelecionados.map(aluno => ({ id: aluno.pessoa_id_pessoa }));
+      const orientadorId = [{ id: orientadorSelecionado.pessoa_id_pessoa }];
+      const headers = {
+        'x-access-token': token,
+      };
+  
       const projetoData = {
-        orientadores: alunosIds,
-        autores: [{ "id": orientadorId }],
+        orientadores: orientadorId,
+        autores: alunosIds,
         titulo,
         tema,
         problema,
@@ -187,9 +187,9 @@ const AdicionaProjetoComponent = () => {
         publico: publico ? 1 : 0,
         url_projeto: url,
       };
-
+  
       const response = await axiosFecht.post('/projeto/adiciona', projetoData, { headers });
-
+  
       if (response.status === 200) {
         setProjetoAdicionado(true);
         navigate('/Area/Pessoa-Projeto');
@@ -198,6 +198,7 @@ const AdicionaProjetoComponent = () => {
       console.error('Erro ao adicionar projeto:', error);
     }
   };
+  
 
   return (
     <div>
@@ -339,15 +340,15 @@ const AdicionaProjetoComponent = () => {
         </div>
 
         <div className="col-md-10 col-sm-8 align-self-center mt-5">
-            <DatePicker
-              selected={anoPublicacao}
-              onChange={handleChange}
-              dateFormat="yyyy"
-              showYearPicker
-              placeholderText="Ano de Publicação"
-              className="form-control"
-            />
-       </div>
+          {/* Campo de anoPublicacao do Projeto */}
+          <TextField
+            label="anoPublicacao"
+            variant="outlined"
+            fullWidth
+            value={anoPublicacao}
+            onChange={(event) => setAnoPublicacao(event.target.value)}
+          />
+        </div>
 
           <div>
             <label htmlFor="privacyToggle" className="toggle-label ms-5">
