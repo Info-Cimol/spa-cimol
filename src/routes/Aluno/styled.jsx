@@ -200,6 +200,10 @@ export const Container = styled.div`
             width: 400px;
         }
 
+        .buttons {
+            margin-top: 7rem;
+        }
+
         .carrossel{
             width: 400px;
         }
@@ -217,13 +221,17 @@ export const Container = styled.div`
         }
     }
 
-    @media screen and (min-width: 800px){
+    @media screen and (max-width: 800px){
         .boxCardapio{
             width: 500px;
         }
 
         .carrossel{
             width: 500px;
+        }
+
+        .buttons {
+            margin-top: 2rem;
         }
 
         .containerCardapio{
@@ -243,6 +251,10 @@ export const Container = styled.div`
     @media screen and (min-width: 1000px){
         .boxCardapio{
             width: 600px;
+        }
+
+        .buttons {
+            margin-top: 7rem;
         }
 
         .carrossel{

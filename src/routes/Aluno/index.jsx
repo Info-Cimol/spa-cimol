@@ -148,68 +148,156 @@ function Aluno(){
       <MenuHamburguer userType={userRole}/>
 
       {mostrarBotao ?(
-     <div className='container-fluid'>
-     <div className='row'>
-       <div className='buttons'>
-         {userRole === 'aluno' && (
-           <div className="col-sm-12">
-             <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
-               Olá estudante, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
-             </h1>
-             <button className='button col-lg-4' onClick={mostrarCardapio}>Merenda</button>
-             <button className='button col-lg-6 col-xs-12' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
+   <div className='container-fluid'>
+   <div className='row'>
+     <div className='buttons'>
+
+      {userRole === 'aluno' && (
+        <div className="col-sm-12">
+          <div className="col-sm-12">
+            <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-5rem', marginBottom: '20px' }}>
+              Olá estudante, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+            </h1>
+          </div>
+
+          <div className="col-sm-12 d-flex flex-wrap justify-content-around">
+            <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+              <div className="card-body">
+                <h5 className="card-title" style={{ color: '#fff' }}>Merenda</h5>
+                <p className="card-text" style={{ color: '#fff' }}>Clique para ver o cardápio de merenda.</p>
+                <button className="card__btn" onClick={mostrarCardapio}>Abrir</button>
+              </div>
+            </div>
+
+            <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+              <div className="card-body">
+                <h5 className="card-title" style={{ color: '#fff' }}>Catálogo de Projetos</h5>
+                <p className="card-text" style={{ color: '#fff' }}>Explore o catálogo de projetos disponíveis.</p>
+                <button className="card__btn" onClick={redirecionarParaProjeto}>Abrir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {userRole === 'professor' && (
+        <div className="col-sm-12">
+          <div className="col-sm-12">
+            <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-5rem', marginBottom: '20px' }}>
+              Olá professor, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+            </h1>
+          </div>
+
+          <div className="col-sm-12 d-flex flex-wrap justify-content-around">
+            <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+              <div className="card-body">
+                <h5 className="card-title" style={{ color: '#fff' }}>Merenda</h5>
+                <p className="card-text" style={{ color: '#fff' }}>Clique para ver o cardápio de merenda.</p>
+                <button className="card__btn" onClick={mostrarCardapio}>Abrir</button>
+              </div>
+            </div>
+
+            <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+              <div className="card-body">
+                <h5 className="card-title" style={{ color: '#fff' }}>Catálogo de Projetos</h5>
+                <p className="card-text" style={{ color: '#fff' }}>Explore o catálogo de projetos disponíveis.</p>
+                <button className="card__btn" onClick={redirecionarParaProjeto}>Abrir</button>
+              </div>
+            </div>
+
+            <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+              <div className="card-body">
+                <h5 className="card-title" style={{ color: '#fff' }}>Provas</h5>
+                <p className="card-text" style={{ color: '#fff' }}>Acesse a seção de provas disponíveis.</p>
+                {/* Adicione a lógica ou remova o botão descomentando a linha abaixo */}
+                {/* <button className="btn btn-primary" onClick={redirecionarParaProvas}>Abrir</button> */}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+ 
+       {userRole === 'admin' && (
+              <div className="col-sm-12">
+              <div className="col-sm-12">
+                <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-5rem', marginBottom: '20px' }}>
+                  Olá Administrador, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+                </h1>
+              </div>
+
+              <div className="col-sm-12 d-flex flex-wrap justify-content-around">
+                <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+                  <div className="card-body">
+                    <h5 className="card-title" style={{ color: '#fff' }}>Merenda</h5>
+                    <p className="card-text" style={{ color: '#fff' }}>Clique para ver o cardápio de merenda.</p>
+                    <button className="card__btn" onClick={mostrarCardapio}>Abrir</button>
+                  </div>
+                </div>
+
+                <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+                  <div className="card-body">
+                    <h5 className="card-title" style={{ color: '#fff' }}>Catálogo de Projetos</h5>
+                    <p className="card-text" style={{ color: '#fff' }}>Explore o catálogo de projetos disponíveis.</p>
+                    <button className="card__btn" onClick={redirecionarParaProjeto}>Abrir</button>
+                  </div>
+                </div>
+
+                <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+                  <div className="card-body">
+                    <h5 className="card-title" style={{ color: '#fff' }}>Provas</h5>
+                    <p className="card-text" style={{ color: '#fff' }}>Acesse a seção de provas disponíveis.</p>
+                    {/* Adicione a lógica ou remova o botão descomentando a linha abaixo */}
+                    {/* <button className="btn btn-primary" onClick={redirecionarParaProvas}>Abrir</button> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+       )}
+ 
+       {userRole === 'merendeira' && (
+         <div className="col-sm-12">
+           <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-5rem', marginBottom: '20px' }}>
+             Olá merendeira, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+           </h1>
+           <div className="row">
+           <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+           <div className="card-body">
+                 <h5 className="card-title" style={{ color: '#fff' }}>Cardápio</h5>
+                 <p className="card-text" style={{ color: '#fff' }}>Clique para ver o cardápio.</p>
+                 <button className="card__btn" onClick={mostrarCardapio}>Abrir</button>
+               </div>
            </div>
-         )}
-   
-         {userRole === 'professor' && (
-           <div className="col-sm-12">
-             <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
-               Olá professor, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
-             </h1>
-             <button className='button col-lg-4 col-xs-12' onClick={mostrarCardapio}>Merenda</button>
-             <button className='button col-lg-4 col-xs-12' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
-             <button className='button col-lg-4 col-xs-12' /*onClick={redirecionarParaProjeto}*/>Provas</button>
            </div>
-         )}
-   
-         {userRole === 'admin' && (
-           <div className="col-sm-12">
-             <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
-               Olá administrador, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
-             </h1>
-             <button className='button col-lg-4 col-xs-12' onClick={mostrarCardapio}>Merenda</button>
-             <button className='button col-lg-4 col-xs-12' onClick={redirecionarParaProjeto}>Catálogo de Projetos</button>
-             <button className='button col-lg-4 col-xs-12' /*onClick={redirecionarParaProjeto}*/>Provas</button>
-           </div>
-         )}
-   
-         {userRole === 'merendeira' && (
-           <div className="col-sm-12">
-             <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
-               Olá merendeira, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
-             </h1>
-             <div className="row">
-               <button className='button col-lg-12' onClick={mostrarCardapio}>
-                 Cardápio
-               </button>
-             </div>
-           </div>
-         )}
-   
-         {userRole === 'secretaria' && (
-           <div className="col-sm-12">
-             <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '0', marginBottom: '20px' }}>
-               Olá supervisor, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
-             </h1>
-             <div className="row">
-               <button className='button col-lg-6' onClick={mostrarCardapio}>Cardápio</button>
-               <button className='button col-lg-6' >Alunos</button>
-             </div>
-           </div>
-         )}
-       </div>
-     </div>    
+         </div>
+       )}
+ 
+          {userRole === 'secretaria' && (
+            <div className="col-sm-12">
+              <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-5rem', marginBottom: '20px' }}>
+                Olá supervisor, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+              </h1>
+              <div className="row">
+                <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+                  <div className="card-body">
+                    <h5 className="card-title" style={{ color: '#fff' }}>Cardápio</h5>
+                    <p className="card-text" style={{ color: '#fff' }}>Clique para ver o cardápio.</p>
+                    <button className="card__btn" onClick={mostrarCardapio}>Abrir</button>
+                  </div>
+                </div>
+
+                <div className="card" style={{ width: '18rem', margin: '10px', backgroundColor: '#1B2F4A' }}>
+                  <div className="card-body">
+                    <h5 className="card-title" style={{ color: '#fff' }}>Alunos</h5>
+                    <p className="card-text" style={{ color: '#fff' }}>Acesse a seção de alunos.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+     </div>
    </div>
+ </div>
+ 
    
         ) : (
 

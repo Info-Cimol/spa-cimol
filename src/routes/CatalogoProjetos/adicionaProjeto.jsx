@@ -56,11 +56,13 @@ const AdicionaProjetoComponent = () => {
 
   const handleFile = async (event) => {
     try {
+
       const file = event.target.files[0];
       const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
       const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
 
       if (file) {
+        
         const formData = new FormData();
         formData.append('file', file);
         formData.append('resource_type', 'raw');
