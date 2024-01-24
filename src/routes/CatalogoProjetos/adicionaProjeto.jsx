@@ -31,19 +31,17 @@ const AdicionaProjetoComponent = () => {
   const [pdfAdicionado, setPdfAdicionado] = useState(false);
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [professoresDisponiveis, setProfessoresDisponiveis] = useState([]);
-  const [setLogoAdicionada] = useState(false);
-  const [arquivoAdicionado] = useState(false);
+  const [arquivoAdicionado, setArquivoAdicionado] = useState(false);
   const fileInputLogoRef = useRef(null);
   const fileInputPDFRef = useRef(null);
   const [url, setUrl] = useState('');
   const [publico, setPublico] = useState(false);
   const userRole = localStorage.getItem('userRole');
- 
+  const [anoPublicacao, setAnoPublicacao] = useState(null);
+
   const handleToggle = () => {
     setPublico(!publico); 
   };
-
-  const [anoPublicacao, setAnoPublicacao] = useState(null);
 
   const handleChange = (date) => {
     setAnoPublicacao(date);
@@ -61,7 +59,6 @@ const AdicionaProjetoComponent = () => {
       const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
       const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
       
-
       if (file) {
         
         const formData = new FormData();
@@ -117,7 +114,7 @@ const AdicionaProjetoComponent = () => {
         .then((responses) => {
           const imageUrls = responses.map((response) => response.data.secure_url);
           setLogoProjeto(imageUrls);
-          setLogoAdicionada(true);
+          setArquivoAdicionado(true);
         })
         .catch((error) => {
           console.error('Erro ao fazer upload de logo:', error);
@@ -203,7 +200,6 @@ const AdicionaProjetoComponent = () => {
     }
   };
   
-
   return (
     <div>
       <ContainerTopo userType={userRole} />
@@ -368,6 +364,7 @@ const AdicionaProjetoComponent = () => {
           </div>
 
           <div className='row'>
+
           {/* Adicionar Logo */}
           <div className="col-md-6 col-sm-6 align-self-center mt-5">
           <label className="custom-file">
