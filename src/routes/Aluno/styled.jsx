@@ -6,6 +6,15 @@ export const Container = styled.div`
     display: flex;
     flex-direction: center;
     align-items: center;
+    
+ 
+}
+   .titulo-home {
+    font-family: 'Inika', serif; 
+    align-items: center;
+    text-align: center;
+    margin-bottom: 5rem;
+    margin-top: -7rem;
 }
 
 .button {
@@ -228,6 +237,10 @@ export const Container = styled.div`
 
         .carrossel{
             width: 500px;
+        }
+
+        .titulo-home{
+            margin-top: -1rem;
         }
 
         .buttons {
