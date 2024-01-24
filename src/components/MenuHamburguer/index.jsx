@@ -30,6 +30,11 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
     navigate('/');
   };
 
+  const handleBottonUpdatePassword = () => {
+   
+    navigate('/Reset-Password');
+  };
+
   const handleBottonHome = () => {
     if (userType === "aluno") {
       navigate('/Home');

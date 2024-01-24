@@ -1,16 +1,9 @@
-import { v2 as cloudinary } from 'cloudinary-core';
-import { useEffect } from 'react';
+import {v2 as cloudinary} from 'cloudinary';
+          
+cloudinary.config({ 
+  cloud_name: 'dzpbclwij', 
+  api_key: '346628249128189', 
+  api_secret: 'ymXLYIi5OJsUZYJHUjRnx2kxv8g' 
+});
 
-const CloudinaryConfig = () => {
-  useEffect(() => {
-    cloudinary.config({ 
-      cloud_name: process.env.REACT_APP_CLOUD_NAME,
-      api_key: process.env.REACT_APP_API_KEY, 
-      api_secret: process.env.REACT_APP_API_SECRET,
-    });
-  }, []); 
-
-  return null; 
-};
-
-export default CloudinaryConfig;
+export default cloudinary;

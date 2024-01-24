@@ -71,8 +71,9 @@ const EdicaoProjeto = () => {
     try {
       setLoading(true);
       const file = event.target.files[0];
-      const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
-      const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
+      const cloudinaryCloudName = 'dzpbclwij';
+      const cloudinaryUploadPreset = 'bdsmg4su';
+
       if (file) {
         const formData = new FormData();
         formData.append('file', file);
@@ -108,8 +109,8 @@ const EdicaoProjeto = () => {
     const files = event.target.files;
 
     if (files.length > 0) {
-      const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
-      const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
+      const cloudinaryCloudName = 'dzpbclwij';
+      const cloudinaryUploadPreset = 'bdsmg4su';
       const uploadPromises = [];
       setLoading(true);
 

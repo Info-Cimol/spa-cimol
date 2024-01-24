@@ -60,6 +60,7 @@ const AdicionaProjetoComponent = () => {
       const file = event.target.files[0];
       const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
       const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
+      
 
       if (file) {
         
@@ -100,6 +101,7 @@ const AdicionaProjetoComponent = () => {
     if (files.length > 0) {
       const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
       const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
+      
       const uploadPromises = [];
 
       for (const file of files) {
@@ -194,7 +196,7 @@ const AdicionaProjetoComponent = () => {
   
       if (response.status === 200) {
         setProjetoAdicionado(true);
-        navigate('/Area/Pessoa-Projeto');
+        navigate('/Area/Projeto');
       }
     } catch (error) {
       console.error('Erro ao adicionar projeto:', error);
