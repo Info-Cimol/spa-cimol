@@ -147,7 +147,7 @@ function Aluno(){
       <ContainerTopo  userType={userRole}/>
       <MenuHamburguer userType={userRole}/>
 
-      {mostrarBotao ?(
+{mostrarBotao ?(
    <div className='container-fluid'>
    <div className='row'>
      <div className='buttons'>
@@ -155,7 +155,7 @@ function Aluno(){
       {userRole === 'aluno' && (
         <div className="col-sm-12">
           <div className="col-sm-12">
-            <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-5rem', marginBottom: '20px' }}>
+            <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-4rem', marginBottom: '20px' }}>
               Olá estudante, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
             </h1>
           </div>
@@ -183,7 +183,7 @@ function Aluno(){
       {userRole === 'professor' && (
         <div className="col-sm-12">
           <div className="col-sm-12">
-            <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-5rem', marginBottom: '20px' }}>
+            <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-4rem', marginBottom: '20px' }}>
               Olá professor, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
             </h1>
           </div>
@@ -220,7 +220,7 @@ function Aluno(){
        {userRole === 'admin' && (
               <div className="col-sm-12">
               <div className="col-sm-12">
-                <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-5rem', marginBottom: '20px' }}>
+                <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-4rem', marginBottom: '20px' }}>
                   Olá Administrador, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
                 </h1>
               </div>
@@ -256,7 +256,7 @@ function Aluno(){
  
        {userRole === 'merendeira' && (
          <div className="col-sm-12">
-           <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-5rem', marginBottom: '20px' }}>
+           <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-4rem', marginBottom: '20px' }}>
              Olá merendeira, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
            </h1>
            <div className="row">
@@ -273,7 +273,7 @@ function Aluno(){
  
           {userRole === 'secretaria' && (
             <div className="col-sm-12">
-              <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-5rem', marginBottom: '20px' }}>
+              <h1 className="escreva fade-up" style={{ color: '#111', textAlign: 'center', marginTop: '-4rem', marginBottom: '20px' }}>
                 Olá supervisor, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
               </h1>
               <div className="row">
@@ -297,8 +297,6 @@ function Aluno(){
      </div>
    </div>
  </div>
- 
-   
         ) : (
 
         <div className='containerCardapio'>
