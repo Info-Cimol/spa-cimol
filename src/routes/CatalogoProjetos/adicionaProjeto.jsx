@@ -168,14 +168,14 @@ const AdicionaProjetoComponent = () => {
   const adicionarProjeto = async () => {
     try {
       const token = localStorage.getItem('token');
-      const alunosIds = alunosSelecionados.map(aluno => ({ id: aluno.pessoa_id_pessoa }));
-      const orientadorId = [{ id: orientadorSelecionado.pessoa_id_pessoa }];
+      const alunosIds = alunosSelecionados.map(aluno => aluno.pessoa_id_pessoa);
+      const orientadorId = orientadorSelecionado.pessoa_id_pessoa; 
       const headers = {
         'x-access-token': token,
       };
   
       const projetoData = {
-        orientadores: orientadorId,
+        orientadores: [orientadorId],  
         autores: alunosIds,
         titulo,
         tema,
@@ -199,6 +199,7 @@ const AdicionaProjetoComponent = () => {
       console.error('Erro ao adicionar projeto:', error);
     }
   };
+  
   
   return (
     <div>

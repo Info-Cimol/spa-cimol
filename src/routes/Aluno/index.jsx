@@ -190,14 +190,6 @@ function Aluno(){
 
           <div className="col-sm-12 d-flex flex-wrap justify-content-around">
             <div className="card">
-              <div className="card__body">
-                <h5 className="card__head">Merenda</h5>
-                <p className="card__desc">Clique para ver o cardápio de merenda.</p>
-                <button className="card__btn" onClick={mostrarCardapio}>Abrir</button>
-              </div>
-            </div>
-
-            <div className="card">
               <div className="card-body">
                 <h5 className="card__head">Catálogo de Projetos</h5>
                 <p className="card__desc">Explore o catálogo de projetos disponíveis.</p>
@@ -235,12 +227,12 @@ function Aluno(){
                 </div>
 
                 <div className="card">
-              <div className="card-body">
-                <h5 className="card__head">Catálogo de Projetos</h5>
-                <p className="card__desc">Explore o catálogo de projetos disponíveis.</p>
-                <button className="card__btn" onClick={redirecionarParaProjeto}>Abrir</button>
-              </div>
-            </div>
+                  <div className="card-body">
+                    <h5 className="card__head">Catálogo de Projetos</h5>
+                    <p className="card__desc">Explore o catálogo de projetos disponíveis.</p>
+                    <button className="card__btn" onClick={redirecionarParaProjeto}>Abrir</button>
+                  </div>
+                </div>
 
                 <div className="card">
                   <div className="card__body">

@@ -13,6 +13,7 @@ import AreaPessoaProjeto from './routes/CatalogoProjetos/areaPessoaProjeto';
 import VisualizaProjetoPessoa from './routes/CatalogoProjetos/visualizaProjeto';
 import AdicionaProjeto from './routes/CatalogoProjetos/adicionaProjeto';
 import EditaProjeto from './routes/CatalogoProjetos/editaProjeto';
+import Teste from './components/FileUploader/pdfUploader';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
   {
     element: <App/>,
     children: [
+
       {
         path: '/',
         element: <Login />,
@@ -28,6 +30,12 @@ const router = createBrowserRouter([
       {
         path: '/Home',
         element: <Private allowedRoles={['aluno', 'professor', 'admin', 'merendeira', 'secretaria']}><Home /></Private>,
+      },
+
+      //Rota para testar a inserção dos dados por meio do anexo do pdf
+      {
+        path: '/Teste',
+        element: <Teste />,
       },
 
       //-------------Ferramenta de catálogo de projeto------------------------
