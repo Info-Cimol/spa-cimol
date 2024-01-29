@@ -5,7 +5,7 @@ import { Private } from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
 import App from './App';
 import ScrollToTopButton from './components/ScrollTop'
-import Home from './routes/Aluno';
+import Home from './routes/Home';
 import Login from './routes/Login';
 import ProjetoHomePessa from './routes/CatalogoProjetos/homeProjeto';
 import ProjetoHomeDetalhes from './routes/CatalogoProjetos/homeDetalhesProjeto';

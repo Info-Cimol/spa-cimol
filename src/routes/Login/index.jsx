@@ -204,7 +204,7 @@ function Login() {
               <label className="valor-label" key={type}>
                 <input
                   className="checkbox-input"
-                  type="checkbox"
+                  type="radio"
                   value={type}
                   checked={selectedUserType.includes(type)}
                   onChange={() => setSelectedUserType(type)}
