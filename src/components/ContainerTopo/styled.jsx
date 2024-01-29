@@ -28,6 +28,7 @@ export const Container = styled.div`
   }
 
   .containerTopo {
+    bottom: 78px;
     background-color: #1b2f4a;
     height: 95%;
     animation: ${fadeIn} 1.8s ease; 

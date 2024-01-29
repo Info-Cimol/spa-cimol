@@ -13,6 +13,7 @@ import Divider from '@mui/material/Divider';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+//import Aluno from '../Aluno';
 import { deepOrange } from '@mui/material/colors';
 import VpnKey from '@mui/icons-material/VpnKey';
 
@@ -21,36 +22,22 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [userNameIni] = localStorage.getItem('userName'); // Puxa a inicial da pessoa pelo nome no localstorage
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [userRole] = useState(localStorage.getItem('userRole'));
   const userEmail = localStorage.getItem('userEmail');
   const userName = localStorage.getItem('userName');
-  const userRole = localStorage.getItem('userRole');
-
+ 
   const handleBottonSair = () => {
     localStorage.removeItem('userData');
     navigate('/');
   };
 
-  const handleBottonUpdatePassword = () => {
+ /* const handleBottonUpdatePassword = () => {
    
     navigate('/Reset-Password');
-  };
+  };*/
 
   const handleBottonHome = () => {
-    if (userType === "aluno") {
-      navigate('/Home');
-
-    } else if (userType === "professor") {
-      navigate('/Home');
-
-    } else if (userType === "secretaria") {
-      navigate('/Home');
-
-    } else if (userType === "admin") {
-      navigate('/Home');
-
-    } else if (userType === "merendeira") {
-      navigate('/Home');
-    }
+    navigate('/Home', { replace: true, forceRefresh: true });
   };
   
   const handleBottonProjeto = () => {
@@ -68,10 +55,6 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
       setMostrarBotao(false);
       setSecaoAlunos(false);
     }
-  };
-
-  const handleBottonAlunos = () => {
-    setSecaoAlunos(true);
   };
 
   const handleBottonMeusProjetos = () => {
@@ -179,9 +162,8 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
   
         {userType === "secretaria" && (
           <>
-            <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-            <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
-            <StyledTextButton onClick={handleBottonAlunos}>Alunos</StyledTextButton>
+          <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
+          <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
           </>
         )}
   

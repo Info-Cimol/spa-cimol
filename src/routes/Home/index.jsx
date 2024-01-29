@@ -22,7 +22,9 @@ function Home(){
     <Container>
       <ContainerTopo  userType={userRole}/>
       <MenuHamburguer userType={userRole}/>
-
+      {exibirAluno ? (
+        <Aluno />
+      ) : (
    <div className='container-fluid'>
    <div className='row'>
      <div className='buttons'>
@@ -175,7 +177,10 @@ function Home(){
                   <div className="card-body">
                     <h5 className="card__head">Alunos</h5>
                     <p className="card__desc">Clique para ver os alunos cadastrados.</p>
-                    <button className="card__btn" >Abrir</button>
+                     <div>
+                    <button className='card__btn' onClick={abriComponenteAluno}>Abrir</button>
+                    {exibirAluno && <Aluno />}
+                  </div>
                   </div>
                 </div>
 
@@ -209,7 +214,7 @@ function Home(){
      </div>
    </div>
  </div>
-       
+            )}
     </Container>
   )   
 }
