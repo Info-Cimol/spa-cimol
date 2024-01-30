@@ -17,7 +17,20 @@ const CadastroAluno = () => {
   const [alunoEditando, setAlunoEditando] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [alunosPorPagina] = useState(15); 
+  const [showPageNumbers, setShowPageNumbers] = useState(false);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setShowPageNumbers(window.innerWidth > 600);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Configurar o estado inicial
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   useEffect(() => {
     carregarAlunos();
   }, [currentPage]); 
@@ -188,9 +201,9 @@ const CadastroAluno = () => {
               ))}
           </tbody>
         </table>
-        
+
         {/* Adicionar navegação entre páginas */}
-    <div className="pagination">
+        <div className="pagination">
       <Button
         disabled={currentPage === 1}
         onClick={() => setCurrentPage(currentPage - 1)}
@@ -206,7 +219,6 @@ const CadastroAluno = () => {
       </Button>
     </div>
   </div>
-     
     </div>
   );
 };

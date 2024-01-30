@@ -1,15 +1,45 @@
 #pesquisa {
 margin-top: 5rem;
 }
+/* Adicione esses estilos ao seu arquivo de estilos CSS ou ao seu componente React (por exemplo, usando styled-components) */
+
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+  overflow-x: auto; /* Adicione a rolagem horizontal */
+  white-space: nowrap; /* Impede a quebra de linha */
+  transition: opacity 0.5s ease; /* Adiciona uma transição suave */
 }
 
-.pagination button {
-  margin: 0 5px; 
+.pagination.show {
+  opacity: 1; /* Mostra gradualmente */
+}
+
+.page-numbers {
+  display: flex;
+  gap: 5px;
+}
+
+.page-numbers button {
+  margin: 0 5px;
+}
+
+@media screen and (max-width: 600px) {
+  .pagination {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page-numbers button {
+    display: none;
+  }
+
+  .page-numbers button:first-child,
+  .page-numbers button:last-child {
+    display: inline-block;
+  }
 }
 
 #pesquisa-text {
