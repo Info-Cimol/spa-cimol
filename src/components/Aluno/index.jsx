@@ -6,9 +6,9 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
+import Modal from '@mui/material/Modal';
 import 'react-toastify/dist/ReactToastify.css';
 import axiosFetch from '../../axios/config';
-import ArquivoUpload from '../FileUploader/pdfUploaderAluno';
 import './alunoCadastro.css';
 
 const CadastroAluno = () => {
@@ -16,7 +16,9 @@ const CadastroAluno = () => {
   const [termoPesquisa, setTermoPesquisa] = useState('');
   const [alunoEditando, setAlunoEditando] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [alunosPorPagina] = useState(15); 
+  const [alunosPorPagina] = useState(15);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [selectedAlunoId, setSelectedAlunoId] = useState(null);
   const [,setShowPageNumbers] = useState(false);
 
   useEffect(() => {
@@ -61,10 +63,6 @@ const CadastroAluno = () => {
     setAlunoEditando(alunoId);
   };
 
-  const handleCancelar = () => {
-    setAlunoEditando(null);
-  };
-
   const handleSalvar = async (alunoId, novoNome, novaMatricula) => {
     try {
       const token = localStorage.getItem('token');
@@ -89,21 +87,31 @@ const CadastroAluno = () => {
     }
   };
 
-  const handleDesativar = async (alunoId) => {
+  const handleDesativar = (alunoId) => {
+    setSelectedAlunoId(alunoId);
+    setShowConfirmationModal(true);
+  };
+
+  const handleConfirmDesativar = async () => {
     try {
       const token = localStorage.getItem('token');
       const headers = {
         'x-access-token': token,
       };
 
-      await axiosFetch.put(`/desativa/aluno/${alunoId}`, null, { headers });
+      await axiosFetch.put(`/desativa/aluno/${selectedAlunoId}`, null, { headers });
 
       carregarAlunos();
       toast.success('Aluno desativado com sucesso!');
+      setShowConfirmationModal(false);
     } catch (error) {
       console.error('Erro ao desativar aluno:', error);
       toast.error('Erro ao desativar aluno.');
     }
+  };
+
+  const handleCancelarDesativar = () => {
+    setShowConfirmationModal(false);
   };
 
   const indexOfLastAluno = currentPage * alunosPorPagina;
@@ -111,8 +119,8 @@ const CadastroAluno = () => {
   const alunosPaginados = alunosDisponiveis.slice(indexOfFirstAluno, indexOfLastAluno);
 
   return (
- <div>
-      <div className="container-fluid"> 
+    <div>
+      <div className="container-fluid">
         <Autocomplete
           id='pesquisa'
           options={alunosDisponiveis}
@@ -129,9 +137,7 @@ const CadastroAluno = () => {
         />
       </div>
 
-      {/* Tabela de Alunos */}
       <div className='container-fluid'>
-        <ArquivoUpload />
         <table>
           <thead>
             <tr>
@@ -151,11 +157,11 @@ const CadastroAluno = () => {
                     {alunoEditando === aluno.id ? (
                       <TextField
                         value={aluno.nome}
-                        onChange={(e) => setAlunosDisponiveis((prev) => (
+                        onChange={(e) => setAlunosDisponiveis((prev) =>
                           prev.map((prevAluno) => (
                             prevAluno.id === aluno.id ? { ...prevAluno, nome: e.target.value } : prevAluno
                           ))
-                        ))}
+                        )}
                       />
                     ) : (
                       aluno.nome
@@ -165,11 +171,11 @@ const CadastroAluno = () => {
                     {alunoEditando === aluno.id ? (
                       <TextField
                         value={aluno.matricula}
-                        onChange={(e) => setAlunosDisponiveis((prev) => (
+                        onChange={(e) => setAlunosDisponiveis((prev) =>
                           prev.map((prevAluno) => (
                             prevAluno.id === aluno.id ? { ...prevAluno, matricula: e.target.value } : prevAluno
                           ))
-                        ))}
+                        )}
                       />
                     ) : (
                       aluno.matricula
@@ -181,7 +187,7 @@ const CadastroAluno = () => {
                         <Button onClick={() => handleSalvar(aluno.id, aluno.nome, aluno.matricula)} variant="contained" color="primary">
                           Salvar
                         </Button>
-                        <Button onClick={handleCancelar} variant="contained" color="secondary">
+                        <Button onClick={() => setAlunoEditando(null)} variant="contained" color="secondary">
                           Cancelar
                         </Button>
                       </>
@@ -201,7 +207,6 @@ const CadastroAluno = () => {
           </tbody>
         </table>
 
-        {/* Adicionar navegação entre páginas */}
         <div className="pagination">
           <Button
             disabled={currentPage === 1}
@@ -217,8 +222,20 @@ const CadastroAluno = () => {
             Próxima
           </Button>
         </div>
+
+        <Modal open={showConfirmationModal} onClose={handleCancelarDesativar}>
+        <div style={{ padding: '16px', background: '#fff', width: '300px', margin: '50px auto' }}>
+          <p>Tem certeza de que deseja desativar este aluno?</p>
+          <Button onClick={handleConfirmDesativar} variant="contained" color="primary" style={{ marginRight: '8px' }}>
+            Confirmar
+          </Button>
+          <Button onClick={handleCancelarDesativar} variant="contained" color="secondary">
+            Cancelar
+          </Button>
+        </div>
+      </Modal>
       </div>
-  </div>
+    </div>
   );
 };
 
