@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
-import BlockIcon from '@mui/icons-material/Block';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axiosFetch from '../../axios/config';
@@ -15,10 +15,12 @@ const CadastroAluno = () => {
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [termoPesquisa, setTermoPesquisa] = useState('');
   const [alunoEditando, setAlunoEditando] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [alunosPorPagina] = useState(15); 
 
   useEffect(() => {
     carregarAlunos();
-  }, []);
+  }, [currentPage]); 
 
   const carregarAlunos = async () => {
     try {
@@ -91,10 +93,14 @@ const CadastroAluno = () => {
     }
   };
 
+  const indexOfLastAluno = currentPage * alunosPorPagina;
+  const indexOfFirstAluno = indexOfLastAluno - alunosPorPagina;
+  const alunosPaginados = alunosDisponiveis.slice(indexOfFirstAluno, indexOfLastAluno);
+
   return (
     <div>
     
-      <div className="container-fluid">
+      <div className="container-fluid"> 
         <Autocomplete
           id='pesquisa'
           options={alunosDisponiveis}
@@ -112,7 +118,8 @@ const CadastroAluno = () => {
       </div>
 
       {/* Tabela de Alunos */}
-      <div className='container-fluid'>  <ArquivoUpload/>
+      <div className='container-fluid'>
+        <ArquivoUpload />
         <table>
           <thead>
             <tr>
@@ -122,7 +129,7 @@ const CadastroAluno = () => {
             </tr>
           </thead>
           <tbody>
-            {alunosDisponiveis
+            {alunosPaginados
               .filter((aluno) =>
                 aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase())
               )
@@ -172,7 +179,7 @@ const CadastroAluno = () => {
                           <EditIcon />
                         </IconButton>
                         <IconButton onClick={() => handleDesativar(aluno.id)} color="secondary">
-                          <BlockIcon />
+                          <DeleteIcon />
                         </IconButton>
                       </>
                     )}
@@ -181,7 +188,25 @@ const CadastroAluno = () => {
               ))}
           </tbody>
         </table>
-      </div>
+        
+        {/* Adicionar navegação entre páginas */}
+    <div className="pagination">
+      <Button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(currentPage - 1)}
+      >
+        Anterior
+      </Button>
+      <span>{currentPage}</span>
+      <Button
+        disabled={indexOfLastAluno >= alunosDisponiveis.length}
+        onClick={() => setCurrentPage(currentPage + 1)}
+      >
+        Próxima
+      </Button>
+    </div>
+  </div>
+     
     </div>
   );
 };

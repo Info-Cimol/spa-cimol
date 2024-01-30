@@ -10,6 +10,7 @@ import axiosFetch from '../../axios/config';
 
 const FileUploader = () => {
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -18,6 +19,8 @@ const FileUploader = () => {
 
   const handleUploadAluno = async () => {
     try {
+      setLoading(true);
+
       const token = localStorage.getItem('token');
       const headers = {
         'x-access-token': token,
@@ -37,6 +40,8 @@ const FileUploader = () => {
 
       // Mensagem de erro
       toast.error('Erro ao enviar o arquivo. Por favor, tente novamente.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,7 +52,7 @@ const FileUploader = () => {
   return (
     <div>
       <label htmlFor="file-input">
-        <IconButton component="span">
+        <IconButton title='Adicione um arquivo' component="span">
           <AddIcon fontSize="large" />
         </IconButton>
       </label>
@@ -59,8 +64,8 @@ const FileUploader = () => {
             <div>
               Arquivo selecionado: {file.name}
             </div>
-            <Button onClick={handleUploadAluno} variant="contained" color="primary" style={{ marginRight: 10 }}>
-              Enviar
+            <Button onClick={handleUploadAluno} variant="contained" color="primary" style={{ marginRight: 10 }} disabled={loading}>
+              {loading ? 'Enviando...' : 'Enviar'}
             </Button>
             <Button onClick={handleCancelUpload} variant="contained" color="secondary">
               Cancelar

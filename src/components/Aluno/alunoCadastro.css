@@ -1,7 +1,20 @@
 #pesquisa {
 margin-top: 5rem;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
+.pagination button {
+  margin: 0 5px; 
+}
+
+#pesquisa-text {
+  margin-top: 1500px;
+}
 table {
     width: 100%;
     border-collapse: collapse;
