@@ -17,7 +17,7 @@ const CadastroAluno = () => {
   const [alunoEditando, setAlunoEditando] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [alunosPorPagina] = useState(15); 
-  const [showPageNumbers, setShowPageNumbers] = useState(false);
+  const [,setShowPageNumbers] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -111,8 +111,7 @@ const CadastroAluno = () => {
   const alunosPaginados = alunosDisponiveis.slice(indexOfFirstAluno, indexOfLastAluno);
 
   return (
-    <div>
-    
+ <div>
       <div className="container-fluid"> 
         <Autocomplete
           id='pesquisa'
@@ -204,22 +203,22 @@ const CadastroAluno = () => {
 
         {/* Adicionar navegação entre páginas */}
         <div className="pagination">
-      <Button
-        disabled={currentPage === 1}
-        onClick={() => setCurrentPage(currentPage - 1)}
-      >
-        Anterior
-      </Button>
-      <span>{currentPage}</span>
-      <Button
-        disabled={indexOfLastAluno >= alunosDisponiveis.length}
-        onClick={() => setCurrentPage(currentPage + 1)}
-      >
-        Próxima
-      </Button>
-    </div>
+          <Button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Anterior
+          </Button>
+          <span>{currentPage}</span>
+          <Button
+            disabled={indexOfLastAluno >= alunosDisponiveis.length}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Próxima
+          </Button>
+        </div>
+      </div>
   </div>
-    </div>
   );
 };
 
