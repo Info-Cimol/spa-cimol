@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import axiosFetch from '../../axios/config';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import BlockIcon from '@mui/icons-material/Block';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axiosFetch from '../../axios/config';
 import './alunoCadastro.css';
 
 const CadastroAluno = () => {
@@ -153,13 +157,21 @@ const CadastroAluno = () => {
                   <td>
                     {alunoEditando === aluno.id ? (
                       <>
-                        <button onClick={() => handleSalvar(aluno.id, aluno.nome, aluno.matricula)}>Salvar</button>
-                        <button onClick={handleCancelar}>Cancelar</button>
+                        <Button onClick={() => handleSalvar(aluno.id, aluno.nome, aluno.matricula)} variant="contained" color="primary">
+                          Salvar
+                        </Button>
+                        <Button onClick={handleCancelar} variant="contained" color="secondary">
+                          Cancelar
+                        </Button>
                       </>
                     ) : (
                       <>
-                        <button onClick={() => handleEditar(aluno.id)}>Editar</button>
-                        <button onClick={() => handleDesativar(aluno.id)}>Desativar</button>
+                        <IconButton onClick={() => handleEditar(aluno.id)} color="primary">
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton onClick={() => handleDesativar(aluno.id)} color="secondary">
+                          <BlockIcon />
+                        </IconButton>
                       </>
                     )}
                   </td>
