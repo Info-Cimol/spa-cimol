@@ -8,6 +8,7 @@ import BlockIcon from '@mui/icons-material/Block';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axiosFetch from '../../axios/config';
+import ArquivoUpload from '../FileUploader/pdfUploaderAluno';
 import './alunoCadastro.css';
 
 const CadastroAluno = () => {
@@ -92,6 +93,7 @@ const CadastroAluno = () => {
 
   return (
     <div>
+    
       <div className="container-fluid">
         <Autocomplete
           id='pesquisa'
@@ -110,7 +112,7 @@ const CadastroAluno = () => {
       </div>
 
       {/* Tabela de Alunos */}
-      <div className='container-fluid'>
+      <div className='container-fluid'>  <ArquivoUpload/>
         <table>
           <thead>
             <tr>
