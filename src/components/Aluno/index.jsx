@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import axiosFetch from '../../axios/config';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './alunoCadastro.css';
 
 const CadastroAluno = () => {
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [termoPesquisa, setTermoPesquisa] = useState('');
+  const [alunoEditando, setAlunoEditando] = useState(null);
 
   useEffect(() => {
     carregarAlunos();
@@ -28,6 +29,7 @@ const CadastroAluno = () => {
           id: aluno.pessoa_id_pessoa,
           nome: aluno.nome_aluno,
           matricula: aluno.matricula_aluno,
+          editando: false,
         }))
       );
     } catch (error) {
@@ -35,7 +37,15 @@ const CadastroAluno = () => {
     }
   };
 
-  const handleEditar = async (alunoId) => {
+  const handleEditar = (alunoId) => {
+    setAlunoEditando(alunoId);
+  };
+
+  const handleCancelar = () => {
+    setAlunoEditando(null);
+  };
+
+  const handleSalvar = async (alunoId, novoNome, novaMatricula) => {
     try {
       const token = localStorage.getItem('token');
       const headers = {
@@ -43,19 +53,15 @@ const CadastroAluno = () => {
         'Content-Type': 'application/json',
       };
 
-      const novoNome = prompt('Digite o novo nome:');
-      const novaMatricula = prompt('Digite a nova matrícula:');
-      const novoAtivo = prompt('O aluno está ativo? (true/false):').toLowerCase() === 'true';
-
       const requestBody = {
         novoNome,
-        novoAtivo,
         novaMatricula,
       };
 
       await axiosFetch.put(`/altera/aluno/${alunoId}`, requestBody, { headers });
 
       carregarAlunos();
+      setAlunoEditando(null);
       toast.success('Aluno editado com sucesso!');
     } catch (error) {
       console.error('Erro ao editar aluno:', error);
@@ -116,18 +122,52 @@ const CadastroAluno = () => {
               )
               .map((aluno) => (
                 <tr key={aluno.id}>
-                  <td>{aluno.nome}</td>
-                  <td>{aluno.matricula}</td>
                   <td>
-                    <button onClick={() => handleEditar(aluno.id)}>Editar</button>
-                    <button onClick={() => handleDesativar(aluno.id)}>Desativar</button>
+                    {alunoEditando === aluno.id ? (
+                      <TextField
+                        value={aluno.nome}
+                        onChange={(e) => setAlunosDisponiveis((prev) => (
+                          prev.map((prevAluno) => (
+                            prevAluno.id === aluno.id ? { ...prevAluno, nome: e.target.value } : prevAluno
+                          ))
+                        ))}
+                      />
+                    ) : (
+                      aluno.nome
+                    )}
+                  </td>
+                  <td>
+                    {alunoEditando === aluno.id ? (
+                      <TextField
+                        value={aluno.matricula}
+                        onChange={(e) => setAlunosDisponiveis((prev) => (
+                          prev.map((prevAluno) => (
+                            prevAluno.id === aluno.id ? { ...prevAluno, matricula: e.target.value } : prevAluno
+                          ))
+                        ))}
+                      />
+                    ) : (
+                      aluno.matricula
+                    )}
+                  </td>
+                  <td>
+                    {alunoEditando === aluno.id ? (
+                      <>
+                        <button onClick={() => handleSalvar(aluno.id, aluno.nome, aluno.matricula)}>Salvar</button>
+                        <button onClick={handleCancelar}>Cancelar</button>
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={() => handleEditar(aluno.id)}>Editar</button>
+                        <button onClick={() => handleDesativar(aluno.id)}>Desativar</button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
       </div>
-      <ToastContainer />
     </div>
   );
 };
