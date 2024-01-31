@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
+import ArquivoUpload from '../FileUploader/pdfUploaderAluno';
 import Modal from '@mui/material/Modal';
 import 'react-toastify/dist/ReactToastify.css';
 import axiosFetch from '../../axios/config';
@@ -19,23 +20,29 @@ const CadastroAluno = () => {
   const [alunosPorPagina] = useState(15);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [selectedAlunoId, setSelectedAlunoId] = useState(null);
-  const [,setShowPageNumbers] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingAluno, setEditingAluno] = useState({
+    id: '',
+    nome: '',
+    matricula: '',
+  });
 
   useEffect(() => {
     const handleResize = () => {
-      setShowPageNumbers(window.innerWidth > 600);
+      // Adapte conforme necessário
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize(); // Configurar o estado inicial
+    handleResize();
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   useEffect(() => {
     carregarAlunos();
-  }, [currentPage]); 
+  }, [currentPage]);
 
   const carregarAlunos = async () => {
     try {
@@ -59,8 +66,9 @@ const CadastroAluno = () => {
     }
   };
 
-  const handleEditar = (alunoId) => {
-    setAlunoEditando(alunoId);
+  const handleEditar = (aluno) => {
+    setEditingAluno(aluno);
+    setShowEditModal(true);
   };
 
   const handleSalvar = async (alunoId, novoNome, novaMatricula) => {
@@ -79,7 +87,6 @@ const CadastroAluno = () => {
       await axiosFetch.put(`/altera/aluno/${alunoId}`, requestBody, { headers });
 
       carregarAlunos();
-      setAlunoEditando(null);
       toast.success('Aluno editado com sucesso!');
     } catch (error) {
       console.error('Erro ao editar aluno:', error);
@@ -114,12 +121,22 @@ const CadastroAluno = () => {
     setShowConfirmationModal(false);
   };
 
+  const handleSalvarEdicao = async () => {
+    try {
+      await handleSalvar(editingAluno.id, editingAluno.nome, editingAluno.matricula);
+      setShowEditModal(false);
+    } catch (error) {
+      console.error('Erro ao editar aluno:', error);
+      toast.error('Erro ao editar aluno.');
+    }
+  };
+
   const indexOfLastAluno = currentPage * alunosPorPagina;
   const indexOfFirstAluno = indexOfLastAluno - alunosPorPagina;
   const alunosPaginados = alunosDisponiveis.slice(indexOfFirstAluno, indexOfLastAluno);
 
   return (
-    <div>
+    <>
       <div className="container-fluid">
         <Autocomplete
           id='pesquisa'
@@ -138,11 +155,16 @@ const CadastroAluno = () => {
       </div>
 
       <div className='container-fluid'>
+        <ArquivoUpload />
         <table>
           <thead>
             <tr>
               <th>Nome</th>
               <th>Matrícula</th>
+              <th>E-mail</th>
+              <th>CPF</th>
+              <th>Endereço</th>
+              <th>Contato</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -154,46 +176,54 @@ const CadastroAluno = () => {
               .map((aluno) => (
                 <tr key={aluno.id}>
                   <td>
-                    {alunoEditando === aluno.id ? (
-                      <TextField
-                        value={aluno.nome}
-                        onChange={(e) => setAlunosDisponiveis((prev) =>
-                          prev.map((prevAluno) => (
-                            prevAluno.id === aluno.id ? { ...prevAluno, nome: e.target.value } : prevAluno
-                          ))
-                        )}
-                      />
-                    ) : (
-                      aluno.nome
-                    )}
+                    <>
+                      {alunoEditando === aluno.id ? (
+                        <TextField
+                          value={editingAluno.nome}
+                          onChange={(e) => setEditingAluno((prev) => ({ ...prev, nome: e.target.value }))}
+                        />
+                      ) : (
+                        aluno.nome
+                      )}
+                    </>
                   </td>
                   <td>
-                    {alunoEditando === aluno.id ? (
-                      <TextField
-                        value={aluno.matricula}
-                        onChange={(e) => setAlunosDisponiveis((prev) =>
-                          prev.map((prevAluno) => (
-                            prevAluno.id === aluno.id ? { ...prevAluno, matricula: e.target.value } : prevAluno
-                          ))
-                        )}
-                      />
-                    ) : (
-                      aluno.matricula
-                    )}
+                    <>
+                      {alunoEditando === aluno.id ? (
+                        <TextField
+                          value={editingAluno.matricula}
+                          onChange={(e) => setEditingAluno((prev) => ({ ...prev, matricula: e.target.value }))}
+                        />
+                      ) : (
+                        aluno.matricula
+                      )}
+                    </>
+                  </td>
+                  <td>
+                    fghdhs@gmail.com
+                  </td>
+                  <td>
+                    xxx.xxx.xxx-xx
+                  </td>
+                  <td>
+                    Rua dos Alfeneiros N°4
+                  </td>
+                  <td>
+                    (xx)x xxxx-xxxx
                   </td>
                   <td>
                     {alunoEditando === aluno.id ? (
                       <>
-                        <Button onClick={() => handleSalvar(aluno.id, aluno.nome, aluno.matricula)} variant="contained" color="primary">
+                        <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
                           Salvar
                         </Button>
-                        <Button onClick={() => setAlunoEditando(null)} variant="contained" color="secondary">
+                        <Button onClick={() => setShowEditModal(false)} variant="contained" color="secondary">
                           Cancelar
                         </Button>
                       </>
                     ) : (
                       <>
-                        <IconButton onClick={() => handleEditar(aluno.id)} color="primary">
+                        <IconButton onClick={() => handleEditar(aluno)} color="primary">
                           <EditIcon />
                         </IconButton>
                         <IconButton onClick={() => handleDesativar(aluno.id)} color="secondary">
@@ -224,18 +254,84 @@ const CadastroAluno = () => {
         </div>
 
         <Modal open={showConfirmationModal} onClose={handleCancelarDesativar}>
-        <div style={{ padding: '16px', background: '#fff', width: '300px', margin: '50px auto' }}>
-          <p>Tem certeza de que deseja desativar este aluno?</p>
-          <Button onClick={handleConfirmDesativar} variant="contained" color="primary" style={{ marginRight: '8px' }}>
-            Confirmar
-          </Button>
-          <Button onClick={handleCancelarDesativar} variant="contained" color="secondary">
-            Cancelar
-          </Button>
-        </div>
-      </Modal>
-      </div>
+          <div style={{ padding: '16px', background: '#fff', width: '300px', margin: '50px auto' }}>
+            <p>Tem certeza de que deseja desativar esse aluno?</p>
+            <Button onClick={handleConfirmDesativar} variant="contained" color="primary" style={{ marginRight: '8px' }}>
+              Confirmar
+            </Button>
+            <Button onClick={handleCancelarDesativar} variant="contained" color="secondary">
+              Cancelar
+            </Button>
+          </div>
+        </Modal>
+
+        <Modal open={showEditModal} onClose={() => setShowEditModal(false)}>
+  <div className="edicaoPessoa">
+    <div className="header">
+      <h2>Editando Aluno</h2>
     </div>
+
+    <TextField
+      id="nome"
+      label="Nome"
+      variant="outlined"
+      value={editingAluno.nome}
+      onChange={(e) => setEditingAluno((prev) => ({ ...prev, nome: e.target.value }))}
+      className="inputField"
+    />
+
+    <TextField
+      id="matricula"
+      label="Matrícula"
+      variant="outlined"
+      value={editingAluno.matricula}
+      onChange={(e) => setEditingAluno((prev) => ({ ...prev, matricula: e.target.value }))}
+      className="inputField"
+    />
+
+    <TextField
+      id="email"
+      label="E-mail"
+      variant="outlined"
+      className="inputField"
+    />
+
+    <TextField
+      id="cpf"
+      label="CPF"
+      placeholder='XXX.XXX.XXX-XX'
+      variant="outlined"
+      className="inputField"
+    />
+
+    <TextField
+          id="endereco"
+          label="Endereço"
+          placeholder='Rua Martins Coelho'
+          variant="outlined"
+          className="inputField"
+        />
+
+    <TextField
+          id="contato"
+          label="Contato"
+          placeholder='(xx)x xxxx-xxxx'
+          variant="outlined"
+          className="inputField"
+        />
+
+    <div className="botoesAcao">
+      <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
+        Salvar
+      </Button>
+      <Button onClick={() => setShowEditModal(false)} variant="contained" color="secondary">
+        Cancelar
+      </Button>
+    </div>
+  </div>
+</Modal>
+      </div>
+    </>
   );
 };
 

@@ -2,6 +2,43 @@
 margin-top: 5rem;
 }
 
+.edicaoPessoa {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 700px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.inputField {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.botoesAcao {
+  display: flex;
+  justify-content: space-between;
+}
+
+.botoesAcao button {
+  width: 48%;
+}
+
+
+.botoesAcao {
+  margin-top: 1rem;
+}
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -44,26 +81,53 @@ margin-top: 5rem;
 #pesquisa-text {
   margin-top: 1500px;
 }
+
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  overflow-x: auto;
+  box-shadow: 16px 4px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  color: #333;
+  padding: 12px;
+  text-align: left;
+  font-weight: bold;
+  border: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #e0f7fa; 
+}
+
+tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    overflow-x: auto;
   }
-  
-  th {
-    background-color: #f2f2f2;
-    color: #333;
-    padding: 12px;
-    text-align: left;
-    font-weight: bold;
-    border: 1px solid #ddd;
+
+  th, td {
+    white-space: nowrap;
+    max-width: none; 
+    overflow: auto; 
+    text-overflow: initial; 
   }
-  
-  td {
-    padding: 12px;
-    border: 1px solid #ddd;
-  }
-  
-  tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
 }
