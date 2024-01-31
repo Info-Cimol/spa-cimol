@@ -15,7 +15,7 @@ import './alunoCadastro.css';
 const CadastroAluno = () => {
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [termoPesquisa, setTermoPesquisa] = useState('');
-  const [alunoEditando, setAlunoEditando] = useState(null);
+  const [alunoEditando] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [alunosPorPagina] = useState(15);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -29,7 +29,6 @@ const CadastroAluno = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      // Adapte conforme necessário
     };
 
     window.addEventListener('resize', handleResize);
@@ -43,6 +42,40 @@ const CadastroAluno = () => {
   useEffect(() => {
     carregarAlunos();
   }, [currentPage]);
+
+  const formatarTelefone = (telefone) => {
+    // Formatar telefone para (xx) x xxxx-xxxx
+    const regexTelefone = /^(\d{2})(\d{1})(\d{4})(\d{4})$/;
+    const telefoneFormatado = telefone.replace(regexTelefone, '($1) $2 $3-$4').slice(0,16);
+    return telefoneFormatado;
+  };
+
+  const formatarCPF = (cpf) => {
+    // Formatar CPF para xxx.xxx.xxx-xx
+    const regexCPF = /^(\d{3})(\d{3})(\d{3})(\d{2})$/;
+    const cpfFormatado = cpf.replace(regexCPF, '$1.$2.$3-$4').slice(0,14);
+    return cpfFormatado;
+  };
+
+  const handleTelefoneChange = (e) => {
+    // Formatar telefone enquanto o usuário digita
+    let telefone = e.target.value.replace(/\D/g, ''); 
+    telefone = formatarTelefone(telefone);
+    setEditingAluno((prev) => ({ ...prev, telefone }));
+  };
+
+  const handleCPFChange = (e) => {
+    // Formatar CPF enquanto o usuário digita
+    let cpf = e.target.value.replace(/\D/g, ''); 
+    cpf = formatarCPF(cpf);
+    setEditingAluno((prev) => ({ ...prev, cpf }));
+  };
+
+  const handleMatriculaChange = (e) => {
+    // Aceitar apenas números na matrícula
+    const matricula = e.target.value.replace(/\D/g, '');
+    setEditingAluno((prev) => ({ ...prev, matricula }));
+  };
 
   const carregarAlunos = async () => {
     try {
@@ -254,7 +287,7 @@ const CadastroAluno = () => {
         </div>
 
         <Modal open={showConfirmationModal} onClose={handleCancelarDesativar}>
-          <div style={{ padding: '16px', background: '#fff', width: '300px', margin: '50px auto' }}>
+          <div style={{ padding: '16px', background: '#fff', width: '400px', margin: '50px auto' }}>
             <p>Tem certeza de que deseja desativar esse aluno?</p>
             <Button onClick={handleConfirmDesativar} variant="contained" color="primary" style={{ marginRight: '8px' }}>
               Confirmar
@@ -280,29 +313,45 @@ const CadastroAluno = () => {
       style={{marginTop: "15px"}}className="inputField"
     />
 
-    <TextField style={{marginTop: "15px"}}className="inputField"
-      id="matricula"
-      label="Matrícula"
-      variant="outlined"
-      value={editingAluno.matricula}
-      onChange={(e) => setEditingAluno((prev) => ({ ...prev, matricula: e.target.value }))}
-      
-    />
+<TextField
+        id="matricula"
+        label="Matrícula"
+        variant="outlined"
+        value={editingAluno.matricula}
+        onChange={handleMatriculaChange}
+        style={{ marginTop: "15px" }}
+        className="inputField"
+      />
 
-    <TextField
-      id="email"
-      label="E-mail"
-      variant="outlined"
-      style={{marginTop: "15px"}}className="inputField"
-    />
+      <TextField
+        id="email"
+        label="E-mail"
+        variant="outlined"
+        style={{ marginTop: "15px" }}
+        className="inputField"
+      />
 
-    <TextField
-      id="cpf"
-      label="CPF"
-      placeholder='XXX.XXX.XXX-XX'
-      variant="outlined"
-      style={{marginTop: "15px"}}className="inputField"
-    />
+<TextField
+        id="telefone"
+        label="Contato"
+        placeholder="(xx) x xxxx-xxxx"
+        variant="outlined"
+        value={editingAluno.telefone}
+        onChange={handleTelefoneChange}
+        style={{ marginTop: "15px" }}
+        className="inputField"
+      />
+
+      <TextField
+        id="cpf"
+        label="CPF"
+        placeholder="xxx.xxx.xxx-xx"
+        variant="outlined"
+        value={editingAluno.cpf}
+        onChange={handleCPFChange}
+        style={{ marginTop: "15px" }}
+        className="inputField"
+      />
 
     <TextField
           id="endereco"
@@ -311,15 +360,6 @@ const CadastroAluno = () => {
           variant="outlined"
           style={{marginTop: "15px"}}className="inputField"
         />
-
-    <TextField
-          id="contato"
-          label="Contato"
-          placeholder='(xx)x xxxx-xxxx'
-          variant="outlined"
-          style={{marginTop: "15px"}}className="inputField"
-        />
-
     <div className="botoesAcao">
       <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
         Salvar
