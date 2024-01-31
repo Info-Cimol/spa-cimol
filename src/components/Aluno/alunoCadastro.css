@@ -7,12 +7,14 @@ margin-top: 5rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 700px;
+  width: 100%;
+  max-width: 1000px;
+  max-height: 500px;
   background-color: #fff;
   border-radius: 8px;
-  padding: 24px;
+  padding: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow:scroll;
 }
 
 .header {
@@ -88,7 +90,7 @@ table {
   overflow-x: auto;
   box-shadow: 16px 4px 8px rgba(0, 0, 0, 0.1); 
   border-radius: 8px;
-  overflow: hidden;
+  overflow: scroll; 
   cursor: pointer;
 }
 
@@ -120,7 +122,7 @@ tbody tr {
 
 @media screen and (max-width: 600px) {
   table {
-    overflow-x: auto;
+    overflow:scroll;
   }
 
   th, td {

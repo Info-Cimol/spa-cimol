@@ -14,22 +14,26 @@ import './alunoCadastro.css';
 
 const CadastroAluno = () => {
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
-  const [termoPesquisa, setTermoPesquisa] = useState('');
   const [alunoEditando] = useState(null);
+  const [termoPesquisa, setTermoPesquisa] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [alunosPorPagina] = useState(15);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [selectedAlunoId, setSelectedAlunoId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+
   const [editingAluno, setEditingAluno] = useState({
     id: '',
     nome: '',
     matricula: '',
+    email: '',   
+    cpf: '',        
+    endereco: '',    
+    ativo: '',
   });
 
   useEffect(() => {
-    const handleResize = () => {
-    };
+    const handleResize = () => {};
 
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -44,21 +48,18 @@ const CadastroAluno = () => {
   }, [currentPage]);
 
   const formatarTelefone = (telefone) => {
-    // Formatar telefone para (xx) x xxxx-xxxx
     const regexTelefone = /^(\d{2})(\d{1})(\d{4})(\d{4})$/;
     const telefoneFormatado = telefone.replace(regexTelefone, '($1) $2 $3-$4').slice(0,16);
     return telefoneFormatado;
   };
 
   const formatarCPF = (cpf) => {
-    // Formatar CPF para xxx.xxx.xxx-xx
     const regexCPF = /^(\d{3})(\d{3})(\d{3})(\d{2})$/;
-    const cpfFormatado = cpf.replace(regexCPF, '$1.$2.$3-$4').slice(0,14);
+    const cpfFormatado = cpf.replace(regexCPF, '$1.$2.$3-$4').slice(0,13);
     return cpfFormatado;
   };
 
   const handleTelefoneChange = (e) => {
-    // Formatar telefone enquanto o usuário digita
     let telefone = e.target.value.replace(/\D/g, ''); 
     telefone = formatarTelefone(telefone);
     setEditingAluno((prev) => ({ ...prev, telefone }));
@@ -72,7 +73,6 @@ const CadastroAluno = () => {
   };
 
   const handleMatriculaChange = (e) => {
-    // Aceitar apenas números na matrícula
     const matricula = e.target.value.replace(/\D/g, '');
     setEditingAluno((prev) => ({ ...prev, matricula }));
   };
@@ -85,12 +85,16 @@ const CadastroAluno = () => {
       };
 
       const response = await axiosFetch.get('/listar/alunos', { headers });
-
+      console.log('Resposta da API:', response.data);
       setAlunosDisponiveis(
         response.data.map((aluno) => ({
           id: aluno.pessoa_id_pessoa,
-          nome: aluno.nome_aluno,
-          matricula: aluno.matricula_aluno,
+          nome: aluno.nome_aluno || 'Nome não fornecido',
+          email: aluno.email_aluno || 'E-mail não fornecido',
+          matricula: aluno.matricula_aluno || 'Matrícula não fornecido',
+          cpf: aluno.cpf_aluno || 'CPF não fornecido',
+          endereco: aluno.endereco_aluno || 'Endereço não fornecido',
+          ativo: aluno.ativo_aluno || "Status de aluno não fornecido",
           editando: false,
         }))
       );
@@ -104,7 +108,7 @@ const CadastroAluno = () => {
     setShowEditModal(true);
   };
 
-  const handleSalvar = async (alunoId, novoNome, novaMatricula) => {
+  const handleSalvar = async (alunoId, novoNome, novaMatricula,  novoEmail, novoCpf, novoEndereco,) => {
     try {
       const token = localStorage.getItem('token');
       const headers = {
@@ -115,6 +119,9 @@ const CadastroAluno = () => {
       const requestBody = {
         novoNome,
         novaMatricula,
+        novoEmail,
+        novoCpf,
+        novoEndereco,
       };
 
       await axiosFetch.put(`/altera/aluno/${alunoId}`, requestBody, { headers });
@@ -156,14 +163,21 @@ const CadastroAluno = () => {
 
   const handleSalvarEdicao = async () => {
     try {
-      await handleSalvar(editingAluno.id, editingAluno.nome, editingAluno.matricula);
+      await handleSalvar(
+        editingAluno.id,
+        editingAluno.nome,
+        editingAluno.matricula,
+        editingAluno.email,
+        editingAluno.cpf,
+        editingAluno.endereco
+      );
       setShowEditModal(false);
     } catch (error) {
       console.error('Erro ao editar aluno:', error);
       toast.error('Erro ao editar aluno.');
     }
   };
-
+  
   const indexOfLastAluno = currentPage * alunosPorPagina;
   const indexOfFirstAluno = indexOfLastAluno - alunosPorPagina;
   const alunosPaginados = alunosDisponiveis.slice(indexOfFirstAluno, indexOfLastAluno);
@@ -198,6 +212,7 @@ const CadastroAluno = () => {
               <th>CPF</th>
               <th>Endereço</th>
               <th>Contato</th>
+              <th>Status</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -233,16 +248,55 @@ const CadastroAluno = () => {
                     </>
                   </td>
                   <td>
-                    fghdhs@gmail.com
+                  <>
+                      {alunoEditando === aluno.id ? (
+                        <TextField
+                          value={editingAluno.email}
+                          onChange={(e) => setEditingAluno((prev) => ({ ...prev, email: e.target.value }))}
+                        />
+                      ) : (
+                        aluno.email
+                      )}
+                    </>
                   </td>
                   <td>
-                    xxx.xxx.xxx-xx
-                  </td>
-                  <td>
-                    Rua dos Alfeneiros N°4
-                  </td>
+                  <>
+                      {alunoEditando === aluno.id ? (
+                        <TextField
+                          value={editingAluno.cpf}
+                          onChange={(e) => setEditingAluno((prev) => ({ ...prev, cpf: e.target.value }))}
+                        />
+                      ) : (
+                        aluno.cpf
+                      )}
+                    </>
+                    </td>
+                     <td>
+                     <>
+                      {alunoEditando === aluno.id ? (
+                        <TextField
+                          value={editingAluno.endereco}
+                          onChange={(e) => setEditingAluno((prev) => ({ ...prev, endereco: e.target.value }))}
+                        />
+                      ) : (
+                        aluno.endereco
+                      )}
+                    </>
+                    </td>
                   <td>
                     (xx)x xxxx-xxxx
+                  </td>
+                  <td>
+                  <>
+                      {alunoEditando === aluno.id ? (
+                        <TextField
+                          value={editingAluno.ativo}
+                          onChange={(e) => setEditingAluno((prev) => ({ ...prev, ativo: e.target.value }))}
+                        />
+                      ) : (
+                        aluno.ativo
+                      )}
+                    </>
                   </td>
                   <td>
                     {alunoEditando === aluno.id ? (
@@ -287,89 +341,102 @@ const CadastroAluno = () => {
         </div>
 
         <Modal open={showConfirmationModal} onClose={handleCancelarDesativar}>
-          <div style={{ padding: '16px', background: '#fff', width: '400px', margin: '50px auto' }}>
-            <p>Tem certeza de que deseja desativar esse aluno?</p>
-            <Button onClick={handleConfirmDesativar} variant="contained" color="primary" style={{ marginRight: '8px' }}>
-              Confirmar
-            </Button>
-            <Button onClick={handleCancelarDesativar} variant="contained" color="secondary">
-              Cancelar
-            </Button>
-          </div>
+            <div style={{ padding: '16px', background: '#fff', width: '400px', margin: '50px auto' }}>
+              <p>Tem certeza de que deseja desativar esse aluno?</p>
+              <Button onClick={handleConfirmDesativar} variant="contained" color="primary" style={{ marginRight: '8px' }}>
+                Confirmar
+              </Button>
+              <Button onClick={handleCancelarDesativar} variant="contained" color="secondary">
+                Cancelar
+              </Button>
+            </div>
         </Modal>
 
         <Modal open={showEditModal} onClose={() => setShowEditModal(false)}>
-  <div className="edicaoPessoa">
-    <div className="header">
-      <h2>Editando Aluno</h2>
-    </div>
+        <div className="edicaoPessoa">
+          <div className="header">
+            <h2>Editando Aluno</h2>
+          </div>
 
-    <TextField
-      id="nome"
-      label="Nome"
-      variant="outlined"
-      value={editingAluno.nome}
-      onChange={(e) => setEditingAluno((prev) => ({ ...prev, nome: e.target.value }))}
-      style={{marginTop: "15px"}}className="inputField"
-    />
+          <TextField
+            id="nome"
+            label="Nome"
+            variant="outlined"
+            value={editingAluno.nome}
+            onChange={(e) => setEditingAluno((prev) => ({ ...prev, nome: e.target.value }))}
+            style={{marginTop: "15px"}}className="inputField"
+          />
 
-<TextField
-        id="matricula"
-        label="Matrícula"
-        variant="outlined"
-        value={editingAluno.matricula}
-        onChange={handleMatriculaChange}
-        style={{ marginTop: "15px" }}
-        className="inputField"
-      />
+            <TextField
+              id="matricula"
+              label="Matrícula"
+              variant="outlined"
+              value={editingAluno.matricula}
+              onChange={handleMatriculaChange}
+              style={{ marginTop: "15px" }}
+              className="inputField"
+            />
 
-      <TextField
-        id="email"
-        label="E-mail"
-        variant="outlined"
-        style={{ marginTop: "15px" }}
-        className="inputField"
-      />
+            <TextField
+              id="email"
+              label="E-mail"
+              value={editingAluno.email}
+              onChange={(e) => setEditingAluno((prev) => ({ ...prev, email: e.target.value }))}
+              style={{ marginTop: "15px" }}
+              className="inputField"
+            />
 
-<TextField
-        id="telefone"
-        label="Contato"
-        placeholder="(xx) x xxxx-xxxx"
-        variant="outlined"
-        value={editingAluno.telefone}
-        onChange={handleTelefoneChange}
-        style={{ marginTop: "15px" }}
-        className="inputField"
-      />
+            <TextField
+              id="telefone"
+              label="Contato"
+              placeholder="(xx) x xxxx-xxxx"
+              variant="outlined"
+              value={editingAluno.telefone}
+              onChange={handleTelefoneChange}
+              style={{ marginTop: "15px" }}
+              className="inputField"
+            />
 
-      <TextField
-        id="cpf"
-        label="CPF"
-        placeholder="xxx.xxx.xxx-xx"
-        variant="outlined"
-        value={editingAluno.cpf}
-        onChange={handleCPFChange}
-        style={{ marginTop: "15px" }}
-        className="inputField"
-      />
+              <TextField
+                id="cpf"
+                label="CPF"
+                variant="outlined"
+                value={editingAluno.cpf}
+                onChange={handleCPFChange}
+                style={{ marginTop: "15px" }}
+                className="inputField"
+              />
 
-    <TextField
-          id="endereco"
-          label="Endereço"
-          placeholder='Rua Martins Coelho'
-          variant="outlined"
-          style={{marginTop: "15px"}}className="inputField"
-        />
-    <div className="botoesAcao">
-      <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
-        Salvar
-      </Button>
-      <Button onClick={() => setShowEditModal(false)} variant="contained" color="secondary">
-        Cancelar
-      </Button>
-    </div>
-  </div>
-</Modal>
+              <TextField
+                id="endereco"
+                label="Endereço"
+                variant="outlined"
+                value={editingAluno.endereco}
+                onChange={(e) => setEditingAluno((prev) => ({ ...prev, endereco: e.target.value }))}
+                style={{ marginTop: "15px" }}
+                className="inputField"
+              />
+
+              <TextField
+                id="ativo"
+                label="Status"
+                variant="outlined"
+                value={editingAluno.ativo}
+                onChange={(e) => setEditingAluno((prev) => ({ ...prev, ativo: e.target.value }))}
+                style={{ marginTop: "15px" }}
+                className="inputField"
+              />
+              
+              <div className="botoesAcao">
+                <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
+                  Salvar
+                </Button>
+                <Button onClick={() => setShowEditModal(false)} variant="contained" color="secondary">
+                  Cancelar
+                </Button>
+              </div>
+            </div>
+      </Modal>
       </div>
     </>
   );
