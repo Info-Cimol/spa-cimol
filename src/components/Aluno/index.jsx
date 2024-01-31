@@ -277,23 +277,23 @@ const CadastroAluno = () => {
       variant="outlined"
       value={editingAluno.nome}
       onChange={(e) => setEditingAluno((prev) => ({ ...prev, nome: e.target.value }))}
-      className="inputField"
+      style={{marginTop: "15px"}}className="inputField"
     />
 
-    <TextField
+    <TextField style={{marginTop: "15px"}}className="inputField"
       id="matricula"
       label="Matrícula"
       variant="outlined"
       value={editingAluno.matricula}
       onChange={(e) => setEditingAluno((prev) => ({ ...prev, matricula: e.target.value }))}
-      className="inputField"
+      
     />
 
     <TextField
       id="email"
       label="E-mail"
       variant="outlined"
-      className="inputField"
+      style={{marginTop: "15px"}}className="inputField"
     />
 
     <TextField
@@ -301,7 +301,7 @@ const CadastroAluno = () => {
       label="CPF"
       placeholder='XXX.XXX.XXX-XX'
       variant="outlined"
-      className="inputField"
+      style={{marginTop: "15px"}}className="inputField"
     />
 
     <TextField
@@ -309,7 +309,7 @@ const CadastroAluno = () => {
           label="Endereço"
           placeholder='Rua Martins Coelho'
           variant="outlined"
-          className="inputField"
+          style={{marginTop: "15px"}}className="inputField"
         />
 
     <TextField
@@ -317,7 +317,7 @@ const CadastroAluno = () => {
           label="Contato"
           placeholder='(xx)x xxxx-xxxx'
           variant="outlined"
-          className="inputField"
+          style={{marginTop: "15px"}}className="inputField"
         />
 
     <div className="botoesAcao">

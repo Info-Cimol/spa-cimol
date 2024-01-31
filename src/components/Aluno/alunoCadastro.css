@@ -7,7 +7,7 @@ margin-top: 5rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
+  width: 90%;
   max-width: 700px;
   background-color: #fff;
   border-radius: 8px;
@@ -17,12 +17,12 @@ margin-top: 5rem;
 
 .header {
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 2rem;
 }
 
 .inputField {
   width: 100%;
-  margin-top: 2rem;
+  height: 100%;
 }
 
 .botoesAcao {
@@ -33,7 +33,6 @@ margin-top: 5rem;
 .botoesAcao button {
   width: 48%;
 }
-
 
 .botoesAcao {
   margin-top: 1rem;
