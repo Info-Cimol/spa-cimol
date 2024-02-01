@@ -2,7 +2,7 @@ import React, { useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
-import Aluno from '../../components/Aluno'
+import Aluno from '../../components/Aluno/'
 import {Container} from './styled';
 
 function Home(){

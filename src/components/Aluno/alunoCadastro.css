@@ -87,7 +87,6 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  overflow-x: auto;
   box-shadow: 16px 4px 8px rgba(0, 0, 0, 0.1); 
   border-radius: 8px;
   overflow: scroll; 
@@ -124,7 +123,9 @@ tbody tr {
   table {
     overflow:scroll;
   }
-
+tbody tr:first-child{
+  overflow: scroll; 
+}
   th, td {
     white-space: nowrap;
     max-width: none; 

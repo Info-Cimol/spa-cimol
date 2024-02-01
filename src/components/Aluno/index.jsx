@@ -68,9 +68,11 @@ const CadastroAluno = () => {
   const handleTelefoneChange = (e) => {
     let telefone = e.target.value.replace(/\D/g, ''); 
     telefone = formatarTelefone(telefone);
-    setEditingAluno((prev) => ({ ...prev, telefone }));
+    let dd = e.target.value.replace(/\D/g, ''); 
+    dd = formatarTelefone(dd);
+    setEditingAluno((prev) => ({ ...prev, telefone, dd }));
   };
-
+  
   const handleCPFChange = (e) => {
     // Formatar CPF enquanto o usuário digita
     let cpf = e.target.value.replace(/\D/g, ''); 
@@ -295,11 +297,12 @@ const CadastroAluno = () => {
                     </>
                     </td>
                     <td>
+                    <td>
                       <>
                         {alunoEditando === aluno.id ? (
                           <>
                             <TextField
-                              value={editingAluno.dd && editingAluno.telefone}
+                              value={editingAluno.dd}
                               onChange={(e) => setEditingAluno((prev) => ({ ...prev, dd: e.target.value }))}
                               style={{ width: '40px' }} 
                             />
@@ -315,6 +318,8 @@ const CadastroAluno = () => {
                           </>
                         )}
                       </>
+                    </td>
+
                     </td>
                     <td>
                     <>
@@ -422,7 +427,7 @@ const CadastroAluno = () => {
               label="Contato"
               placeholder="(xx) x xxxx-xxxx"
               variant="outlined"
-              value={editingAluno.telefone}
+              value={ editingAluno.dd && editingAluno.telefone}
               onChange={handleTelefoneChange}
               style={{ marginTop: "15px" }}
               className="inputField"
