@@ -5,6 +5,10 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
 import { toast } from 'react-toastify';
 import ArquivoUpload from '../FileUploader/pdfUploaderAluno';
 import Modal from '@mui/material/Modal';
@@ -28,7 +32,9 @@ const CadastroAluno = () => {
     matricula: '',
     email: '',   
     cpf: '',        
-    endereco: '',    
+    endereco: '',
+    telefone: '',
+    dd: '',    
     ativo: '',
   });
 
@@ -55,7 +61,7 @@ const CadastroAluno = () => {
 
   const formatarCPF = (cpf) => {
     const regexCPF = /^(\d{3})(\d{3})(\d{3})(\d{2})$/;
-    const cpfFormatado = cpf.replace(regexCPF, '$1.$2.$3-$4').slice(0,13);
+    const cpfFormatado = cpf.replace(regexCPF, '$1.$2.$3-$4').slice(0,14);
     return cpfFormatado;
   };
 
@@ -94,6 +100,8 @@ const CadastroAluno = () => {
           matricula: aluno.matricula_aluno || 'Matrícula não fornecido',
           cpf: aluno.cpf_aluno || 'CPF não fornecido',
           endereco: aluno.endereco_aluno || 'Endereço não fornecido',
+          dd: aluno.dd_telefone || 'DD não fornecido',
+          telefone: aluno.numero_telefone || 'Número não informado',
           ativo: aluno.ativo_aluno || "Status de aluno não fornecido",
           editando: false,
         }))
@@ -108,7 +116,7 @@ const CadastroAluno = () => {
     setShowEditModal(true);
   };
 
-  const handleSalvar = async (alunoId, novoNome, novaMatricula,  novoEmail, novoCpf, novoEndereco,) => {
+  const handleSalvar = async (alunoId, novoNome, novaMatricula,  novoEmail, novoCpf, novoEndereco, novoNumero) => {
     try {
       const token = localStorage.getItem('token');
       const headers = {
@@ -122,6 +130,7 @@ const CadastroAluno = () => {
         novoEmail,
         novoCpf,
         novoEndereco,
+        novoNumero,
       };
 
       await axiosFetch.put(`/altera/aluno/${alunoId}`, requestBody, { headers });
@@ -169,7 +178,9 @@ const CadastroAluno = () => {
         editingAluno.matricula,
         editingAluno.email,
         editingAluno.cpf,
-        editingAluno.endereco
+        editingAluno.endereco,
+        editingAluno.dd,
+        editingAluno.telefone,
       );
       setShowEditModal(false);
     } catch (error) {
@@ -217,12 +228,12 @@ const CadastroAluno = () => {
             </tr>
           </thead>
           <tbody>
-            {alunosPaginados
-              .filter((aluno) =>
-                aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase())
-              )
-              .map((aluno) => (
-                <tr key={aluno.id}>
+          {alunosPaginados
+            .filter((aluno) =>
+              aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase())
+            )
+            .map((aluno) => (
+              <tr key={aluno.id}>
                   <td>
                     <>
                       {alunoEditando === aluno.id ? (
@@ -283,21 +294,41 @@ const CadastroAluno = () => {
                       )}
                     </>
                     </td>
-                  <td>
-                    (xx)x xxxx-xxxx
-                  </td>
-                  <td>
-                  <>
+                    <td>
+                      <>
+                        {alunoEditando === aluno.id ? (
+                          <>
+                            <TextField
+                              value={editingAluno.dd && editingAluno.telefone}
+                              onChange={(e) => setEditingAluno((prev) => ({ ...prev, dd: e.target.value }))}
+                              style={{ width: '40px' }} 
+                            />
+                            {' '}
+                            <TextField
+                              value={editingAluno.numero}
+                              onChange={(e) => setEditingAluno((prev) => ({ ...prev, numero: e.target.value }))}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            ({aluno.dd})  {aluno.telefone}
+                          </>
+                        )}
+                      </>
+                    </td>
+                    <td>
+                    <>
                       {alunoEditando === aluno.id ? (
                         <TextField
                           value={editingAluno.ativo}
                           onChange={(e) => setEditingAluno((prev) => ({ ...prev, ativo: e.target.value }))}
                         />
                       ) : (
-                        aluno.ativo
+                        aluno.ativo === 1 ? "Ativo" : "Suspenso"
                       )}
                     </>
                   </td>
+
                   <td>
                     {alunoEditando === aluno.id ? (
                       <>
@@ -417,15 +448,18 @@ const CadastroAluno = () => {
                 className="inputField"
               />
 
-              <TextField
-                id="ativo"
-                label="Status"
-                variant="outlined"
-                value={editingAluno.ativo}
-                onChange={(e) => setEditingAluno((prev) => ({ ...prev, ativo: e.target.value }))}
-                style={{ marginTop: "15px" }}
-                className="inputField"
-              />
+<FormControl fullWidth variant="outlined" style={{ marginTop: "15px" }}>
+  <InputLabel id="status-label">Status</InputLabel>
+  <Select
+    label="Status"
+    value={editingAluno.ativo ? 1 : 0}
+    onChange={(e) => setEditingAluno((prev) => ({ ...prev, ativo: e.target.value === 1 ? true : false }))}
+  >
+    <MenuItem value={1}>Ativo</MenuItem>
+    <MenuItem value={0}>Suspenso</MenuItem>
+  </Select>
+</FormControl>
+
               
               <div className="botoesAcao">
                 <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
