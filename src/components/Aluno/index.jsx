@@ -116,12 +116,11 @@ const CadastroAluno = () => {
     setShowEditModal(true);
   };
 
-  const handleSalvar = async (alunoId, novoNome, novaMatricula,  novoEmail, novoCpf, novoEndereco, novoNumero) => {
+  const handleSalvar = async (alunoId, novoNome, novaMatricula,  novoEmail, novoCpf, novoEndereco, novoNumero, novoAtivo) => {
     try {
       const token = localStorage.getItem('token');
       const headers = {
         'x-access-token': token,
-        'Content-Type': 'application/json',
       };
 
       const requestBody = {
@@ -131,6 +130,7 @@ const CadastroAluno = () => {
         novoCpf,
         novoEndereco,
         novoNumero,
+        novoAtivo,
       };
 
       await axiosFetch.put(`/altera/aluno/${alunoId}`, requestBody, { headers });
@@ -448,19 +448,18 @@ const CadastroAluno = () => {
                 className="inputField"
               />
 
-<FormControl fullWidth variant="outlined" style={{ marginTop: "15px" }}>
-  <InputLabel id="status-label">Status</InputLabel>
-  <Select
-    label="Status"
-    value={editingAluno.ativo ? 1 : 0}
-    onChange={(e) => setEditingAluno((prev) => ({ ...prev, ativo: e.target.value === 1 ? true : false }))}
-  >
-    <MenuItem value={1}>Ativo</MenuItem>
-    <MenuItem value={0}>Suspenso</MenuItem>
-  </Select>
-</FormControl>
+              <FormControl fullWidth variant="outlined" style={{ marginTop: "15px" }}>
+                <InputLabel id="status-label">Status</InputLabel>
+                <Select
+                  label="Status"
+                  value={editingAluno.ativo ? 'ativo' : 'suspenso'}
+                  onChange={(e) => setEditingAluno((prev) => ({ ...prev, ativo: e.target.value === 'ativo' ? true : false }))}
+                >
+                  <MenuItem value="ativo">Ativo</MenuItem>
+                  <MenuItem value="suspenso">Suspenso</MenuItem>
+                </Select>
+              </FormControl>
 
-              
               <div className="botoesAcao">
                 <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
                   Salvar
