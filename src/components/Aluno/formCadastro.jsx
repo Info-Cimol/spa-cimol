@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
 import axiosFetch from '../../axios/config';
 import FileUploader from '../FileUploader/pdfUploaderAluno';
+import FichaUploader from '../FileUploader/fichaUploader';
 
 const CadastroAlunoForm = ({ open, onClose }) => {
   const MAX_NOME_LENGTH = 255;
@@ -243,14 +244,11 @@ const CadastroAlunoForm = ({ open, onClose }) => {
             margin="normal"
           />
 
-         
-             {/* Adicione um InputLabel para a descrição antes do FileUploader */}
-             <InputLabel>Ficha Geral dos Alunos</InputLabel>
+          <InputLabel>Ficha Geral dos Alunos</InputLabel>
           <FileUploader />
 
-          {/* Adicione um InputLabel para a descrição antes do FileUploader */}
           <InputLabel>Ficha Unitária</InputLabel>
-          <FileUploader />
+          <FichaUploader />
 
           {/* Botões de cadastrar e cancelar */}
           <div className="botoesAcao">

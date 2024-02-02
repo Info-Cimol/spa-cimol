@@ -32,7 +32,6 @@ const CadastroAluno = () => {
 
 
   const onVoltar = () => {
-   
     // Recarrega a página
     window.location.reload();
   };
@@ -241,7 +240,6 @@ const CadastroAluno = () => {
         <IconButton  title='Adicione um arquivo' component="span">
           <AddIcon onClick={handleToggleForm} fontSize="large" />
         </IconButton>
-
     
         <table>
           <thead>
