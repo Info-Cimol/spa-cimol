@@ -19,12 +19,16 @@ function Home(){
 };
 
   return(
-    <Container>
-      <ContainerTopo  userType={userRole}/>
-      <MenuHamburguer userType={userRole}/>
-      {exibirAluno ? (
-        <Aluno />
-      ) : (
+     <Container>
+    {!exibirAluno && (
+      <>
+        <ContainerTopo userType={userRole} />
+        <MenuHamburguer userType={userRole} />
+      </>
+    )}
+    {exibirAluno ? (
+      <Aluno />
+    ) : (
    <div className='container-fluid'>
    <div className='row'>
      <div className='buttons'>

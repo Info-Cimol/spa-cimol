@@ -10,8 +10,9 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import { toast } from 'react-toastify';
-import ArquivoUpload from '../FileUploader/pdfUploaderAluno';
+import CadastroAlunoForm from './formCadastro';
 import Modal from '@mui/material/Modal';
+import AddIcon from '@mui/icons-material/Add';
 import 'react-toastify/dist/ReactToastify.css';
 import axiosFetch from '../../axios/config';
 import './alunoCadastro.css';
@@ -20,11 +21,17 @@ const CadastroAluno = () => {
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [alunoEditando] = useState(null);
   const [termoPesquisa, setTermoPesquisa] = useState('');
+  const [onSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [alunosPorPagina] = useState(15);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [selectedAlunoId, setSelectedAlunoId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [exibirCadastroAlunoForm, setExibirCadastroAlunoForm] = useState(false);
+
+  const handleToggleForm = () => {
+    setExibirCadastroAlunoForm(!exibirCadastroAlunoForm);
+  };
 
   const [editingAluno, setEditingAluno] = useState({
     id: '',
@@ -198,24 +205,32 @@ const CadastroAluno = () => {
   return (
     <>
       <div className="container-fluid">
-        <Autocomplete
-          id='pesquisa'
-          options={alunosDisponiveis}
-          getOptionLabel={(aluno) => aluno.nome}
-          renderInput={(params) => (
-            <TextField
-              id='pesquisa-text'
-              {...params}
-              label="Pesquisar Aluno"
-              variant="outlined"
-              onChange={(e) => setTermoPesquisa(e.target.value)}
-            />
-          )}
+      <Autocomplete
+      style={{ marginTop: '30px' }}
+      options={alunosDisponiveis}
+      getOptionLabel={(aluno) => aluno.nome}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Pesquisar Aluno"
+          variant="outlined"
+          fullWidth
+          onChange={(e) => {
+            setTermoPesquisa(e.target.value);
+            onSearch(e.target.value); // Chama a função de pesquisa fornecida como propriedade
+          }}
         />
+      )}
+    />
       </div>
 
       <div className='container-fluid'>
-        <ArquivoUpload />
+  
+        <IconButton  title='Adicione um arquivo' component="span">
+          <AddIcon onClick={handleToggleForm} fontSize="large" />
+        </IconButton>
+
+    
         <table>
           <thead>
             <tr>
@@ -359,7 +374,8 @@ const CadastroAluno = () => {
               ))}
           </tbody>
         </table>
-
+  {exibirCadastroAlunoForm && 
+      <CadastroAlunoForm open={true} onClose={() => setShowEditModal(false)} />}
         <div className="pagination">
           <Button
             disabled={currentPage === 1}
