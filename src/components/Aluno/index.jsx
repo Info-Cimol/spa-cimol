@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -21,13 +23,20 @@ const CadastroAluno = () => {
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [alunoEditando] = useState(null);
   const [termoPesquisa, setTermoPesquisa] = useState('');
-  const [onSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [alunosPorPagina] = useState(15);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [selectedAlunoId, setSelectedAlunoId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [exibirCadastroAlunoForm, setExibirCadastroAlunoForm] = useState(false);
+
+
+  const onVoltar = () => {
+   
+    // Recarrega a página
+    window.location.reload();
+  };
+  
 
   const handleToggleForm = () => {
     setExibirCadastroAlunoForm(!exibirCadastroAlunoForm);
@@ -205,6 +214,10 @@ const CadastroAluno = () => {
   return (
     <>
       <div className="container-fluid">
+      <IconButton onClick={onVoltar} style={{ marginTop: '20px', marginLeft: '10px' }}>
+        <ArrowBackIcon />
+      </IconButton>
+
       <Autocomplete
       style={{ marginTop: '30px' }}
       options={alunosDisponiveis}
@@ -217,7 +230,6 @@ const CadastroAluno = () => {
           fullWidth
           onChange={(e) => {
             setTermoPesquisa(e.target.value);
-            onSearch(e.target.value); // Chama a função de pesquisa fornecida como propriedade
           }}
         />
       )}
@@ -374,8 +386,10 @@ const CadastroAluno = () => {
               ))}
           </tbody>
         </table>
+
   {exibirCadastroAlunoForm && 
-      <CadastroAlunoForm open={true} onClose={() => setShowEditModal(false)} />}
+      <CadastroAlunoForm open={true} onClose={() => setShowEditModal(false)} />    
+  }
         <div className="pagination">
           <Button
             disabled={currentPage === 1}
