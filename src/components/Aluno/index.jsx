@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Autocomplete, TextField, Button, IconButton, Switch} from '@mui/material';
+import {Autocomplete, TextField, Button, IconButton, Switch, Modal, Fade, Paper} from '@mui/material';
+import { Edit as EditIcon, ArrowBack as ArrowBackIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import axiosFetch from '../../axios/config';
+import AddIcon from '@mui/icons-material/Add';
 import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
-import MenuHamburguer from "../../components/MenuHamburguer";
-import { Edit as EditIcon, ArrowBack as ArrowBackIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import MenuHamburguer from '../../components/MenuHamburguer';
 import CadastroAlunoForm from './formCadastro';
-import Modal from '@mui/material/Modal';
-import AddIcon from '@mui/icons-material/Add';
-import axiosFetch from '../../axios/config';
 import FileUploader from '../FileUploader/pdfUploaderAluno';
 import FichaUploader from '../FileUploader/fichaUploader';
 import './alunoCadastro.css';
@@ -22,6 +21,7 @@ const CadastroAluno = () => {
   const [selectedAlunoId, setSelectedAlunoId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [exibirCadastroAlunoForm, setExibirCadastroAlunoForm] = useState(false);
+  const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [userRole] = useState(localStorage.getItem('userRole'));
  
   const MAX_CPF_LENGTH = 14;
@@ -74,6 +74,48 @@ const CadastroAluno = () => {
     carregarAlunos();
   }, [currentPage]);
 
+  const DetalhesAlunoModal = ({ alunoSelecionado, onClose }) => {
+    return (
+      <Modal
+        open={alunoSelecionado !== null}
+        onClose={onClose}
+        closeAfterTransition
+        className="detahes-aluno-modal"
+      >
+        <Fade in={alunoSelecionado !== null}>
+          <Paper className="detalhes-aluno-paper">
+            <h2 className="detalhes-aluno-title">Ficha Individual</h2>
+            <div className="detalhes-aluno-info">
+              <strong>Nome:</strong> {alunoSelecionado?.nome}
+            </div>
+            <div className="detalhes-aluno-info">
+              <strong>Matrícula:</strong> {alunoSelecionado?.matricula}
+            </div>
+            <div className="detalhes-aluno-info">
+              <strong>E-mail:</strong> {alunoSelecionado?.email}
+            </div>
+            <div className="detalhes-aluno-info">
+              <strong>CPF:</strong> {alunoSelecionado?.cpf}
+            </div>
+            <div className="detalhes-aluno-info">
+              <strong>Telefone:</strong> {alunoSelecionado?.numero}
+            </div>
+            <div className="detalhes-aluno-info">
+              <strong>Endereço:</strong> {alunoSelecionado?.endereco}
+            </div>
+            <Button
+              onClick={onClose}
+              className="detalhes-aluno-close-button"
+              variant="contained"
+              color="primary"
+            >
+              Fechar
+            </Button>
+          </Paper>
+        </Fade>
+      </Modal>
+    );
+  };
 
   const handleTelefoneChange = (e) => {
     let numero = e.target.value.replace(/\D/g, ''); 
@@ -231,8 +273,7 @@ const CadastroAluno = () => {
     />
       </div>
 
-      <div className='container-fluid'>
-
+  <div className='container-fluid'>
       <div className="botoesAcao">
           <div className="uploaders">
             {/* Botão para adicionar um novo arquivo */}
@@ -256,6 +297,8 @@ const CadastroAluno = () => {
             </div>
           </div>
         </div>
+        
+        <DetalhesAlunoModal alunoSelecionado={alunoSelecionado} onClose={() => setAlunoSelecionado(null)} />
 
         <table>
           <thead>
@@ -276,7 +319,7 @@ const CadastroAluno = () => {
               aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase())
             )
             .map((aluno) => (
-              <tr key={aluno.id}>
+              <tr key={aluno.id} onClick={() => setAlunoSelecionado(aluno)}>
                   <td>
                     <>
                       {alunoEditando === aluno.id ? (
