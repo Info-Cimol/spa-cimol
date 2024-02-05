@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import ContainerTopo from '../../components/ContainerTopo';
+import MenuHamburguer from "../../components/MenuHamburguer";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -29,7 +30,7 @@ const CadastroAluno = () => {
   const [selectedAlunoId, setSelectedAlunoId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [exibirCadastroAlunoForm, setExibirCadastroAlunoForm] = useState(false);
-
+  const [userRole] = useState(localStorage.getItem('userRole'));
 
   const onVoltar = () => {
     // Recarrega a página
@@ -212,8 +213,12 @@ const CadastroAluno = () => {
 
   return (
     <>
+    <div>
+    <ContainerTopo userType={userRole} />
+        <MenuHamburguer userType={userRole} />
+    </div>
       <div className="container-fluid">
-      <IconButton onClick={onVoltar} style={{ marginTop: '20px', marginLeft: '10px' }}>
+      <IconButton onClick={onVoltar} style={{ marginTop: '50px', marginLeft: '10px' }}>
         <ArrowBackIcon />
       </IconButton>
 
