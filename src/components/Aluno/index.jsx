@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Autocomplete, TextField, Button, IconButton, Switch } from '@mui/material';
+import { Autocomplete, TextField, Button, IconButton, Switch} from '@mui/material';
 import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
@@ -8,6 +8,8 @@ import CadastroAlunoForm from './formCadastro';
 import Modal from '@mui/material/Modal';
 import AddIcon from '@mui/icons-material/Add';
 import axiosFetch from '../../axios/config';
+import FileUploader from '../FileUploader/pdfUploaderAluno';
+import FichaUploader from '../FileUploader/fichaUploader';
 import './alunoCadastro.css';
 
 const CadastroAluno = () => {
@@ -230,11 +232,31 @@ const CadastroAluno = () => {
       </div>
 
       <div className='container-fluid'>
-  
-        <IconButton  title='Adicione um arquivo' component="span">
-          <AddIcon onClick={handleToggleForm} fontSize="large" />
-        </IconButton>
-    
+
+      <div className="botoesAcao">
+          <div className="uploaders">
+            {/* Botão para adicionar um novo arquivo */}
+            <div className="miniCard" onClick={handleToggleForm}>
+              <IconButton title="Adicione um novo arquivo" component="span">
+                <AddIcon fontSize="large" />
+              </IconButton>
+              <p>Formulário cadastro</p>
+            </div>
+          
+            {/* Mini Card - Upload da Ficha Geral dos Alunos */}
+            <div className="miniCard">
+              <FileUploader />
+              <p>Upload da Ficha Geral</p>
+            </div>
+
+            {/* Mini Card - Upload da Ficha Unitária */}
+            <div className="miniCard">
+              <FichaUploader />
+              <p>Upload da Ficha Unitária</p>
+            </div>
+          </div>
+        </div>
+
         <table>
           <thead>
             <tr>

@@ -31,13 +31,8 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
     navigate('/');
   };
 
- /* const handleBottonUpdatePassword = () => {
-   
-    navigate('/Reset-Password');
-  };*/
-
   const handleBottonHome = () => {
-    navigate('/Home', { replace: true, forceRefresh: true });
+    window.location.reload();
   };
   
   const handleBottonProjeto = () => {

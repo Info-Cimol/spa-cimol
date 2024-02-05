@@ -3,10 +3,7 @@ import Modal from '@mui/material/Modal';
 import { toast } from 'react-toastify';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
 import axiosFetch from '../../axios/config';
-import FileUploader from '../FileUploader/pdfUploaderAluno';
-import FichaUploader from '../FileUploader/fichaUploader';
 
 const CadastroAlunoForm = ({ open, onClose }) => {
   const MAX_NOME_LENGTH = 255;
@@ -243,12 +240,6 @@ const CadastroAlunoForm = ({ open, onClose }) => {
             multiline
             rows={4}
           />
-
-          <InputLabel>Ficha Geral dos Alunos</InputLabel>
-          <FileUploader />
-
-          <InputLabel>Ficha Unitária</InputLabel>
-          <FichaUploader />
 
           {/* Botões de cadastrar e cancelar */}
           <div className="botoesAcao">

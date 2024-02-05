@@ -26,7 +26,7 @@ function Home(){
         <MenuHamburguer userType={userRole} />
       </>
     )}
-    {exibirAluno ? (
+   {exibirAluno && (userRole === 'admin' || userRole === 'secretaria') ? (
       <Aluno />
     ) : (
    <div className='container-fluid'>
