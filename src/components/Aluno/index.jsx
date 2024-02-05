@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Autocomplete, TextField, Button, IconButton} from '@mui/material';
+import { Autocomplete, TextField, Button, IconButton, Switch } from '@mui/material';
 import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
@@ -21,7 +21,7 @@ const CadastroAluno = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [exibirCadastroAlunoForm, setExibirCadastroAlunoForm] = useState(false);
   const [userRole] = useState(localStorage.getItem('userRole'));
-
+ 
   const MAX_CPF_LENGTH = 14;
   const MAX_TELEFONE_LENGTH = 16;
 
@@ -43,13 +43,20 @@ const CadastroAluno = () => {
     id: '',
     nome: '',
     matricula: '',
-    email: '',   
-    cpf: '',        
+    email: '',
+    cpf: '',
     endereco: '',
     numero: '',
-    ativo: '',
-  });
-
+    ativo: 0,
+  });  
+  
+  const handleToggle = () => {
+    setEditingAluno((prevEditingAluno) => ({
+      ...prevEditingAluno,
+      ativo: prevEditingAluno.ativo === 1 ? 0 : 1,
+    }));
+  };
+  
   useEffect(() => {
     const handleResize = () => {};
 
@@ -172,6 +179,8 @@ const CadastroAluno = () => {
 
   const handleSalvarEdicao = async () => {
     try {
+      const valorParaBanco = editingAluno.ativo !== null ? editingAluno.ativo : 0;
+  
       await handleSalvar(
         editingAluno.id,
         editingAluno.nome,
@@ -180,6 +189,7 @@ const CadastroAluno = () => {
         editingAluno.cpf,
         editingAluno.endereco,
         editingAluno.numero,
+        valorParaBanco
       );
       setShowEditModal(false);
     } catch (error) {
@@ -456,14 +466,26 @@ const CadastroAluno = () => {
                 className="inputField"
               />
 
-              <div className="botoesAcao">
-                <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
-                  Salvar
-                </Button>
-                <Button onClick={() => setShowEditModal(false)} variant="contained" color="secondary">
-                  Cancelar
-                </Button>
-              </div>
+              <div>
+
+              <div className="toggleAtivoSuspenso">
+              <Switch
+                checked={editingAluno.ativo === 1}
+                onChange={handleToggle}
+                inputProps={{ 'aria-label': 'Toggle suspenso/ativo' }}
+              />
+              {editingAluno.ativo === 1 ? 'Ativo' : 'Suspenso'}
+            </div>
+
+                    <div className="botoesAcao">
+                      <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
+                        Salvar
+                      </Button>
+                      <Button onClick={() => setShowEditModal(false)} variant="contained" color="secondary">
+                        Cancelar
+                      </Button>
+                    </div>
+                  </div>
             </div>
       </Modal>
       </div>
