@@ -30,7 +30,7 @@ const CadastroAlunoForm = ({ open, onClose }) => {
   });
 
   const [charCount, setCharCount] = useState({
-    nome: MAX_NOME_LENGTH,  // Defina o comprimento máximo para o campo de nome
+    nome: MAX_NOME_LENGTH, 
     email: MAX_EMAIL_LENGTH,
     cpf: MAX_CPF_LENGTH,
     telefone: MAX_TELEFONE_LENGTH,
@@ -181,6 +181,16 @@ const CadastroAlunoForm = ({ open, onClose }) => {
           />
 
           <TextField
+            name="matricula"
+            label={`Matrícula (${charCount.matricula} caracteres restantes)`}
+            variant="outlined"
+            value={alunoData.matricula}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+          />
+
+          <TextField
             name="email"
             label={`Email (${charCount.email} caracteres restantes)`}
             variant="outlined"
@@ -232,16 +242,6 @@ const CadastroAlunoForm = ({ open, onClose }) => {
             margin="normal"
             multiline
             rows={4}
-          />
-
-          <TextField
-            name="matricula"
-            label={`Matrícula (${charCount.matricula} caracteres restantes)`}
-            variant="outlined"
-            value={alunoData.matricula}
-            onChange={handleInputChange}
-            fullWidth
-            margin="normal"
           />
 
           <InputLabel>Ficha Geral dos Alunos</InputLabel>

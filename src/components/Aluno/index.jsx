@@ -1,22 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { Autocomplete, TextField, Button, IconButton, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import DeleteIcon from '@mui/icons-material/Delete';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import { toast } from 'react-toastify';
+import { Edit as EditIcon, ArrowBack as ArrowBackIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import CadastroAlunoForm from './formCadastro';
 import Modal from '@mui/material/Modal';
 import AddIcon from '@mui/icons-material/Add';
-import 'react-toastify/dist/ReactToastify.css';
 import axiosFetch from '../../axios/config';
 import './alunoCadastro.css';
 
@@ -32,11 +22,18 @@ const CadastroAluno = () => {
   const [exibirCadastroAlunoForm, setExibirCadastroAlunoForm] = useState(false);
   const [userRole] = useState(localStorage.getItem('userRole'));
 
-  const onVoltar = () => {
-    // Recarrega a página
-    window.location.reload();
+  const MAX_CPF_LENGTH = 14;
+  const MAX_TELEFONE_LENGTH = 16;
+
+  const formatCPF = (value) => {
+    const formattedValue = value.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    return formattedValue.slice(0, MAX_CPF_LENGTH);
   };
-  
+
+  const formatTelefone = (value) => {
+    const formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $3-$4');
+    return formattedValue.slice(0, MAX_TELEFONE_LENGTH);
+  };
 
   const handleToggleForm = () => {
     setExibirCadastroAlunoForm(!exibirCadastroAlunoForm);
@@ -69,30 +66,19 @@ const CadastroAluno = () => {
     carregarAlunos();
   }, [currentPage]);
 
-  const formatarTelefone = (telefone) => {
-    const regexTelefone = /^(\d{2})(\d{1})(\d{4})(\d{4})$/;
-    const telefoneFormatado = telefone.replace(regexTelefone, '($1) $2 $3-$4').slice(0,16);
-    return telefoneFormatado;
-  };
-
-  const formatarCPF = (cpf) => {
-    const regexCPF = /^(\d{3})(\d{3})(\d{3})(\d{2})$/;
-    const cpfFormatado = cpf.replace(regexCPF, '$1.$2.$3-$4').slice(0,14);
-    return cpfFormatado;
-  };
 
   const handleTelefoneChange = (e) => {
     let telefone = e.target.value.replace(/\D/g, ''); 
-    telefone = formatarTelefone(telefone);
+    telefone = formatTelefone(telefone);
     let dd = e.target.value.replace(/\D/g, ''); 
-    dd = formatarTelefone(dd);
+    dd = formatTelefone(telefone);
     setEditingAluno((prev) => ({ ...prev, telefone, dd }));
   };
   
   const handleCPFChange = (e) => {
     // Formatar CPF enquanto o usuário digita
     let cpf = e.target.value.replace(/\D/g, ''); 
-    cpf = formatarCPF(cpf);
+    cpf = formatCPF(cpf);
     setEditingAluno((prev) => ({ ...prev, cpf }));
   };
 
@@ -215,12 +201,10 @@ const CadastroAluno = () => {
     <>
     <div>
     <ContainerTopo userType={userRole} />
-        <MenuHamburguer userType={userRole} />
+    <MenuHamburguer userType={userRole} />
     </div>
       <div className="container-fluid">
-      <IconButton onClick={onVoltar} style={{ marginTop: '50px', marginLeft: '10px' }}>
-        <ArrowBackIcon />
-      </IconButton>
+      <IconButton style={{ marginTop: '50px', marginLeft: '10px' }}><ArrowBackIcon /></IconButton>
 
       <Autocomplete
       style={{ marginTop: '30px' }}
@@ -328,28 +312,25 @@ const CadastroAluno = () => {
                     </td>
                     <td>
                     <td>
-                      <>
-                        {alunoEditando === aluno.id ? (
-                          <>
-                            <TextField
-                              value={editingAluno.dd}
-                              onChange={(e) => setEditingAluno((prev) => ({ ...prev, dd: e.target.value }))}
-                              style={{ width: '40px' }} 
-                            />
-                            {' '}
-                            <TextField
-                              value={editingAluno.numero}
-                              onChange={(e) => setEditingAluno((prev) => ({ ...prev, numero: e.target.value }))}
-                            />
-                          </>
-                        ) : (
-                          <>
-                            ({aluno.dd})  {aluno.telefone}
-                          </>
-                        )}
-                      </>
+                      {alunoEditando === aluno.id ? (
+                        <>
+                          <TextField
+                            value={editingAluno.dd}
+                            onChange={(e) => setEditingAluno((prev) => ({ ...prev, dd: e.target.value }))}
+                            style={{ width: '40px' }}
+                          />
+                          {' '}
+                          <TextField
+                            value={editingAluno.telefone}
+                            onChange={(e) => setEditingAluno((prev) => ({ ...prev, telefone: e.target.value }))}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          ({aluno.dd}) {aluno.telefone}
+                        </>
+                      )}
                     </td>
-
                     </td>
                     <td>
                     <>
@@ -454,8 +435,7 @@ const CadastroAluno = () => {
               style={{ marginTop: "15px" }}
               className="inputField"
             />
-
-            <TextField
+<TextField
               id="telefone"
               label="Contato"
               placeholder="(xx) x xxxx-xxxx"
@@ -465,6 +445,7 @@ const CadastroAluno = () => {
               style={{ marginTop: "15px" }}
               className="inputField"
             />
+
 
               <TextField
                 id="cpf"
