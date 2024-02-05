@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Autocomplete, TextField, Button, IconButton, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Autocomplete, TextField, Button, IconButton} from '@mui/material';
 import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
@@ -46,8 +46,7 @@ const CadastroAluno = () => {
     email: '',   
     cpf: '',        
     endereco: '',
-    telefone: '',
-    dd: '',    
+    numero: '',
     ativo: '',
   });
 
@@ -68,11 +67,9 @@ const CadastroAluno = () => {
 
 
   const handleTelefoneChange = (e) => {
-    let telefone = e.target.value.replace(/\D/g, ''); 
-    telefone = formatTelefone(telefone);
-    let dd = e.target.value.replace(/\D/g, ''); 
-    dd = formatTelefone(telefone);
-    setEditingAluno((prev) => ({ ...prev, telefone, dd }));
+    let numero = e.target.value.replace(/\D/g, ''); 
+    numero = formatTelefone(numero);
+    setEditingAluno((prev) => ({ ...prev, numero }));
   };
   
   const handleCPFChange = (e) => {
@@ -104,8 +101,7 @@ const CadastroAluno = () => {
           matricula: aluno.matricula_aluno || 'Matrícula não fornecido',
           cpf: aluno.cpf_aluno || 'CPF não fornecido',
           endereco: aluno.endereco_aluno || 'Endereço não fornecido',
-          dd: aluno.dd_telefone || 'DD não fornecido',
-          telefone: aluno.numero_telefone || 'Número não informado',
+          numero: aluno.numero_telefone || 'Número não informado',
           ativo: aluno.ativo_aluno || "Status de aluno não fornecido",
           editando: false,
         }))
@@ -133,8 +129,8 @@ const CadastroAluno = () => {
         novoEmail,
         novoCpf,
         novoEndereco,
-        novoNumero,
         novoAtivo,
+        novoNumero,
       };
 
       await axiosFetch.put(`/altera/aluno/${alunoId}`, requestBody, { headers });
@@ -183,8 +179,7 @@ const CadastroAluno = () => {
         editingAluno.email,
         editingAluno.cpf,
         editingAluno.endereco,
-        editingAluno.dd,
-        editingAluno.telefone,
+        editingAluno.numero,
       );
       setShowEditModal(false);
     } catch (error) {
@@ -315,19 +310,13 @@ const CadastroAluno = () => {
                       {alunoEditando === aluno.id ? (
                         <>
                           <TextField
-                            value={editingAluno.dd}
-                            onChange={(e) => setEditingAluno((prev) => ({ ...prev, dd: e.target.value }))}
-                            style={{ width: '40px' }}
-                          />
-                          {' '}
-                          <TextField
-                            value={editingAluno.telefone}
-                            onChange={(e) => setEditingAluno((prev) => ({ ...prev, telefone: e.target.value }))}
+                            value={editingAluno.numero}
+                            onChange={(e) => setEditingAluno((prev) => ({ ...prev, numero: e.target.value }))}
                           />
                         </>
                       ) : (
                         <>
-                          ({aluno.dd}) {aluno.telefone}
+                           {aluno.numero}
                         </>
                       )}
                     </td>
@@ -435,17 +424,17 @@ const CadastroAluno = () => {
               style={{ marginTop: "15px" }}
               className="inputField"
             />
-<TextField
+            
+            <TextField
               id="telefone"
               label="Contato"
               placeholder="(xx) x xxxx-xxxx"
               variant="outlined"
-              value={ editingAluno.dd && editingAluno.telefone}
+              value={editingAluno.numero}
               onChange={handleTelefoneChange}
               style={{ marginTop: "15px" }}
               className="inputField"
             />
-
 
               <TextField
                 id="cpf"
@@ -466,18 +455,6 @@ const CadastroAluno = () => {
                 style={{ marginTop: "15px" }}
                 className="inputField"
               />
-
-              <FormControl fullWidth variant="outlined" style={{ marginTop: "15px" }}>
-                <InputLabel id="status-label">Status</InputLabel>
-                <Select
-                  label="Status"
-                  value={editingAluno.ativo ? 'ativo' : 'suspenso'}
-                  onChange={(e) => setEditingAluno((prev) => ({ ...prev, ativo: e.target.value === 'ativo' ? true : false }))}
-                >
-                  <MenuItem value="ativo">Ativo</MenuItem>
-                  <MenuItem value="suspenso">Suspenso</MenuItem>
-                </Select>
-              </FormControl>
 
               <div className="botoesAcao">
                 <Button onClick={handleSalvarEdicao} variant="contained" color="primary">

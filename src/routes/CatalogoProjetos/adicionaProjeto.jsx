@@ -10,7 +10,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { faFileImage, faFilePdf, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import DatePicker from 'react-datepicker';
 import './css/adiciona.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -41,10 +40,6 @@ const AdicionaProjetoComponent = () => {
 
   const handleToggle = () => {
     setPublico(!publico); 
-  };
-
-  const handleChange = (date) => {
-    setAnoPublicacao(date);
   };
 
   useEffect(() => {

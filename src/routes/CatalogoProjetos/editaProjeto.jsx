@@ -24,6 +24,7 @@ const EdicaoProjeto = () => {
     logo_projeto: [],
     publico: 0,
   });
+  
   const [loading, setLoading] = useState(false);
   const [mensagemSucesso, setMensagemSucesso] = useState(null);
   const [isPrivate, setIsPrivate] = useState(projetoEdit.publico === 0);
