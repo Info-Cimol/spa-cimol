@@ -21,11 +21,11 @@
 
 .uploaders {
   display: flex;
-  width: 100%; /* Adicionado para ocupar toda a largura */
+  width: 100%; 
 }
 
 .miniCard {
-  width: 100%; /* Adicionado para ocupar toda a largura */
+  width: 100%; 
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 15px;
@@ -177,17 +177,17 @@ p {
 
 table {
   width: 100%;
-  border-collapse: collapse;
   margin-top: 20px;
-  box-shadow: 16px 4px 8px rgba(0, 0, 0, 0.1); 
+  box-shadow: 8px 8px 8px 8px rgba(0.1, 0.1, 0.1, 0.1); 
   border-radius: 8px;
-  overflow: scroll; 
+  overflow-x: auto; 
   cursor: pointer;
 }
 
 th, td {
   padding: 12px;
   border: 1px solid #ddd;
+  min-width: 100px; 
 }
 
 th {
@@ -211,17 +211,13 @@ tbody tr {
   transition: background-color 0.3s ease;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 767px) {
   table {
-    overflow:scroll;
+    width: 100%;
+    overflow-x: auto; 
   }
-tbody tr:first-child{
-  overflow: scroll; 
-}
+
   th, td {
-    white-space: nowrap;
-    max-width: none; 
-    overflow: auto; 
-    text-overflow: initial; 
+    min-width: 100px; 
   }
 }
