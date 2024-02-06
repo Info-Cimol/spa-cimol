@@ -24,7 +24,12 @@ const CadastroAluno = () => {
   const [exibirCadastroAlunoForm, setExibirCadastroAlunoForm] = useState(false);
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [userRole] = useState(localStorage.getItem('userRole'));
- 
+  const [showAttachmentModal, setShowAttachmentModal] = useState(false);
+
+  const handleToggleAttachmentModal = () => {
+    setShowAttachmentModal(!showAttachmentModal);
+  };
+
   const MAX_CPF_LENGTH = 14;
   const MAX_TELEFONE_LENGTH = 16;
 
@@ -290,32 +295,55 @@ const CadastroAluno = () => {
           />
         )}
       />
-
-      </div>
+    </div>
 
   <div className='container-fluid'>
       <div className="botoesAcao">
-          <div className="uploaders">
-            {/* Botão para adicionar um novo arquivo */}
-            <div className="miniCard" onClick={handleToggleForm}>
-              <IconButton title="Adicione um novo arquivo" component="span">
-                <AddIcon fontSize="large" />
-              </IconButton>
-              <p>Formulário cadastro</p>
-            </div>
-          
-            {/* Mini Card - Upload da Ficha Geral dos Alunos */}
-            <div className="miniCard">
-              <FileUploader />
-              <p>Upload da Ficha Geral</p>
-            </div>
 
-            {/* Mini Card - Upload da Ficha Unitária */}
-            <div className="miniCard">
-              <FichaUploader />
-              <p>Upload da Ficha Unitária</p>
-            </div>
+      <div className="uploaders">
+      {/* Botão para adicionar um novo arquivo */}
+      <div className="miniCard" onClick={handleToggleForm}>
+        <IconButton title="Adicione um novo arquivo" component="span">
+          <AddIcon fontSize="large" />
+        </IconButton>
+        <p>Formulário cadastro</p>
+      </div>
+
+      <div className="miniCard" onClick={handleToggleAttachmentModal}>
+        <IconButton title="Escolha o tipo de anexo" component="span">
+          <AddIcon fontSize="large" />
+        </IconButton>
+        <p>Opções de Anexos</p>
+      </div>
+
+      {/* Modal para as opções de anexo */}
+      <Modal
+        open={showAttachmentModal}
+        onClose={handleToggleAttachmentModal}
+        aria-labelledby="attachment-options"
+        aria-describedby="choose-attachment-type"
+      >
+        <div className='edicaoPessoa'>
+          <div className='mini-card'>
+            <FileUploader />
+            <p>Upload da Ficha Geral</p>
           </div>
+          <div className='mini-card'>
+            <FichaUploader />
+            <p>Upload da Ficha Unitária</p>
+          </div>
+          <Button
+            className="detalhes-aluno-close-button"
+            variant="contained"
+            color="primary"
+            onClick={handleToggleAttachmentModal} 
+          >
+            Fechar
+          </Button>
+        </div>
+      </Modal>
+    </div>
+
         </div>
         
         <DetalhesAlunoModal alunoSelecionado={alunoSelecionado} onClose={() => setAlunoSelecionado(null)} />
