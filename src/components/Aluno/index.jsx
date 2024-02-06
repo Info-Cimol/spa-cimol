@@ -15,6 +15,7 @@ const CadastroAluno = () => {
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [alunoEditando] = useState(null);
   const [termoPesquisa, setTermoPesquisa] = useState('');
+  const [, setIsSearchEmpty] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [alunosPorPagina] = useState(15);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -23,7 +24,6 @@ const CadastroAluno = () => {
   const [exibirCadastroAlunoForm, setExibirCadastroAlunoForm] = useState(false);
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [userRole] = useState(localStorage.getItem('userRole'));
-  const [cliqueBotao, setCliqueBotao] = useState(false);
  
   const MAX_CPF_LENGTH = 14;
   const MAX_TELEFONE_LENGTH = 16;
@@ -41,7 +41,6 @@ const CadastroAluno = () => {
   const handleToggleForm = () => {
     setExibirCadastroAlunoForm(!exibirCadastroAlunoForm);
   };
-  
 
   const [editingAluno, setEditingAluno] = useState({
     id: '',
@@ -77,15 +76,14 @@ const CadastroAluno = () => {
   }, [currentPage]);
 
   const DetalhesAlunoModal = ({ alunoSelecionado, onClose }) => {
-    
     return (
       <Modal
-        open={alunoSelecionado !== null && editingAluno && cliqueBotao}
+        open={alunoSelecionado !== null}
         onClose={onClose}
         closeAfterTransition
         className="detahes-aluno-modal"
       >
-        <Fade in={alunoSelecionado !== null && editingAluno && cliqueBotao}>
+        <Fade in={alunoSelecionado !== null}>
           <Paper className="detalhes-aluno-paper">
             <h2 className="detalhes-aluno-title">Ficha Individual</h2>
             {alunoSelecionado && (
@@ -180,7 +178,6 @@ const CadastroAluno = () => {
   const handleEditar = (aluno) => {
     setEditingAluno(aluno);
     setShowEditModal(true);
-    setCliqueBotao(true);
   };
 
   const handleSalvar = async (alunoId, novoNome, novaMatricula,  novoEmail, novoCpf, novoEndereco, novoNumero, novoAtivo) => {
@@ -213,7 +210,6 @@ const CadastroAluno = () => {
   const handleDesativar = (alunoId) => {
     setSelectedAlunoId(alunoId);
     setShowConfirmationModal(true);
-    setCliqueBotao(true);
   };
 
   const handleConfirmDesativar = async () => {
@@ -259,9 +255,10 @@ const CadastroAluno = () => {
     }
   };
   
-  const indexOfLastAluno = currentPage * alunosPorPagina;
-  const indexOfFirstAluno = indexOfLastAluno - alunosPorPagina;
-  const alunosPaginados = alunosDisponiveis.slice(indexOfFirstAluno, indexOfLastAluno);
+  const startIndex = (currentPage - 1) * alunosPorPagina;
+  const endIndex = startIndex + alunosPorPagina;
+  const alunosFiltrados = alunosDisponiveis.filter((aluno) => termoPesquisa ? aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) : true);
+  const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
 
   return (
     <>
@@ -271,23 +268,29 @@ const CadastroAluno = () => {
     </div>
       <div className="container-fluid">
       <IconButton style={{ marginTop: '50px', marginLeft: '10px' }}><ArrowBackIcon /></IconButton>
+            <Autocomplete
+        style={{ marginTop: '30px' }}
+        options={alunosDisponiveis}
+        getOptionLabel={(aluno) => aluno.nome}
+        inputValue={termoPesquisa} 
+        onInputChange={(event, newValue) => {
+          setTermoPesquisa(newValue);
+        }}
+        onChange={(event, newValue) => {
+          if (!newValue) {
+            setIsSearchEmpty(true); 
+          }
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Pesquisar Aluno"
+            variant="outlined"
+            fullWidth
+          />
+        )}
+      />
 
-      <Autocomplete
-      style={{ marginTop: '30px' }}
-      options={alunosDisponiveis}
-      getOptionLabel={(aluno) => aluno.nome}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Pesquisar Aluno"
-          variant="outlined"
-          fullWidth
-          onChange={(e) => {
-            setTermoPesquisa(e.target.value);
-          }}
-        />
-      )}
-    />
       </div>
 
   <div className='container-fluid'>
@@ -469,21 +472,21 @@ const CadastroAluno = () => {
   {exibirCadastroAlunoForm && 
       <CadastroAlunoForm open={true} onClose={() => setShowEditModal(false)} />    
   }
-        <div className="pagination">
-          <Button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
-            Anterior
-          </Button>
-          <span>{currentPage}</span>
-          <Button
-            disabled={indexOfLastAluno >= alunosDisponiveis.length}
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            Próxima
-          </Button>
-        </div>
+     <div className="pagination">
+      <Button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(currentPage - 1)}
+      >
+        Anterior
+      </Button>
+      <span>{currentPage}</span>
+      <Button
+        disabled={endIndex >= alunosFiltrados.length}
+        onClick={() => setCurrentPage(currentPage + 1)}
+      >
+        Próxima
+      </Button>
+    </div>
 
         <Modal open={showConfirmationModal} onClose={handleCancelarDesativar}>
             <div style={{ padding: '16px', background: '#fff', width: '400px', margin: '50px auto' }}>
