@@ -17,7 +17,7 @@ const CadastroAluno = () => {
   const [termoPesquisa, setTermoPesquisa] = useState('');
   const [, setIsSearchEmpty] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [alunosPorPagina] = useState(20);
+  const [alunosPorPagina] = useState(15);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [selectedAlunoId, setSelectedAlunoId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -264,24 +264,7 @@ const CadastroAluno = () => {
   const endIndex = startIndex + alunosPorPagina;
   const alunosFiltrados = alunosDisponiveis.filter((aluno) => termoPesquisa ? aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) : true);
   const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(alunosFiltrados.length / alunosPorPagina);
 
-let startPage, endPage;
-if (totalPages <= 3) {
-  startPage = 1;
-  endPage = totalPages;
-} else if (currentPage <= 2) {
-  startPage = 1;
-  endPage = 3;
-} else if (currentPage + 1 >= totalPages) {
-  startPage = totalPages - 2;
-  endPage = totalPages;
-} else {
-  startPage = currentPage - 1; 
-  endPage = currentPage + 2;
-}
-
-  
   return (
     <>
     <div>
@@ -362,6 +345,7 @@ if (totalPages <= 3) {
     </div>
 
     </div>
+
         <DetalhesAlunoModal alunoSelecionado={alunoSelecionado} onClose={() => setAlunoSelecionado(null)} />
 
         <table>
@@ -516,29 +500,21 @@ if (totalPages <= 3) {
   {exibirCadastroAlunoForm && 
       <CadastroAlunoForm open={true} onClose={() => setShowEditModal(false)} />    
   }
-
-    <div className='container-fluid'>
-  <div className="pagination">
-    <Button
-      disabled={currentPage === 1}
-      onClick={() => setCurrentPage(currentPage - 1)}
-    >
-      Anterior
-    </Button>
-    {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map(page => (
-      <Button key={page} onClick={() => setCurrentPage(page)}>
-        {page}
+     <div className="pagination">
+      <Button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(currentPage - 1)}
+      >
+        Anterior
       </Button>
-    ))}
-    <Button
-      disabled={currentPage === totalPages}
-      onClick={() => setCurrentPage(currentPage + 1)}
-    >
-      Próxima
-    </Button>
-  </div>
+      <span>{currentPage}</span>
+      <Button
+        disabled={endIndex >= alunosFiltrados.length}
+        onClick={() => setCurrentPage(currentPage + 1)}
+      >
+        Próxima
+      </Button>
     </div>
-    
 
         <Modal open={showConfirmationModal} onClose={handleCancelarDesativar}>
             <div style={{ padding: '16px', background: '#fff', width: '400px', margin: '50px auto' }}>
