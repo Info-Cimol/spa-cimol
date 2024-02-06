@@ -49,7 +49,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* Definindo a altura como 100% da altura da viewport */
+  height: 100vh;
 }
 
 .detalhes-aluno-paper {
@@ -66,6 +66,19 @@ p {
   margin-bottom: 20px;
   color: #2c3e50;
   font-weight: bold;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.detalhes-aluno-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 10px; 
+}
+
+.detalhes-aluno-column {
+  display: flex;
+  flex-direction: column;
 }
 
 .detalhes-aluno-info {
@@ -76,10 +89,10 @@ p {
 .detalhes-aluno-close-button {
   background-color: #3498db;
   color: #fff;
-  margin-top: 20px;
-  border-radius: 8px;
-  font-size: 1.4rem;
-  padding: 12px 20px;
+  margin: 20px auto 0; 
+  border-radius: 15px; 
+  font-size: 1.6rem; 
+  padding: 15px 30px; 
   cursor: pointer;
   border: none;
   outline: none;

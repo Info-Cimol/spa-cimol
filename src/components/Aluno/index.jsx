@@ -23,6 +23,7 @@ const CadastroAluno = () => {
   const [exibirCadastroAlunoForm, setExibirCadastroAlunoForm] = useState(false);
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [userRole] = useState(localStorage.getItem('userRole'));
+  const [cliqueBotao, setCliqueBotao] = useState(false);
  
   const MAX_CPF_LENGTH = 14;
   const MAX_TELEFONE_LENGTH = 16;
@@ -40,6 +41,7 @@ const CadastroAluno = () => {
   const handleToggleForm = () => {
     setExibirCadastroAlunoForm(!exibirCadastroAlunoForm);
   };
+  
 
   const [editingAluno, setEditingAluno] = useState({
     id: '',
@@ -75,34 +77,47 @@ const CadastroAluno = () => {
   }, [currentPage]);
 
   const DetalhesAlunoModal = ({ alunoSelecionado, onClose }) => {
+    
     return (
       <Modal
-        open={alunoSelecionado !== null}
+        open={alunoSelecionado !== null && editingAluno && cliqueBotao}
         onClose={onClose}
         closeAfterTransition
         className="detahes-aluno-modal"
       >
-        <Fade in={alunoSelecionado !== null}>
+        <Fade in={alunoSelecionado !== null && editingAluno && cliqueBotao}>
           <Paper className="detalhes-aluno-paper">
             <h2 className="detalhes-aluno-title">Ficha Individual</h2>
-            <div className="detalhes-aluno-info">
-              <strong>Nome:</strong> {alunoSelecionado?.nome}
-            </div>
-            <div className="detalhes-aluno-info">
-              <strong>Matrícula:</strong> {alunoSelecionado?.matricula}
-            </div>
-            <div className="detalhes-aluno-info">
-              <strong>E-mail:</strong> {alunoSelecionado?.email}
-            </div>
-            <div className="detalhes-aluno-info">
-              <strong>CPF:</strong> {alunoSelecionado?.cpf}
-            </div>
-            <div className="detalhes-aluno-info">
-              <strong>Telefone:</strong> {alunoSelecionado?.numero}
-            </div>
-            <div className="detalhes-aluno-info">
-              <strong>Endereço:</strong> {alunoSelecionado?.endereco}
-            </div>
+            {alunoSelecionado && (
+              <div className="detalhes-aluno-grid">
+                <div className="detalhes-aluno-column">
+                  <div className="detalhes-aluno-info">
+                    <strong>Nome:</strong> {alunoSelecionado?.nome}
+                  </div>
+                  <div className="detalhes-aluno-info">
+                    <strong>Matrícula:</strong> {alunoSelecionado?.matricula}
+                  </div>
+                  <div className="detalhes-aluno-info">
+                    <strong>E-mail:</strong> {alunoSelecionado?.email}
+                  </div>
+                </div>
+                <div className="detalhes-aluno-column">
+                  <div className="detalhes-aluno-info">
+                    <strong>CPF:</strong> {alunoSelecionado?.cpf}
+                  </div>
+                  <div className="detalhes-aluno-info">
+                    <strong>Telefone:</strong> {alunoSelecionado?.numero}
+                  </div>
+                  <div className="detalhes-aluno-info">
+                    <strong>Endereço:</strong> {alunoSelecionado?.endereco}
+                  </div>
+                  <div className="detalhes-aluno-info">
+                    <strong>Situação:</strong>{" "}
+                    {alunoSelecionado?.ativo === 1 ? "Ativado" : "Suspenso"}
+                  </div>
+                </div>
+              </div>
+            )}
             <Button
               onClick={onClose}
               className="detalhes-aluno-close-button"
@@ -114,7 +129,7 @@ const CadastroAluno = () => {
           </Paper>
         </Fade>
       </Modal>
-    );
+    ); 
   };
 
   const handleTelefoneChange = (e) => {
@@ -165,6 +180,7 @@ const CadastroAluno = () => {
   const handleEditar = (aluno) => {
     setEditingAluno(aluno);
     setShowEditModal(true);
+    setCliqueBotao(true);
   };
 
   const handleSalvar = async (alunoId, novoNome, novaMatricula,  novoEmail, novoCpf, novoEndereco, novoNumero, novoAtivo) => {
@@ -197,6 +213,7 @@ const CadastroAluno = () => {
   const handleDesativar = (alunoId) => {
     setSelectedAlunoId(alunoId);
     setShowConfirmationModal(true);
+    setCliqueBotao(true);
   };
 
   const handleConfirmDesativar = async () => {
@@ -319,7 +336,14 @@ const CadastroAluno = () => {
               aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase())
             )
             .map((aluno) => (
-              <tr key={aluno.id} onClick={() => setAlunoSelecionado(aluno)}>
+              <tr
+                key={aluno.id}
+                onClick={() => {
+                  if (alunoEditando !== aluno.id) {
+                    setAlunoSelecionado(aluno);
+                  }
+                }}
+              >
                   <td>
                     <>
                       {alunoEditando === aluno.id ? (
@@ -421,17 +445,24 @@ const CadastroAluno = () => {
                       </>
                     ) : (
                       <>
-                        <IconButton onClick={() => handleEditar(aluno)} color="primary">
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton onClick={() => handleDesativar(aluno.id)} color="secondary">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
+                      <IconButton
+                        onClick={() => handleEditar(aluno)}
+                        color="primary"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleDesativar(aluno.id)}
+                        color="secondary"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </>
+                    
                     )}
                   </td>
-                </tr>
-              ))}
+                  </tr>
+                ))}
           </tbody>
         </table>
 
