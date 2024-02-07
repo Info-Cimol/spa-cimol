@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useState, useEffect } from "react";
 import { slide as Menu } from "react-burger-menu";
 import { Container } from "./styled.jsx";
 import { useNavigate } from "react-router-dom";
@@ -10,28 +10,37 @@ import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
+import { deepOrange } from '@mui/material/colors';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-//import Aluno from '../Aluno';
-import { deepOrange } from '@mui/material/colors';
+import Aluno from '../Aluno/index.jsx';
 import VpnKey from '@mui/icons-material/VpnKey';
 
 const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [userNameIni] = localStorage.getItem('userName'); // Puxa a inicial da pessoa pelo nome no localstorage
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userNameIni] = localStorage.getItem('userName');
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [userRole] = useState(localStorage.getItem('userRole'));
   const userEmail = localStorage.getItem('userEmail');
   const userName = localStorage.getItem('userName');
- 
+  const [exibirAluno, setExibirAluno] = useState(false);
+
   const handleBottonSair = () => {
     localStorage.removeItem('userData');
     navigate('/');
   };
 
+  const handleBottonAluno = () => {
+    if ((userRole === "admin" || userRole === "secretaria") && !exibirAluno) {
+      setExibirAluno(true);
+    }
+    setIsMenuOpen(true);
+  };  
+  
   const handleBottonHome = () => {
+    navigate('/Home')
     window.location.reload();
   };
   
@@ -87,6 +96,9 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
 
   return (
     <Container>
+    {exibirAluno && (userRole === 'admin' || userRole === 'secretaria') ? (
+      <Aluno />
+    ) : (
       <Menu right width={isSmallScreen ? "50%" : 150} isOpen={isMenuOpen}>
         <React.Fragment>
           <Tooltip title="Sua conta">
@@ -111,7 +123,7 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
                 padding: '10px',
               }}
             >
-
+  
               <MenuItem>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <Avatar sx={{ bgcolor: deepOrange[500], width: 50, height: 50, marginBottom: '10px', md: 6 }}>{userNameIni}</Avatar>
@@ -155,50 +167,31 @@ const MenuHamburguer = ({ userType, setMostrarBotao, setSecaoAlunos }) => {
           )}
         </React.Fragment>
   
-        {userType === "secretaria" && (
-          <>
-          <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-          <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
-          </>
-        )}
-  
-        {userType === "aluno" && (
+        {(userType === "aluno" || userType === "professor" || userType === "merendeira" || userType === "admin") && (
           <>
             <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
             <StyledTextButton onClick={handleBottonCardapio}>Cardapio</StyledTextButton>
-            <StyledTextButton onClick={handleBottonProjeto}>Projetos</StyledTextButton>
-            <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
           </>
         )}
   
-        {userType === "professor" && (
-          <>
-            <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-            <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
-            <StyledTextButton onClick={handleBottonProjeto}>Projetos</StyledTextButton>
-            <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
-            <StyledTextButton /*</>onClick={}*/>Provas</StyledTextButton>
-          </>
+        {(userType === "professor" || userType === "admin") && (
+          <StyledTextButton onClick={handleBottonProjeto}>Projetos</StyledTextButton>
         )}
   
-        {userType === "merendeira" && (
-          <>
-            <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-            <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
-          </>
+        {(userType === "aluno" || userType === "admin" || userType === "professor") &&  (
+          <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
         )}
   
-        {userType === "admin" && (
-          <>
-           <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-            <StyledTextButton onClick={handleBottonCardapio}>Cardápio</StyledTextButton>
-            <StyledTextButton onClick={handleBottonProjeto}>Projetos</StyledTextButton>
-            <StyledTextButton onClick={handleBottonMeusProjetos}>Meus Projetos</StyledTextButton>
-            <StyledTextButton /*</>onClick={}*/>Provas</StyledTextButton>
-          </>
+        {(userType === "professor" || userType === "admin") && (
+          <StyledTextButton /*</>onClick={}*/>Provas</StyledTextButton>
+        )}
+        
+        {(userType === "admin" || userType === "secretaria") && (
+          <StyledTextButton onClick={handleBottonAluno}>Alunos</StyledTextButton>
         )}
       </Menu>
-    </Container>
+    )}
+  </Container>
   );  
 };
 

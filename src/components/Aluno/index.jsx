@@ -272,8 +272,9 @@ const CadastroAluno = () => {
     <MenuHamburguer userType={userRole} />
     </div>
       <div className="container-fluid">
-      <IconButton style={{ marginTop: '50px', marginLeft: '10px' }}><ArrowBackIcon /></IconButton>
-            <Autocomplete
+      <IconButton style={{ marginTop: '30px', marginLeft: '10px' }}><ArrowBackIcon /></IconButton>
+    
+      <Autocomplete
         style={{ marginTop: '30px' }}
         options={alunosDisponiveis}
         getOptionLabel={(aluno) => aluno.nome}
@@ -324,13 +325,14 @@ const CadastroAluno = () => {
         aria-describedby="choose-attachment-type"
       >
         <div className='edicaoPessoa'>
-          <div className='mini-card'>
-            <FileUploader />
-            <p>Upload da Ficha Geral</p>
-          </div>
+         
           <div className='mini-card'>
             <FichaUploader />
             <p>Upload da Ficha Unitária</p>
+          </div>
+           <div className='mini-card'>
+            <FileUploader />
+            <p>Upload da Ficha Geral</p>
           </div>
           <Button
             className="detalhes-aluno-close-button"

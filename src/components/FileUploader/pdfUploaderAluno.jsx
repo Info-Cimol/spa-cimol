@@ -9,17 +9,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import axiosFetch from '../../axios/config';
 
 const FileUploader = () => {
-  const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [fileSecond, setFileSecond] = useState(null);
+  const [loadingSecond, setLoadingSecond] = useState(false);
 
-  const handleFileChange = (e) => {
+  const handleFileChangeSecond = (e) => {
     const selectedFile = e.target.files[0];
-    setFile(selectedFile);
+    setFileSecond(selectedFile);
   };
 
-  const handleUploadAluno = async () => {
+  const handleUploadAlunoSecond = async () => {
     try {
-      setLoading(true);
+      setLoadingSecond(true);
 
       const token = localStorage.getItem('token');
       const headers = {
@@ -27,7 +27,7 @@ const FileUploader = () => {
       };
 
       const formData = new FormData();
-      formData.append('pdf', file);
+      formData.append('pdf', fileSecond);
 
       const response = await axiosFetch.post('/aluno/upload/reading-pdf', formData, { headers });
 
@@ -41,33 +41,33 @@ const FileUploader = () => {
       // Mensagem de erro
       toast.error('Erro ao enviar o arquivo. Por favor, tente novamente.');
     } finally {
-      setLoading(false);
+      setLoadingSecond(false);
     }
   };
 
-  const handleCancelUpload = () => {
-    setFile(null);
+  const handleCancelUploadSecond = () => {
+    setFileSecond(null);
   };
 
   return (
     <div>
-      <label htmlFor="file-input">
+      <label htmlFor="file-input-second">
         <IconButton title='Adicione um arquivo' component="span">
           <AddIcon fontSize="large" />
         </IconButton>
       </label>
-      <input id="file-input" type="file" onChange={(e) => handleFileChange(e)} style={{ display: 'none' }} />
+      <input id="file-input-second" type="file" onChange={(e) => handleFileChangeSecond(e)} style={{ display: 'none' }} />
       
-      {file && (
+      {fileSecond && (
         <Card variant="outlined" style={{ marginTop: 10, maxWidth: 300 }}>
           <CardContent>
             <div>
-              Arquivo selecionado: {file.name}
+              Arquivo selecionado: {fileSecond.name}
             </div>
-            <Button onClick={handleUploadAluno} variant="contained" color="primary" style={{ marginRight: 10 }} disabled={loading}>
-              {loading ? 'Enviando...' : 'Enviar'}
+            <Button onClick={handleUploadAlunoSecond} variant="contained" color="primary" style={{ marginRight: 10 }} disabled={loadingSecond}>
+              {loadingSecond ? 'Enviando...' : 'Enviar'}
             </Button>
-            <Button onClick={handleCancelUpload} variant="contained" color="secondary">
+            <Button onClick={handleCancelUploadSecond} variant="contained" color="secondary">
               Cancelar
             </Button>
           </CardContent>
