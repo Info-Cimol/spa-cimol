@@ -133,6 +133,9 @@ const CadastroAluno = () => {
                     <strong>Endereço:</strong> {alunoSelecionado?.endereco}
                   </div>
                   <div className="detalhes-aluno-info">
+                    <strong>Observação:</strong> {alunoSelecionado?.observacao}
+                  </div>
+                  <div className="detalhes-aluno-info">
                     <strong>Situação:</strong>{" "}
                     {alunoSelecionado?.ativo === 1 ? "Ativado" : "Suspenso"}
                   </div>
@@ -181,6 +184,7 @@ const CadastroAluno = () => {
           cpf: aluno.cpf_aluno || 'CPF não fornecido',
           endereco: aluno.endereco_aluno || 'Endereço não fornecido',
           numero: aluno.numero_telefone || 'Número não informado',
+          observacao: aluno.observacao_aluno || 'Observação não fornecida',
           ativo: aluno.ativo_aluno || "Status de aluno não fornecido",
           editando: false,
         }))
@@ -195,7 +199,7 @@ const CadastroAluno = () => {
     setShowEditModal(true);
   };
 
-  const handleSalvar = async (alunoId, novoNome, novaMatricula,  novoEmail, novoCpf, novoEndereco, novoNumero, novoAtivo) => {
+  const handleSalvar = async (alunoId, novoNome, novaMatricula,  novoEmail, novoCpf, novoEndereco, novaObservacao, novoNumero, novoAtivo) => {
     try {
       const token = localStorage.getItem('token');
       const headers = {
@@ -208,6 +212,7 @@ const CadastroAluno = () => {
         novoEmail,
         novoCpf,
         novoEndereco,
+        novaObservacao,
         novoAtivo,
         novoNumero,
       };
@@ -260,6 +265,7 @@ const CadastroAluno = () => {
         editingAluno.email,
         editingAluno.cpf,
         editingAluno.endereco,
+        editingAluno.observacao,
         editingAluno.numero,
         valorParaBanco
       );
@@ -367,6 +373,7 @@ const CadastroAluno = () => {
               <th>CPF</th>
               <th>Endereço</th>
               <th>Contato</th>
+              <th>Observação</th>
               <th>Status</th>
               <th>Ações</th>
             </tr>
@@ -460,6 +467,19 @@ const CadastroAluno = () => {
                         </>
                       )}
                     </td>
+                    </td>
+                    
+                    <td> 
+                    <>
+                      {alunoEditando === aluno.id ? (
+                        <TextField
+                          value={editingAluno.observacao}
+                          onChange={(e) => setEditingAluno((prev) => ({ ...prev, observacao: e.target.value }))}
+                        />
+                      ) : (
+                        aluno.observacao
+                      )}
+                    </>
                     </td>
                     <td>
                     <>
@@ -609,6 +629,15 @@ const CadastroAluno = () => {
                 className="inputField"
               />
 
+               <TextField
+                id="observacao"
+                label="Observação"
+                variant="outlined"
+                value={editingAluno.observacao}
+                onChange={(e) => setEditingAluno((prev) => ({ ...prev, observacao: e.target.value }))}
+                style={{ marginTop: "15px" }}
+                className="inputField"
+              />
               <div>
 
               <div className="toggleAtivoSuspenso">
