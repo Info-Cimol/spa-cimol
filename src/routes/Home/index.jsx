@@ -81,7 +81,16 @@ function Home(){
             <div className="card">
               <div className="card__body">
                 <h5 className="card__head">Provas</h5>
-                <p className="card__desc">Acesse a seção de provas disponíveis.</p>
+                <p className="card__desc">Indisponível.</p>
+                {/* Adicione a lógica ou remova o botão descomentando a linha abaixo */}
+                {/* <button className="btn btn-primary" onClick={redirecionarParaProvas}>Abrir</button> */}
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="card__body">
+                <h5 className="card__head">Ármários</h5>
+                <p className="card__desc">Indisponível.</p>
                 {/* Adicione a lógica ou remova o botão descomentando a linha abaixo */}
                 {/* <button className="btn btn-primary" onClick={redirecionarParaProvas}>Abrir</button> */}
               </div>
@@ -137,11 +146,20 @@ function Home(){
                 <div className="card">
                   <div className="card__body">
                     <h5 className="card__head">Provas</h5>
-                    <p className="card__desc">Acesse a seção de provas disponíveis.</p>
+                    <p className="card__desc">Indisponível</p>
                     {/* Adicione a lógica ou remova o botão descomentando a linha abaixo */}
                     {/* <button className="btn btn-primary" onClick={redirecionarParaProvas}>Abrir</button> */}
                   </div>
                 </div>
+
+                <div className="card">
+              <div className="card__body">
+                <h5 className="card__head">Armários</h5>
+                <p className="card__desc">Indisponível</p>
+                {/* Adicione a lógica ou remova o botão descomentando a linha abaixo */}
+                {/* <button className="btn btn-primary" onClick={redirecionarParaProvas}>Abrir</button> */}
+              </div>
+            </div>
               </div>
             </div>
        )}

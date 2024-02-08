@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {Autocomplete, TextField, Button, IconButton, Switch, Modal, Fade, Paper} from '@mui/material';
-import { Edit as EditIcon, ArrowBack as ArrowBackIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import {Autocomplete, TextField, Button, IconButton, Switch, Modal, Fade, Paper } from '@mui/material';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import axiosFetch from '../../axios/config';
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from 'react-toastify';
@@ -9,6 +12,7 @@ import MenuHamburguer from '../../components/MenuHamburguer';
 import CadastroAlunoForm from './formCadastro';
 import FileUploader from '../FileUploader/pdfUploaderAluno';
 import FichaUploader from '../FileUploader/fichaUploader';
+import BackArrow from '../BackArrow/index';
 import './alunoCadastro.css';
 
 const CadastroAluno = () => {
@@ -25,6 +29,12 @@ const CadastroAluno = () => {
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
   const [userRole] = useState(localStorage.getItem('userRole'));
   const [showAttachmentModal, setShowAttachmentModal] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleOptionSelect = (option) => {
+    setSelectedOption(option);
+  };
+
 
   const handleToggleAttachmentModal = () => {
     setShowAttachmentModal(!showAttachmentModal);
@@ -272,8 +282,10 @@ const CadastroAluno = () => {
     <MenuHamburguer userType={userRole} />
     </div>
       <div className="container-fluid">
-      <IconButton style={{ marginTop: '30px', marginLeft: '10px' }}><ArrowBackIcon /></IconButton>
-    
+        
+      <BackArrow style={{ marginTop: '200px', marginLeft: '10px' }}/>
+      <IconButton style={{ marginTop: '50px', marginLeft: '10px' }}></IconButton>
+  
       <Autocomplete
         style={{ marginTop: '30px' }}
         options={alunosDisponiveis}
@@ -307,39 +319,36 @@ const CadastroAluno = () => {
         <IconButton title="Adicione um novo arquivo" component="span">
           <AddIcon fontSize="large" />
         </IconButton>
-        <p>Formulário cadastro</p>
       </div>
 
       <div className="miniCard" onClick={handleToggleAttachmentModal}>
         <IconButton title="Escolha o tipo de anexo" component="span">
-          <AddIcon fontSize="large" />
+          <InsertDriveFileIcon fontSize="large" />
         </IconButton>
         <p>Opções de Anexos</p>
       </div>
 
-      {/* Modal para as opções de anexo */}
       <Modal
         open={showAttachmentModal}
         onClose={handleToggleAttachmentModal}
         aria-labelledby="attachment-options"
         aria-describedby="choose-attachment-type"
       >
-        <div className='edicaoPessoa'>
-         
-          <div className='mini-card'>
-            <FichaUploader />
-            <p>Upload da Ficha Unitária</p>
+        <div className="attachment-modal">
+          <h2>Escolha o Tipo de Anexo</h2>
+          <div className="options">
+            <FormControlLabel
+              control={<Checkbox checked={selectedOption === 'Ficha Unitária'} onChange={() => handleOptionSelect('Ficha Unitária')} />}
+              label="Upload da Ficha Unitária"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={selectedOption === 'Ficha Geral'} onChange={() => handleOptionSelect('Ficha Geral')} />}
+              label="Upload da Ficha Geral"
+            />
           </div>
-           <div className='mini-card'>
-            <FileUploader />
-            <p>Upload da Ficha Geral</p>
-          </div>
-          <Button
-            className="detalhes-aluno-close-button"
-            variant="contained"
-            color="primary"
-            onClick={handleToggleAttachmentModal} 
-          >
+          {selectedOption === 'Ficha Unitária' && <FichaUploader />}
+          {selectedOption === 'Ficha Geral' && <FileUploader />}
+          <Button variant="contained" color="primary" onClick={handleToggleAttachmentModal}>
             Fechar
           </Button>
         </div>
