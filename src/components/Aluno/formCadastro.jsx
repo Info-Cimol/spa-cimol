@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '@mui/material/Modal';
 import { toast } from 'react-toastify';
+import { IconButton } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
 import axiosFetch from '../../axios/config';
 
@@ -164,6 +166,11 @@ const CadastroAlunoForm = ({ open, onClose }) => {
         <div className="header">
           <h2>Cadastro de Aluno</h2>
         </div>
+        <div className="close">
+              <IconButton onClick={handleCancel}>
+                <CloseIcon style={{ color: 'cinza' }} />
+              </IconButton>
+            </div>
         <form onSubmit={handleFormSubmit}>
 
           {/* Campos do formulário */}
@@ -245,9 +252,6 @@ const CadastroAlunoForm = ({ open, onClose }) => {
           <div className="botoesAcao">
             <Button type="submit" variant="contained" color="primary" style={{ marginRight: 10 }}>
               Cadastrar Aluno
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleCancel}>
-              Cancelar
             </Button>
           </div>
         </form>

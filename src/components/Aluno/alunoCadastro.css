@@ -13,6 +13,20 @@
   overflow:scroll;
 }
 
+.anexo{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+ .close{
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-top: -80px;
+  margin-bottom: 50px;
+ }
+
 .botoesAcao {
   display: flex;
   justify-content: space-around;
@@ -25,7 +39,7 @@
 }
 
 .attachment-modal {
-  width: 400px;
+  width: 450px;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
@@ -49,7 +63,7 @@
 }
 
 .options .MuiCheckbox-root {
-  color: #1976d2; /* Cor do checkbox */
+  color: #1976d2; 
 }
 
 .options .MuiFormControlLabel-label {
@@ -146,7 +160,8 @@ p {
 }
 
 .header {
-  text-align: center;
+  display: flex;
+  justify-content: center;
   margin-bottom: 2rem;
 }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Autocomplete, TextField, Button, IconButton, Switch, Modal, Fade, Paper } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import CloseIcon from '@mui/icons-material/Close';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
@@ -35,9 +36,9 @@ const CadastroAluno = () => {
     setSelectedOption(option);
   };
 
-
   const handleToggleAttachmentModal = () => {
     setShowAttachmentModal(!showAttachmentModal);
+    setSelectedOption(null);
   };
 
   const MAX_CPF_LENGTH = 14;
@@ -101,6 +102,11 @@ const CadastroAluno = () => {
         <Fade in={alunoSelecionado !== null}>
           <Paper className="detalhes-aluno-paper">
             <h2 className="detalhes-aluno-title">Ficha Individual</h2>
+            <div className="close">
+              <IconButton onClick={onClose}>
+                <CloseIcon style={{ color: 'cinza' }} />
+              </IconButton>
+            </div>
             {alunoSelecionado && (
               <div className="detalhes-aluno-grid">
                 <div className="detalhes-aluno-column">
@@ -131,14 +137,6 @@ const CadastroAluno = () => {
                 </div>
               </div>
             )}
-            <Button
-              onClick={onClose}
-              className="detalhes-aluno-close-button"
-              variant="contained"
-              color="primary"
-            >
-              Fechar
-            </Button>
           </Paper>
         </Fade>
       </Modal>
@@ -334,8 +332,15 @@ const CadastroAluno = () => {
         aria-labelledby="attachment-options"
         aria-describedby="choose-attachment-type"
       >
-        <div className="attachment-modal">
-          <h2>Escolha o Tipo de Anexo</h2>
+        <div className="attachment-modal"> 
+        <div className='anexo'>
+            <h2>Selecione um Anexo</h2>
+            <div className="close-icon">
+              <IconButton onClick={handleToggleAttachmentModal}>
+                <CloseIcon style={{ color: 'red' }} />
+              </IconButton>
+            </div>
+          </div>
           <div className="options">
             <FormControlLabel
               control={<Checkbox checked={selectedOption === 'Ficha Unitária'} onChange={() => handleOptionSelect('Ficha Unitária')} />}
@@ -348,9 +353,6 @@ const CadastroAluno = () => {
           </div>
           {selectedOption === 'Ficha Unitária' && <FichaUploader />}
           {selectedOption === 'Ficha Geral' && <FileUploader />}
-          <Button variant="contained" color="primary" onClick={handleToggleAttachmentModal}>
-            Fechar
-          </Button>
         </div>
       </Modal>
     </div>
@@ -542,8 +544,14 @@ const CadastroAluno = () => {
         <Modal open={showEditModal} onClose={() => setShowEditModal(false)}>
         <div className="edicaoPessoa">
           <div className="header">
-            <h2>Editando Aluno</h2>
+            <h2>Editar Aluno</h2>  
           </div>
+
+          <div className="close">
+              <IconButton onClick={() => setShowEditModal(false)}>
+                <CloseIcon style={{ color: 'cinza' }} />
+              </IconButton>
+            </div>
 
           <TextField
             id="nome"
@@ -618,9 +626,6 @@ const CadastroAluno = () => {
                     <div className="botoesAcao">
                       <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
                         Salvar
-                      </Button>
-                      <Button onClick={() => setShowEditModal(false)} variant="contained" color="secondary">
-                        Cancelar
                       </Button>
                     </div>
                   </div>
