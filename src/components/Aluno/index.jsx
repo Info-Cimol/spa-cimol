@@ -4,7 +4,7 @@ import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import axiosFetch from '../../axios/config';
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from 'react-toastify';
@@ -314,20 +314,15 @@ const CadastroAluno = () => {
      <div className="botoesAcao">
 
       <div className="uploaders">
-      {/* Botão para adicionar um novo arquivo */}
-      <div className="miniCard" onClick={handleToggleForm}>
-        <IconButton title="Adicione um novo arquivo" component="span">
-          <AddIcon fontSize="large" />
+      
+        <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
+          <AddIcon  fontSize="large" />
         </IconButton>
-      </div>
 
-      <div className="miniCard" onClick={handleToggleAttachmentModal}>
-        <IconButton title="Escolha o tipo de anexo" component="span">
-          <InsertDriveFileIcon fontSize="large" />
+        <IconButton onClick={handleToggleAttachmentModal} title="Escolha o tipo de anexo" component="span">
+          <UploadFileIcon   fontSize="large" />
         </IconButton>
-        <p>Opções de Anexos</p>
-      </div>
-
+     
       <Modal
         open={showAttachmentModal}
         onClose={handleToggleAttachmentModal}
@@ -346,11 +341,11 @@ const CadastroAluno = () => {
           <div className="options">
             <FormControlLabel
               control={<Checkbox checked={selectedOption === 'Ficha Unitária'} onChange={() => handleOptionSelect('Ficha Unitária')} />}
-              label="Upload da Ficha Unitária"
+              label="Ficha única aluno"
             />
             <FormControlLabel
               control={<Checkbox checked={selectedOption === 'Ficha Geral'} onChange={() => handleOptionSelect('Ficha Geral')} />}
-              label="Upload da Ficha Geral"
+              label="Lista Geral alunos"
             />
           </div>
           {selectedOption === 'Ficha Unitária' && <FichaUploader />}
