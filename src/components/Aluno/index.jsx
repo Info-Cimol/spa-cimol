@@ -101,7 +101,9 @@ const CadastroAluno = () => {
       >
         <Fade in={alunoSelecionado !== null}>
           <Paper className="detalhes-aluno-paper">
-            <h2 className="detalhes-aluno-title">Ficha Individual</h2>
+            <div className='header'>
+            <h2>Ficha Individual</h2>
+            </div>
             <div className="close">
               <IconButton onClick={onClose}>
                 <CloseIcon style={{ color: 'cinza' }} />
@@ -337,7 +339,7 @@ const CadastroAluno = () => {
             <h2>Selecione um Anexo</h2>
             <div className="close-icon">
               <IconButton onClick={handleToggleAttachmentModal}>
-                <CloseIcon style={{ color: 'red' }} />
+                <CloseIcon style={{ color: 'cinza' }} />
               </IconButton>
             </div>
           </div>

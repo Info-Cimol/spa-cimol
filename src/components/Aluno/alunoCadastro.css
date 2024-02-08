@@ -211,6 +211,10 @@ p {
     flex-direction: flex;
     align-items: center;
   }
+  .attachment-modal {
+    width: 100%;
+    max-width: 100%;
+  }
 
   .page-numbers button {
     display: none;
