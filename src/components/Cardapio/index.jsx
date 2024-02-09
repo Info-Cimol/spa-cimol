@@ -40,8 +40,10 @@ function Cardapio() {
 
   return (
     <>
+    <div>
       <ContainerTopo userType={userRole} />
       <MenuHamburguer userType={userRole} />
+    </div>
       <BackArrow style={{ marginTop: '100px', marginLeft: '10px' }}/>
       
       <div className='containerCardapio'>

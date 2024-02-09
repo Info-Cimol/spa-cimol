@@ -14,26 +14,29 @@ function Home() {
 
   const abrirCardapio = () => {
     setExibirCardapio(true);
+    setExibirAluno(false); 
+  };
+
+  const abrirAluno = () => {
+    setExibirCardapio(false);
+    setExibirAluno(true); 
   };
 
   const redirecionarParaProjeto = () => {
     navigate('/Projeto');
   };
 
+
   return (
     <Container>
-      {!exibirAluno && !exibirCardapio && (
-        <>
-          <ContainerTopo userType={userRole} />
-          <MenuHamburguer userType={userRole} />
-        </>
-      )}
-
-      {exibirAluno && (userRole === 'admin' || userRole === 'secretaria') && (
+      <ContainerTopo userType={userRole} />
+      <MenuHamburguer userType={userRole} />
+      
+      {exibirAluno && (
         <Aluno />
       )}
 
-      {exibirCardapio && (userRole === 'admin' || userRole === 'secretaria') && (
+      {exibirCardapio && (
         <Cardapio />
       )}
 
@@ -112,7 +115,7 @@ function Home() {
                     <div className="card__body">
                       <h5 className="card__head">Alunos</h5>
                       <p className="card__desc">Clique para ver os alunos cadastrados.</p>
-                      <button className='card__btn' onClick={() => setExibirAluno(true)}>Abrir</button>
+                      <button className='card__btn' onClick={abrirAluno}>Abrir</button>
                     </div>
                   </div>
                   <div className="card">
@@ -176,7 +179,7 @@ function Home() {
                     <div className="card__body">
                       <h5 className="card__head">Alunos</h5>
                       <p className="card__desc">Clique para ver os alunos cadastrados.</p>
-                      <button className='card__btn' onClick={() => setExibirAluno(true)}>Abrir</button>
+                      <button className='card__btn' onClick={abrirAluno}>Abrir</button>
                     </div>
                   </div>
                   <div className="card">
