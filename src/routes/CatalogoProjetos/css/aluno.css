@@ -38,6 +38,7 @@
    transition: transform 0.3s ease-in-out;
    max-width: 80%;
   }
+  
   .card__img {
    filter: drop-shadow(0 4px 10px rgba(black, .4));
    border-radius: 20px; 
