@@ -20,8 +20,8 @@
 
 .cardapio-carousel {
   display: flex;
-  overflow-x: auto;
   padding: 20px;
+  touch-action: pan-x; 
 }
 
 .card__cardapio {

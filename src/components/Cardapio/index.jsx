@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { FaCalendarPlus } from 'react-icons/fa';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import BackArrow from '../BackArrow/index';
@@ -44,37 +45,41 @@ function Cardapio() {
       <BackArrow style={{ marginTop: '100px', marginLeft: '10px' }}/>
       
       <div className='containerCardapio'>
-          <div className='header_cardapio'>
-            <h1>Cardápio da semana</h1>
-          </div>
-          <motion.div className='cardapio-carousel'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              overflowX: 'auto',
-              width: '100%', 
-            }}
-            drag="x" 
-            dragConstraints={{ left: 0, right: 0 }} 
-          >
-            {cardapio.map((item, index) => (
-              <motion.div key={index} className='card__cardapio'
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{ marginRight: '20px', flex: '0 0 auto' }}
-              >
-                <img src={img} alt='text alt' className='card__image' />
-                <div className='card__content'>
-                  <h2 className='card__title'>{item.nome}</h2>
-                  <h2 className='card__title'>{getDayOfWeek(item.data)}</h2> 
-                  <p className='card__description'>{item.descricao}</p>
+        <div className='header_cardapio'>
+          <h1>Cardápio da semana</h1>
+        </div>
+        <motion.div className='cardapio-carousel'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            overflowX: 'auto',
+            width: '100%', 
+          }}
+          drag="x" 
+          dragConstraints={{ left: 0, right: 0 }} 
+        >
+          {cardapio.map((item, index) => (
+            <motion.div key={index} className='card__cardapio'
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              style={{ marginRight: '20px', flex: '0 0 auto' }}
+            >
+              <img src={img} alt='text alt' className='card__image' />
+              <div className='card__content'>
+                <h2 className='card__title'>{item.nome}</h2>
+                <h2 className='card__title'>{getDayOfWeek(item.data)}</h2> 
+                <p className='card__description'>{item.descricao}</p>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <FaCalendarPlus size={20} style={{ marginRight: '5px' }} />
+                  <span>Reservar</span>
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </>
   );
