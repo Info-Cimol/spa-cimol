@@ -24,6 +24,14 @@
   touch-action: pan-x; 
 }
 
+.select-turno {
+  border: none;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 .card__cardapio {
   flex: 0 0 auto;
   margin-right: 20px;
@@ -57,6 +65,5 @@
 }
 
 .card__cardapio:hover {
-  transform: translateY(-5px);
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }
