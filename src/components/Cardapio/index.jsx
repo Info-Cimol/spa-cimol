@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaCalendarPlus } from 'react-icons/fa';
+import { FaCalendarPlus, FaBan } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
@@ -63,10 +63,18 @@ function Cardapio() {
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    let dayOfWeek = date.getDay() + 1;
+    let dayOfWeek = date.getDay();
     return days[dayOfWeek];
   };
-  
+
+  const isReservaDisabled = (data) => {
+    const dataCardapio = new Date(data);
+    const hoje = new Date();
+    const diferencaMilissegundos = dataCardapio.getTime() - hoje.getTime();
+    const diferencaDias = Math.floor(diferencaMilissegundos / (1000 * 60 * 60 * 24));
+    return diferencaDias < 3;
+  };  
+
   const handleTurnoChange = (idCardapio, selectedValue) => {
     setSelectedTurno({ ...selectedTurno, [idCardapio]: selectedValue });
   };
@@ -111,8 +119,12 @@ function Cardapio() {
                 <h2 className='card__title'>{item.nome}</h2>
                 <p className='card__description'>{item.descricao}</p>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <FaCalendarPlus size={20} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={() => reservarCardapio(item.id_cardapio)} />
-                  <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, e.target.value)}>
+                  {isReservaDisabled(item.data) ? (
+                    <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />
+                  ) : (
+                    <FaCalendarPlus size={20} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={() => reservarCardapio(item.id_cardapio)} />
+                  )}
+                  <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, e.target.value)} disabled={isReservaDisabled(item.data)}>
                     <option value="">Selecione um turno</option>
                     <option value="manhã">Manhã</option>
                     <option value="tarde">Tarde</option>
