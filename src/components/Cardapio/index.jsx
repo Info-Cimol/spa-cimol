@@ -21,7 +21,7 @@ function Cardapio() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosFecht.get('/cardapio/listar/cardapio', {headers});
+        const response = await axiosFecht.get('/listar/cardapio', {headers});
         setCardapio(response.data);
       } catch (error) {
         console.log('Erro ao listar cardápio', error);
@@ -31,20 +31,26 @@ function Cardapio() {
     fetchData();
   }, );
 
-  const reservarCardapio = async (id) => {
+  const reservarCardapio = async (idCardapio, turno) => {
     try {
-      const response = await axiosFecht.post(`/cardapio/reservar/${id}`, {}, { headers });
+      const token = localStorage.getItem('token');
+      const id = localStorage.getItem('id');
+      const headers = {
+        'x-access-token': token,
+      };
+  
+      const response = await axiosFecht.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno }, { headers });
       if (response.data.deletado === true) {
-        console.log('reserva removida');
+        console.log('Reserva removida');
       } else {
         console.log('Reserva realizada com sucesso');
-        setReservado({ ...reservado, [id]: true });
+        setReservado({ ...reservado, [idCardapio]: true });
       }
     } catch (error) {
-      console.log("erro ao reservar cardapio ", error);
+      console.log("Erro ao reservar cardápio ", error);
     }
   };
-
+  
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
@@ -78,26 +84,31 @@ function Cardapio() {
             width: '100%', 
             cursor: 'pointer',
           }}>
-          {cardapio.map((item, index) => (
-            <motion.div
-              key={index}
-              className='card__cardapio'
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              style={{ marginRight: '20px', flex: '0 0 auto' }}
-            >
-              <img src={img} alt='text alt' className='card__image' />
-              <div className='card__content'>
-                <h2 className='card__title'>{getDayOfWeek(item.data)}</h2> 
-                <h2 className='card__title'>{item.nome}</h2>
-                <p className='card__description'>{item.descricao}</p>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <FaCalendarPlus disabled={reservado[item.id_cardapio]} onClick={() => reservarCardapio(item.id_cardapio)} size={20} style={{ marginRight: '5px', cursor: 'pointer' }} />
-                  Reserva
-                </div>
-              </div>
-            </motion.div>
-          ))}
+        {cardapio.map((item, index) => (
+        <motion.div
+          key={index}
+          className='card__cardapio'
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          style={{ marginRight: '20px', flex: '0 0 auto' }}
+        >
+      <img src={img} alt='text alt' className='card__image' />
+      <div className='card__content'>
+        <h2 className='card__title'>{getDayOfWeek(item.data)}</h2> 
+        <h2 className='card__title'>{item.nome}</h2>
+        <p className='card__description'>{item.descricao}</p>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <select onChange={(e) => reservarCardapio(item.id_cardapio, e.target.value)}>
+            <option value="manhã">Manhã</option>
+            <option value="tarde">Tarde</option>
+            <option value="noite">Noite</option>
+          </select>
+        </div>
+      </div>
+    </motion.div>
+))}
+
+
         </motion.div>
       </div>
     </>
