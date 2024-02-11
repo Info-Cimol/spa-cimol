@@ -31,7 +31,6 @@ const AdicionaProjetoComponent = () => {
   const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
   const [professoresDisponiveis, setProfessoresDisponiveis] = useState([]);
   const [arquivoAdicionado, setArquivoAdicionado] = useState(false);
-  const fileInputLogoRef = useRef(null);
   const fileInputPDFRef = useRef(null);
   const [url, setUrl] = useState('');
   const [publico, setPublico] = useState(false);
@@ -70,7 +69,6 @@ const AdicionaProjetoComponent = () => {
             },
           }
         );
-
         if (cloudinaryResponse.status === 200 && cloudinaryResponse.data.secure_url) {
           const urlPdf = cloudinaryResponse.data.secure_url;
 
@@ -366,7 +364,6 @@ const AdicionaProjetoComponent = () => {
           <label className="custom-file">
             <input
               type="file"
-              ref={fileInputLogoRef}
               id="fileInputLogo"
               name="file"
               multiple

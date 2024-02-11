@@ -85,14 +85,13 @@ function Cardapio() {
         <ContainerTopo userType={userRole} />
         <MenuHamburguer userType={userRole} />
       </div>
-      <BackArrow style={{ marginTop: '30px', marginLeft: '10px' }}/>
       
-      <div className='containerCardapio'>
-        <div className='header_cardapio'>
-          <h1 className = 'titulo-home fade-up'>
+      <div className='container-fluid'>
+        <BackArrow style={{ marginTop: '120px', marginLeft: '10px' }}/>
+  <div className='containerCardapio'>
+        <h1 className="titulo-home fade-up">
             Cardápio da semana
           </h1>
-        </div>
         <motion.div
           className='cardapio-carousel'
           initial={{ opacity: 0 }}
@@ -113,7 +112,7 @@ function Cardapio() {
               whileTap={{ scale: 0.95 }}
               style={{ marginRight: '20px', flex: '0 0 auto' }}
             >
-              <img src={img} alt='text alt' className='card__image' />
+              <img src={item.imagem ? item.imagem : img} alt='text alt' className='card__image' />
               <div className='card__content'>
                 <h2 className='card__title'>{getDayOfWeek(item.data)}</h2> 
                 <h2 className='card__title'>{item.nome}</h2>
@@ -136,6 +135,8 @@ function Cardapio() {
           ))}
         </motion.div>
       </div>
+      </div>
+    
     </>
   );
 }
