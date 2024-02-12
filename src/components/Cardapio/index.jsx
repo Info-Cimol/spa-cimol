@@ -112,7 +112,7 @@ function Cardapio() {
               whileTap={{ scale: 0.95 }}
               style={{ marginRight: '20px', flex: '0 0 auto' }}
             >
-              <img src={item.imagem ? item.imagem : img} alt='text alt' className='card__image' />
+              <img src={item.imagem ? item.imagem : img } alt='text alt' className='card__image' />
               <div className='card__content'>
                 <h2 className='card__title'>{getDayOfWeek(item.data)}</h2> 
                 <h2 className='card__title'>{item.nome}</h2>
