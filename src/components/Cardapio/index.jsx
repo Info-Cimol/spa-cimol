@@ -27,15 +27,16 @@ function Cardapio() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosFecht.get('/listar/cardapio', {headers});
-        setCardapio(response.data);
+        const response = await axiosFecht.get('/listar/cardapio', { headers });
+        const cardapioOrdenado = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
+        setCardapio(cardapioOrdenado);
       } catch (error) {
         console.log('Erro ao listar cardápio', error);
       }
     };
 
     fetchData();
-  },);
+});
 
   const reservarCardapio = async (idCardapio) => {
     try {

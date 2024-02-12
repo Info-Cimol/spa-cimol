@@ -106,6 +106,7 @@ function CriarCardapio({open, onClose }) {
           fullWidth
           margin="normal"
         />
+
         <TextField
           name="descricao"
           label="Descrição do prato"
@@ -117,6 +118,7 @@ function CriarCardapio({open, onClose }) {
           multiline
           rows={4}
         />
+
         <TextField
           name="data"
           label="Data do cardápio"
@@ -128,24 +130,25 @@ function CriarCardapio({open, onClose }) {
           margin="normal"
           InputLabelProps={{ shrink: true }}
         />
+
         <label>
           <input
             type="checkbox"
             checked={anexarArquivo}
             onChange={(e) => setAnexarArquivo(e.target.checked)}
-            style={{ marginRight: 10 }}
           />
           Anexar arquivo
         </label>
         {anexarArquivo && (
           <input type="file" id="fileInputLogo" name="file" multiple onChange={handleFileUpload} />
         )}
-          {/* Botões de cadastrar e cancelar */}
-          <div className="botoesAcao">
-            <Button onChange={handleCriarCardapio} type="submit" variant="contained" color="primary" style={{ marginRight: 10 }}>
-              Cadastrar Cardápio
-            </Button>
-          </div>
+        
+        <div className='botoesAcao'>
+         <Button onClick={handleCriarCardapio} disabled={anexarArquivo && !imagemEnviada} variant="contained" color="primary" style={{ marginRight: 10 }}>
+          Criar Cardápio
+        </Button>
+        </div>
+       
       </Box>
     </Modal>
   );
