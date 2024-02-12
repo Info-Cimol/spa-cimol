@@ -100,16 +100,19 @@ function Cardapio() {
         <BackArrow style={{ marginTop: '120px', marginLeft: '10px' }} />
         <div className='containerCardapio'>
   
-          <div className="header">
-            <h2 className="title">Cardápio da semana</h2>
-            {/* Botão de adicionar (+) */}
-            <div className="add-button-container">
-              <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
-                <AddIcon fontSize="large" />
-              </IconButton>
-            </div>
+        <div className="header">
+        <h2 className="title">Cardápio da semana</h2>
+        
+        {/* Botão de adicionar (+) */}
+        {userRole === 'admin' || userRole === 'secretaria' ? (
+          <div className="add-button-container">
+            <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
+              <AddIcon fontSize="large" />
+            </IconButton>
           </div>
-  
+        ) : null}
+      </div>
+
           <motion.div
             className='cardapio-carousel'
             style={{
