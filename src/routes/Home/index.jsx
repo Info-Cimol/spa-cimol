@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import Aluno from '../../components/Aluno/';
-import Cardapio from '../../components/Cardapio/';
+import Cardapio from '../../components/Cardapio/index';
+import CardapioMerendeira from '../../components/Cardapio/cardapioMerendeira';
 import { Container } from './styled';
 
 function Home() {
@@ -11,6 +12,7 @@ function Home() {
   const [exibirAluno, setExibirAluno] = useState(false);
   const [exibirCardapio, setExibirCardapio] = useState(false);
   const [userRole] = useState(localStorage.getItem('userRole'));
+  const [exibirCardapioMerenda, setExibirCardapioMerenda] = useState(false); 
 
   const abrirCardapio = () => {
     setExibirCardapio(true);
@@ -20,6 +22,12 @@ function Home() {
   const abrirAluno = () => {
     setExibirCardapio(false);
     setExibirAluno(true); 
+  };
+
+  const abrirCardapioMerenda = () => {
+    setExibirCardapioMerenda(true);
+    setExibirCardapio(false); 
+    setExibirAluno(false); 
   };
 
   const redirecionarParaProjeto = () => {
@@ -37,8 +45,12 @@ function Home() {
       {exibirCardapio && (
         <Cardapio />
       )}
+
+{exibirCardapioMerenda && ( 
+        <CardapioMerendeira />
+      )}
       
-      {!exibirAluno && !exibirCardapio && (
+      {!exibirAluno && !exibirCardapio && !exibirCardapioMerenda && (
         <div className='container-fluid'>
           <div className='row'>
             <div className='buttons'>
@@ -146,20 +158,20 @@ function Home() {
                 </div>
               )}
 
-              {userRole === 'merendeira' && (
+                {userRole === 'merendeira' && (
                 <div className="col-sm-12">
                   <h1 className="titulo-home fade-up">
-                    Olá merendeira, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
+                    Olá merendeira, seja muito bem-vindo. Aqui você tem acesso aos cardápios semanais.
                   </h1>
                   <div className="card">
                     <div className="card__body">
                       <h5 className="card__head">Cardápio</h5>
                       <p className="card__desc">Clique para ver o cardápio.</p>
-                      <button className="card__btn" onClick={abrirCardapio}>Abrir</button>
+                      <button className="card__btn" onClick={abrirCardapioMerenda}>Abrir</button>
                     </div>
                   </div>
                 </div>
-              )}
+              )} 
 
               {userRole === 'secretaria' && (
                 <div className="col-sm-12">

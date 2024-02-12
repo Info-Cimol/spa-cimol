@@ -4,6 +4,64 @@
   align-items: center;
 }
 
+.containerCardapio {
+  margin-top: 20px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.add-button-container {
+  display: flex;
+  align-items: center;
+}
+
+.cardapio-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cardapio-table th,
+.cardapio-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+.cardapio-table th {
+  background-color: #f0f0f0;
+}
+
+.cardapio-table td {
+  background-color: #fff;
+}
+
+@media (max-width: 768px) {
+
+  .title {
+    font-size: 20px;
+  }
+
+  .cardapio-table th,
+  .cardapio-table td {
+    font-size: 14px;
+  }
+}
+
+
 .modal-container {
   position: fixed;
   border: none;
