@@ -86,7 +86,7 @@ function CriarCardapio({open, onClose }) {
   return (
     <Modal open={modalOpen} onClose={() => onClose()}>
 
-<Box className='modal-container'>
+<Box className='edicaoPessoa'>
 
 <div className="header">
       <h2 className="title">Cadastro de Cardápio</h2>

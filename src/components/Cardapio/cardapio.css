@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
 
 .modal-container {
@@ -60,8 +59,7 @@
 .card__cardapio {
   flex: 0 0 auto;
   margin-right: 20px;
-  width: 350px;
-  height: 350px;
+  width: 300px;
   background-color: #f3eded;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);

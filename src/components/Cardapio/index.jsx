@@ -112,16 +112,16 @@ function Cardapio() {
   
           <motion.div
             className='cardapio-carousel'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
             style={{
               display: 'flex',
               justifyContent: 'space-between',
               overflowX: 'auto',
               width: '100%',
               cursor: 'pointer',
+              height: 'auto',
             }}>
-            {cardapio.map((item, index) => (
+
+           {cardapio.map((item, index) => (
               <motion.div
                 key={index}
                 className='card__cardapio'
@@ -148,6 +148,7 @@ function Cardapio() {
                 </div>
               </motion.div>
             ))}
+
           </motion.div>
         </div>
       </div>
