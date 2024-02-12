@@ -62,6 +62,7 @@ function Cardapio() {
       }
     } catch (error) {
       console.log("Erro ao reservar cardápio ", error);
+      toast.error(error);
     }
   };
 
@@ -136,6 +137,11 @@ function Cardapio() {
                   <h2 className='card__title'>{getDayOfWeek(item.data)}</h2>
                   <h2 className='card__title'>{item.nome}</h2>
                   <p className='card__description'>{item.descricao}</p>
+                  
+                      {userRole === 'admin' || userRole === 'secretaria' ? (
+                        <p className=''>Reservas: {item.reservas}</p>
+                      ) : null}
+
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     {isReservaDisabled(item.data) ? (
                       <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />

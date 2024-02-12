@@ -122,25 +122,35 @@ const CadastroAlunoForm = ({ open, onClose }) => {
   
       // Fechar o modal após o envio do formulário
       onClose();
-    } catch (error) {
-      console.error('Erro ao cadastrar aluno:', error);
-      if (error.response) {
-        console.error('Detalhes do erro (response.data):', error.response.data);
-        console.error('Status do erro (response.status):', error.response.status);
-        // Exibir toast de erro
-        toast.error('Erro ao cadastrar aluno. Detalhes no console.', { position: toast.POSITION.TOP_RIGHT });
+    }catch (error) {
+      if (error.response && error.response.status === 401) {
+          if (error.response.data.error === 'A matrícula já está em uso') {
+              toast.error('Matrícula já existe. Por favor, escolha outra matrícula.');
+          } else if (error.response.data.error === 'Email já existente') {
+              toast.error('Email já existe. Por favor, escolha outro email.');
+          } else {
+              // Se o erro não for especificamente de matrícula ou email já existentes, exibir mensagem genérica
+              toast.error('Erro ao cadastrar aluno. Detalhes no console.');
+              console.error('Detalhes do erro (response.data):', error.response.data);
+          }
+      } else if (error.response) {
+          // Se houver uma resposta do servidor com um status diferente de 409, exibir mensagem genérica
+          console.error('Erro ao cadastrar aluno:', error);
+          console.error('Detalhes do erro (response.data):', error.response.data);
+          console.error('Status do erro (response.status):', error.response.status);
+          toast.error('Erro ao cadastrar aluno. Detalhes no console.');
       } else if (error.request) {
-        console.error('Erro na requisição (sem resposta do servidor):', error.request);
-        // Exibir toast de erro
-        toast.error('Erro na requisição. Detalhes no console.', { position: toast.POSITION.TOP_RIGHT });
+          // Se não houver resposta do servidor, exibir mensagem genérica
+          console.error('Erro na requisição (sem resposta do servidor):', error.request);
+          toast.error('Erro na requisição. Detalhes no console.', { position: toast.POSITION.TOP_RIGHT });
       } else {
-        console.error('Erro ao processar requisição:', error.message);
-        // Exibir toast de erro
-        toast.error('Erro ao processar requisição. Detalhes no console.', { position: toast.POSITION.TOP_RIGHT });
+          // Se ocorrer um erro durante o processamento da requisição, exibir mensagem genérica
+          console.error('Erro ao processar requisição:', error.message);
+          toast.error('Erro ao processar requisição. Detalhes no console.', { position: toast.POSITION.TOP_RIGHT });
       }
-    }
-  };
-
+  }
+}
+  
   const handleCancel = () => {
     setModalOpen(false);
   };
