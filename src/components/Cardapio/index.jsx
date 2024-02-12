@@ -16,6 +16,7 @@ function Cardapio() {
   const [cardapio, setCardapio] = useState([]);
   const [reservado, setReservado] = useState({});
   const [openCadastro, setOpenCadastro] = useState(false);
+  const [reservas, setReservas] = useState([]);
   const [selectedTurno, setSelectedTurno] = useState({});
   const token = localStorage.getItem('token');
   const [userRole] = useState(localStorage.getItem('userRole'));
@@ -36,7 +37,27 @@ function Cardapio() {
     };
 
     fetchData();
-  }, []);
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const headers = {
+          'x-access-token': token,
+        }; 
+        const idUser = localStorage.getItem('id');
+        const response = await axiosFecht.get(`/listar/reservas/${idUser}`, { headers });
+        const reservasOrdenadas = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
+        setReservas(reservasOrdenadas);
+      } catch (error) {
+        console.log('Erro ao listar reservas', error);
+      }
+    };
+  
+    fetchData();
+  });
+  
 
   useEffect(() => {
     const storedReservas = JSON.parse(localStorage.getItem('reservado')) || {};
@@ -174,8 +195,17 @@ function Cardapio() {
                 </div>
               </motion.div>
             ))}
-
           </motion.div>
+          
+          <h2 className="title">Minhas reservas</h2>
+
+          {reservas.map((reserva, index) => (
+            <div key={index}>
+              <p>Nome do cardápio: {reserva.nome_cardapio}</p>
+              <p>Data do cardápio: {reserva.data_cardapio}</p>
+              <p>Turno da reserva: {reserva.turno}</p>
+            </div>
+          ))}
         </div>
       </div>
     </>
