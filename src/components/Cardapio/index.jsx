@@ -84,7 +84,7 @@ function Cardapio() {
   };
 
   const handleToggleForm = () => {
-    setOpenCadastro(!openCadastro); // Altera o estado para abrir ou fechar o modal
+    setOpenCadastro(!openCadastro); 
   };
 
   return (
@@ -93,29 +93,27 @@ function Cardapio() {
         <ContainerTopo userType={userRole} />
         <MenuHamburguer userType={userRole} />
       </div>
-
-      {/* Renderiza o componente CardapioCadastro se openCadastro for true */}
+  
       {openCadastro && <CardapioCadastro open={openCadastro} onClose={() => setOpenCadastro(false)} />}
-
+  
       <div className='container-fluid'>
         <BackArrow style={{ marginTop: '120px', marginLeft: '10px' }} />
         <div className='containerCardapio'>
-          <h1 className="titulo-home fade-up">
-            Cardápio da semana
-          </h1>
-
-          {/* Botão de adicionar (+) */}
-          <div className="add-button-container">
-            <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
-              <AddIcon fontSize="large" />
-            </IconButton>
+  
+          <div className="header">
+            <h2 className="title">Cardápio da semana</h2>
+            {/* Botão de adicionar (+) */}
+            <div className="add-button-container">
+              <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
+                <AddIcon fontSize="large" />
+              </IconButton>
+            </div>
           </div>
-
+  
           <motion.div
             className='cardapio-carousel'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
             style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -127,8 +125,6 @@ function Cardapio() {
               <motion.div
                 key={index}
                 className='card__cardapio'
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
                 style={{ marginRight: '20px', flex: '0 0 auto' }}
               >
                 <img src={item.imagem ? item.imagem : img} alt='text alt' className='card__image' />
@@ -156,7 +152,7 @@ function Cardapio() {
         </div>
       </div>
     </>
-  );
+  );  
 }
 
 export default Cardapio;

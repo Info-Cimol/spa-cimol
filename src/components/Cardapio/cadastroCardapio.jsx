@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import './cardapio.css';
 
 function CriarCardapio({open, onClose }) {
   const [nome, setNome] = useState('');
@@ -85,13 +86,17 @@ function CriarCardapio({open, onClose }) {
   return (
     <Modal open={modalOpen} onClose={() => onClose()}>
 
-      <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 600, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2 className='header'>Criar Cardápio</h2>
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </div>
+<Box className='modal-container'>
+
+<div className="header">
+      <h2 className="title">Cadastro de Cardápio</h2>
+      <div className="close-button">
+        <IconButton onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      </div>
+    </div>
+        
         <TextField
           name="nome"
           label="Nome do prato"
