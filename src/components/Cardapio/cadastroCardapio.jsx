@@ -10,6 +10,7 @@ function CriarCardapio() {
   const [data, setData] = useState('');
   const [imagem, setImagem] = useState('');
   const [imagemEnviada, setImagemEnviada] = useState(false);
+  const [anexarArquivo, setAnexarArquivo] = useState(false);
 
   const handleCriarCardapio = async () => {
     try {
@@ -18,12 +19,12 @@ function CriarCardapio() {
         'x-access-token': token,
       };
 
-      const response = await axiosFecht.post('/criar/cardapio', {
-        nome,
-        descricao,
-        data,
-        imagem,
-      }, { headers });
+      let dataToSend = { nome, descricao, data };
+      if (anexarArquivo && imagemEnviada) {
+        dataToSend.imagem = imagem;
+      }
+
+      const response = await axiosFecht.post('/criar/cardapio', dataToSend, { headers });
 
       toast.success('Seu cardápio foi cadastrado!');
     } catch (error) {
@@ -63,6 +64,7 @@ function CriarCardapio() {
         });
     } else {
       console.warn('Nenhuma imagem selecionada');
+      setImagemEnviada(true); // Permitindo cadastro direto mesmo sem imagem
     }
   };
 
@@ -105,9 +107,22 @@ function CriarCardapio() {
         }}
       />
 
-      <input type="file" id="fileInputLogo" name="file" multiple onChange={handleFileUpload} />
+      {/* Checkbox para permitir o usuário decidir se deseja anexar um arquivo */}
+      <label>
+        <input
+          type="checkbox"
+          checked={anexarArquivo}
+          onChange={(e) => setAnexarArquivo(e.target.checked)}
+        />
+        Anexar arquivo
+      </label>
 
-      <button onClick={handleCriarCardapio} disabled={!imagemEnviada}>
+      {/* Input para seleção de arquivo */}
+      {anexarArquivo && (
+        <input type="file" id="fileInputLogo" name="file" multiple onChange={handleFileUpload} />
+      )}
+
+      <button onClick={handleCriarCardapio} disabled={anexarArquivo && !imagemEnviada}>
         Criar Cardápio
       </button>
     </div>
