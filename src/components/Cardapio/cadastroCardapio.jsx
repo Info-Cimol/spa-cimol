@@ -88,14 +88,14 @@ function CriarCardapio({open, onClose }) {
 
 <Box className='edicaoPessoa'>
 
-<div className="header">
-      <h2 className="title">Cadastro de Cardápio</h2>
-      <div className="close-button">
-        <IconButton onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
+      <div className="header">
+            <h2 className="title">Cadastro de Cardápio</h2>
+            <div className="close-button">
+              <IconButton onClick={onClose}>
+                <CloseIcon />
+              </IconButton>
+            </div>
       </div>
-    </div>
         
         <TextField
           name="nome"
@@ -133,15 +133,19 @@ function CriarCardapio({open, onClose }) {
             type="checkbox"
             checked={anexarArquivo}
             onChange={(e) => setAnexarArquivo(e.target.checked)}
+            style={{ marginRight: 10 }}
           />
           Anexar arquivo
         </label>
         {anexarArquivo && (
           <input type="file" id="fileInputLogo" name="file" multiple onChange={handleFileUpload} />
         )}
-        <Button onClick={handleCriarCardapio} disabled={anexarArquivo && !imagemEnviada}>
-          Criar Cardápio
-        </Button>
+          {/* Botões de cadastrar e cancelar */}
+          <div className="botoesAcao">
+            <Button onChange={handleCriarCardapio} type="submit" variant="contained" color="primary" style={{ marginRight: 10 }}>
+              Cadastrar Cardápio
+            </Button>
+          </div>
       </Box>
     </Modal>
   );
