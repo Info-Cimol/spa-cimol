@@ -32,6 +32,7 @@
 .cardapio-table {
   width: 100%;
   border-collapse: collapse;
+  overflow: auto;
 }
 
 .cardapio-table th,

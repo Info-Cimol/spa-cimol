@@ -36,7 +36,16 @@ function Cardapio() {
     };
 
     fetchData();
-});
+  }, []);
+
+  useEffect(() => {
+    const storedReservas = JSON.parse(localStorage.getItem('reservado')) || {};
+    setReservado(storedReservas);
+  }, []);
+
+  const salvarReservasLocalStorage = (reservas) => {
+    localStorage.setItem('reservado', JSON.stringify(reservas));
+  };
 
   const reservarCardapio = async (idCardapio) => {
     try {
@@ -52,13 +61,20 @@ function Cardapio() {
         return;
       }
 
+      if (reservado[idCardapio] && reservado[idCardapio] === turno) {
+        toast.error('Você já tem uma reserva para este turno.');
+        return;
+      }
+
       const response = await axiosFecht.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno }, { headers });
       if (response.data.deletado === true) {
         console.log('Reserva removida');
         toast.error('Não foi possível realizar sua reserva!');
       } else {
         toast.success('Sua reserva foi cadastrada!');
-        setReservado({ ...reservado, [idCardapio]: true });
+        const newReservado = { ...reservado, [idCardapio]: turno };
+        setReservado(newReservado);
+        salvarReservasLocalStorage(newReservado);
       }
     } catch (error) {
       console.log("Erro ao reservar cardápio ", error);

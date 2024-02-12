@@ -54,6 +54,7 @@ function Home() {
         <div className='container-fluid'>
           <div className='row'>
             <div className='buttons'>
+              
               {userRole === 'aluno' && (
                 <div className="col-sm-12">
                   <h1 className="titulo-home fade-up">
@@ -117,7 +118,14 @@ function Home() {
                   <div className="col-sm-12 d-flex flex-wrap justify-content-around">
                     <div className="card">
                       <div className="card__body">
-                        <h5 className="card__head">Merenda</h5>
+                        <h5 className="card__head">Reservas</h5>
+                        <p className="card__desc">Clique para ver a quantidade de reservas.</p>
+                        <button className='card__btn' onClick={abrirCardapioMerenda}>Abrir</button>
+                      </div>
+                    </div>
+                    <div className="card">
+                      <div className="card__body">
+                        <h5 className="card__head">Cardápio</h5>
                         <p className="card__desc">Clique para ver o cardápio de merenda.</p>
                         <button className='card__btn' onClick={abrirCardapio}>Abrir</button>
                       </div>
@@ -165,7 +173,7 @@ function Home() {
                   </h1>
                   <div className="card">
                     <div className="card__body">
-                      <h5 className="card__head">Cardápio</h5>
+                      <h5 className="card__head">Reservas</h5>
                       <p className="card__desc">Clique para ver o cardápio.</p>
                       <button className="card__btn" onClick={abrirCardapioMerenda}>Abrir</button>
                     </div>
@@ -179,11 +187,18 @@ function Home() {
                     Olá supervisor, seja muito bem-vindo. Aqui você tem acesso a todas as ferramentas do Cimol.
                   </h1>
                   <div className="col-sm-12 d-flex flex-wrap justify-content-around">
+                  <div className="card">
+                      <div className="card__body">
+                        <h5 className="card__head">Reservas</h5>
+                        <p className="card__desc">Clique para ver a quantidade de reservas.</p>
+                        <button className='card__btn' onClick={abrirCardapioMerenda}>Abrir</button>
+                      </div>
+                    </div>
                     <div className="card">
                       <div className="card__body">
-                        <h5 className="card__head">Merenda</h5>
+                        <h5 className="card__head">Cardápio</h5>
                         <p className="card__desc">Clique para ver o cardápio de merenda.</p>
-                        <button className="card__btn" onClick={abrirCardapio}>Abrir</button>
+                        <button className='card__btn' onClick={abrirCardapio}>Abrir</button>
                       </div>
                     </div>
                     <div className="card">
