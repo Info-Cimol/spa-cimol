@@ -9,14 +9,14 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-function CriarCardapio() {
+function CriarCardapio({open, onClose }) {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [data, setData] = useState('');
   const [imagem, setImagem] = useState('');
   const [imagemEnviada, setImagemEnviada] = useState(false);
   const [anexarArquivo, setAnexarArquivo] = useState(false);
-  const [open, setOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(open);
 
   const handleCriarCardapio = async () => {
     try {
@@ -30,7 +30,7 @@ function CriarCardapio() {
         dataToSend.imagem = imagem;
       }
 
-      const response = await axiosFecht.post('/criar/cardapio', dataToSend, { headers });
+      await axiosFecht.post('/criar/cardapio', dataToSend, { headers });
 
       toast.success('Seu cardápio foi cadastrado!');
       handleClose();
@@ -64,32 +64,27 @@ function CriarCardapio() {
         .then((responses) => {
           const imageUrls = responses.map((response) => response.data.secure_url);
           setImagem(imageUrls);
-          setImagemEnviada(true); // Definindo a imagem como enviada com sucesso
+          setImagemEnviada(true); 
         })
         .catch((error) => {
           console.error('Erro ao fazer upload de imagem:', error);
         });
     } else {
       console.warn('Nenhuma imagem selecionada');
-      setImagemEnviada(true); // Permitindo cadastro direto mesmo sem imagem
+      setImagemEnviada(true); 
     }
   };
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => setModalOpen(false);
 
   useEffect(() => {
     if (!open) {
-      // Lógica para fechar o modal após o cadastro ou cancelamento
     }
   }, [open]);
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+    <Modal open={modalOpen} onClose={() => onClose()}>
+
       <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 600, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2 className='header'>Criar Cardápio</h2>
