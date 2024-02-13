@@ -26,7 +26,7 @@ function Cardapio() {
       try {
         const response = await axiosFecht.get('/listar/cardapio', { headers });
         const cardapioOrdenado = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
-        setCardapio(cardapioOrdenado.filter(item => isWithinCurrentWeek(item.data))); // Filtrando os cardápios para incluir apenas os da semana
+        setCardapio(cardapioOrdenado.filter(item => isWithinCurrentWeek(item.data))); 
       } catch (error) {
         console.log('Erro ao listar cardápio', error);
       }
@@ -107,16 +107,16 @@ function Cardapio() {
   const isReservaDisabled = (data) => {
     const dataCardapio = new Date(data);
     const hoje = new Date();
-    const diferencaMilissegundos = dataCardapio.getTime() - hoje.getTime();
-    const diferencaDias = Math.floor(diferencaMilissegundos / (1000 * 60 * 60 * 24));
-    return diferencaDias < 3;
+    const diferencaEmMilissegundos = dataCardapio.getTime() - hoje.getTime();
+    const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
+    const podeReservar = diferencaEmDias >= 2; 
+    return !podeReservar;
   };
 
   const handleTurnoChange = (idCardapio, selectedValue) => {
     setSelectedTurno({ ...selectedTurno, [idCardapio]: selectedValue });
   };
 
-  // Função para verificar se uma data está dentro da semana atual
   const isWithinCurrentWeek = (dateString) => {
     const date = new Date(dateString);
     const today = new Date();
