@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import './cardapio.css';
 
-function CriarCardapio({open, onClose }) {
+function CriarCardapio({ open, onClose }) {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [data, setData] = useState('');
@@ -65,14 +65,14 @@ function CriarCardapio({open, onClose }) {
         .then((responses) => {
           const imageUrls = responses.map((response) => response.data.secure_url);
           setImagem(imageUrls);
-          setImagemEnviada(true); 
+          setImagemEnviada(true);
         })
         .catch((error) => {
           console.error('Erro ao fazer upload de imagem:', error);
         });
     } else {
       console.warn('Nenhuma imagem selecionada');
-      setImagemEnviada(true); 
+      setImagemEnviada(true);
     }
   };
 
@@ -83,20 +83,36 @@ function CriarCardapio({open, onClose }) {
     }
   }, [open]);
 
+  // Função para verificar se a data é sábado, domingo ou anterior ao dia atual
+  const isInvalidDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+
+    // Verifica se é sábado (6) ou domingo (0)
+    if (date.getDay() === 6 || date.getDay() === 0) {
+      return true;
+    }
+
+    // Verifica se é anterior ao dia atual
+    if (date < today) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <Modal open={modalOpen} onClose={() => onClose()}>
+      <Box className='edicaoPessoa'>
+        <div className="header">
+          <h2 className="title">Cadastro de Cardápio</h2>
+          <div className="close-button">
+            <IconButton onClick={onClose}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+        </div>
 
-<Box className='edicaoPessoa'>
-
-      <div className="header">
-            <h2 className="title">Cadastro de Cardápio</h2>
-            <div className="close-button">
-              <IconButton onClick={onClose}>
-                <CloseIcon />
-              </IconButton>
-            </div>
-      </div>
-        
         <TextField
           name="nome"
           label="Nome do prato"
@@ -125,7 +141,13 @@ function CriarCardapio({open, onClose }) {
           type="date"
           variant="outlined"
           value={data}
-          onChange={(e) => setData(e.target.value)}
+          onChange={(e) => {
+            if (isInvalidDate(e.target.value)) {
+              toast.error('Por favor, selecione uma data válida.');
+            } else {
+              setData(e.target.value);
+            }
+          }}
           fullWidth
           margin="normal"
           InputLabelProps={{ shrink: true }}
@@ -142,13 +164,19 @@ function CriarCardapio({open, onClose }) {
         {anexarArquivo && (
           <input type="file" id="fileInputLogo" name="file" multiple onChange={handleFileUpload} />
         )}
-        
+
         <div className='botoesAcao'>
-         <Button onClick={handleCriarCardapio} disabled={anexarArquivo && !imagemEnviada} variant="contained" color="primary" style={{ marginRight: 10 }}>
-          Criar Cardápio
-        </Button>
+          <Button
+            onClick={handleCriarCardapio}
+            disabled={anexarArquivo && !imagemEnviada}
+            variant="contained"
+            color="primary"
+            style={{ marginRight: 10 }}
+          >
+            Criar Cardápio
+          </Button>
         </div>
-       
+
       </Box>
     </Modal>
   );

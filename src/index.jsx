@@ -13,7 +13,7 @@ import AreaPessoaProjeto from './routes/CatalogoProjetos/areaPessoaProjeto';
 import VisualizaProjetoPessoa from './routes/CatalogoProjetos/visualizaProjeto';
 import AdicionaProjeto from './routes/CatalogoProjetos/adicionaProjeto';
 import EditaProjeto from './routes/CatalogoProjetos/editaProjeto';
-//import Teste from './components/Cardapio/cardapioMerendeira'
+//import Teste from './components/Cardapio/cardapioMerendeira';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 

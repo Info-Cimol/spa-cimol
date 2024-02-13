@@ -5,17 +5,13 @@ import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import BackArrow from '../BackArrow/index';
-import CardapioCadastro from '../Cardapio/cadastroCardapio'
-import AddIcon from '@mui/icons-material/Add';
 import axiosFecht from '../../axios/config';
 import imagem1 from '../../imagens/image1.jpg';
-import { IconButton } from '@mui/material';
 import './cardapio.css';
 
 function Cardapio() {
   const [cardapio, setCardapio] = useState([]);
   const [reservado, setReservado] = useState({});
-  const [openCadastro, setOpenCadastro] = useState(false);
   const [reservas, setReservas] = useState([]);
   const [selectedTurno, setSelectedTurno] = useState({});
   const token = localStorage.getItem('token');
@@ -23,14 +19,14 @@ function Cardapio() {
   const img = imagem1;
   const headers = {
     'x-access-token': token,
-  }; 
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axiosFecht.get('/listar/cardapio', { headers });
         const cardapioOrdenado = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
-        setCardapio(cardapioOrdenado);
+        setCardapio(cardapioOrdenado.filter(item => isWithinCurrentWeek(item.data))); // Filtrando os cardápios para incluir apenas os da semana
       } catch (error) {
         console.log('Erro ao listar cardápio', error);
       }
@@ -45,7 +41,7 @@ function Cardapio() {
         const token = localStorage.getItem('token');
         const headers = {
           'x-access-token': token,
-        }; 
+        };
         const idUser = localStorage.getItem('id');
         const response = await axiosFecht.get(`/listar/reservas/${idUser}`, { headers });
         const reservasOrdenadas = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
@@ -54,10 +50,9 @@ function Cardapio() {
         console.log('Erro ao listar reservas', error);
       }
     };
-  
+
     fetchData();
-  });
-  
+  }, []);
 
   useEffect(() => {
     const storedReservas = JSON.parse(localStorage.getItem('reservado')) || {};
@@ -106,8 +101,7 @@ function Cardapio() {
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    let dayOfWeek = date.getDay();
-    return days[dayOfWeek];
+    return days[date.getDay()+1];
   };
 
   const isReservaDisabled = (data) => {
@@ -122,8 +116,13 @@ function Cardapio() {
     setSelectedTurno({ ...selectedTurno, [idCardapio]: selectedValue });
   };
 
-  const handleToggleForm = () => {
-    setOpenCadastro(!openCadastro); 
+  // Função para verificar se uma data está dentro da semana atual
+  const isWithinCurrentWeek = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const firstDayOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1); // Calcula o primeiro dia da semana (domingo)
+    const lastDayOfWeek = new Date(firstDayOfWeek.getFullYear(), firstDayOfWeek.getMonth(), firstDayOfWeek.getDate() + 6); // Calcula o último dia da semana (sábado)
+    return date >= firstDayOfWeek && date <= lastDayOfWeek;
   };
 
   return (
@@ -132,25 +131,14 @@ function Cardapio() {
         <ContainerTopo userType={userRole} />
         <MenuHamburguer userType={userRole} />
       </div>
-  
-      {openCadastro && <CardapioCadastro open={openCadastro} onClose={() => setOpenCadastro(false)} />}
-  
+
       <div className='container-fluid'>
         <BackArrow style={{ marginTop: '120px', marginLeft: '10px' }} />
         <div className='containerCardapio'>
-  
-        <div className="header">
-        <h2 className="title">Cardápio da semana</h2>
-        
-        {/* Botão de adicionar (+) */}
-        {userRole === 'admin' || userRole === 'secretaria' ? (
-          <div className="add-button-container">
-            <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
-              <AddIcon fontSize="large" />
-            </IconButton>
+
+          <div className="header">
+            <h2 className="title">Cardápio da semana</h2>
           </div>
-        ) : null}
-      </div>
 
           <motion.div
             className='cardapio-carousel'
@@ -163,7 +151,7 @@ function Cardapio() {
               height: 'auto',
             }}>
 
-           {cardapio.map((item, index) => (
+            {cardapio.map((item, index) => (
               <motion.div
                 key={index}
                 className='card__cardapio'
@@ -174,10 +162,10 @@ function Cardapio() {
                   <h2 className='card__title'>{getDayOfWeek(item.data)}</h2>
                   <h2 className='card__title'>{item.nome}</h2>
                   <p className='card__description'>{item.descricao}</p>
-                  
-                      {userRole === 'admin' || userRole === 'secretaria' ? (
-                        <p className=''>Reservas: {item.reservas}</p>
-                      ) : null}
+
+                  {userRole === 'admin' || userRole === 'secretaria' ? (
+                    <p className=''>Reservas: {item.reservas}</p>
+                  ) : null}
 
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     {isReservaDisabled(item.data) ? (
@@ -196,7 +184,7 @@ function Cardapio() {
               </motion.div>
             ))}
           </motion.div>
-          
+
           <h2 className="title">Minhas reservas</h2>
 
           {reservas.map((reserva, index) => (
@@ -209,7 +197,7 @@ function Cardapio() {
         </div>
       </div>
     </>
-  );  
+  );
 }
 
 export default Cardapio;
