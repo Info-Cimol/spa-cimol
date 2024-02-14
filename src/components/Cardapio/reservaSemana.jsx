@@ -3,6 +3,7 @@ import ContainerTopo from '../ContainerTopo';
 import MenuHamburguer from "../MenuHamburguer";
 import BackArrow from '../BackArrow/index';
 import CardapioCadastro from './cadastroCardapio';
+import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import axiosFetch from '../../axios/config';
@@ -11,6 +12,8 @@ import './cardapio.css';
 function CardapioMerendeira() {
   const [cardapio, setCardapio] = useState([]);
   const [openCadastro, setOpenCadastro] = useState(false);
+  const [selectedReservation, setSelectedReservation] = useState(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false); 
   const token = localStorage.getItem('token');
   const [userRole] = useState(localStorage.getItem('userRole'));
   const [currentWeek, setCurrentWeek] = useState('');
@@ -57,6 +60,17 @@ function CardapioMerendeira() {
     return data >= today && data < nextMonday;
   });
 
+  // Função para abrir a ficha detalhada ao clicar em uma reserva na tabela
+  const handleReservationClick = (reservation) => {
+    setSelectedReservation(reservation);
+    setIsDetailModalOpen(true);
+  };
+
+  // Função para fechar a ficha detalhada
+  const handleCloseDetailModal = () => {
+    setIsDetailModalOpen(false);
+  };
+
   return (
     <>
       <div>
@@ -93,7 +107,7 @@ function CardapioMerendeira() {
                 const dayOfWeek = getDayOfWeek(item.data);
                 if (dayOfWeek) {
                   return (
-                    <tr key={index}>
+                    <tr key={index} onClick={() => handleReservationClick(item)}>
                       <td>{dayOfWeek}</td>
                       <td>{item.nome}</td>
                       <td>{item.descricao}</td>
@@ -107,6 +121,26 @@ function CardapioMerendeira() {
           </table>
         </div>
       </div>
+      {isDetailModalOpen && (
+        <div className="modal-container">
+          <div className="header">
+            <h2 className="title">Detalhes da Reserva</h2>
+            <IconButton className="close-button" onClick={handleCloseDetailModal} title="Fechar">
+              <CloseIcon />
+            </IconButton>
+          </div>
+          <div className="modal-content">
+            <p>Data: {getDayOfWeek(selectedReservation.data)}</p>
+            <p>Nome: {selectedReservation.nome}</p>
+            <p>Descrição: {selectedReservation.descricao}</p>
+            <p>Reservas: {selectedReservation.reservas}</p>
+            <p>Manhã: {selectedReservation.manha_count}</p>
+            <p>Tarde: {selectedReservation.tarde_count}</p>
+            <p>Noite: {selectedReservation.noite_count}</p>
+            
+          </div>
+        </div>
+      )}
     </>
   );  
 }
