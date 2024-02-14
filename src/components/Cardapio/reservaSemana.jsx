@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import ContainerTopo from '../../components/ContainerTopo';
-import MenuHamburguer from "../../components/MenuHamburguer";
+import ContainerTopo from '../ContainerTopo';
+import MenuHamburguer from "../MenuHamburguer";
 import BackArrow from '../BackArrow/index';
-import CardapioCadastro from '../Cardapio/cadastroCardapio';
+import CardapioCadastro from './cadastroCardapio';
 import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import axiosFetch from '../../axios/config';
@@ -33,22 +33,29 @@ function CardapioMerendeira() {
 
     fetchData();
     
-    // Calcular a semana atual e a seguinte
     const today = new Date();
-    const nextWeekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
-    const weekRange = `${today.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${nextWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
+    const nextMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (1 + 7 - today.getDay()) % 7);
+    const weekRange = `${today.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${nextMonday.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
     setCurrentWeek(weekRange);
-  }, [token]);
+  }, [token, openCadastro]);
 
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    let dayOfWeek = date.getDay();
+    const dayOfWeek = date.getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) {
       return null; 
     }
     return days[dayOfWeek];
   };
+
+  // Filtra os cardápios da semana atual
+  const cardapioDaSemanaAtual = cardapio.filter(item => {
+    const data = new Date(item.data);
+    const today = new Date();
+    const nextMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (1 + 7 - today.getDay()) % 7);
+    return data >= today && data < nextMonday;
+  });
 
   return (
     <>
@@ -70,8 +77,8 @@ function CardapioMerendeira() {
           </div>
         ) : null}
 
-              {openCadastro && <CardapioCadastro open={openCadastro} onClose={() => setOpenCadastro(false)} />}
-  
+        {openCadastro && <CardapioCadastro open={openCadastro} onClose={() => setOpenCadastro(false)} />}
+
           <table className="cardapio-table">
             <thead>
               <tr>
@@ -82,7 +89,7 @@ function CardapioMerendeira() {
               </tr>
             </thead>
             <tbody>
-              {cardapio.map((item, index) => {
+              {cardapioDaSemanaAtual.map((item, index) => {
                 const dayOfWeek = getDayOfWeek(item.data);
                 if (dayOfWeek) {
                   return (

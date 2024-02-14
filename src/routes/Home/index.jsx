@@ -4,7 +4,7 @@ import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import Aluno from '../../components/Aluno/';
 import Cardapio from '../../components/Cardapio/index';
-import CardapioMerendeira from '../../components/Cardapio/cardapioMerendeira';
+import ReservaSemana from '../../components/Cardapio/reservaSemana';
 import { Container } from './styled';
 
 function Home() {
@@ -47,7 +47,7 @@ function Home() {
       )}
 
 {exibirCardapioMerenda && ( 
-        <CardapioMerendeira />
+        <ReservaSemana />
       )}
       
       {!exibirAluno && !exibirCardapio && !exibirCardapioMerenda && (

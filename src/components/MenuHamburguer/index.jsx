@@ -2,22 +2,13 @@ import React, { useState, useEffect } from "react";
 import { slide as Menu } from "react-burger-menu";
 import { Container } from "./styled.jsx";
 import { useNavigate } from "react-router-dom";
-import StyledTextButton from "./styled";
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
+import { Avatar, Box, Tooltip, IconButton, MenuItem, ListItemIcon, Divider } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
+import { PersonAdd, Settings, Logout, VpnKey } from '@mui/icons-material';
 import Aluno from '../Aluno/index.jsx';
 import Cardapio from '../Cardapio/index.jsx';
-import CardapioMerendeira from '../Cardapio/cardapioMerendeira.jsx';
-import VpnKey from '@mui/icons-material/VpnKey';
+import ReservaSemana from '../Cardapio/reservaSemana.jsx';
+import StyledTextButton from "./styled";
 
 const MenuHamburguer = ({ userType}) => {
   const navigate = useNavigate();
@@ -114,7 +105,7 @@ const MenuHamburguer = ({ userType}) => {
       )}
 
 {exibirCardapioMerenda && ( 
-        <CardapioMerendeira />
+        <ReservaSemana />
       )}
       
       {!exibirAluno && !exibirCardapio && !exibirCardapioMerenda && (
@@ -189,14 +180,14 @@ const MenuHamburguer = ({ userType}) => {
           {(userType === "merendeira") && (
             <>
               <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapioMerenda}>Cardapio</StyledTextButton>
+              <StyledTextButton onClick={abrirCardapioMerenda}>Reserva</StyledTextButton>
             </>
           )}
 
           {(userType === "admin") && (
             <>
               <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
+              <StyledTextButton onClick={abrirCardapioMerenda}>Reserva</StyledTextButton>
               <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
               <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>
               <StyledTextButton>Professor</StyledTextButton>
@@ -209,7 +200,7 @@ const MenuHamburguer = ({ userType}) => {
           {(userType === "secretaria") && (
             <>
               <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
+              <StyledTextButton onClick={abrirCardapioMerenda}>Reserva</StyledTextButton>
               <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
               <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>
               <StyledTextButton>Professor</StyledTextButton>
@@ -234,7 +225,6 @@ const MenuHamburguer = ({ userType}) => {
               <StyledTextButton>Provas</StyledTextButton>
             </>
           )}
-
         </Menu>
       )}
     </Container>
