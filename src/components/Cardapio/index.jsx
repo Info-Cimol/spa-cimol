@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import BackArrow from '../BackArrow/index';
-import axiosFecht from '../../axios/config';
+import axiosFetch from '../../axios/config';
 import imagem1 from '../../imagens/image1.jpg';
 import './cardapio.css';
 
@@ -14,19 +14,28 @@ function Cardapio() {
   const [reservado, setReservado] = useState({});
   const [reservas, setReservas] = useState([]);
   const [selectedTurno, setSelectedTurno] = useState({});
-  const token = localStorage.getItem('token');
   const [userRole] = useState(localStorage.getItem('userRole'));
+  const [currentWeek, setCurrentWeek] = useState('');
   const img = imagem1;
+  const id = localStorage.getItem('id');
+  const token = localStorage.getItem('token');
   const headers = {
     'x-access-token': token,
   };
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosFecht.get('/listar/cardapio', { headers });
+        const response = await axiosFetch.get('/listar/cardapio', { headers });
         const cardapioOrdenado = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
         setCardapio(cardapioOrdenado.filter(item => isWithinCurrentWeek(item.data))); 
+
+        // Define a semana atual
+        const today = new Date();
+        const nextMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (1 + 7 - today.getDay()) % 7);
+        const currentDate = `${today.getDate()}/${today.getMonth() + 1}`;
+        const nextWeekDate = `${nextMonday.getDate()}/${nextMonday.getMonth() + 1}`;
+        setCurrentWeek(`${currentDate} - ${nextWeekDate}`);
       } catch (error) {
         console.log('Erro ao listar cardápio', error);
       }
@@ -38,12 +47,8 @@ function Cardapio() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const headers = {
-          'x-access-token': token,
-        };
-        const idUser = localStorage.getItem('id');
-        const response = await axiosFecht.get(`/listar/reservas/${idUser}`, { headers });
+    
+        const response = await axiosFetch.get(`/lista/reservas/${id}`, { headers });
         const reservasOrdenadas = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
         setReservas(reservasOrdenadas);
       } catch (error) {
@@ -52,7 +57,7 @@ function Cardapio() {
     };
 
     fetchData();
-  }, []);
+  });
 
   useEffect(() => {
     const storedReservas = JSON.parse(localStorage.getItem('reservado')) || {};
@@ -65,12 +70,8 @@ function Cardapio() {
 
   const reservarCardapio = async (idCardapio) => {
     try {
-      const token = localStorage.getItem('token');
       const id = localStorage.getItem('id');
       const turno = selectedTurno[idCardapio];
-      const headers = {
-        'x-access-token': token,
-      };
 
       if (!turno) {
         toast.error('Por favor, selecione um turno antes de reservar.');
@@ -82,7 +83,7 @@ function Cardapio() {
         return;
       }
 
-      const response = await axiosFecht.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno }, { headers });
+      const response = await axiosFetch.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno }, { headers });
       if (response.data.deletado === true) {
         console.log('Reserva removida');
         toast.error('Não foi possível realizar sua reserva!');
@@ -101,13 +102,13 @@ function Cardapio() {
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    return days[date.getDay()+1];
+    return days[date.getDay()];
   };
 
   const isReservaDisabled = (data) => {
     const dataCardapio = new Date(data);
-    const hoje = new Date();
-    const diferencaEmMilissegundos = dataCardapio.getTime() - hoje.getTime();
+    const today = new Date();
+    const diferencaEmMilissegundos = dataCardapio.getTime() - today.getTime();
     const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
     const podeReservar = diferencaEmDias >= 2; 
     return !podeReservar;
@@ -137,7 +138,7 @@ function Cardapio() {
         <div className='containerCardapio'>
 
           <div className="header">
-            <h2 className="title">Cardápio da semana</h2>
+            <h2 className="title">Cardápio da semana ({currentWeek})</h2>
           </div>
 
           <motion.div
@@ -185,15 +186,19 @@ function Cardapio() {
             ))}
           </motion.div>
 
+      <div className="reservas-container">
           <h2 className="title">Minhas reservas</h2>
-
-          {reservas.map((reserva, index) => (
-            <div key={index}>
-              <p>Nome do cardápio: {reserva.nome_cardapio}</p>
-              <p>Data do cardápio: {reserva.data_cardapio}</p>
-              <p>Turno da reserva: {reserva.turno}</p>
-            </div>
+    
+          {reservas.map((reserva) => (
+            <motion.div key={reserva.id} className="reserva-card">
+              <div className="reserva-content">
+                <h2 className="reserva-title">{reserva.nome_cardapio}</h2>
+                <p className="reserva-info">Data do cardápio: {reserva.data_cardapio}</p>
+                <p className="reserva-info">Turno da reserva: {reserva.turno}</p>
+              </div>
+            </motion.div>
           ))}
+        </div>
         </div>
       </div>
     </>
