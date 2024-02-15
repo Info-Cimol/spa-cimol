@@ -132,15 +132,15 @@ function Cardapio() {
         <ContainerTopo userType={userRole} />
         <MenuHamburguer userType={userRole} />
       </div>
-
+  
       <div className='container-fluid'>
         <BackArrow style={{ marginTop: '120px', marginLeft: '10px' }} />
         <div className='containerCardapio'>
-
+  
           <div className="header">
             <h2 className="title">Cardápio da semana ({currentWeek})</h2>
           </div>
-
+  
           <motion.div
             className='cardapio-carousel'
             style={{
@@ -151,7 +151,7 @@ function Cardapio() {
               cursor: 'pointer',
               height: 'auto',
             }}>
-
+  
             {cardapio.map((item, index) => (
               <motion.div
                 key={index}
@@ -163,11 +163,11 @@ function Cardapio() {
                   <h2 className='card__title'>{getDayOfWeek(item.data)}</h2>
                   <h2 className='card__title'>{item.nome}</h2>
                   <p className='card__description'>{item.descricao}</p>
-
+  
                   {userRole === 'admin' || userRole === 'secretaria' ? (
                     <p className=''>Reservas: {item.reservas}</p>
                   ) : null}
-
+  
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     {isReservaDisabled(item.data) ? (
                       <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />
@@ -185,31 +185,41 @@ function Cardapio() {
               </motion.div>
             ))}
           </motion.div>
-
-       <div className="container_reserva">
-        <div className='header'>
-           <h2 className="title">Minhas reservas</h2>
-        </div>
-         
-          {reservas.map((reserva) => (
-              <motion.div
-              key={reserva}
-              className='card__cardapio'
-              style={{ marginRight: '20px', flex: '0 0 auto' }}
-            >
-              <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
-              <div className="card__cardapio">
-                <h2 className="card__title">{reserva.nome_cardapio}</h2>
-                <p className="card__info">Dia da semana:  {getDayOfWeek(reserva.data_cardapio)}</p>
-                <p className="card__info">Turno da reserva: {reserva.turno}</p>
-              </div>
+  
+            <div className='header'>
+              <h2 className="title">Minhas reservas</h2>
+            </div>
+  
+            <motion.div
+              className='cardapio-carousel'
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                overflowX: 'auto',
+                width: '100%',
+                cursor: 'pointer',
+                height: 'auto'}}
+                >
+  
+              {reservas.map((reserva) => (
+                <motion.div
+                  key={reserva.id}
+                  className='card__cardapio'
+                  style={{ marginRight: '20px', flex: '0 0 auto' }}
+                >
+                  <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
+                  <div className="card__content">
+                    <h2 className="card__title">{reserva.nome_cardapio}</h2>
+                    <p className="card__info">Dia da semana: {getDayOfWeek(reserva.data_cardapio)}</p>
+                    <p className="card__info">Turno da reserva: {reserva.turno}</p>
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
+          </div>
         </div>
-        </div>
-      </div>
     </>
-  );
-}
+  );  
+};
 
 export default Cardapio;
