@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
-import { Modal, Box, TextField, Button, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import axiosFetch from '../../axios/config';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { toast } from 'react-toastify';
+import TextField from '@mui/material/TextField';
+import axiosFecht from '../../axios/config';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import './cardapio.css';
 
-function CardapioCadastro({ open, onClose }) {
+function CriarCardapio({ open, onClose, onUpdate  }) {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [data, setData] = useState('');
+  const [imagem, setImagem] = useState('');
+  const [imagemEnviada, setImagemEnviada] = useState(false);
+  const [anexarArquivo, setAnexarArquivo] = useState(false);
+  const [modalOpen, setModalOpen] = useState(open);
 
   const handleCriarCardapio = async () => {
     try {
@@ -15,29 +25,103 @@ function CardapioCadastro({ open, onClose }) {
       const headers = {
         'x-access-token': token,
       };
-
-      // Verifica se a data não é sábado nem domingo
+  
+      // Verifica se a data está dentro da semana atual
+      const today = new Date();
       const selectedDate = new Date(data);
-      const dayOfWeek = selectedDate.getDay();
-
-      if (dayOfWeek === 0 || dayOfWeek === 6) {
-        toast.error('Não é permitido criar cardápios para sábado ou domingo.');
-        return; // Sai da função se for sábado ou domingo
+  
+      // Obtém o primeiro dia da semana atual (domingo)
+      const firstDayOfWeek = new Date(today);
+      firstDayOfWeek.setDate(today.getDate() - today.getDay());
+  
+      if (selectedDate < firstDayOfWeek || selectedDate > today) {
+        toast.error('Você só pode criar cardápios para a semana atual.');
+        return; // Sai da função se a data não estiver na semana atual
       }
-
-      const dataToSend = { nome, descricao, data };
-      await axiosFetch.post('/criar/cardapio', dataToSend, { headers });
-
+  
+      // Verificar se já existe um cardápio para a data informada
+      const response = await axiosFecht.get(`/cardapio/data/${data}`, { headers });
+  
+      if (response.data.length > 0) {
+        toast.error('Já existe um cardápio cadastrado para esta data.');
+        return; // Sai da função se já existir um cardápio para a data informada
+      }
+  
+      let dataToSend = { nome, descricao, data };
+      if (anexarArquivo && imagemEnviada) {
+        dataToSend.imagem = imagem;
+      }
+  
+      await axiosFecht.post('/criar/cardapio', dataToSend, { headers });
+  
       toast.success('Seu cardápio foi cadastrado!');
-      onClose();
+      handleClose();
+      onUpdate();
     } catch (error) {
       console.error('Erro ao criar cardápio:', error);
       toast.error('Não foi possível cadastrar o seu cardápio!');
     }
+  };  
+
+  const handleFileUpload = async (event) => {
+    const files = event.target.files;
+
+    if (files.length > 0) {
+      const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
+      const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
+
+      const uploadPromises = [];
+
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('resource_type', 'image');
+        formData.append('upload_preset', cloudinaryUploadPreset);
+
+        uploadPromises.push(
+          axios.post(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/upload`, formData)
+        );
+      }
+
+      Promise.all(uploadPromises)
+        .then((responses) => {
+          const imageUrls = responses.map((response) => response.data.secure_url);
+          setImagem(imageUrls);
+          setImagemEnviada(true);
+        })
+        .catch((error) => {
+          console.error('Erro ao fazer upload de imagem:', error);
+        });
+    } else {
+      console.warn('Nenhuma imagem selecionada');
+      setImagemEnviada(true);
+    }
+  };
+
+  const handleClose = () => setModalOpen(false);
+
+  useEffect(() => {
+    if (!open) {
+    }
+  }, [open]);
+
+  const isInvalidDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+
+    if (date.getDay() === 6 || date.getDay() === 0) {
+      return true;
+    }
+
+    if (date < today) {
+      return true;
+    }
+
+    return false;
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={modalOpen} onClose={() => onClose()}>
       <Box className='edicaoPessoa'>
         <div className="header">
           <h2 className="title">Cadastro de Cardápio</h2>
@@ -76,15 +160,34 @@ function CardapioCadastro({ open, onClose }) {
           type="date"
           variant="outlined"
           value={data}
-          onChange={(e) => setData(e.target.value)}
+          onChange={(e) => {
+            if (isInvalidDate(e.target.value)) {
+              toast.error('Por favor, selecione uma data válida.');
+            } else {
+              setData(e.target.value);
+            }
+          }}
           fullWidth
           margin="normal"
           InputLabelProps={{ shrink: true }}
         />
 
+        <label>
+          <input
+            type="checkbox"
+            checked={anexarArquivo}
+            onChange={(e) => setAnexarArquivo(e.target.checked)}
+          />
+          Anexar arquivo
+        </label>
+        {anexarArquivo && (
+          <input type="file" id="fileInputLogo" name="file" multiple onChange={handleFileUpload} />
+        )}
+
         <div className='botoesAcao'>
           <Button
             onClick={handleCriarCardapio}
+            disabled={anexarArquivo && !imagemEnviada}
             variant="contained"
             color="primary"
             style={{ marginRight: 10 }}
@@ -98,4 +201,4 @@ function CardapioCadastro({ open, onClose }) {
   );
 }
 
-export default CardapioCadastro;
+export default CriarCardapio;
