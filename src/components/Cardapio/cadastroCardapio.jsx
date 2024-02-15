@@ -1,23 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import TextField from '@mui/material/TextField';
-import axiosFecht from '../../axios/config';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
+import React, { useState } from 'react';
+import { Modal, Box, TextField, Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import './cardapio.css';
+import axiosFetch from '../../axios/config';
+import { toast } from 'react-toastify';
 
-function CriarCardapio({ open, onClose }) {
+function CardapioCadastro({ open, onClose }) {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [data, setData] = useState('');
-  const [imagem, setImagem] = useState('');
-  const [imagemEnviada, setImagemEnviada] = useState(false);
-  const [anexarArquivo, setAnexarArquivo] = useState(false);
-  const [modalOpen, setModalOpen] = useState(open);
 
   const handleCriarCardapio = async () => {
     try {
@@ -26,83 +16,28 @@ function CriarCardapio({ open, onClose }) {
         'x-access-token': token,
       };
 
-      let dataToSend = { nome, descricao, data };
-      if (anexarArquivo && imagemEnviada) {
-        dataToSend.imagem = imagem;
+      // Verifica se a data não é sábado nem domingo
+      const selectedDate = new Date(data);
+      const dayOfWeek = selectedDate.getDay();
+
+      if (dayOfWeek === 0 || dayOfWeek === 6) {
+        toast.error('Não é permitido criar cardápios para sábado ou domingo.');
+        return; // Sai da função se for sábado ou domingo
       }
 
-      await axiosFecht.post('/criar/cardapio', dataToSend, { headers });
+      const dataToSend = { nome, descricao, data };
+      await axiosFetch.post('/criar/cardapio', dataToSend, { headers });
 
       toast.success('Seu cardápio foi cadastrado!');
-      handleClose();
+      onClose();
     } catch (error) {
       console.error('Erro ao criar cardápio:', error);
       toast.error('Não foi possível cadastrar o seu cardápio!');
     }
   };
 
-  const handleFileUpload = async (event) => {
-    const files = event.target.files;
-
-    if (files.length > 0) {
-      const cloudinaryCloudName = process.env.REACT_APP_CLOUD_NAME;
-      const cloudinaryUploadPreset = process.env.REACT_APP_UPLOAD_PRESENT;
-
-      const uploadPromises = [];
-
-      for (const file of files) {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('resource_type', 'image');
-        formData.append('upload_preset', cloudinaryUploadPreset);
-
-        uploadPromises.push(
-          axios.post(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/upload`, formData)
-        );
-      }
-
-      Promise.all(uploadPromises)
-        .then((responses) => {
-          const imageUrls = responses.map((response) => response.data.secure_url);
-          setImagem(imageUrls);
-          setImagemEnviada(true);
-        })
-        .catch((error) => {
-          console.error('Erro ao fazer upload de imagem:', error);
-        });
-    } else {
-      console.warn('Nenhuma imagem selecionada');
-      setImagemEnviada(true);
-    }
-  };
-
-  const handleClose = () => setModalOpen(false);
-
-  useEffect(() => {
-    if (!open) {
-    }
-  }, [open]);
-
-  // Função para verificar se a data é sábado, domingo ou anterior ao dia atual
-  const isInvalidDate = (dateString) => {
-    const date = new Date(dateString);
-    const today = new Date();
-
-    // Verifica se é sábado (6) ou domingo (0)
-    if (date.getDay() === 6 || date.getDay() === 0) {
-      return true;
-    }
-
-    // Verifica se é anterior ao dia atual
-    if (date < today) {
-      return true;
-    }
-
-    return false;
-  };
-
   return (
-    <Modal open={modalOpen} onClose={() => onClose()}>
+    <Modal open={open} onClose={onClose}>
       <Box className='edicaoPessoa'>
         <div className="header">
           <h2 className="title">Cadastro de Cardápio</h2>
@@ -141,34 +76,15 @@ function CriarCardapio({ open, onClose }) {
           type="date"
           variant="outlined"
           value={data}
-          onChange={(e) => {
-            if (isInvalidDate(e.target.value)) {
-              toast.error('Por favor, selecione uma data válida.');
-            } else {
-              setData(e.target.value);
-            }
-          }}
+          onChange={(e) => setData(e.target.value)}
           fullWidth
           margin="normal"
           InputLabelProps={{ shrink: true }}
         />
 
-        <label>
-          <input
-            type="checkbox"
-            checked={anexarArquivo}
-            onChange={(e) => setAnexarArquivo(e.target.checked)}
-          />
-          Anexar arquivo
-        </label>
-        {anexarArquivo && (
-          <input type="file" id="fileInputLogo" name="file" multiple onChange={handleFileUpload} />
-        )}
-
         <div className='botoesAcao'>
           <Button
             onClick={handleCriarCardapio}
-            disabled={anexarArquivo && !imagemEnviada}
             variant="contained"
             color="primary"
             style={{ marginRight: 10 }}
@@ -182,4 +98,4 @@ function CriarCardapio({ open, onClose }) {
   );
 }
 
-export default CriarCardapio;
+export default CardapioCadastro;
