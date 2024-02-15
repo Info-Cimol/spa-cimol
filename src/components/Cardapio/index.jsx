@@ -186,15 +186,22 @@ function Cardapio() {
             ))}
           </motion.div>
 
-      <div className="reservas-container">
-          <h2 className="title">Minhas reservas</h2>
-    
+       <div className="container_reserva">
+        <div className='header'>
+           <h2 className="title">Minhas reservas</h2>
+        </div>
+         
           {reservas.map((reserva) => (
-            <motion.div key={reserva.id} className="reserva-card">
-              <div className="reserva-content">
-                <h2 className="reserva-title">{reserva.nome_cardapio}</h2>
-                <p className="reserva-info">Data do cardápio: {reserva.data_cardapio}</p>
-                <p className="reserva-info">Turno da reserva: {reserva.turno}</p>
+              <motion.div
+              key={reserva}
+              className='card__cardapio'
+              style={{ marginRight: '20px', flex: '0 0 auto' }}
+            >
+              <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
+              <div className="card__cardapio">
+                <h2 className="card__title">{reserva.nome_cardapio}</h2>
+                <p className="card__info">Dia da semana:  {getDayOfWeek(reserva.data_cardapio)}</p>
+                <p className="card__info">Turno da reserva: {reserva.turno}</p>
               </div>
             </motion.div>
           ))}
