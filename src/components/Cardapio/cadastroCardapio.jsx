@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import TextField from '@mui/material/TextField';
-import axiosFecht from '../../axios/config';
+import axiosFetch from '../../axios/config';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import './cardapio.css';
 
-function CriarCardapio({ open, onClose, onUpdate  }) {
+function CriarCardapio({ open, onClose, onUpdate }) {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [data, setData] = useState('');
@@ -18,41 +18,19 @@ function CriarCardapio({ open, onClose, onUpdate  }) {
   const [imagemEnviada, setImagemEnviada] = useState(false);
   const [anexarArquivo, setAnexarArquivo] = useState(false);
   const [modalOpen, setModalOpen] = useState(open);
+  const token = localStorage.getItem('token');
+  const headers = {
+    'x-access-token': token,
+  };
 
   const handleCriarCardapio = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const headers = {
-        'x-access-token': token,
-      };
-  
-      // Verifica se a data está dentro da semana atual
-      const today = new Date();
-      const selectedDate = new Date(data);
-  
-      // Obtém o primeiro dia da semana atual (domingo)
-      const firstDayOfWeek = new Date(today);
-      firstDayOfWeek.setDate(today.getDate() - today.getDay());
-  
-      if (selectedDate < firstDayOfWeek || selectedDate > today) {
-        toast.error('Você só pode criar cardápios para a semana atual.');
-        return; // Sai da função se a data não estiver na semana atual
-      }
-  
-      // Verificar se já existe um cardápio para a data informada
-      const response = await axiosFecht.get(`/cardapio/data/${data}`, { headers });
-  
-      if (response.data.length > 0) {
-        toast.error('Já existe um cardápio cadastrado para esta data.');
-        return; // Sai da função se já existir um cardápio para a data informada
-      }
-  
       let dataToSend = { nome, descricao, data };
       if (anexarArquivo && imagemEnviada) {
         dataToSend.imagem = imagem;
       }
   
-      await axiosFecht.post('/criar/cardapio', dataToSend, { headers });
+      await axiosFetch.post('/criar/cardapio', dataToSend, { headers });
   
       toast.success('Seu cardápio foi cadastrado!');
       handleClose();
@@ -62,7 +40,7 @@ function CriarCardapio({ open, onClose, onUpdate  }) {
       toast.error('Não foi possível cadastrar o seu cardápio!');
     }
   };  
-
+  
   const handleFileUpload = async (event) => {
     const files = event.target.files;
 
@@ -101,8 +79,7 @@ function CriarCardapio({ open, onClose, onUpdate  }) {
   const handleClose = () => setModalOpen(false);
 
   useEffect(() => {
-    if (!open) {
-    }
+    setModalOpen(open);
   }, [open]);
 
   const isInvalidDate = (dateString) => {
