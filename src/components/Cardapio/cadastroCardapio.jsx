@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import './cardapio.css';
 
-function CriarCardapio({ open, onClose, onUpdate }) {
+function CriarCardapio({ open, onClose, onUpdate, onCadastroConcluido }) {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [data, setData] = useState('');
@@ -29,17 +29,20 @@ function CriarCardapio({ open, onClose, onUpdate }) {
       if (anexarArquivo && imagemEnviada) {
         dataToSend.imagem = imagem;
       }
-  
+
       await axiosFetch.post('/criar/cardapio', dataToSend, { headers });
-  
+
       toast.success('Seu cardápio foi cadastrado!');
       handleClose();
       onUpdate();
+      if (typeof onCadastroConcluido === 'function') {
+        onCadastroConcluido(); // Chama a função de atualização após o cadastro ser concluído
+      }
     } catch (error) {
       console.error('Erro ao criar cardápio:', error);
     }
-  };  
-  
+  };
+
   const handleFileUpload = async (event) => {
     const files = event.target.files;
 
@@ -136,7 +139,7 @@ function CriarCardapio({ open, onClose, onUpdate }) {
           Anexar arquivo
         </label>
         {anexarArquivo && (
-          <input type="file" id="fileInputLogo"  style={{ marginRight: 10 }} name="file" multiple onChange={handleFileUpload} />
+          <input type="file" id="fileInputLogo" style={{ marginRight: 10 }} name="file" multiple onChange={handleFileUpload} />
         )}
 
         <div className='botoesAcao'>

@@ -51,7 +51,7 @@ function CardapioMerendeira() {
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    return days[date.getDay()];
+    return days[date.getDay() + 1];
   };
 
   const handleReservationClick = (reservation) => {
@@ -62,6 +62,18 @@ function CardapioMerendeira() {
   const handleCloseDetailModal = () => {
     setIsDetailModalOpen(false);
   };
+
+  const handleUpdateCardapioList = async () => {
+    try {
+      const response = await axiosFetch.get('/listar/cardapio', {
+        headers: { 'x-access-token': token }
+      });
+      setCardapio(response.data);
+    } catch (error) {
+      console.error('Erro ao atualizar lista de cardápios:', error);
+    }
+  };
+  
 
   const handleNextWeek = () => {
     const nextWeekStart = new Date(currentDate);
@@ -119,6 +131,7 @@ function CardapioMerendeira() {
   
       toast.success('Cardápio excluído com sucesso!');
   
+      // Feche o modal de confirmação e o modal de detalhes
       setIsDetailModalOpen(false);
       setConfirmationModalOpen(false);
     } catch (error) {
@@ -137,7 +150,7 @@ function CardapioMerendeira() {
         <BackArrow style={{ marginTop: '2000px', marginLeft: '10px' }} />
         <div className='containerCardapio'>
           <div className="add-button-container">
-            <h2>Reservas da semana  {currentWeek}</h2>
+            <h2>Cardápio  {currentWeek}</h2>
             {userRole === 'admin' || userRole === 'secretaria' ? (
               <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
                 <AddIcon fontSize="large" />
@@ -145,14 +158,22 @@ function CardapioMerendeira() {
             ) : null}
           </div>
 
-          {openCadastro && <CardapioCadastro open={openCadastro} onClose={() => setOpenCadastro(false)} />}
+                  {openCadastro && (
+          <CardapioCadastro
+            open={openCadastro}
+            onClose={() => {
+              setOpenCadastro(false);
+              handleUpdateCardapioList(); 
+            }}
+            onUpdate={handleUpdateCardapioList} 
+          />
+        )}
 
           <table className="cardapio-table">
             <thead>
               <tr>
                 <th>Dia</th>
                 <th>Nome</th>
-                <th>Descrição</th>
                 <th>Reservas</th>
               </tr>
             </thead>
@@ -170,7 +191,6 @@ function CardapioMerendeira() {
                     <tr key={index} onClick={() => handleReservationClick(item)}>
                       <td>{dayOfWeek}</td>
                       <td>{item.nome}</td>
-                      <td>{item.descricao}</td>
                       <td>{item.reservas}</td>
                     </tr>
                   );
