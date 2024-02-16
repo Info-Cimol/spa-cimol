@@ -13,51 +13,47 @@ function Cardapio() {
   const [cardapio, setCardapio] = useState([]);
   const [reservado, setReservado] = useState({});
   const [reservas, setReservas] = useState([]);
-  const [selectedTurno, setSelectedTurno] = useState({});
   const [userRole] = useState(localStorage.getItem('userRole'));
-  const [currentWeek, setCurrentWeek] = useState('');
   const img = imagem1;
   const id = localStorage.getItem('id');
   const token = localStorage.getItem('token');
   const headers = {
     'x-access-token': token,
   };
+  const [selectedTurno, setSelectedTurno] = useState({});
+
+const handleTurnoChange = (idCardapio, selectedValue) => {
+  setSelectedTurno(prevState => ({
+    ...prevState,
+    [idCardapio]: selectedValue
+  }));
+};
  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axiosFetch.get('/listar/cardapio', { headers });
-        const cardapioOrdenado = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
-        setCardapio(cardapioOrdenado.filter(item => isWithinCurrentWeek(item.data))); 
-
-        // Define a semana atual
-        const today = new Date();
-        const nextMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (1 + 7 - today.getDay()) % 7);
-        const currentDate = `${today.getDate()}/${today.getMonth() + 1}`;
-        const nextWeekDate = `${nextMonday.getDate()}/${nextMonday.getMonth() + 1}`;
-        setCurrentWeek(`${currentDate} - ${nextWeekDate}`);
+        setCardapio(response.data);
       } catch (error) {
         console.log('Erro ao listar cardápio', error);
       }
     };
 
     fetchData();
-  });
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-    
         const response = await axiosFetch.get(`/lista/reservas/${id}`, { headers });
-        const reservasOrdenadas = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
-        setReservas(reservasOrdenadas);
+        setReservas(response.data);
       } catch (error) {
         console.log('Erro ao listar reservas', error);
       }
     };
 
     fetchData();
-  });
+  }, []);
 
   useEffect(() => {
     const storedReservas = JSON.parse(localStorage.getItem('reservado')) || {};
@@ -72,16 +68,6 @@ function Cardapio() {
     try {
       const id = localStorage.getItem('id');
       const turno = selectedTurno[idCardapio];
-
-      if (!turno) {
-        toast.error('Por favor, selecione um turno antes de reservar.');
-        return;
-      }
-
-      if (reservado[idCardapio] && reservado[idCardapio] === turno) {
-        toast.error('Você já tem uma reserva para este turno.');
-        return;
-      }
 
       const response = await axiosFetch.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno }, { headers });
       if (response.data.deletado === true) {
@@ -102,7 +88,7 @@ function Cardapio() {
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    return days[date.getDay()];
+    return days[date.getDay() + 1];
   };
 
   const isReservaDisabled = (data) => {
@@ -110,20 +96,8 @@ function Cardapio() {
     const today = new Date();
     const diferencaEmMilissegundos = dataCardapio.getTime() - today.getTime();
     const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
-    const podeReservar = diferencaEmDias >= 2; 
+    const podeReservar = diferencaEmDias >= 1; 
     return !podeReservar;
-  };
-
-  const handleTurnoChange = (idCardapio, selectedValue) => {
-    setSelectedTurno({ ...selectedTurno, [idCardapio]: selectedValue });
-  };
-
-  const isWithinCurrentWeek = (dateString) => {
-    const date = new Date(dateString);
-    const today = new Date();
-    const firstDayOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1); // Calcula o primeiro dia da semana (domingo)
-    const lastDayOfWeek = new Date(firstDayOfWeek.getFullYear(), firstDayOfWeek.getMonth(), firstDayOfWeek.getDate() + 6); // Calcula o último dia da semana (sábado)
-    return date >= firstDayOfWeek && date <= lastDayOfWeek;
   };
 
   return (
@@ -138,7 +112,7 @@ function Cardapio() {
         <div className='containerCardapio'>
   
           <div className="header">
-            <h2 className="title">Cardápio da semana ({currentWeek})</h2>
+            <h2 className="title">Cardápio</h2>
           </div>
   
           <motion.div

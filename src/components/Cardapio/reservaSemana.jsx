@@ -18,7 +18,7 @@ function CardapioMerendeira() {
   const token = localStorage.getItem('token');
   const [userRole] = useState(localStorage.getItem('userRole'));
   const [currentWeek, setCurrentWeek] = useState('');
-  const [currentDate, setCurrentDate] = useState(new Date() + 1);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const handleToggleForm = () => {
     setOpenCadastro(!openCadastro);
@@ -35,7 +35,7 @@ function CardapioMerendeira() {
         const today = new Date();
         setCurrentDate(today);
 
-        const nextMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1 (1 + 7 - today.getDay()) % 7);
+        const nextMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() (1 + 7 - today.getDay()));
         const weekRange = `${today.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${nextMonday.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
         setCurrentWeek(weekRange);
       } catch (error) {
@@ -126,9 +126,9 @@ function CardapioMerendeira() {
             {cardapio.map((item, index) => {
               const itemDate = new Date(item.data);
               const startOfWeek = new Date(currentDate);
-              startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); 
+              startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
               const endOfWeek = new Date(startOfWeek);
-              endOfWeek.setDate(startOfWeek.getDate() + 5); 
+              endOfWeek.setDate(startOfWeek.getDate() + 5);
 
               if (itemDate >= startOfWeek && itemDate <= endOfWeek) {
                 const dayOfWeek = getDayOfWeek(itemDate);
@@ -143,7 +143,6 @@ function CardapioMerendeira() {
               }
               return null;
             })}
-
             </tbody>
           </table>
 
