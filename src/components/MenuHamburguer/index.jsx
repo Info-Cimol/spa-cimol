@@ -187,8 +187,7 @@ const MenuHamburguer = ({ userType}) => {
           {(userType === "admin") && (
             <>
               <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapioMerenda}>Reserva</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
+              <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
               <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>
               <StyledTextButton>Professor</StyledTextButton>
               <StyledTextButton onClick={handleBottonProjeto}>Projeto</StyledTextButton>
@@ -200,8 +199,7 @@ const MenuHamburguer = ({ userType}) => {
           {(userType === "secretaria") && (
             <>
               <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapioMerenda}>Reserva</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
+              <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
               <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>
               <StyledTextButton>Professor</StyledTextButton>
             </>

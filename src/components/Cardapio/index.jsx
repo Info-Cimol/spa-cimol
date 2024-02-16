@@ -64,11 +64,16 @@ const handleTurnoChange = (idCardapio, selectedValue) => {
     localStorage.setItem('reservado', JSON.stringify(reservas));
   };
 
-  const reservarCardapio = async (idCardapio) => {
+  const reservarCardapio = async (idCardapio, maisDeUmTurno) => {
     try {
       const id = localStorage.getItem('id');
-      const turno = selectedTurno[idCardapio];
-
+      let turno;
+      if (maisDeUmTurno) {
+        turno = ['manhã', 'tarde', 'noite']; // ou qualquer lógica que você queira para definir os turnos
+      } else {
+        turno = selectedTurno[idCardapio];
+      }
+  
       const response = await axiosFetch.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno }, { headers });
       if (response.data.deletado === true) {
         console.log('Reserva removida');
@@ -142,19 +147,20 @@ const handleTurnoChange = (idCardapio, selectedValue) => {
                     <p className=''>Reservas: {item.reservas}</p>
                   ) : null}
   
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {isReservaDisabled(item.data) ? (
-                      <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />
-                    ) : (
-                      <FaCalendarPlus size={20} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={() => reservarCardapio(item.id_cardapio)} />
-                    )}
-                    <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, e.target.value)} disabled={isReservaDisabled(item.data)}>
-                      <option value="">Selecione um turno</option>
-                      <option value="manhã">Manhã</option>
-                      <option value="tarde">Tarde</option>
-                      <option value="noite">Noite</option>
-                    </select>
-                  </div>
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+  {isReservaDisabled(item.data) ? (
+    <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />
+  ) : (
+    <FaCalendarPlus size={20} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={() => reservarCardapio(item.id_cardapio)} />
+  )}
+  <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, Array.from(e.target.selectedOptions, option => option.value))} disabled={isReservaDisabled(item.data)} multiple>
+    <option value="">Selecione um turno</option>
+    <option value="manhã">Manhã</option>
+    <option value="tarde">Tarde</option>
+    <option value="noite">Noite</option>
+  </select>
+</div>
+
                 </div>
               </motion.div>
             ))}
