@@ -5,6 +5,7 @@ import BackArrow from '../BackArrow/index';
 import CardapioCadastro from './cadastroCardapio';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton, Button } from '@mui/material';
+import { toast } from 'react-toastify';
 import AddIcon from '@mui/icons-material/Add';
 import axiosFetch from '../../axios/config';
 import './cardapio.css';
@@ -17,8 +18,7 @@ function CardapioMerendeira() {
   const token = localStorage.getItem('token');
   const [userRole] = useState(localStorage.getItem('userRole'));
   const [currentWeek, setCurrentWeek] = useState('');
-  const [weekStart, setWeekStart] = useState('');
-  const [weekEnd, setWeekEnd] = useState('');
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const handleToggleForm = () => {
     setOpenCadastro(!openCadastro);
@@ -32,13 +32,12 @@ function CardapioMerendeira() {
         });
         setCardapio(response.data);
 
-        // Define a semana atual
         const today = new Date();
+        setCurrentDate(today);
+
         const nextMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (1 + 7 - today.getDay()) % 7);
         const weekRange = `${today.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${nextMonday.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
         setCurrentWeek(weekRange);
-        setWeekStart(today);
-        setWeekEnd(nextMonday);
       } catch (error) {
         console.log('Erro ao listar cardápio', error);
       }
@@ -50,25 +49,8 @@ function CardapioMerendeira() {
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    const dayOfWeek = date.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-      return null;
-    }
-    return days[dayOfWeek];
+    return days[date.getDay() + 1];
   };
-
-  const cardapioDaSemanaAtual = cardapio.filter(item => {
-    const data = new Date(item.data);
-    const dayOfWeek = data.getDay();
-
-    // Verifica se o dia da semana não é sábado (6) ou domingo (0)
-    if (dayOfWeek !== 6 && dayOfWeek !== 0) {
-      // Retorna true se o dia estiver dentro da semana atual
-      return data >= weekStart && data < weekEnd;
-    }
-
-    return false;
-  });
 
   const handleReservationClick = (reservation) => {
     setSelectedReservation(reservation);
@@ -80,35 +62,36 @@ function CardapioMerendeira() {
   };
 
   const handleNextWeek = () => {
-    const nextWeekStart = new Date(weekEnd);
-    nextWeekStart.setDate(nextWeekStart.getDate() + 1);
+    const nextWeekStart = new Date(currentDate);
+    nextWeekStart.setDate(nextWeekStart.getDate() + 7);
+  
+    setCurrentDate(nextWeekStart);
+  
     const nextWeekEnd = new Date(nextWeekStart);
-    nextWeekEnd.setDate(nextWeekEnd.getDate() + 7);
-
+    nextWeekEnd.setDate(nextWeekEnd.getDate() + 6);
+  
     const weekRange = `${nextWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${nextWeekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
     setCurrentWeek(weekRange);
-    setWeekStart(nextWeekStart);
-    setWeekEnd(nextWeekEnd);
-  };
-
-  const handlePreviousWeek = () => {
-    const today = new Date();
-    const previousWeekStart = new Date(weekStart);
-    previousWeekStart.setDate(previousWeekStart.getDate() - 1);
-
-    // Se a data retroceder até a data atual, não permite mais retroceder
-    if (previousWeekStart < today) {
-      return;
-    }
-    const previousWeekEnd = new Date(previousWeekStart);
-    previousWeekEnd.setDate(previousWeekEnd.getDate() + 7);
-  
-    const weekRange = `${previousWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${previousWeekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
-    setCurrentWeek(weekRange);
-    setWeekStart(previousWeekStart);
-    setWeekEnd(previousWeekEnd);
   };  
-
+  
+  const handlePreviousWeek = () => {
+    const previousWeekStart = new Date(currentDate);
+    previousWeekStart.setDate(previousWeekStart.getDate() - 7);
+  
+    if (previousWeekStart >= new Date()) {
+      setCurrentDate(previousWeekStart);
+  
+      const previousWeekEnd = new Date(previousWeekStart);
+      previousWeekEnd.setDate(previousWeekEnd.getDate() + 6);
+  
+      const weekRange = `${previousWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${previousWeekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
+      setCurrentWeek(weekRange);
+    } else {
+      // Não retrocede para uma semana no passado
+      toast.error('Você não pode retroceder para uma semana no passado.');
+    }
+  };
+  
   return (
     <>
       <div>
@@ -140,9 +123,11 @@ function CardapioMerendeira() {
               </tr>
             </thead>
             <tbody>
-              {cardapioDaSemanaAtual.map((item, index) => {
+              {cardapio.map((item, index) => {
                 const dayOfWeek = getDayOfWeek(item.data);
-                if (dayOfWeek) {
+                const itemDate = new Date(item.data);
+
+                if (itemDate >= currentDate && itemDate < new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7)) {
                   return (
                     <tr key={index} onClick={() => handleReservationClick(item)}>
                       <td>{dayOfWeek}</td>

@@ -540,9 +540,10 @@ const CadastroAluno = () => {
 
         <Modal open={showEditModal} onClose={() => setShowEditModal(false)}>
         <div className="edicaoPessoa">
-          
+          <div className="header">
             <h2>Editar Aluno</h2>  
-        
+          </div>
+
           <div className="close">
               <IconButton onClick={() => setShowEditModal(false)}>
                 <CloseIcon style={{ color: 'cinza' }} />

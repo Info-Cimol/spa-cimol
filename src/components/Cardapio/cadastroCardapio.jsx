@@ -82,21 +82,6 @@ function CriarCardapio({ open, onClose, onUpdate }) {
     setModalOpen(open);
   }, [open]);
 
-  const isInvalidDate = (dateString) => {
-    const date = new Date(dateString);
-    const today = new Date();
-
-    if (date.getDay() === 6 || date.getDay() === 0) {
-      return true;
-    }
-
-    if (date < today) {
-      return true;
-    }
-
-    return false;
-  };
-
   return (
     <Modal open={modalOpen} onClose={() => onClose()}>
       <Box className='edicaoPessoa'>
@@ -137,13 +122,7 @@ function CriarCardapio({ open, onClose, onUpdate }) {
           type="date"
           variant="outlined"
           value={data}
-          onChange={(e) => {
-            if (isInvalidDate(e.target.value)) {
-              toast.error('Por favor, selecione uma data válida.');
-            } else {
-              setData(e.target.value);
-            }
-          }}
+          onChange={(e) => setData(e.target.value)}
           fullWidth
           margin="normal"
           InputLabelProps={{ shrink: true }}
@@ -158,7 +137,7 @@ function CriarCardapio({ open, onClose, onUpdate }) {
           Anexar arquivo
         </label>
         {anexarArquivo && (
-          <input type="file" id="fileInputLogo" name="file" multiple onChange={handleFileUpload} />
+          <input type="file" id="fileInputLogo"  style={{ marginRight: 10 }} name="file" multiple onChange={handleFileUpload} />
         )}
 
         <div className='botoesAcao'>
