@@ -51,7 +51,7 @@ function CardapioMerendeira() {
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    return days[date.getDay() + 1];
+    return days[date.getDay()];
   };
 
   const handleReservationClick = (reservation) => {
@@ -105,17 +105,20 @@ function CardapioMerendeira() {
   const handleConfirmDelete = async () => {
     try {
       const idCardapio = selectedReservation.id_cardapio;
+      
       // Fazer uma requisição DELETE para a rota de exclusão correspondente
       await axiosFetch.delete(`/exclui/cardapio/${idCardapio}`, {
         headers: { 'x-access-token': token }
       });
+  
+      // Atualizar a lista de cardápios após a exclusão
+      const response = await axiosFetch.get('/listar/cardapio', {
+        headers: { 'x-access-token': token }
+      });
+      setCardapio(response.data);
+  
       toast.success('Cardápio excluído com sucesso!');
   
-      // Atualize a lista de cardápios após a exclusão
-      const updatedCardapio = cardapio.filter(item => item.idCardapio !== selectedReservation.idCardapio);
-      setCardapio(updatedCardapio);
-  
-      // Feche o modal de confirmação e o modal de detalhes
       setIsDetailModalOpen(false);
       setConfirmationModalOpen(false);
     } catch (error) {

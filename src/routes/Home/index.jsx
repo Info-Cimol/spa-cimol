@@ -118,16 +118,9 @@ function Home() {
                   <div className="col-sm-12 d-flex flex-wrap justify-content-around">
                     <div className="card">
                       <div className="card__body">
-                        <h5 className="card__head">Reservas</h5>
+                        <h5 className="card__head">Merenda</h5>
                         <p className="card__desc">Clique para ver a quantidade de reservas.</p>
                         <button className='card__btn' onClick={abrirCardapioMerenda}>Abrir</button>
-                      </div>
-                    </div>
-                    <div className="card">
-                      <div className="card__body">
-                        <h5 className="card__head">Cardápio</h5>
-                        <p className="card__desc">Clique para ver o cardápio de merenda.</p>
-                        <button className='card__btn' onClick={abrirCardapio}>Abrir</button>
                       </div>
                     </div>
                     <div className="card">
@@ -189,16 +182,9 @@ function Home() {
                   <div className="col-sm-12 d-flex flex-wrap justify-content-around">
                   <div className="card">
                       <div className="card__body">
-                        <h5 className="card__head">Reservas</h5>
+                        <h5 className="card__head">Merenda</h5>
                         <p className="card__desc">Clique para ver a quantidade de reservas.</p>
                         <button className='card__btn' onClick={abrirCardapioMerenda}>Abrir</button>
-                      </div>
-                    </div>
-                    <div className="card">
-                      <div className="card__body">
-                        <h5 className="card__head">Cardápio</h5>
-                        <p className="card__desc">Clique para ver o cardápio de merenda.</p>
-                        <button className='card__btn' onClick={abrirCardapio}>Abrir</button>
                       </div>
                     </div>
                     <div className="card">

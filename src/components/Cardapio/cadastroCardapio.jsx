@@ -37,7 +37,6 @@ function CriarCardapio({ open, onClose, onUpdate }) {
       onUpdate();
     } catch (error) {
       console.error('Erro ao criar cardápio:', error);
-      toast.error('Não foi possível cadastrar o seu cardápio!');
     }
   };  
   
