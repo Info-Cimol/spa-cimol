@@ -128,7 +128,7 @@ const handleTurnoChange = (idCardapio, selectedValue) => {
         <div className='containerCardapio'>
   
           <div className="header">
-            <h2 className="title">Cardápio</h2>
+            <h2 className="title">Cardápio da Semana</h2>
           </div>
   
           <motion.div

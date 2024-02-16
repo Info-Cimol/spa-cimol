@@ -6,7 +6,7 @@ import CardapioCadastro from './cadastroCardapio';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton,Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import {Delete as DeleteIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import axiosFetch from '../../axios/config';
 import './cardapio.css';
@@ -51,7 +51,7 @@ function CardapioMerendeira() {
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    return days[date.getDay() + 1];
+    return days[date.getDay()];
   };
 
   const handleReservationClick = (reservation) => {
@@ -82,24 +82,24 @@ function CardapioMerendeira() {
     setCurrentDate(nextWeekStart);
   
     const nextWeekEnd = new Date(nextWeekStart);
-    nextWeekEnd.setDate(nextWeekEnd.getDate() + 6);
+    nextWeekEnd.setDate(nextWeekEnd.getDate() + 4);
   
     const weekRange = `${nextWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${nextWeekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
     setCurrentWeek(weekRange);
-  };  
+  };
   
   const handlePreviousWeek = () => {
     const previousWeekStart = new Date(currentDate);
     previousWeekStart.setDate(previousWeekStart.getDate() - 7);
     const previousWeekEnd = new Date(previousWeekStart);
-    previousWeekEnd.setDate(previousWeekEnd.getDate() + 6);
+    previousWeekEnd.setDate(previousWeekEnd.getDate() + 4);
   
     setCurrentDate(previousWeekStart);
   
     const weekRange = `${previousWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${previousWeekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
     setCurrentWeek(weekRange);
-  };  
-
+  };
+  
   const handleOpenConfirmationModal = () => {
     setConfirmationModalOpen(true);
   };
@@ -172,26 +172,22 @@ function CardapioMerendeira() {
               </tr>
             </thead>
             <tbody>
-              {cardapio.map((item, index) => {
-                const itemDate = new Date(item.data);
-                const startOfWeek = new Date(currentDate);
-                startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
-                const endOfWeek = new Date(startOfWeek);
-                endOfWeek.setDate(startOfWeek.getDate() + 5);
+  {cardapio.map((item, index) => {
+    const itemDate = new Date(item.data);
+    // Verifica se a data do item está dentro da semana de segunda a sexta-feira
+    if (itemDate.getDay() >= 1 && itemDate.getDay() <= 5) {
+      return (
+        <tr key={index} onClick={() => handleReservationClick(item)}>
+          <td>{getDayOfWeek(itemDate)}</td>
+          <td>{item.nome}</td>
+          <td>{item.reservas}</td>
+        </tr>
+      );
+    }
+    return null;
+  })}
+</tbody>
 
-                if (itemDate >= startOfWeek && itemDate <= endOfWeek) {
-                  const dayOfWeek = getDayOfWeek(itemDate);
-                  return (
-                    <tr key={index} onClick={() => handleReservationClick(item)}>
-                      <td>{dayOfWeek}</td>
-                      <td>{item.nome}</td>
-                      <td>{item.reservas}</td>
-                    </tr>
-                  );
-                }
-                return null;
-              })}
-            </tbody>
           </table>
 
           <div className="week-navigation">
