@@ -91,20 +91,14 @@ function CardapioMerendeira() {
   const handlePreviousWeek = () => {
     const previousWeekStart = new Date(currentDate);
     previousWeekStart.setDate(previousWeekStart.getDate() - 7);
-    const today = new Date();
+    const previousWeekEnd = new Date(previousWeekStart);
+    previousWeekEnd.setDate(previousWeekEnd.getDate() + 6);
   
-    if (previousWeekStart <= today) {
-      setCurrentDate(previousWeekStart);
-      const previousWeekEnd = new Date(previousWeekStart);
-      previousWeekEnd.setDate(previousWeekEnd.getDate() + 6);
+    setCurrentDate(previousWeekStart);
   
-      const weekRange = `${previousWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${previousWeekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
-      setCurrentWeek(weekRange);
-    } else {
-      // Não retrocede além do dia atual
-      console.error('Você não pode retroceder além do dia atual.');
-    }
-  };
+    const weekRange = `${previousWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${previousWeekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
+    setCurrentWeek(weekRange);
+  };  
 
   const handleOpenConfirmationModal = () => {
     setConfirmationModalOpen(true);

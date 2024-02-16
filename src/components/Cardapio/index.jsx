@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaCalendarPlus, FaBan } from 'react-icons/fa';
+import { FaCalendarPlus, FaBan, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
@@ -69,7 +69,7 @@ const handleTurnoChange = (idCardapio, selectedValue) => {
       const id = localStorage.getItem('id');
       let turno;
       if (maisDeUmTurno) {
-        turno = ['manhã', 'tarde', 'noite']; // ou qualquer lógica que você queira para definir os turnos
+        turno = ['manhã', 'tarde', 'noite']; 
       } else {
         turno = selectedTurno[idCardapio];
       }
@@ -96,15 +96,26 @@ const handleTurnoChange = (idCardapio, selectedValue) => {
     return days[date.getDay() + 1];
   };
 
-  const isReservaDisabled = (data) => {
+  const isReservaDisabled = (data, idCardapio) => {
+    // Verifica se o cardápio já está na lista de reservas do usuário
+    const isReservado = reservas.some(reserva => reserva.id_cardapio === idCardapio);
+    
+    // Verifica se o cardápio já foi reservado anteriormente pelo usuário
+    const isJaReservado = idCardapio in reservado;
+    
+    // Restante da lógica permanece a mesma
     const dataCardapio = new Date(data);
     const today = new Date();
     const diferencaEmMilissegundos = dataCardapio.getTime() - today.getTime();
     const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
-    const podeReservar = diferencaEmDias >= 1; 
-    return !podeReservar;
+    
+    // Verifica se já passou da data de reserva
+    const passouDaDataReserva = diferencaEmDias < 1;
+    
+    // Se o usuário já tiver uma reserva para este cardápio ou se já passou da data de reserva, desabilita a reserva
+    return isReservado || isJaReservado || passouDaDataReserva;
   };
-
+   
   return (
     <>
       <div>
@@ -147,20 +158,24 @@ const handleTurnoChange = (idCardapio, selectedValue) => {
                     <p className=''>Reservas: {item.reservas}</p>
                   ) : null}
   
-  <div style={{ display: 'flex', alignItems: 'center' }}>
-  {isReservaDisabled(item.data) ? (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {isReservaDisabled(item.data, item.id_cardapio) ? (
+  <FaCheck size={20} style={{ marginRight: '5px', color: 'green' }} />
+) : (
+  isReservaDisabled(item.data) ? (
     <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />
   ) : (
     <FaCalendarPlus size={20} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={() => reservarCardapio(item.id_cardapio)} />
-  )}
-  <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, Array.from(e.target.selectedOptions, option => option.value))} disabled={isReservaDisabled(item.data)} multiple>
-    <option value="">Selecione um turno</option>
-    <option value="manhã">Manhã</option>
-    <option value="tarde">Tarde</option>
-    <option value="noite">Noite</option>
-  </select>
-</div>
+  )
+)}
 
+                    <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, Array.from(e.target.selectedOptions, option => option.value))} disabled={isReservaDisabled(item.data)} multiple>
+                      <option value="">Selecione um turno</option>
+                      <option value="manhã">Manhã</option>
+                      <option value="tarde">Tarde</option>
+                      <option value="noite">Noite</option>
+                    </select>
+                  </div>
                 </div>
               </motion.div>
             ))}
