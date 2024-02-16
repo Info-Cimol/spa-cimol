@@ -40,7 +40,7 @@ const handleTurnoChange = (idCardapio, selectedValue) => {
     };
 
     fetchData();
-  }, []);
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +53,7 @@ const handleTurnoChange = (idCardapio, selectedValue) => {
     };
 
     fetchData();
-  }, []);
+  });
 
   useEffect(() => {
     const storedReservas = JSON.parse(localStorage.getItem('reservado')) || {};
