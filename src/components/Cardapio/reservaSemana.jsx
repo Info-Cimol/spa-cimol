@@ -35,7 +35,7 @@ function CardapioMerendeira() {
         const today = new Date();
         setCurrentDate(today);
 
-        const nextMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (1 + 7 - today.getDay()) % 7);
+        const nextMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1 + (1 + 7 - today.getDay()) % 7);
         const weekRange = `${today.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${nextMonday.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
         setCurrentWeek(weekRange);
       } catch (error) {
@@ -77,20 +77,20 @@ function CardapioMerendeira() {
   const handlePreviousWeek = () => {
     const previousWeekStart = new Date(currentDate);
     previousWeekStart.setDate(previousWeekStart.getDate() - 7);
+    const today = new Date();
   
-    if (previousWeekStart >= new Date()) {
+    if (previousWeekStart <= today) {
       setCurrentDate(previousWeekStart);
-  
       const previousWeekEnd = new Date(previousWeekStart);
       previousWeekEnd.setDate(previousWeekEnd.getDate() + 6);
   
       const weekRange = `${previousWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${previousWeekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
       setCurrentWeek(weekRange);
     } else {
-      // Não retrocede para uma semana no passado
-      toast.error('Você não pode retroceder para uma semana no passado.');
+      // Não retrocede além do dia atual
+      toast.error('Você não pode retroceder além do dia atual.');
     }
-  };
+  };  
   
   return (
     <>
