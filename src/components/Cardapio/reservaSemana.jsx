@@ -4,9 +4,9 @@ import MenuHamburguer from "../MenuHamburguer";
 import BackArrow from '../BackArrow/index';
 import CardapioCadastro from './cadastroCardapio';
 import CloseIcon from '@mui/icons-material/Close';
-import { IconButton,Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import {Delete as DeleteIcon } from '@mui/icons-material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import axiosFetch from '../../axios/config';
 import './cardapio.css';
@@ -19,8 +19,8 @@ function CardapioMerendeira() {
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const [token] = useState(localStorage.getItem('token'));
   const [userRole] = useState(localStorage.getItem('userRole'));
-  const [currentWeek, setCurrentWeek] = useState('');
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
+  const [mondays, setMondays] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,29 +29,47 @@ function CardapioMerendeira() {
           headers: { 'x-access-token': token }
         });
         setCardapio(response.data);
-
+  
         const today = new Date();
-        setCurrentDate(today);
-
-        const nextMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (1 + 7 - today.getDay()));
-        const weekRange = `${today.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${nextMonday.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
-        setCurrentWeek(weekRange);
+        const currentDayOfWeek = today.getDay();
+        const monday = new Date(today);
+        monday.setDate(today.getDate() - currentDayOfWeek + (currentDayOfWeek === 0 ? -7 : 1));
+  
+        const endOfWeek = new Date(monday);
+        endOfWeek.setDate(monday.getDate() + 7);
+  
+        const mondays = getMondays(monday, endOfWeek);
+        setMondays(mondays);
       } catch (error) {
         console.log('Erro ao listar cardápio', error);
       }
     };
-
+  
     fetchData();
-  }, [token, openCadastro]);
+  }, [token]);  
+
+  const getMondays = (startOfWeek, endOfWeek) => {
+    const days = [];
+    let current = new Date(startOfWeek);
+
+    while (current <= endOfWeek) {
+      days.push(new Date(current));
+      current.setDate(current.getDate() + 7);
+    }
+
+    return days;
+  };
+
+  const handleNextWeek = () => {
+    setCurrentWeekIndex(currentWeekIndex + 1);
+  };
+
+  const handlePreviousWeek = () => {
+    setCurrentWeekIndex(currentWeekIndex - 1);
+  };
 
   const handleToggleForm = () => {
     setOpenCadastro(!openCadastro);
-  };
-
-  const getDayOfWeek = (dateString) => {
-    const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-    const date = new Date(dateString);
-    return days[date.getDay()];
   };
 
   const handleReservationClick = (reservation) => {
@@ -73,33 +91,7 @@ function CardapioMerendeira() {
       console.error('Erro ao atualizar lista de cardápios:', error);
     }
   };
-  
 
-  const handleNextWeek = () => {
-    const nextWeekStart = new Date(currentDate);
-    nextWeekStart.setDate(nextWeekStart.getDate() + 7);
-  
-    setCurrentDate(nextWeekStart);
-  
-    const nextWeekEnd = new Date(nextWeekStart);
-    nextWeekEnd.setDate(nextWeekEnd.getDate() + 4);
-  
-    const weekRange = `${nextWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${nextWeekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
-    setCurrentWeek(weekRange);
-  };
-  
-  const handlePreviousWeek = () => {
-    const previousWeekStart = new Date(currentDate);
-    previousWeekStart.setDate(previousWeekStart.getDate() - 7);
-    const previousWeekEnd = new Date(previousWeekStart);
-    previousWeekEnd.setDate(previousWeekEnd.getDate() + 4);
-  
-    setCurrentDate(previousWeekStart);
-  
-    const weekRange = `${previousWeekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${previousWeekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}`;
-    setCurrentWeek(weekRange);
-  };
-  
   const handleOpenConfirmationModal = () => {
     setConfirmationModalOpen(true);
   };
@@ -111,27 +103,38 @@ function CardapioMerendeira() {
   const handleConfirmDelete = async () => {
     try {
       const idCardapio = selectedReservation.id_cardapio;
-      
-      // Fazer uma requisição DELETE para a rota de exclusão correspondente
+
       await axiosFetch.delete(`/exclui/cardapio/${idCardapio}`, {
         headers: { 'x-access-token': token }
       });
-  
-      // Atualizar a lista de cardápios após a exclusão
+
       const response = await axiosFetch.get('/listar/cardapio', {
         headers: { 'x-access-token': token }
       });
       setCardapio(response.data);
-  
+
       toast.success('Cardápio excluído com sucesso!');
-  
-      // Feche o modal de confirmação e o modal de detalhes
+
       setIsDetailModalOpen(false);
       setConfirmationModalOpen(false);
     } catch (error) {
       console.error('Erro ao excluir cardápio:', error);
     }
-  };  
+  };
+
+  const currentMonday = mondays[currentWeekIndex];
+  const currentFriday = new Date(currentMonday); 
+  currentFriday.setDate(currentFriday.getDate() + 4);
+
+  const weekRange = currentMonday && currentFriday ?
+    `${currentMonday.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${currentFriday.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}` :
+    "";
+
+  const getDayOfWeek = (dateString) => {
+    const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    const date = new Date(dateString);
+    return days[date.getDay() + 1]; 
+  };
 
   return (
     <>
@@ -144,7 +147,7 @@ function CardapioMerendeira() {
         <BackArrow style={{ marginTop: '2000px', marginLeft: '10px' }} />
         <div className='containerCardapio'>
           <div className="add-button-container">
-            <h2>Cardápio  {currentWeek}</h2>
+            <h2>Cardápio {weekRange}</h2>
             {userRole === 'admin' || userRole === 'secretaria' ? (
               <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
                 <AddIcon fontSize="large" />
@@ -152,51 +155,50 @@ function CardapioMerendeira() {
             ) : null}
           </div>
 
-                  {openCadastro && (
-          <CardapioCadastro
-            open={openCadastro}
-            onClose={() => {
-              setOpenCadastro(false);
-              handleUpdateCardapioList(); 
-            }}
-            onUpdate={handleUpdateCardapioList} 
-          />
-        )}
+          {openCadastro && (
+            <CardapioCadastro
+              open={openCadastro}
+              onClose={() => {
+                setOpenCadastro(false);
+                handleUpdateCardapioList();
+              }}
+              onUpdate={handleUpdateCardapioList}
+            />
+          )}
 
           <table className="cardapio-table">
             <thead>
               <tr>
                 <th>Dia</th>
-                <th>Nome</th>
+                <th>Cardápio</th>
                 <th>Reservas</th>
               </tr>
             </thead>
             <tbody>
-  {cardapio.map((item, index) => {
-    const itemDate = new Date(item.data);
-    // Verifica se a data do item está dentro da semana de segunda a sexta-feira
-    if (itemDate.getDay() >= 1 && itemDate.getDay() <= 5) {
-      return (
-        <tr key={index} onClick={() => handleReservationClick(item)}>
-          <td>{getDayOfWeek(itemDate)}</td>
-          <td>{item.nome}</td>
-          <td>{item.reservas}</td>
-        </tr>
-      );
-    }
-    return null;
-  })}
-</tbody>
-
+              {cardapio.map((item, index) => {
+                const itemDate = new Date(item.data);
+                
+                if (itemDate >= currentMonday && itemDate <= currentFriday) {
+                  return (
+                    <tr key={index} onClick={() => handleReservationClick(item)}>
+                      <td>{getDayOfWeek(itemDate)}</td>
+                      <td>{item.nome}</td>
+                      <td>{item.reservas}</td>
+                    </tr>
+                  );
+                }
+                return null;
+              })}
+            </tbody>
           </table>
 
           <div className="week-navigation">
-            <Button onClick={handlePreviousWeek}>Semana Anterior</Button>
+            <Button onClick={handlePreviousWeek} disabled={currentWeekIndex === 0}>Semana Anterior</Button>
             <Button onClick={handleNextWeek}>Próxima Semana</Button>
           </div>
         </div>
       </div>
-      
+
       {isDetailModalOpen && (
         <div className="modal-container">
           <div className="header">
@@ -210,12 +212,12 @@ function CardapioMerendeira() {
             <p><strong>Nome do Prato:</strong> {selectedReservation.nome}</p>
             <p><strong>Descrição do Prato:</strong> {selectedReservation.descricao}</p>
             <p><strong>Reservas do dia:</strong> {selectedReservation.reservas}</p>
-            <p><strong>Parte da Manhã:</strong> {selectedReservation.manha_count}</p>
-            <p><strong>Parte da Tarde:</strong> {selectedReservation.tarde_count}</p>
-            <p><strong>Parte da Noite:</strong> {selectedReservation.noite_count}</p>
+            <p><strong>Manhã:</strong> {selectedReservation.manha_count}</p>
+            <p><strong>Tarde:</strong> {selectedReservation.tarde_count}</p>
+            <p><strong>Noite:</strong> {selectedReservation.noite_count}</p>
             {/* Botões de editar e deletar */}
             <div>
-              <DeleteIcon style={{cursor : "pointer"}} onClick={handleOpenConfirmationModal}>Excluir</DeleteIcon>
+              <DeleteIcon style={{ cursor: "pointer" }} onClick={handleOpenConfirmationModal}>Excluir</DeleteIcon>
             </div>
           </div>
         </div>
@@ -245,6 +247,7 @@ function CardapioMerendeira() {
       </Dialog>
     </>
   );
+
 }
 
 export default CardapioMerendeira;
