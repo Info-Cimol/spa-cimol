@@ -31,13 +31,16 @@ function CardapioMerendeira() {
         setCardapio(response.data);
   
         const today = new Date();
-        const currentDayOfWeek = today.getDay();
+        const currentDayOfWeek = today.getDay(); // 0 para Domingo, 1 para Segunda-feira, ..., 6 para Sábado
+        const diffStart = today.getDate() - currentDayOfWeek + (currentDayOfWeek === 0 ? -6 : 1); // Ajuste para obter segunda-feira
+        
         const monday = new Date(today);
-        monday.setDate(today.getDate() - currentDayOfWeek + (currentDayOfWeek === 0 ? -7 : 1));
-  
+        monday.setDate(diffStart);
+        
+        // Adicionamos 4 dias para obter a sexta-feira
         const endOfWeek = new Date(monday);
         endOfWeek.setDate(monday.getDate() + 7);
-  
+        
         const mondays = getMondays(monday, endOfWeek);
         setMondays(mondays);
       } catch (error) {
@@ -51,14 +54,18 @@ function CardapioMerendeira() {
   const getMondays = (startOfWeek, endOfWeek) => {
     const days = [];
     let current = new Date(startOfWeek);
-
+  
     while (current <= endOfWeek) {
       days.push(new Date(current));
       current.setDate(current.getDate() + 7);
     }
-
+  
+    if (!days.some(day => day.getTime() === startOfWeek.getTime())) {
+      days.unshift(new Date(startOfWeek));
+    }
+  
     return days;
-  };
+  };  
 
   const handleNextWeek = () => {
     setCurrentWeekIndex(currentWeekIndex + 1);
@@ -175,20 +182,21 @@ function CardapioMerendeira() {
               </tr>
             </thead>
             <tbody>
-              {cardapio.map((item, index) => {
-                const itemDate = new Date(item.data);
-                
-                if (itemDate >= currentMonday && itemDate <= currentFriday) {
-                  return (
-                    <tr key={index} onClick={() => handleReservationClick(item)}>
-                      <td>{getDayOfWeek(itemDate)}</td>
-                      <td>{item.nome}</td>
-                      <td>{item.reservas}</td>
-                    </tr>
-                  );
-                }
-                return null;
-              })}
+            {cardapio.map((item, index) => {
+    const itemDate = new Date(item.data);
+
+    if (itemDate <= currentFriday) {
+        return (
+            <tr key={index} onClick={() => handleReservationClick(item)}>
+                <td>{getDayOfWeek(itemDate)}</td>
+                <td>{item.nome}</td>
+                <td>{item.reservas}</td>
+            </tr>
+        );
+    }
+    return null; 
+})}
+
             </tbody>
           </table>
 
