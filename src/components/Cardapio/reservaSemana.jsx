@@ -226,7 +226,9 @@ const handleNextWeek = () => {
             <p><strong>Noite:</strong> {selectedReservation.noite_count}</p>
             {/* Botões de editar e deletar */}
             <div>
-              <DeleteIcon style={{ cursor: "pointer" }} onClick={handleOpenConfirmationModal}>Excluir</DeleteIcon>
+            {userRole === 'admin' || userRole === 'secretaria' ? (
+                 <DeleteIcon style={{ cursor: "pointer" }} onClick={handleOpenConfirmationModal}>Excluir</DeleteIcon>
+            ) : null}
             </div>
           </div>
         </div>
