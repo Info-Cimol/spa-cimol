@@ -166,7 +166,7 @@ function Home() {
                   </h1>
                   <div className="card">
                     <div className="card__body">
-                      <h5 className="card__head">Reservas</h5>
+                      <h5 className="card__head">Merenda</h5>
                       <p className="card__desc">Clique para ver o cardápio.</p>
                       <button className="card__btn" onClick={abrirCardapioMerenda}>Abrir</button>
                     </div>
