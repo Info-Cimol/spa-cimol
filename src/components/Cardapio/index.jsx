@@ -35,7 +35,7 @@ function Cardapio() {
  useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await axiosFetch.get('/listar/cardapio', {
+      const response = await axiosFetch.get('/cardapio', {
         headers: { 'x-access-token': token }
       });
       setCardapio(response.data);
@@ -79,7 +79,7 @@ const handlePreviousWeek = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosFetch.get(`/lista/reservas/${id}`, { headers });
+        const response = await axiosFetch.get(`/reservas/${id}`, { headers });
         setReservas(response.data);
       } catch (error) {
         console.log('Erro ao listar reservas', error);
@@ -179,63 +179,63 @@ const handlePreviousWeek = () => {
               height: 'auto',
             }}>
 
- {cardapio.length > 0 ? (
-  cardapio.map((item, index) => {
-    const itemDate = new Date(item.data);
-    const sundayOfCurrentWeek = sundays[currentWeekIndex];
-    const saturdayOfCurrentWeek = new Date(sundayOfCurrentWeek);
-    saturdayOfCurrentWeek.setDate(saturdayOfCurrentWeek.getDate() + 7);
-    const isAlreadyReserved = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio);
-    const isDisabled = isReservaDisabled(item.data, item.id_cardapio);
-    const isWithinCurrentWeek = itemDate >= sundayOfCurrentWeek && itemDate <= saturdayOfCurrentWeek;
+          {cardapio.length > 0 ? (
+            cardapio.map((item, index) => {
+              const itemDate = new Date(item.data);
+              const sundayOfCurrentWeek = sundays[currentWeekIndex];
+              const saturdayOfCurrentWeek = new Date(sundayOfCurrentWeek);
+              saturdayOfCurrentWeek.setDate(saturdayOfCurrentWeek.getDate() + 7);
+              const isAlreadyReserved = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio);
+              const isDisabled = isReservaDisabled(item.data, item.id_cardapio);
+              const isWithinCurrentWeek = itemDate >= sundayOfCurrentWeek && itemDate <= saturdayOfCurrentWeek;
+              const hasReservedIcon = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio && reserva.id_usuario === id);
 
-    if (isWithinCurrentWeek) {
-      return (
-        <motion.div
-          key={index}
-          className='card__cardapio'
-          style={{ marginRight: '20px', flex: '0 0 auto' }}
-        >
-          <img src={item.imagem ? item.imagem : img} alt='text alt' className='card__image' />
-          <div className='card__content'>
-            <h2 className='card__title'>{getDayOfWeek(item.data)}</h2>
-            <h2 className='card__title'>{item.nome}</h2>
-            <p className='card__description'>{item.descricao}</p>
+              if (isWithinCurrentWeek) {
+                return (
+                  <motion.div
+                    key={index}
+                    className='card__cardapio'
+                    style={{ marginRight: '20px', flex: '0 0 auto' }}
+                  >
+                    <img src={item.imagem ? item.imagem : img} alt='text alt' className='card__image' />
+                    <div className='card__content'>
+                      <h2 className='card__title'>{getDayOfWeek(item.data)}</h2>
+                      <h2 className='card__title'>{item.nome}</h2>
+                      <p className='card__description'>{item.descricao}</p>
 
-            {userRole === 'admin' || userRole === 'secretaria' ? (
-              <p className=''>Reservas: {item.reservas}</p>
-            ) : null}
+                      {userRole === 'admin' || userRole === 'secretaria' ? (
+                        <p className=''>Reservas: {item.reservas}</p>
+                      ) : null}
 
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              {isAlreadyReserved ? (
-                <FaCheck size={20} style={{ marginRight: '5px', color: 'green' }} />
-              ) : (
-                isDisabled ? (
-                  <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />
-                ) : (
-                  <FaCalendarPlus size={20} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={() => reservarCardapio(item.id_cardapio)} />
-                )
-              )}
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {hasReservedIcon ? (
+                          <FaCheck size={20} style={{ marginRight: '5px', color: 'green' }} />
+                        ) : (
+                          isAlreadyReserved ? (
+                            <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />
+                          ) : (
+                            <FaCalendarPlus size={20} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={() => reservarCardapio(item.id_cardapio)} />
+                          )
+                        )}
 
-              <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, Array.from(e.target.selectedOptions, option => option.value))} disabled={isDisabled} multiple>
-                <option value="">Selecione um turno</option>
-                <option value="manhã">Manhã</option>
-                <option value="tarde">Tarde</option>
-                <option value="noite">Noite</option>
-              </select>
+                        <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, Array.from(e.target.selectedOptions, option => option.value))} disabled={isDisabled} multiple>
+                          <option value="">Selecione um turno</option>
+                          <option value="manhã">Manhã</option>
+                          <option value="tarde">Tarde</option>
+                          <option value="noite">Noite</option>
+                        </select>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              }
+              return null;
+            })
+          ) : (
+            <div>
+              <p>Nenhum cardápio cadastrado para esta semana</p>
             </div>
-          </div>
-        </motion.div>
-      );
-    }
-    return null;
-  })
-) : (
-  <div>
-    <p>Nenhum cardápio cadastrado para esta semana</p>
-  </div>
-)}
-
+          )}
 
           </motion.div>
           

@@ -30,7 +30,7 @@ function CriarCardapio({ open, onClose, onUpdate, onCadastroConcluido }) {
         dataToSend.imagem = imagem;
       }
 
-      await axiosFetch.post('/criar/cardapio', dataToSend, { headers });
+      await axiosFetch.post('/cardapio', dataToSend, { headers });
 
       toast.success('Seu cardápio foi cadastrado!');
       handleClose();

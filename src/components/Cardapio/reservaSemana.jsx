@@ -25,7 +25,7 @@ function CardapioMerendeira() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosFetch.get('/listar/cardapio', {
+        const response = await axiosFetch.get('/cardapio', {
           headers: { 'x-access-token': token }
         });
         setCardapio(response.data);
@@ -81,7 +81,7 @@ const handleNextWeek = () => {
 
   const handleUpdateCardapioList = async () => {
     try {
-      const response = await axiosFetch.get('/listar/cardapio', {
+      const response = await axiosFetch.get('/cardapio', {
         headers: { 'x-access-token': token }
       });
       setCardapio(response.data);
@@ -102,11 +102,11 @@ const handleNextWeek = () => {
     try {
       const idCardapio = selectedReservation.id_cardapio;
 
-      await axiosFetch.delete(`/exclui/cardapio/${idCardapio}`, {
+      await axiosFetch.delete(`/cardapio/${idCardapio}`, {
         headers: { 'x-access-token': token }
       });
 
-      const response = await axiosFetch.get('/listar/cardapio', {
+      const response = await axiosFetch.get('/cardapio', {
         headers: { 'x-access-token': token }
       });
       setCardapio(response.data);
