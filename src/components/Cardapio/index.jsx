@@ -127,24 +127,24 @@ const handlePreviousWeek = () => {
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    return days[date.getDay() + 1];
+    return days[date.getDay()];
   };
 
   const isReservaDisabled = (data, idCardapio) => {
     const isReservado = reservas.some(reserva => reserva.id_cardapio === idCardapio);
-    
     const isJaReservado = idCardapio in reservado;
-    
     const dataCardapio = new Date(data);
     const today = new Date();
-    const diferencaEmMilissegundos = dataCardapio.getTime() - today.getTime();
-    const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
-    
-    const passouDaDataReserva = diferencaEmDias < 1;
-    
-    return isReservado || isJaReservado || passouDaDataReserva;
+    // Adiciona 1 dia à data atual para permitir reservas a partir do próximo dia
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+  
+    // Verifica se a data do cardápio é igual ou depois de amanhã
+    const isFutureDate = dataCardapio >= tomorrow;
+  
+    return isReservado || (isJaReservado && !isFutureDate);
   };
-
+  
   const currentSunday = sundays[currentWeekIndex];
   const currentSaturday = new Date(currentSunday); 
   currentSaturday.setDate(currentSaturday.getDate() + 5);
@@ -178,15 +178,15 @@ const handlePreviousWeek = () => {
               cursor: 'pointer',
               height: 'auto',
             }}>
-  
-  {cardapio.length > 0 ? (
+
+ {cardapio.length > 0 ? (
   cardapio.map((item, index) => {
     const itemDate = new Date(item.data);
-
     const sundayOfCurrentWeek = sundays[currentWeekIndex];
     const saturdayOfCurrentWeek = new Date(sundayOfCurrentWeek);
     saturdayOfCurrentWeek.setDate(saturdayOfCurrentWeek.getDate() + 7);
-
+    const isAlreadyReserved = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio);
+    const isDisabled = isReservaDisabled(item.data, item.id_cardapio);
     const isWithinCurrentWeek = itemDate >= sundayOfCurrentWeek && itemDate <= saturdayOfCurrentWeek;
 
     if (isWithinCurrentWeek) {
@@ -207,17 +207,17 @@ const handlePreviousWeek = () => {
             ) : null}
 
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              {isReservaDisabled(item.data, item.id_cardapio) ? (
+              {isAlreadyReserved ? (
                 <FaCheck size={20} style={{ marginRight: '5px', color: 'green' }} />
               ) : (
-                isReservaDisabled(item.data) ? (
+                isDisabled ? (
                   <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />
                 ) : (
                   <FaCalendarPlus size={20} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={() => reservarCardapio(item.id_cardapio)} />
                 )
               )}
 
-              <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, Array.from(e.target.selectedOptions, option => option.value))} disabled={isReservaDisabled(item.data)} multiple>
+              <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, Array.from(e.target.selectedOptions, option => option.value))} disabled={isDisabled} multiple>
                 <option value="">Selecione um turno</option>
                 <option value="manhã">Manhã</option>
                 <option value="tarde">Tarde</option>
@@ -235,6 +235,7 @@ const handlePreviousWeek = () => {
     <p>Nenhum cardápio cadastrado para esta semana</p>
   </div>
 )}
+
 
           </motion.div>
           

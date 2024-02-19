@@ -131,7 +131,7 @@ const handleNextWeek = () => {
     const getDayOfWeek = (dateString) => {
       const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
       const date = new Date(dateString);
-      return days[date.getDay() + 1]; 
+      return days[date.getDay()]; 
     };
 
   return (
