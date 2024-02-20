@@ -165,12 +165,7 @@ const CadastroAluno = () => {
 
   const carregarAlunos = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const headers = {
-        'x-access-token': token,
-      };
-
-      const response = await axiosFetch.get('/listar/alunos', { headers });
+      const response = await axiosFetch.get('/listar/alunos');
       console.log('Resposta da API:', response.data);
       setAlunosDisponiveis(
         response.data.map((aluno) => ({
@@ -197,11 +192,6 @@ const CadastroAluno = () => {
 
   const handleSalvar = async (alunoId, novoNome, novaMatricula,  novoEmail, novoCpf, novoEndereco, novoNumero, novoAtivo) => {
     try {
-      const token = localStorage.getItem('token');
-      const headers = {
-        'x-access-token': token,
-      };
-
       const requestBody = {
         novoNome,
         novaMatricula,
@@ -212,7 +202,7 @@ const CadastroAluno = () => {
         novoNumero,
       };
 
-      await axiosFetch.put(`/altera/aluno/${alunoId}`, requestBody, { headers });
+      await axiosFetch.put(`/altera/aluno/${alunoId}`, requestBody);
 
       carregarAlunos();
       toast.success('Aluno editado com sucesso!');
@@ -229,12 +219,7 @@ const CadastroAluno = () => {
 
   const handleConfirmDesativar = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const headers = {
-        'x-access-token': token,
-      };
-
-      await axiosFetch.put(`/desativa/aluno/${selectedAlunoId}`, null, { headers });
+      await axiosFetch.put(`/desativa/aluno/${selectedAlunoId}`);
 
       carregarAlunos();
       toast.success('Aluno desativado com sucesso!');

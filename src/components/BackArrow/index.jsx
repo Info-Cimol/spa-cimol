@@ -4,7 +4,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const BackArrow = () => {
   const handleGoBack = () => {
-    window.history.back(); 
+    window.location.reload();
   };
 
   return (

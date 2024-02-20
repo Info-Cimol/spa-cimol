@@ -103,16 +103,10 @@ const CadastroAlunoForm = ({ open, onClose }) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
   
-    const token = localStorage.getItem('token');
-    const headers = {
-      'x-access-token': token,
-      'Content-Type': 'application/json',
-    };
-  
     try {
       const alunoDataJSON = JSON.stringify(alunoData);
   
-      const response = await axiosFetch.post('/adiciona/aluno', alunoDataJSON, { headers });
+      const response = await axiosFetch.post('/adiciona/aluno', alunoDataJSON);
       console.log('Resposta da API:', response.data);
 
     // Fechar o modal após o envio do formulário

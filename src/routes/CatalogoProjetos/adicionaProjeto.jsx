@@ -11,7 +11,6 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { faFileImage, faFilePdf, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import './css/adiciona.css';
-import 'react-datepicker/dist/react-datepicker.css';
 
 const AdicionaProjetoComponent = () => {
 

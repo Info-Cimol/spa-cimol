@@ -11,7 +11,6 @@ const fadeIn = keyframes`
 
 export const Container = styled.div`
 
-
   .topo {
     background-color: #1b2f4a;
     height: 124px;
@@ -64,7 +63,7 @@ export const Container = styled.div`
         border-radius: 8px;
         transition: all 1s ease;
       }
-
+    
       .profile-options {
         margin-top: 15px;
       }

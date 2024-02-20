@@ -19,10 +19,6 @@ function Cardapio() {
   const [userRole] = useState(localStorage.getItem('userRole'));
   const img = imagem1;
   const id = localStorage.getItem('id');
-  const token = localStorage.getItem('token');
-  const headers = {
-    'x-access-token': token,
-  };
   const [selectedTurno, setSelectedTurno] = useState({});
 
  const handleTurnoChange = (idCardapio, selectedValue) => {
@@ -35,9 +31,7 @@ function Cardapio() {
  useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await axiosFetch.get('/cardapio', {
-        headers: { 'x-access-token': token }
-      });
+      const response = await axiosFetch.get('/cardapio');
       setCardapio(response.data);
 
       const today = new Date();
@@ -63,7 +57,7 @@ function Cardapio() {
   };
 
   fetchData();
-}, [token]);
+});
 
 const handleNextWeek = () => {
 if (currentWeekIndex < sundays.length - 2) {
@@ -71,7 +65,6 @@ if (currentWeekIndex < sundays.length - 2) {
 }
 };
 
-// Função para voltar para a semana anterior
 const handlePreviousWeek = () => {
   setCurrentWeekIndex(currentWeekIndex - 1);
 };
@@ -79,13 +72,12 @@ const handlePreviousWeek = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosFetch.get(`/reservas/${id}`, { headers });
+        const response = await axiosFetch.get(`/reservas/${id}`);
         setReservas(response.data);
       } catch (error) {
         console.log('Erro ao listar reservas', error);
       }
     };
-
     fetchData();
   });
 
@@ -103,12 +95,12 @@ const handlePreviousWeek = () => {
       const id = localStorage.getItem('id');
       let turno;
       if (maisDeUmTurno) {
-        turno = ['manhã', 'tarde', 'noite']; 
+        turno = ['manha', 'tarde', 'noite']; 
       } else {
         turno = selectedTurno[idCardapio];
       }
   
-      const response = await axiosFetch.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno }, { headers });
+      const response = await axiosFetch.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno });
       if (response.data.deletado === true) {
         console.log('Reserva removida');
         toast.error('Não foi possível realizar sua reserva!');
@@ -127,7 +119,7 @@ const handlePreviousWeek = () => {
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const date = new Date(dateString);
-    return days[date.getDay()];
+    return days[date.getDay() + 1];
   };
 
   const isReservaDisabled = (data, idCardapio) => {
@@ -267,9 +259,9 @@ const handlePreviousWeek = () => {
                 >
                   <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
                   <div className="card__content">
-                    <h2 className="card__title">{reserva.nome_cardapio}</h2>
-                    <p className="card__info">Dia da semana: {getDayOfWeek(reserva.data_cardapio)}</p>
-                    <p className="card__info">Turno da reserva: {reserva.turno}</p>
+                      <h2 className="card__title"><strong>{reserva.nome_cardapio}</strong></h2>
+                      <p className="card__info"><strong>Dia da reserva:</strong> {getDayOfWeek(reserva.data_cardapio)}</p>
+                      <p className="card__info"><strong>Turno da reserva:</strong> {reserva.turnos}</p>
                   </div>
                 </motion.div>
               ))}

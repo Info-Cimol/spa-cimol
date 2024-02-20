@@ -4,9 +4,9 @@ import MenuHamburguer from "../MenuHamburguer";
 import BackArrow from '../BackArrow/index';
 import CardapioCadastro from './cadastroCardapio';
 import CloseIcon from '@mui/icons-material/Close';
-import { IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField  } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { Delete as DeleteIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import axiosFetch from '../../axios/config';
 import './cardapio.css';
@@ -17,17 +17,20 @@ function CardapioMerendeira() {
   const [selectedReservation, setSelectedReservation] = useState(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const [token] = useState(localStorage.getItem('token'));
   const [userRole] = useState(localStorage.getItem('userRole'));
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
   const [sundays, setSundays] = useState([]);
+  const [newNome, setNewNome] = useState(''); 
+  const [newDescricao, setNewDescricao] = useState(''); 
+  const [newImagem, setNewImagem] = useState(''); 
+  const [newData, setNewData] = useState(''); 
+  const [, setSelectedCardapioId] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosFetch.get('/cardapio', {
-          headers: { 'x-access-token': token }
-        });
+        const response = await axiosFetch.get('/cardapio');
         setCardapio(response.data);
   
         const today = new Date();
@@ -53,7 +56,7 @@ function CardapioMerendeira() {
     };
   
     fetchData();
-  }, [token]);
+  });
 
 const handleNextWeek = () => {
   if (currentWeekIndex < sundays.length - 2) {
@@ -61,7 +64,6 @@ const handleNextWeek = () => {
   }
 };
 
-  // Função para voltar para a semana anterior
   const handlePreviousWeek = () => {
     setCurrentWeekIndex(currentWeekIndex - 1);
   };
@@ -81,9 +83,7 @@ const handleNextWeek = () => {
 
   const handleUpdateCardapioList = async () => {
     try {
-      const response = await axiosFetch.get('/cardapio', {
-        headers: { 'x-access-token': token }
-      });
+      const response = await axiosFetch.get('/cardapio');
       setCardapio(response.data);
     } catch (error) {
       console.error('Erro ao atualizar lista de cardápios:', error);
@@ -102,13 +102,9 @@ const handleNextWeek = () => {
     try {
       const idCardapio = selectedReservation.id_cardapio;
 
-      await axiosFetch.delete(`/cardapio/${idCardapio}`, {
-        headers: { 'x-access-token': token }
-      });
+      await axiosFetch.delete(`/cardapio/${idCardapio}`);
 
-      const response = await axiosFetch.get('/cardapio', {
-        headers: { 'x-access-token': token }
-      });
+      const response = await axiosFetch.get('/cardapio');
       setCardapio(response.data);
 
       toast.success('Cardápio excluído com sucesso!');
@@ -118,6 +114,38 @@ const handleNextWeek = () => {
     } catch (error) {
       console.error('Erro ao excluir cardápio:', error);
     }
+  };
+
+  const handleEditeCardapio = async () => {
+    try {
+      const idCardapio = selectedReservation.id_cardapio;
+
+      await axiosFetch.put(`/cardapio/${idCardapio}`, {
+        nome: newNome, 
+        descricao: newDescricao, 
+        data: newData, 
+        imagem: newImagem, 
+      });
+
+      toast.success('Cardápio editado com sucesso!');
+
+      setIsDetailModalOpen(false);
+      setConfirmationModalOpen(false);
+    } catch (error) {
+      console.error('Erro ao editar cardápio:', error);
+      toast.error('Não foi possível editar o seu cardápio!');
+    }
+  };
+
+  const handleOpenEditModal = (cardapioId) => {
+    const selectedCardapio = cardapio.find(item => item.id_cardapio === cardapioId);
+    setNewNome(selectedCardapio.nome);
+    setNewDescricao(selectedCardapio.descricao);
+    setNewImagem(selectedCardapio.imagem);
+    setNewData(selectedCardapio.data);
+
+    setSelectedCardapioId(cardapioId);
+    setIsEditModalOpen(true);
   };
 
   const currentSunday = sundays[currentWeekIndex];
@@ -131,7 +159,7 @@ const handleNextWeek = () => {
     const getDayOfWeek = (dateString) => {
       const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
       const date = new Date(dateString);
-      return days[date.getDay()]; 
+      return days[date.getDay() + 1]; 
     };
 
   return (
@@ -224,10 +252,14 @@ const handleNextWeek = () => {
             <p><strong>Manhã:</strong> {selectedReservation.manha_count}</p>
             <p><strong>Tarde:</strong> {selectedReservation.tarde_count}</p>
             <p><strong>Noite:</strong> {selectedReservation.noite_count}</p>
+
             {/* Botões de editar e deletar */}
             <div>
             {userRole === 'admin' || userRole === 'secretaria' ? (
-                 <DeleteIcon style={{ cursor: "pointer" }} onClick={handleOpenConfirmationModal}>Excluir</DeleteIcon>
+              <DeleteIcon style={{ cursor: "pointer" }} onClick={handleOpenConfirmationModal}>Excluir</DeleteIcon>
+            ) : null}
+            {userRole === 'admin' || userRole === 'secretaria' ? (
+              <EditIcon style={{ cursor: "pointer" }} onClick={() => handleOpenEditModal(selectedReservation.id_cardapio)}>Editar</EditIcon>
             ) : null}
             </div>
           </div>
@@ -256,6 +288,62 @@ const handleNextWeek = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {isEditModalOpen && (
+  <Dialog open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+    <DialogTitle>Editar Cardápio</DialogTitle>
+    <DialogContent>
+      <TextField
+        autoFocus
+        margin="dense"
+        id="nome"
+        label="Nome"
+        type="text"
+        fullWidth
+        value={newNome}
+        onChange={(e) => setNewNome(e.target.value)}
+      />
+      <TextField
+        margin="dense"
+        id="descricao"
+        label="Descrição"
+        type="text"
+        fullWidth
+        value={newDescricao}
+        onChange={(e) => setNewDescricao(e.target.value)}
+      />
+      <TextField
+        margin="dense"
+        id="imagem"
+        label="Imagem URL"
+        type="text"
+        fullWidth
+        value={newImagem}
+        onChange={(e) => setNewImagem(e.target.value)}
+      />
+      <TextField
+        margin="dense"
+        id="data"
+        label="Data"
+        type="date"
+        fullWidth
+        value={newData}
+        onChange={(e) => setNewData(e.target.value)}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={() => setIsEditModalOpen(false)} color="primary">
+        Cancelar
+      </Button>
+      <Button onClick={handleEditeCardapio} color="primary">
+        Editar
+      </Button>
+    </DialogActions>
+  </Dialog>
+)}
     </>
   );
 }

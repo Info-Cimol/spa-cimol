@@ -18,11 +18,7 @@ function CriarCardapio({ open, onClose, onUpdate, onCadastroConcluido }) {
   const [imagemEnviada, setImagemEnviada] = useState(false);
   const [anexarArquivo, setAnexarArquivo] = useState(false);
   const [modalOpen, setModalOpen] = useState(open);
-  const token = localStorage.getItem('token');
-  const headers = {
-    'x-access-token': token,
-  };
-
+  
   const handleCriarCardapio = async () => {
     try {
       let dataToSend = { nome, descricao, data };
@@ -30,13 +26,13 @@ function CriarCardapio({ open, onClose, onUpdate, onCadastroConcluido }) {
         dataToSend.imagem = imagem;
       }
 
-      await axiosFetch.post('/cardapio', dataToSend, { headers });
+      await axiosFetch.post('/cardapio', dataToSend);
 
       toast.success('Seu cardápio foi cadastrado!');
       handleClose();
       onUpdate();
       if (typeof onCadastroConcluido === 'function') {
-        onCadastroConcluido(); // Chama a função de atualização após o cadastro ser concluído
+        onCadastroConcluido(); 
       }
     } catch (error) {
       console.error('Erro ao criar cardápio:', error);
