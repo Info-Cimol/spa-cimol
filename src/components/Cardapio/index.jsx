@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaCalendarPlus, FaBan, FaCheck } from 'react-icons/fa';
-import { Button} from '@mui/material';
+import {FaBan, FaCheck } from 'react-icons/fa';
+import { Button, Modal, FormControlLabel, Checkbox, Box } from '@mui/material';
 import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import BackArrow from '../BackArrow/index';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import axiosFetch from '../../axios/config';
 import imagem1 from '../../imagens/image1.jpg';
 import './cardapio.css';
@@ -17,16 +19,59 @@ function Cardapio() {
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
   const [sundays, setSundays] = useState([]);
   const [userRole] = useState(localStorage.getItem('userRole'));
-  const img = imagem1;
+  const [img] = useState(imagem1);
   const id = localStorage.getItem('id');
   const [selectedTurno, setSelectedTurno] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCardapioId, setSelectedCardapioId] = useState(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [idReservaToDelete, setIdReservaToDelete] = useState(null);
 
- const handleTurnoChange = (idCardapio, selectedValue) => {
-  setSelectedTurno(prevState => ({
-    ...prevState,
-    [idCardapio]: selectedValue
-  }));
- };
+  // Função para abrir o modal de confirmação
+  const openConfirmationModal = (idReserva) => {
+    setIdReservaToDelete(idReserva);
+    setShowConfirmationModal(true);
+  };
+
+  // Função para fechar o modal de confirmação
+  const closeConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  };
+
+  const handleTurnoChange = (idCardapio, turno, isChecked) => {
+    setSelectedTurno(prevState => ({
+      ...prevState,
+      [idCardapio]: {
+        ...prevState[idCardapio],
+        [turno]: isChecked
+      }
+    }));
+  };  
+  
+  const excluirReserva = async (idCardapio) => {
+    try {
+        // Filtra as reservas que não correspondem ao idCardapio a ser excluído
+        const updatedReservas = reservas.filter(reserva => reserva.cardapio_id_cardapio !== idCardapio);
+      
+        await axiosFetch.delete(`/reserva/${id}/cardapio/${idCardapio}`);
+        closeConfirmationModal()
+        setReservas(updatedReservas);
+        toast.success('Reserva excluída com sucesso!');
+    } catch (error) {
+        console.error('Erro ao excluir reserva:', error);
+        toast.error('Erro ao excluir reserva. Por favor, tente novamente.');
+    }
+};
+
+  // Função para abrir o modal
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  // Função para fechar o modal
+  const closeModal = () => {
+    setShowModal(false);
+  };
  
  useEffect(() => {
   const fetchData = async () => {
@@ -57,7 +102,7 @@ function Cardapio() {
   };
 
   fetchData();
-});
+}, []);
 
 const handleNextWeek = () => {
 if (currentWeekIndex < sundays.length - 2) {
@@ -95,9 +140,10 @@ const handlePreviousWeek = () => {
       const id = localStorage.getItem('id');
       let turno;
       if (maisDeUmTurno) {
-        turno = ['manha', 'tarde', 'noite']; 
+        turno = ['manha', 'tarde', 'noite'];
       } else {
-        turno = selectedTurno[idCardapio];
+        // Aqui, converta o objeto para um array de turnos
+        turno = Object.keys(selectedTurno[idCardapio]).filter(turno => selectedTurno[idCardapio][turno]);
       }
   
       const response = await axiosFetch.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno });
@@ -109,12 +155,13 @@ const handlePreviousWeek = () => {
         const newReservado = { ...reservado, [idCardapio]: turno };
         setReservado(newReservado);
         salvarReservasLocalStorage(newReservado);
+        closeModal();
       }
     } catch (error) {
       console.log("Erro ao reservar cardápio ", error);
       toast.error(error);
     }
-  };
+  };  
 
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
@@ -127,16 +174,15 @@ const handlePreviousWeek = () => {
     const isJaReservado = idCardapio in reservado;
     const dataCardapio = new Date(data);
     const today = new Date();
-    // Adiciona 1 dia à data atual para permitir reservas a partir do próximo dia
+
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
   
-    // Verifica se a data do cardápio é igual ou depois de amanhã
     const isFutureDate = dataCardapio >= tomorrow;
   
     return isReservado || (isJaReservado && !isFutureDate);
   };
-  
+
   const currentSunday = sundays[currentWeekIndex];
   const currentSaturday = new Date(currentSunday); 
   currentSaturday.setDate(currentSaturday.getDate() + 5);
@@ -206,18 +252,49 @@ const handlePreviousWeek = () => {
                           isAlreadyReserved ? (
                             <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />
                           ) : (
-                            <FaCalendarPlus size={20} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={() => reservarCardapio(item.id_cardapio)} />
+                            <Button onClick={() => {
+                              setSelectedCardapioId(item.id_cardapio);
+                              openModal();
+                          }} disabled={isDisabled}>Selecionar turno</Button>
                           )
                         )}
+                      </div>
 
-                        <select className="select-turno" onChange={(e) => handleTurnoChange(item.id_cardapio, Array.from(e.target.selectedOptions, option => option.value))} disabled={isDisabled} multiple>
-                          <option value="">Selecione um turno</option>
-                          <option value="manhã">Manhã</option>
-                          <option value="tarde">Tarde</option>
-                          <option value="noite">Noite</option>
-                        </select>
+                    </div>
+                    <Modal open={showModal} onClose={closeModal}>
+                  <div className="modal-container">
+                    <div className="header">
+                      <h2 className="title">Reserva de Cardápio</h2>
+                      <div className="close-button">
+                        <IconButton onClick={closeModal}>
+                          <CloseIcon />
+                        </IconButton>
                       </div>
                     </div>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <FormControlLabel
+                        control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'manha', e.target.checked)} />}
+                        label="Manhã"
+                      />
+                      <FormControlLabel
+                        control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'tarde', e.target.checked)} />}
+                        label="Tarde"
+                      />
+                      <FormControlLabel
+                        control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'noite', e.target.checked)} />}
+                        label="Noite"
+                      />  
+                    </Box>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{ marginRight: '30px' }}
+                    onClick={() => reservarCardapio(selectedCardapioId)}>
+                      Confirmar
+                      </Button>
+                  </div>
+                </Modal>
+
                   </motion.div>
                 );
               }
@@ -253,18 +330,36 @@ const handlePreviousWeek = () => {
   
               {reservas.map((reserva) => (
                 <motion.div
-                  key={reserva.id}
-                  className='card__cardapio'
-                  style={{ marginRight: '20px', flex: '0 0 auto' }}
+                    key={reserva.id_reserva}
+                    className='card__cardapio'
+                    style={{ marginRight: '20px', flex: '0 0 auto' }}
                 >
-                  <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
-                  <div className="card__content">
-                      <h2 className="card__title"><strong>{reserva.nome_cardapio}</strong></h2>
-                      <p className="card__info"><strong>Dia da reserva:</strong> {getDayOfWeek(reserva.data_cardapio)}</p>
-                      <p className="card__info"><strong>Turno da reserva:</strong> {reserva.turnos}</p>
-                  </div>
+                    <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
+                    <div className="card__content">
+                        <h2 className="card__title"><strong>{reserva.nome_cardapio}</strong></h2>
+                        <p className="card__info"><strong>Dia da reserva:</strong> {getDayOfWeek(reserva.data_cardapio)}</p>
+                        <p className="card__info"><strong>Turno da reserva:</strong> {reserva.turnos}</p>
+                        <Button color="error" onClick={() => openConfirmationModal(reserva.cardapio_id_cardapio)} className="btn-excluir-reserva">Excluir Reserva</Button>
+                    </div>
                 </motion.div>
-              ))}
+            ))}
+              {/* Modal de confirmação para excluir reserva */}
+              <Modal open={showConfirmationModal} onClose={closeConfirmationModal} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Box sx={{ width: '400px', bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2 }}>
+                  <div className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                    <h2 className="title">Confirmar Exclusão</h2>
+                    <div className="close-button">
+                      <IconButton onClick={closeConfirmationModal}>
+                        <CloseIcon />
+                      </IconButton>
+                    </div>
+                  </div>
+                  <div className="modal-content" style={{ textAlign: 'center' }}>
+                    <h6>Deseja realmente excluir esta reserva?</h6>
+                    <Button onClick={() => excluirReserva(idReservaToDelete)} color="error">Excluir</Button>
+                  </div>
+                </Box>
+              </Modal>
             </motion.div>
           </div>
         </div>

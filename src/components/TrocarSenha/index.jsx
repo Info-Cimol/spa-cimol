@@ -49,8 +49,15 @@ function TrocarSenha() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
+      if (newPassword !== confirmPassword) {
+        // Se as senhas não coincidirem, exibir um toast de erro
+        toast.error('As senhas não coincidem. Por favor, verifique e tente novamente.');
+        setLoading(false);
+        return; 
+      }
+  
       let requestData = {
         email,
         novaSenha: newPassword,
@@ -58,9 +65,9 @@ function TrocarSenha() {
         codigo: verificationCode,
         updateType: 'senha'
       };
-
+  
       const response = await axiosFetch.put('/user/update-profile', requestData);
-
+  
       if (response.status === 200) {
         if (codeVerified) {
           // Se a senha foi atualizada com sucesso
@@ -85,9 +92,10 @@ function TrocarSenha() {
       console.error(error);
       toast.error('Erro ao processar a solicitação. Tente novamente.');
     }
-
+  
     setLoading(false);
   };
+  
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -106,6 +114,7 @@ function TrocarSenha() {
             Esqueceu a senha?
           </Typography>
         </Box>
+
         <Box component="form" onSubmit={emailSent ? handleFormSubmit : handleEmailFormSubmit} noValidate sx={{ mt: 4 }}>
           {!emailSent && (
             <TextField
@@ -122,6 +131,7 @@ function TrocarSenha() {
               disabled={codeVerified}
             />
           )}
+
           {emailSent && (
             <>
               <TextField
@@ -136,6 +146,7 @@ function TrocarSenha() {
                 onChange={(e) => setVerificationCode(e.target.value)}
                 inputProps={{ maxLength: 6 }}
               />
+
               <TextField
                 margin="normal"
                 required
