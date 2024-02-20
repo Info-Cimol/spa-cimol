@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {FaBan, FaCheck } from 'react-icons/fa';
 import { Button, Modal, FormControlLabel, Checkbox, Box } from '@mui/material';
 import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
@@ -169,19 +168,19 @@ const handlePreviousWeek = () => {
     return days[date.getDay() + 1];
   };
 
-  const isReservaDisabled = (data, idCardapio) => {
-    const isReservado = reservas.some(reserva => reserva.id_cardapio === idCardapio);
-    const isJaReservado = idCardapio in reservado;
+  const isReservaDisabled = (data) => {
     const dataCardapio = new Date(data);
     const today = new Date();
 
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    // Define a data mínima permitida para reserva (hoje + 3 dias)
+    const minimumReservationDate = new Date(today);
+    minimumReservationDate.setDate(minimumReservationDate.getDate() + 3);
+
+    // Define a data máxima permitida para reserva (hoje)
+    const maximumReservationDate = new Date(today);
   
-    const isFutureDate = dataCardapio >= tomorrow;
-  
-    return isReservado || (isJaReservado && !isFutureDate);
-  };
+    return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate;
+};
 
   const currentSunday = sundays[currentWeekIndex];
   const currentSaturday = new Date(currentSunday); 
@@ -217,95 +216,92 @@ const handlePreviousWeek = () => {
               height: 'auto',
             }}>
 
-          {cardapio.length > 0 ? (
-            cardapio.map((item, index) => {
-              const itemDate = new Date(item.data);
-              const sundayOfCurrentWeek = sundays[currentWeekIndex];
-              const saturdayOfCurrentWeek = new Date(sundayOfCurrentWeek);
-              saturdayOfCurrentWeek.setDate(saturdayOfCurrentWeek.getDate() + 7);
-              const isAlreadyReserved = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio);
-              const isDisabled = isReservaDisabled(item.data, item.id_cardapio);
-              const isWithinCurrentWeek = itemDate >= sundayOfCurrentWeek && itemDate <= saturdayOfCurrentWeek;
-              const hasReservedIcon = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio && reserva.id_usuario === id);
+            {cardapio.length > 0 ? (
+                cardapio.map((item, index) => {
+                    const itemDate = new Date(item.data);
+                    const sundayOfCurrentWeek = sundays[currentWeekIndex];
+                    const saturdayOfCurrentWeek = new Date(sundayOfCurrentWeek);
+                    saturdayOfCurrentWeek.setDate(saturdayOfCurrentWeek.getDate() + 7);
+                    const isAlreadyReserved = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio);
+                    const isDisabled = isReservaDisabled(item.data, item.id_cardapio);
+                    const isWithinCurrentWeek = itemDate >= sundayOfCurrentWeek && itemDate <= saturdayOfCurrentWeek;
+                    const hasReservedIcon = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio && reserva.id_usuario === id);
 
-              if (isWithinCurrentWeek) {
-                return (
-                  <motion.div
-                    key={index}
-                    className='card__cardapio'
-                    style={{ marginRight: '20px', flex: '0 0 auto' }}
-                  >
-                    <img src={item.imagem ? item.imagem : img} alt='text alt' className='card__image' />
-                    <div className='card__content'>
-                      <h2 className='card__title'>{getDayOfWeek(item.data)}</h2>
-                      <h2 className='card__title'>{item.nome}</h2>
-                      <p className='card__description'>{item.descricao}</p>
-
-                      {userRole === 'admin' || userRole === 'secretaria' ? (
-                        <p className=''>Reservas: {item.reservas}</p>
-                      ) : null}
-
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        {hasReservedIcon ? (
-                          <FaCheck size={20} style={{ marginRight: '5px', color: 'green' }} />
-                        ) : (
-                          isAlreadyReserved ? (
-                            <FaBan size={20} style={{ marginRight: '5px', color: 'red' }} />
-                          ) : (
-                            <Button onClick={() => {
-                              setSelectedCardapioId(item.id_cardapio);
-                              openModal();
-                          }} disabled={isDisabled}>Selecionar turno</Button>
-                          )
-                        )}
-                      </div>
-
-                    </div>
-                    <Modal open={showModal} onClose={closeModal}>
-                  <div className="modal-container">
-                    <div className="header">
-                      <h2 className="title">Reserva de Cardápio</h2>
-                      <div className="close-button">
-                        <IconButton onClick={closeModal}>
-                          <CloseIcon />
-                        </IconButton>
-                      </div>
-                    </div>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      <FormControlLabel
-                        control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'manha', e.target.checked)} />}
-                        label="Manhã"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'tarde', e.target.checked)} />}
-                        label="Tarde"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'noite', e.target.checked)} />}
-                        label="Noite"
-                      />  
-                    </Box>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={{ marginRight: '30px' }}
-                    onClick={() => reservarCardapio(selectedCardapioId)}>
-                      Confirmar
-                      </Button>
-                  </div>
-                </Modal>
-
-                  </motion.div>
-                );
-              }
-              return null;
-            })
-          ) : (
-            <div>
-              <p>Nenhum cardápio cadastrado para esta semana</p>
-            </div>
-          )}
-
+                    if (isWithinCurrentWeek) {
+                        return (
+                            <motion.div
+                                key={index}
+                                className='card__cardapio'
+                                style={{ marginRight: '20px', flex: '0 0 auto' }}
+                            >
+                                <img src={item.imagem ? item.imagem : img} alt='text alt' className='card__image' />
+                                <div className='card__content'>
+                                    <h2 className='card__title'>{getDayOfWeek(item.data)}</h2>
+                                    <h2 className='card__title'>{item.nome}</h2>
+                                
+                                    <div
+                                        onClick={() => {
+                                            if (!isDisabled && !hasReservedIcon) {
+                                                if (isAlreadyReserved) {
+                                                    toast.error('Este turno está desativado!');
+                                                } else {
+                                                    setSelectedCardapioId(item.id_cardapio);
+                                                    openModal();
+                                                }
+                                            } else {
+                                                toast.error('Para fazer uma reserva é necessário três dias de antecedência.');
+                                            }
+                                        }}
+                                        style={{ cursor: isDisabled || hasReservedIcon ? 'not-allowed' : 'pointer' }}
+                                    >
+                                        <Button disabled={isDisabled || hasReservedIcon}>Selecionar turno</Button>
+                                    </div>
+                                </div>
+                                <Modal open={showModal} onClose={closeModal}>
+                                    <div className="modal-container">
+                                        <div className="header">
+                                            <h2 className="title">Reserva de Cardápio</h2>
+                                            <div className="close-button">
+                                                <IconButton onClick={closeModal}>
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </div>
+                                        </div>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                            <FormControlLabel
+                                                control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'manha', e.target.checked)} />}
+                                                label="Manhã"
+                                            />
+                                            <FormControlLabel
+                                                control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'tarde', e.target.checked)} />}
+                                                label="Tarde"
+                                            />
+                                            <FormControlLabel
+                                                control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'noite', e.target.checked)} />}
+                                                label="Noite"
+                                            />  
+                                        </Box>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            style={{ marginRight: '30px' }}
+                                            onClick={() => reservarCardapio(selectedCardapioId)}
+                                        >
+                                            Confirmar
+                                        </Button>
+                                    </div>
+                                </Modal>
+                            </motion.div>
+                        );
+                    }
+                    return null;
+                })
+            ) : (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <span role="img" aria-label="emoji chorando" style={{ fontSize: '30px' }}>😢</span>
+                    <p style={{ fontSize: '20px' }}>Nenhum cardápio cadastrado para esta semana</p>
+                </div>
+            )}
           </motion.div>
           
           <div className="week-navigation">
@@ -313,36 +309,56 @@ const handlePreviousWeek = () => {
             <Button onClick={handleNextWeek}>Próxima Semana</Button>
           </div>
 
-            <div className='header'>
-              <h2 className="title">Minhas reservas</h2>
-            </div>
-  
-            <motion.div
-              className='cardapio-carousel'
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                overflowX: 'auto',
-                width: '100%',
-                cursor: 'pointer',
-                height: 'auto'}}
-                >
-  
-              {reservas.map((reserva) => (
-                <motion.div
-                    key={reserva.id_reserva}
-                    className='card__cardapio'
-                    style={{ marginRight: '20px', flex: '0 0 auto' }}
-                >
-                    <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
-                    <div className="card__content">
-                        <h2 className="card__title"><strong>{reserva.nome_cardapio}</strong></h2>
-                        <p className="card__info"><strong>Dia da reserva:</strong> {getDayOfWeek(reserva.data_cardapio)}</p>
-                        <p className="card__info"><strong>Turno da reserva:</strong> {reserva.turnos}</p>
-                        <Button color="error" onClick={() => openConfirmationModal(reserva.cardapio_id_cardapio)} className="btn-excluir-reserva">Excluir Reserva</Button>
-                    </div>
-                </motion.div>
-            ))}
+          <div className='header'>
+              <h2 style={{marginTop:'80px'}} className="title">Reservas {weekRange}</h2>
+          </div>
+
+<motion.div
+    className='cardapio-carousel'
+    style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        overflowX: 'auto',
+        width: '100%',
+        cursor: 'pointer',
+        height: 'auto'}}
+>
+    {reservas.length > 0 ? (
+        reservas.map((reserva) => {
+            const reservaDate = new Date(reserva.data);
+            const sundayOfCurrentWeek = sundays[currentWeekIndex];
+            const saturdayOfCurrentWeek = new Date(sundayOfCurrentWeek);
+            saturdayOfCurrentWeek.setDate(saturdayOfCurrentWeek.getDate() + 6);
+            const isWithinCurrentWeek = reservaDate >= sundayOfCurrentWeek && reservaDate <= saturdayOfCurrentWeek;
+
+            if (isWithinCurrentWeek) {
+                return (
+                    <motion.div
+                        key={reserva.id_reserva}
+                        className='card__cardapio'
+                        style={{ marginRight: '20px', flex: '0 0 auto' }}
+                    >
+                        <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
+                        <div className="card__content">
+                            <h2 className="card__title"><strong>{reserva.nome_cardapio}</strong></h2>
+                            <h2 className='card__title'>{getDayOfWeek(reserva.data)}</h2>
+                            <p className="card__info"><strong>Turno da reserva:</strong> {reserva.turnos}</p>
+                            <Button color="error" onClick={() => openConfirmationModal(reserva.cardapio_id_cardapio)} className="btn-excluir-reserva">Excluir Reserva</Button>
+                        </div>
+                    </motion.div>
+                );
+            }
+            return null;
+        })
+    ) : (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <span role="img" aria-label="emoji chorando" style={{ fontSize: '30px' }}>😢</span>
+            <p style={{ fontSize: '20px', marginTop: '20px' }}>Você não possui nenhuma reserva cadastrada!</p>
+        </div>
+    )}
+          
+
+
               {/* Modal de confirmação para excluir reserva */}
               <Modal open={showConfirmationModal} onClose={closeConfirmationModal} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Box sx={{ width: '400px', bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2 }}>
@@ -361,6 +377,10 @@ const handlePreviousWeek = () => {
                 </Box>
               </Modal>
             </motion.div>
+            <div className="week-navigation">
+            <Button onClick={handlePreviousWeek} disabled={currentWeekIndex === 0}>Semana Anterior</Button>
+            <Button onClick={handleNextWeek}>Próxima Semana</Button>
+          </div>
           </div>
         </div>
     </>
