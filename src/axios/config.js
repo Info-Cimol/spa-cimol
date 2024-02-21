@@ -1,7 +1,7 @@
 import axios from 'axios';
 /*http://localhost:5000  https://jellyfish-app-ezt3l.ondigitalocean.app/*/
 const axiosFetch = axios.create({
-  baseURL: 'https://jellyfish-app-ezt3l.ondigitalocean.app/',
+  baseURL: 'https://api-cimol-waath.ondigitalocean.app/',
 });
 
 axiosFetch.interceptors.request.use(
