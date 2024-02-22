@@ -49,9 +49,15 @@ const MenuHamburguer = ({ userType}) => {
   };
   
   const handleBottonHome = () => {
-    navigate('/Home')
-    window.location.reload();
-  };
+
+    if (window.location.pathname.endsWith("/Home")) {
+  
+        window.location.reload();
+    } else {
+        navigate('/Home');
+    }
+};
+
   
   const handleBottonProjeto = () => {
     if (userType === "aluno" || userType === "admin") {

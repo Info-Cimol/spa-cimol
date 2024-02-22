@@ -1,73 +1,62 @@
 import React, { useState } from 'react';
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
+import { IconButton, Card, CardContent, Button } from '@mui/material';
+import { Add as AddIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axiosFetch from '../../axios/config';
 
 const FileUploader = () => {
-  const [fileSecond, setFileSecond] = useState(null);
-  const [loadingSecond, setLoadingSecond] = useState(false);
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleFileChangeSecond = (e) => {
-    const selectedFile = e.target.files[0];
-    setFileSecond(selectedFile);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
-  const handleUploadAlunoSecond = async () => {
+  const handleUpload = async () => {
     try {
-      setLoadingSecond(true);
+      // Verifica se um arquivo foi selecionado
+      if (!file) {
+        toast.error('Nenhum arquivo PDF selecionado. Por favor, selecione um arquivo.');
+        return;
+      }
 
-      const token = localStorage.getItem('token');
-      const headers = {
-        'x-access-token': token,
-      };
-
+      setLoading(true);
       const formData = new FormData();
-      formData.append('pdf', fileSecond);
+      formData.append('pdf', file);
 
-      const response = await axiosFetch.post('/aluno/upload/reading-pdf', formData, { headers });
-
-      console.log(response.data);
-
-      // Mensagem de sucesso
+      await axiosFetch.post('/aluno/upload/reading-pdf', formData);
+      
       toast.success('Arquivo enviado com sucesso!');
     } catch (error) {
       console.error('Erro ao fazer upload do arquivo:', error);
-
-      // Mensagem de erro
       toast.error('Erro ao enviar o arquivo. Por favor, tente novamente.');
     } finally {
-      setLoadingSecond(false);
+      setLoading(false);
     }
   };
 
-  const handleCancelUploadSecond = () => {
-    setFileSecond(null);
+  const handleCancelUpload = () => {
+    setFile(null);
   };
 
   return (
     <div>
-      <label htmlFor="file-input-second">
+      <label htmlFor="file-input">
         <IconButton title='Adicione um arquivo' component="span">
           <AddIcon fontSize="large" />
         </IconButton>
       </label>
-      <input id="file-input-second" type="file" onChange={(e) => handleFileChangeSecond(e)} style={{ display: 'none' }} />
+      <input id="file-input" type="file" onChange={handleFileChange} style={{ display: 'none' }} />
       
-      {fileSecond && (
+      {file && (
         <Card variant="outlined" style={{ marginTop: 10, maxWidth: 300 }}>
           <CardContent>
-            <div>
-              Arquivo selecionado: {fileSecond.name}
-            </div>
-            <Button onClick={handleUploadAlunoSecond} variant="contained" color="primary" style={{ marginRight: 10 }} disabled={loadingSecond}>
-              {loadingSecond ? 'Enviando...' : 'Enviar'}
+            <div>Arquivo selecionado: {file.name}</div>
+            <Button onClick={handleUpload} variant="contained" color="primary" style={{ marginRight: 10 }} disabled={loading}>
+              {loading ? 'Enviando...' : 'Enviar'}
             </Button>
-            <Button onClick={handleCancelUploadSecond} variant="contained" color="secondary">
+            <Button onClick={handleCancelUpload} variant="contained" color="secondary">
               Cancelar
             </Button>
           </CardContent>

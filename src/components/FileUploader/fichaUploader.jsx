@@ -21,15 +21,10 @@ const FileUploader = () => {
     try {
       setLoading(true);
 
-      const token = localStorage.getItem('token');
-      const headers = {
-        'x-access-token': token,
-      };
-
       const formData = new FormData();
       formData.append('pdf', file);
 
-      const response = await axiosFetch.post('/ficha/aluno/upload/reading-pdf', formData, { headers });
+      const response = await axiosFetch.post('/ficha/aluno/upload/reading-pdf', formData);
 
       console.log(response.data);
 
