@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { toast } from 'react-toastify';
 
 export function Private({ children, allowedRoles }) {
   const navigate = useNavigate();
@@ -11,11 +10,14 @@ export function Private({ children, allowedRoles }) {
 
   useEffect(() => {
     const isAuthenticated = userRole && userData;
+    
+    // Verifica se allowedRoles é fornecido e é um array
+    const isAllowedRolesValid = Array.isArray(allowedRoles) && allowedRoles.length > 0;
 
-    if (!isAuthenticated || !allowedRoles.includes(userRole)) {
-      toast.error('Você deslogou com sucesso!');
+    const hasPermission = isAuthenticated && isAllowedRolesValid && allowedRoles.includes(userRole);
+
+    if (!hasPermission) {
       
-      // Verifica se o usuário estava tentando acessar a rota protegida
       if (location.pathname !== '/') {
         // Permanece na rota atual se não houver permissão
         navigate('/');
