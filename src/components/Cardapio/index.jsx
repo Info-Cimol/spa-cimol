@@ -254,7 +254,7 @@ const handlePreviousWeek = () => {
                                         }}
                                         style={{ cursor: isDisabled || hasReservedIcon ? 'not-allowed' : 'pointer' }}
                                     >
-                                        <Button disabled={isDisabled || hasReservedIcon}>Selecionar turno</Button>
+                                        <Button disabled={isDisabled || hasReservedIcon}>Reservar</Button>
                                     </div>
                                 </div>
                                 <Modal open={showModal} onClose={closeModal}>
@@ -269,7 +269,7 @@ const handlePreviousWeek = () => {
                                         </div>
                                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                             <FormControlLabel
-                                                control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'manha', e.target.checked)} />}
+                                                control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'manhã', e.target.checked)} />}
                                                 label="Manhã"
                                             />
                                             <FormControlLabel
@@ -313,52 +313,50 @@ const handlePreviousWeek = () => {
               <h2 style={{marginTop:'80px'}} className="title">Reservas {weekRange}</h2>
           </div>
 
-<motion.div
-    className='cardapio-carousel'
-    style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        overflowX: 'auto',
-        width: '100%',
-        cursor: 'pointer',
-        height: 'auto'}}
->
-    {reservas.length > 0 ? (
-        reservas.map((reserva) => {
-            const reservaDate = new Date(reserva.data);
-            const sundayOfCurrentWeek = sundays[currentWeekIndex];
-            const saturdayOfCurrentWeek = new Date(sundayOfCurrentWeek);
-            saturdayOfCurrentWeek.setDate(saturdayOfCurrentWeek.getDate() + 6);
-            const isWithinCurrentWeek = reservaDate >= sundayOfCurrentWeek && reservaDate <= saturdayOfCurrentWeek;
+          <motion.div
+              className='cardapio-carousel'
+              style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  overflowX: 'auto',
+                  width: '100%',
+                  cursor: 'pointer',
+                  height: 'auto'}}
+          >
+          {reservas.length > 0 ? (
+              reservas.map((reserva) => {
+                  const reservaDate = new Date(reserva.data);
+                  const sundayOfCurrentWeek = sundays[currentWeekIndex];
+                  const saturdayOfCurrentWeek = new Date(sundayOfCurrentWeek);
+                  saturdayOfCurrentWeek.setDate(saturdayOfCurrentWeek.getDate() + 6);
+                  const isWithinCurrentWeek = reservaDate >= sundayOfCurrentWeek && reservaDate <= saturdayOfCurrentWeek;
 
-            if (isWithinCurrentWeek) {
-                return (
-                    <motion.div
-                        key={reserva.id_reserva}
-                        className='card__cardapio'
-                        style={{ marginRight: '20px', flex: '0 0 auto' }}
-                    >
-                        <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
-                        <div className="card__content">
-                            <h2 className="card__title"><strong>{reserva.nome_cardapio}</strong></h2>
-                            <h2 className='card__title'>{getDayOfWeek(reserva.data)}</h2>
-                            <p className="card__info"><strong>Turno da reserva:</strong> {reserva.turnos}</p>
-                            <Button color="error" onClick={() => openConfirmationModal(reserva.cardapio_id_cardapio)} className="btn-excluir-reserva">Excluir Reserva</Button>
-                        </div>
-                    </motion.div>
-                );
-            }
-            return null;
-        })
-    ) : (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <span role="img" aria-label="emoji chorando" style={{ fontSize: '30px' }}>😢</span>
-            <p style={{ fontSize: '20px', marginTop: '20px' }}>Você não possui nenhuma reserva cadastrada!</p>
-        </div>
-    )}
+                  if (isWithinCurrentWeek) {
+                      return (
+                          <motion.div
+                              key={reserva.id_reserva}
+                              className='card__cardapio'
+                              style={{ marginRight: '20px', flex: '0 0 auto' }}
+                          >
+                              <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
+                              <div className="card__content">
+                                  <h2 className="card__title"><strong>{reserva.nome_cardapio}</strong></h2>
+                                  <h2 className='card__title'>{getDayOfWeek(reserva.data)}</h2>
+                                  <p className="card__info"><strong>Turno da reserva:</strong> {reserva.turnos}</p>
+                                  <Button color="error" onClick={() => openConfirmationModal(reserva.cardapio_id_cardapio)} className="btn-excluir-reserva">Excluir Reserva</Button>
+                              </div>
+                          </motion.div>
+                      );
+                  }
+                  return null;
+              })
+          ) : (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <span role="img" aria-label="emoji chorando" style={{ fontSize: '30px' }}>😢</span>
+                  <p style={{ fontSize: '20px', marginTop: '20px' }}>Você não possui nenhuma reserva cadastrada!</p>
+              </div>
+          )}
           
-
-
               {/* Modal de confirmação para excluir reserva */}
               <Modal open={showConfirmationModal} onClose={closeConfirmationModal} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Box sx={{ width: '400px', bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2 }}>

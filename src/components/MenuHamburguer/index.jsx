@@ -24,7 +24,7 @@ const MenuHamburguer = ({ userType}) => {
 
   const handleBottonSair = () => {
     localStorage.removeItem('userData');
-    navigate('/');
+    window.location.reload();
   };
 
   const abrirCardapio = () => {
@@ -50,13 +50,8 @@ const MenuHamburguer = ({ userType}) => {
   
   const handleBottonHome = () => {
 
-    if (window.location.pathname.endsWith("/Home")) {
-  
-        window.location.reload();
-    } else {
-        navigate('/Home');
-    }
-};
+    navigate('/');
+  };
 
   
   const handleBottonProjeto = () => {

@@ -126,11 +126,11 @@ const handleNextWeek = () => {
         data: newData, 
         imagem: newImagem, 
       });
-
+     
       toast.success('Cardápio editado com sucesso!');
 
       setIsDetailModalOpen(false);
-      setConfirmationModalOpen(false);
+      setIsEditModalOpen(false);
     } catch (error) {
       console.error('Erro ao editar cardápio:', error);
       toast.error('Não foi possível editar o seu cardápio!');
@@ -291,7 +291,14 @@ const handleNextWeek = () => {
 
       {isEditModalOpen && (
   <Dialog open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
-    <DialogTitle>Editar Cardápio</DialogTitle>
+    <div className="header">
+          <h2 className="title">Editar Cardápio</h2>
+          <div className="close-button">
+            <IconButton onClick={() => setIsEditModalOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+        </div>
     <DialogContent>
       <TextField
         autoFocus
@@ -335,11 +342,8 @@ const handleNextWeek = () => {
       />
     </DialogContent>
     <DialogActions>
-      <Button onClick={() => setIsEditModalOpen(false)} color="primary">
-        Cancelar
-      </Button>
       <Button onClick={handleEditeCardapio} color="primary">
-        Editar
+        Salvar
       </Button>
     </DialogActions>
   </Dialog>

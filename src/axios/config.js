@@ -1,5 +1,5 @@
 import axios from 'axios';
-/*http://localhost:5000  https://jellyfish-app-ezt3l.ondigitalocean.app/*/
+/*http://localhost:5000  https://api-cimol-v5cwm.ondigitalocean.app/*/
 const axiosFetch = axios.create({
   baseURL: 'http://localhost:5000',
 });
@@ -10,7 +10,6 @@ axiosFetch.interceptors.request.use(
     if (token) {
       config.headers['x-access-token'] = token;
     }
-    config.headers['Content-Type'] = 'multipart/form-data'; 
     return config;
   },
   (error) => {

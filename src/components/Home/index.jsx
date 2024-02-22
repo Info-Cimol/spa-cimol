@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ContainerTopo from '../../components/ContainerTopo';
-import MenuHamburguer from "../../components/MenuHamburguer";
-import Aluno from '../../components/Aluno/';
-import Cardapio from '../../components/Cardapio/index';
-import ReservaSemana from '../../components/Cardapio/reservaSemana';
+import ContainerTopo from '../ContainerTopo';
+import MenuHamburguer from "../MenuHamburguer";
+import Aluno from '../Aluno';
+import Cardapio from '../Cardapio/index';
+import ReservaSemana from '../Cardapio/reservaSemana';
 import { Container } from './styled';
 
 function Home() {

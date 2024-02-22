@@ -5,7 +5,6 @@ import { Private } from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
 import App from './App';
 import ScrollToTopButton from './components/ScrollTop'
-import Home from './routes/Home';
 import Login from './routes/Login';
 import ProjetoHomePessa from './routes/CatalogoProjetos/homeProjeto';
 import ProjetoHomeDetalhes from './routes/CatalogoProjetos/homeDetalhesProjeto';
@@ -24,13 +23,9 @@ const router = createBrowserRouter([
 
       {
         path: '/',
-        element: <Login />,
+        element: <Private allowedRoles={['aluno', 'professor', 'admin', 'merendeira', 'secretaria']}><Login /></Private>,
       },
-   
-      {
-        path: '/Home',
-        element: <Private allowedRoles={['aluno', 'professor', 'admin', 'merendeira', 'secretaria']}><Home /></Private>,
-      },
+
 
     /*{
         path: '/Teste',
