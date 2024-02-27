@@ -32,17 +32,23 @@ function Login() {
   };
  
   const handleLogin = (response) => {
-    const firstLogin = response.data.user.first_login;
-    const ativo = response.data.user.ativo;
+    const firstLogin = response.data.firstLogin; 
   
-    if (ativo === 0) {
-      toast.error('Usuário desativado. Por favor, entre em contato com a direção.');
-    } else if (firstLogin === 1) {
-      setShowTrocarSenha(true); 
+    if (response.data.auth === false) {
+      if (response.data.message === "Usuário desativado. Entre em contato com o suporte.") {
+        toast.error("Usuário desativado. Entre em contato com o suporte.");
+      } else {
+        toast.error("Credenciais inválidas");
+      }
     } else {
-      setUserTypes(response.data.user.perfil);
+      if (firstLogin === false) { 
+        setShowTrocarSenha(true);
+      } else {
+        setUserTypes(response.data.user.perfil);
+      }
     }
   };
+  
   
   const handleProfileSelection = () => {
     if (selectedUserType) {

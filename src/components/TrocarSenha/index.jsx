@@ -111,7 +111,7 @@ function TrocarSenha() {
         <Box sx={{ marginTop: 4, display: 'flex', alignItems: 'center' }}>
           <BackArrow style={{ marginRight: '30px' }} />
           <Typography component="h1" variant="h5" style={{ marginRight: '30px' }}>
-            Esqueceu a senha?
+            Troque sua senha
           </Typography>
         </Box>
 

@@ -54,21 +54,21 @@ const MenuHamburguer = ({ userType}) => {
       navigate('/');
   };
 
-  const handleBottonProjeto = () => {
+ /* const handleBottonProjeto = () => {
     if (userType === "aluno" || userType === "admin") {
       navigate('/Projeto');
     } else if (userType === "professor" || userType === "admin") {
       navigate('/Projeto');
     }
-  };
+  };*/
 
-  const handleBottonMeusProjetos = () => {
+  /*const handleBottonMeusProjetos = () => {
     if (userType === "aluno" || userType === "admin") {
       navigate('/Area/Projeto');
     } else if (userType === "professor" || userType === "admin") {
       navigate('/Area/Projeto');
     }
-  };
+  };*/
 
   const handleCloseProfile = () => {
     setIsMenuOpen(false);
@@ -191,8 +191,8 @@ const MenuHamburguer = ({ userType}) => {
               <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
               <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>
               <StyledTextButton>Professor</StyledTextButton>
-              <StyledTextButton onClick={handleBottonProjeto}>Projeto</StyledTextButton>
-              <StyledTextButton onClick={handleBottonMeusProjetos}>Meus projetos</StyledTextButton>
+                {/*<StyledTextButton onClick={handleBottonProjeto}>Projeto</StyledTextButton>*/} 
+             {/*<StyledTextButton onClick={handleBottonMeusProjetos}>Meus projetos</StyledTextButton> */} 
               <StyledTextButton>Provas</StyledTextButton>
             </>
           )}
@@ -210,8 +210,8 @@ const MenuHamburguer = ({ userType}) => {
             <>
               <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
               <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
-              <StyledTextButton onClick={handleBottonProjeto}>Projeto</StyledTextButton>
-              <StyledTextButton onClick={handleBottonMeusProjetos}>Meus projetos</StyledTextButton>
+             {/*<StyledTextButton onClick={handleBottonProjeto}>Projeto</StyledTextButton>*/} 
+             {/*<StyledTextButton onClick={handleBottonMeusProjetos}>Meus projetos</StyledTextButton> */} 
             </>
           )}
 
@@ -219,8 +219,8 @@ const MenuHamburguer = ({ userType}) => {
             <>
               <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
               <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
-              <StyledTextButton onClick={handleBottonProjeto}>Projeto</StyledTextButton>
-              <StyledTextButton onClick={handleBottonMeusProjetos}>Meus projetos</StyledTextButton>
+             {/*<StyledTextButton onClick={handleBottonProjeto}>Projeto</StyledTextButton>*/} 
+             {/*<StyledTextButton onClick={handleBottonMeusProjetos}>Meus projetos</StyledTextButton> */} 
               <StyledTextButton>Provas</StyledTextButton>
             </>
           )}
