@@ -49,8 +49,9 @@ const MenuHamburguer = ({ userType}) => {
   };
   
   const handleBottonHome = () => {
-
-    window.location.reload();
+      window.location.reload();
+    
+      navigate('/');
   };
 
   const handleBottonProjeto = () => {

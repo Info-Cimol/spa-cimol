@@ -1,38 +1,41 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import ContainerTopo from '../ContainerTopo';
 import MenuHamburguer from "../MenuHamburguer";
 import Aluno from '../Aluno';
 import Cardapio from '../Cardapio/index';
+import ProjetoHomePessa from '../../routes/CatalogoProjetos/homeProjeto';
 import ReservaSemana from '../Cardapio/reservaSemana';
 import { Container } from './styled';
 
 function Home() {
-  const navigate = useNavigate();
   const [exibirAluno, setExibirAluno] = useState(false);
   const [exibirCardapio, setExibirCardapio] = useState(false);
   const [userRole] = useState(localStorage.getItem('userRole'));
   const [exibirCardapioMerenda, setExibirCardapioMerenda] = useState(false); 
-
+  const [exibirHomeProjeto, setExibirHomeProjeto] = useState(false); 
+  
   const abrirCardapio = () => {
     setExibirCardapio(true);
     setExibirAluno(false); 
+    setExibirHomeProjeto(false);
   };
 
   const abrirAluno = () => {
-    setExibirCardapio(false);
-    setExibirAluno(true); 
+     setExibirAluno(true); 
+     setExibirCardapio(false);
+     setExibirHomeProjeto(false);
   };
 
   const abrirCardapioMerenda = () => {
     setExibirCardapioMerenda(true);
     setExibirCardapio(false); 
     setExibirAluno(false); 
+    setExibirHomeProjeto(false);
   };
 
-  const redirecionarParaProjeto = () => {
-    navigate('/Projeto');
-  };
+  /*const abrirComponenteProjeto = () => {
+    setExibirHomeProjeto(true);
+  };*/
 
   return (
     <Container>
@@ -46,11 +49,15 @@ function Home() {
         <Cardapio />
       )}
 
-{exibirCardapioMerenda && ( 
+    {exibirHomeProjeto && (
+        <ProjetoHomePessa />
+      )}
+
+      {exibirCardapioMerenda && ( 
         <ReservaSemana />
       )}
       
-      {!exibirAluno && !exibirCardapio && !exibirCardapioMerenda && (
+      {!exibirAluno && !exibirCardapio && !exibirCardapioMerenda &&  !exibirHomeProjeto && (
         <div className='container-fluid'>
           <div className='row'>
             <div className='buttons'>
@@ -72,7 +79,7 @@ function Home() {
                       <div className="card__body">
                         <h5 className="card__head">Catálogo de Projetos</h5>
                         <p className="card__desc">Explore o catálogo de projetos disponíveis.</p>
-                        <button className="card__btn" onClick={redirecionarParaProjeto}>Abrir</button>
+                        <p className="card__desc">Indisponível.</p>
                       </div>
                     </div>
                   </div>
@@ -89,7 +96,7 @@ function Home() {
                       <div className="card__body">
                         <h5 className="card__head">Catálogo de Projetos</h5>
                         <p className="card__desc">Explore o catálogo de projetos disponíveis.</p>
-                        <button className="card__btn" onClick={redirecionarParaProjeto}>Abrir</button>
+                        <button className="card__btn">Indisponível</button>
                       </div>
                     </div>
                     <div className="card">
@@ -140,7 +147,7 @@ function Home() {
                       <div className="card__body">
                         <h5 className="card__head">Catálogo de Projetos</h5>
                         <p className="card__desc">Explore o catálogo de projetos disponíveis.</p>
-                        <button className="card__btn" onClick={redirecionarParaProjeto}>Abrir</button>
+                        <p className="card__desc">Indisponível.</p>
                       </div>
                     </div>
                     <div className="card">

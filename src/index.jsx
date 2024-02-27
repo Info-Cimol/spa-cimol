@@ -6,7 +6,6 @@ import { ToastContainer } from 'react-toastify';
 import App from './App';
 import ScrollToTopButton from './components/ScrollTop'
 import Login from './routes/Login/index';
-import ProjetoHomePessa from './routes/CatalogoProjetos/homeProjeto';
 import ProjetoHomeDetalhes from './routes/CatalogoProjetos/homeDetalhesProjeto';
 import AreaPessoaProjeto from './routes/CatalogoProjetos/areaPessoaProjeto';
 import VisualizaProjetoPessoa from './routes/CatalogoProjetos/visualizaProjeto';
@@ -29,14 +28,6 @@ const router = createBrowserRouter([
       {
         path: '/Teste',
         element: <Private allowedRoles={['aluno', 'admin', 'secretaria']}><Teste/></Private> ,
-      },
-
-      //-------------Ferramenta de catálogo de projeto------------------------
-     
-      //Rota da home dos projetos, responsável por listar os projetos públicos e ainda possibilita a pesquisa dos mesmos, por título e ano
-      {
-        path: '/Projeto',
-        element: <Private allowedRoles={['aluno', 'professor', 'admin']}><ProjetoHomePessa /></Private>,
       },
 
       //Rota apartir da home, que possibilita ver os projetos das pessoas pelo id do projetos
