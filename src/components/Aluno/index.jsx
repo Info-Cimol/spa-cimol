@@ -135,6 +135,9 @@ const CadastroAluno = () => {
                     <strong>Endereço:</strong> {alunoSelecionado?.endereco}
                   </div>
                   <div className="detalhes-aluno-info">
+                    <strong>Curso:</strong> {alunoSelecionado?.curso}
+                  </div>
+                  <div className="detalhes-aluno-info">
                     <strong>Situação:</strong>{" "}
                     {alunoSelecionado?.ativo === 1 ? "Ativado" : "Suspenso"}
                   </div>
@@ -178,6 +181,7 @@ const CadastroAluno = () => {
           cpf: aluno.cpf_aluno || 'CPF não fornecido',
           endereco: aluno.endereco_aluno || 'Endereço não fornecido',
           numero: aluno.numero_telefone || 'Número não informado',
+          curso: aluno.nome_curso || 'Curso não informado',
           ativo: aluno.ativo_aluno || "Status de aluno não fornecido",
           editando: false,
         }))
