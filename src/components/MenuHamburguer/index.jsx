@@ -50,10 +50,9 @@ const MenuHamburguer = ({ userType}) => {
   
   const handleBottonHome = () => {
 
-    navigate('/');
+    window.location.reload();
   };
 
-  
   const handleBottonProjeto = () => {
     if (userType === "aluno" || userType === "admin") {
       navigate('/Projeto');

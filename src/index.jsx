@@ -5,14 +5,14 @@ import { Private } from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
 import App from './App';
 import ScrollToTopButton from './components/ScrollTop'
-import Login from './routes/Login';
+import Login from './routes/Login/index';
 import ProjetoHomePessa from './routes/CatalogoProjetos/homeProjeto';
 import ProjetoHomeDetalhes from './routes/CatalogoProjetos/homeDetalhesProjeto';
 import AreaPessoaProjeto from './routes/CatalogoProjetos/areaPessoaProjeto';
 import VisualizaProjetoPessoa from './routes/CatalogoProjetos/visualizaProjeto';
 import AdicionaProjeto from './routes/CatalogoProjetos/adicionaProjeto';
 import EditaProjeto from './routes/CatalogoProjetos/editaProjeto';
-//import Teste from './components/FileUploader/pdfUploaderProfessor';
+import Teste from './components/FileUploader/pdfUploaderProfessor';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
@@ -26,11 +26,10 @@ const router = createBrowserRouter([
         element: <Private allowedRoles={['aluno', 'professor', 'admin', 'merendeira', 'secretaria']}><Login /></Private>,
       },
 
-
-    /*{
+      {
         path: '/Teste',
         element: <Private allowedRoles={['aluno', 'admin', 'secretaria']}><Teste/></Private> ,
-      },*/
+      },
 
       //-------------Ferramenta de catálogo de projeto------------------------
      

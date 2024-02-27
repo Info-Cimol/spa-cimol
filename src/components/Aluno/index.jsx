@@ -31,6 +31,8 @@ const CadastroAluno = () => {
   const [userRole] = useState(localStorage.getItem('userRole'));
   const [showAttachmentModal, setShowAttachmentModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [cursos, setCursos] = useState([]);
+  const [selectedCursoId, setSelectedCursoId] = useState(null);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -254,7 +256,26 @@ const CadastroAluno = () => {
       toast.error('Erro ao editar aluno.');
     }
   };
-  
+
+  useEffect(() => {
+    async function fetchCursos() {
+      try {
+        const response = await axiosFetch.get('/listar/cursos');
+        const cursosData = response.data; // Supondo que a resposta seja um array de objetos com os dados dos cursos
+        const cursosComIds = cursosData.map(curso => ({ id: curso.id_curso, nome: curso.nome }));
+        setCursos(cursosComIds);
+      } catch (error) {
+        console.error('Erro ao buscar cursos:', error);
+      }
+    }
+
+    fetchCursos();
+  }, []);
+
+    const handleCursoSelect = event => {
+    setSelectedCursoId(event.target.value);
+  };
+
   const startIndex = (currentPage - 1) * alunosPorPagina;
   const endIndex = startIndex + alunosPorPagina;
   const alunosFiltrados = alunosDisponiveis.filter((aluno) => termoPesquisa ? aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) : true);
@@ -298,24 +319,23 @@ const CadastroAluno = () => {
   <div className='container-fluid'>
      <div className="botoesAcao">
 
-      <div className="uploaders">
-      
-        <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
-          <AddIcon  fontSize="large" />
-        </IconButton>
+     <div className="uploaders">
+      <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
+        <AddIcon fontSize="large" />
+      </IconButton>
 
-        <IconButton onClick={handleToggleAttachmentModal} title="Escolha o tipo de anexo" component="span">
-          <UploadFileIcon   fontSize="large" />
-        </IconButton>
-     
+      <IconButton onClick={handleToggleAttachmentModal} title="Escolha o tipo de anexo" component="span">
+        <UploadFileIcon fontSize="large" />
+      </IconButton>
+
       <Modal
         open={showAttachmentModal}
         onClose={handleToggleAttachmentModal}
         aria-labelledby="attachment-options"
         aria-describedby="choose-attachment-type"
       >
-        <div className="attachment-modal"> 
-        <div className='anexo'>
+        <div className="attachment-modal">
+          <div className="anexo">
             <h2>Selecione um Anexo</h2>
             <div className="close-icon">
               <IconButton onClick={handleToggleAttachmentModal}>
@@ -332,9 +352,18 @@ const CadastroAluno = () => {
               control={<Checkbox checked={selectedOption === 'Ficha Geral'} onChange={() => handleOptionSelect('Ficha Geral')} />}
               label="Lista Geral alunos"
             />
+
+            <select onChange={handleCursoSelect}>
+              <option value="">Selecione um curso</option>
+              {cursos.map(curso => (
+                <option key={curso.id} value={curso.id}>
+                  {curso.nome}
+                </option>
+              ))}
+            </select>
           </div>
-          {selectedOption === 'Ficha Unitária' && <FichaUploader />}
-          {selectedOption === 'Ficha Geral' && <FileUploader />}
+          {selectedOption === 'Ficha Unitária' && <FichaUploader cursoId={selectedCursoId} />}
+          {selectedOption === 'Ficha Geral' && <FileUploader cursoId={selectedCursoId} />}
         </div>
       </Modal>
     </div>
