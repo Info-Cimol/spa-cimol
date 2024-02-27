@@ -168,18 +168,18 @@ const handlePreviousWeek = () => {
     return days[date.getDay() + 1];
   };
 
-  const isReservaDisabled = (data) => {
+  const isReservaDisabled = (data, idCardapio, reservas) => {
     const dataCardapio = new Date(data);
     const today = new Date();
 
-    // Define a data mínima permitida para reserva (hoje + 3 dias)
     const minimumReservationDate = new Date(today);
     minimumReservationDate.setDate(minimumReservationDate.getDate() + 3);
 
-    // Define a data máxima permitida para reserva (hoje)
     const maximumReservationDate = new Date(today);
   
-    return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate;
+    const hasReservation = reservas.some(reserva => reserva.cardapio_id_cardapio === idCardapio);
+
+    return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate || hasReservation;
 };
 
   const currentSunday = sundays[currentWeekIndex];
@@ -223,7 +223,7 @@ const handlePreviousWeek = () => {
                     const saturdayOfCurrentWeek = new Date(sundayOfCurrentWeek);
                     saturdayOfCurrentWeek.setDate(saturdayOfCurrentWeek.getDate() + 7);
                     const isAlreadyReserved = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio);
-                    const isDisabled = isReservaDisabled(item.data, item.id_cardapio);
+                    const isDisabled = isReservaDisabled(item.data, item.id_cardapio, reservas);
                     const isWithinCurrentWeek = itemDate >= sundayOfCurrentWeek && itemDate <= saturdayOfCurrentWeek;
                     const hasReservedIcon = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio && reserva.id_usuario === id);
 

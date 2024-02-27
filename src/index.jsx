@@ -11,7 +11,7 @@ import AreaPessoaProjeto from './routes/CatalogoProjetos/areaPessoaProjeto';
 import VisualizaProjetoPessoa from './routes/CatalogoProjetos/visualizaProjeto';
 import AdicionaProjeto from './routes/CatalogoProjetos/adicionaProjeto';
 import EditaProjeto from './routes/CatalogoProjetos/editaProjeto';
-import Teste from './components/FileUploader/pdfUploaderProfessor';
+import Teste from './components/Cardapio/relatorioReservas';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
 
       {
         path: '/Teste',
-        element: <Private allowedRoles={['aluno', 'admin', 'secretaria']}><Teste/></Private> ,
+        element: <Private allowedRoles={['admin', 'secretaria']}><Teste/></Private> ,
       },
 
       //Rota apartir da home, que possibilita ver os projetos das pessoas pelo id do projetos
