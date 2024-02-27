@@ -32,18 +32,18 @@ function Login() {
   };
  
   const handleLogin = (response) => {
-    const userRoles = response.data.user.perfil;
-    if (userRoles.length === 1) {
-      const userRole = userRoles[0];
-      saveUserData(response, userRole);
-    } else if (userRoles.length > 1) {
-      setUserTypes(userRoles);
+    const firstLogin = response.data.user.first_login;
+    const ativo = response.data.user.ativo;
+  
+    if (ativo === 0) {
+      toast.error('Usuário desativado. Por favor, entre em contato com a direção.');
+    } else if (firstLogin === 1) {
+      setShowTrocarSenha(true); 
     } else {
-      console.log('Usuário sem perfil atribuído');
-      toast.error('Usuário sem perfil atribuído');
+      setUserTypes(response.data.user.perfil);
     }
   };
-
+  
   const handleProfileSelection = () => {
     if (selectedUserType) {
       saveUserData(selectedUserType);
@@ -62,33 +62,11 @@ function Login() {
   
       axiosFecht.post('/user/login', loginData)
         .then((response) => {
-          const userRoles = response.data.user.perfil;
-  
-          if (userRoles.length === 1) {
-            const userRole = userRoles[0];
-            setUserAndNavigate(userRole, response);
-          } else if (userRoles.length > 1 && userType) {
-            setUserAndNavigate(userType, response);
-          } else if (userRoles.length > 1) {
-            setUserTypes(userRoles);
-          } else {
-            console.log('Usuário sem perfil atribuído');
-            toast.error('Usuário sem perfil atribuído');
-          }
+          setUserAndNavigate(userType, response);
         })
         .catch((error) => {
-          if (error.response) {
-            if (error.response.status === 404) {
-              console.log('Email não cadastrado');
-              toast.error('Email não cadastrado');
-            } else {
-              console.error(error.response.data);
-              toast.error('Erro de resposta do servidor');
-            }
-          } else {
-            console.error(error);
-            toast.error('Erro de requisição');
-          }
+          console.error(error.response);
+          toast.error('Erro ao realizar login');
         })
         .finally(() => {
           setLoading(false);
@@ -122,27 +100,21 @@ function Login() {
       };
   
       const response = await axiosFecht.post('/user/login', loginData);
-  
+
       if (response.data.auth === true) {
         handleLogin(response);
       } else {
         setLoading(false);
-        console.log('Senha incorreta');
-        toast.error('Credenciais inválidas');
+        if (response.data.message) {
+          toast.error(response.data.message);
+        } else {
+          console.log('Senha incorreta');
+          toast.error('Credenciais inválidas');
+        }
       }
     } catch (error) {
-      if (error.response) {
-        if (error.response.status === 404) {
-          console.log('Email não cadastrado');
-          toast.error('Email não cadastrado');
-        } else {
-          console.error(error.response.data);
-          toast.error('Erro de resposta do servidor');
-        }
-      } else {
-        console.error(error);
-        toast.error('Erro de requisição');
-      }
+      console.error(error);
+      toast.error('Erro ao realizar login');
       setLoading(false);
     }
   };
@@ -210,7 +182,7 @@ function Login() {
                       className="checkbox-input"
                       type="radio"
                       value={type}
-                      checked={selectedUserType.includes(type)}
+                      checked={selectedUserType === type}
                       onChange={() => setSelectedUserType(type)}
                     />
                     <label className="checkbox-text">{type}</label>
