@@ -33,7 +33,17 @@ function Login() {
  
   const handleLogin = (response) => {
     const firstLogin = response.data.firstLogin; 
-  
+    const userRoles = response.data.user.perfil;
+
+    if (userRoles.length === 1) {
+      const userRole = userRoles[0];
+      saveUserData(response, userRole);
+    } else if (userRoles.length > 1) {
+      setUserTypes(userRoles);
+    } else {
+      console.log('Usuário sem perfil atribuído');
+      toast.error('Usuário sem perfil atribuído');
+    }
     if (response.data.auth === false) {
       if (response.data.message === "Usuário desativado. Entre em contato com o suporte.") {
         toast.error("Usuário desativado. Entre em contato com o suporte.");
@@ -48,7 +58,6 @@ function Login() {
       }
     }
   };
-  
   
   const handleProfileSelection = () => {
     if (selectedUserType) {
@@ -69,6 +78,19 @@ function Login() {
       axiosFecht.post('/user/login', loginData)
         .then((response) => {
           setUserAndNavigate(userType, response);
+          const userRoles = response.data.user.perfil;
+
+          if (userRoles.length === 1) {
+            const userRole = userRoles[0];
+            setUserAndNavigate(userRole, response);
+          } else if (userRoles.length > 1 && userType) {
+            setUserAndNavigate(userType, response);
+          } else if (userRoles.length > 1) {
+            setUserTypes(userRoles);
+          } else {
+            console.log('Usuário sem perfil atribuído');
+            toast.error('Usuário sem perfil atribuído');
+          }
         })
         .catch((error) => {
           console.error(error.response);
