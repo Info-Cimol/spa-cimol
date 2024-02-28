@@ -101,6 +101,10 @@ function Cardapio() {
   };
 
   fetchData();
+
+  const interval = setInterval(fetchData, 60000); 
+
+  return () => clearInterval(interval);
 }, []);
 
 const handleNextWeek = () => {
@@ -123,7 +127,7 @@ const handlePreviousWeek = () => {
       }
     };
     fetchData();
-  });
+  }, [id]); 
 
   useEffect(() => {
     const storedReservas = JSON.parse(localStorage.getItem('reservado')) || {};
@@ -134,14 +138,14 @@ const handlePreviousWeek = () => {
     localStorage.setItem('reservado', JSON.stringify(reservas));
   };
 
-  const reservarCardapio = async (idCardapio, maisDeUmTurno) => {
+  const reservarCardapio = async (idCardapio, maisDeUmTurno, updateReservas = true) => {
     try {
       const id = localStorage.getItem('id');
       let turno;
       if (maisDeUmTurno) {
         turno = ['manha', 'tarde', 'noite'];
       } else {
-        // Aqui, converta o objeto para um array de turnos
+   
         turno = Object.keys(selectedTurno[idCardapio]).filter(turno => selectedTurno[idCardapio][turno]);
       }
   
@@ -155,12 +159,17 @@ const handlePreviousWeek = () => {
         setReservado(newReservado);
         salvarReservasLocalStorage(newReservado);
         closeModal();
+        if (updateReservas) {
+          const updatedReservasResponse = await axiosFetch.get(`/reservas/${id}`);
+          setReservas(updatedReservasResponse.data);
+        }
       }
     } catch (error) {
       console.log("Erro ao reservar cardápio ", error);
       toast.error(error);
     }
-  };  
+  }; 
+  
 
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
@@ -180,9 +189,7 @@ const handlePreviousWeek = () => {
     const hasReservation = reservas.some(reserva => reserva.cardapio_id_cardapio === idCardapio);
 
     return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate || hasReservation;
-};/*  if (hasReservation) {
-  toast.error('Você já possui uma reserva para este cardápio.');
-}  */
+};
 
   const currentSunday = sundays[currentWeekIndex];
   const currentSaturday = new Date(currentSunday); 

@@ -33,6 +33,57 @@ const CadastroAluno = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [cursos, setCursos] = useState([]);
   const [selectedCursoId, setSelectedCursoId] = useState(null);
+  const [firstLoadComplete, setFirstLoadComplete] = useState(false);
+  const [fetchData, setFetchData] = useState(true); 
+  
+  useEffect(() => {
+    const carregarAlunos = async () => {
+      try {
+        const response = await axiosFetch.get('/listar/alunos');
+        console.log('Resposta da API:', response.data);
+        
+        // Ordenar os alunos por nome em ordem alfabética
+        const alunosOrdenados = response.data
+          .map((aluno) => ({
+            id: aluno.pessoa_id_pessoa,
+            nome: aluno.nome_aluno || 'Nome não fornecido',
+            email: aluno.email_aluno || 'E-mail não fornecido',
+            matricula: aluno.matricula_aluno || 'Matrícula não fornecido',
+            cpf: aluno.cpf_aluno || 'CPF não fornecido',
+            endereco: aluno.endereco_aluno || 'Endereço não fornecido',
+            numero: aluno.numero_telefone || 'Número não informado',
+            curso: aluno.nome_curso || 'Curso não informado',
+            ativo: aluno.ativo_aluno || "Status de aluno não fornecido",
+            editando: false,
+          }))
+          .sort((a, b) => a.nome.localeCompare(b.nome)); // Ordenar por nome
+        
+        setAlunosDisponiveis(alunosOrdenados);
+  
+        // Se for a primeira vez que os alunos são carregados, marque a primeira solicitação como completa
+        if (!firstLoadComplete) {
+          setFirstLoadComplete(true);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar alunos:', error);
+      }
+    };
+  
+    if (fetchData) {
+      carregarAlunos();
+      setFetchData(false);
+    }
+  
+    const interval = setInterval(() => {
+      // Verificar se a primeira solicitação já foi concluída antes de ativar o intervalo de atualização
+      if (firstLoadComplete) {
+        carregarAlunos();
+      }
+    }, 60000); // Atualizar a cada 60 segundos
+  
+    return () => clearInterval(interval);
+  }, [fetchData, firstLoadComplete]);
+  
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -139,7 +190,7 @@ const CadastroAluno = () => {
                   </div>
                   <div className="detalhes-aluno-info">
                     <strong>Situação:</strong>{" "}
-                    {alunoSelecionado?.ativo === 1 ? "Ativado" : "Suspenso"}
+                    {alunoSelecionado?.ativo === 1 ? "Ativo" : "Suspenso"}
                   </div>
                 </div>
               </div>
@@ -223,11 +274,17 @@ const CadastroAluno = () => {
     setShowConfirmationModal(true);
   };
 
+  const handleCancelarDesativar = () => {
+    setShowConfirmationModal(false);
+  };
+
   const handleConfirmDesativar = async () => {
     try {
       await axiosFetch.put(`/desativa/aluno/${selectedAlunoId}`);
-
+  
+      // Após desativar o aluno, atualize imediatamente a lista de alunos
       carregarAlunos();
+  
       toast.success('Aluno desativado com sucesso!');
       setShowConfirmationModal(false);
     } catch (error) {
@@ -235,11 +292,7 @@ const CadastroAluno = () => {
       toast.error('Erro ao desativar aluno.');
     }
   };
-
-  const handleCancelarDesativar = () => {
-    setShowConfirmationModal(false);
-  };
-
+  
   const handleSalvarEdicao = async () => {
     try {
       const valorParaBanco = editingAluno.ativo !== null ? editingAluno.ativo : 0;
@@ -254,12 +307,17 @@ const CadastroAluno = () => {
         editingAluno.numero,
         valorParaBanco
       );
+  
+      // Após editar o aluno, atualize imediatamente a lista de alunos
+      carregarAlunos();
+  
       setShowEditModal(false);
     } catch (error) {
       console.error('Erro ao editar aluno:', error);
       toast.error('Erro ao editar aluno.');
     }
   };
+  
 
   useEffect(() => {
     async function fetchCursos() {
@@ -282,8 +340,13 @@ const CadastroAluno = () => {
 
   const startIndex = (currentPage - 1) * alunosPorPagina;
   const endIndex = startIndex + alunosPorPagina;
-  const alunosFiltrados = alunosDisponiveis.filter((aluno) => termoPesquisa ? aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) : true);
-  const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
+  // Filtrar e ordenar os alunos por nome em ordem alfabética
+const alunosFiltrados = alunosDisponiveis
+.filter((aluno) => termoPesquisa ? aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) : true)
+.sort((a, b) => a.nome.localeCompare(b.nome));
+
+// Aplicar a paginação após a ordenação
+const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
 
   return (
     <>

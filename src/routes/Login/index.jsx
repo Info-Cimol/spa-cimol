@@ -227,7 +227,7 @@ function Login() {
               {loading ? 'Carregando...' : 'Entrar'}
             </button>
           </form>
-          <div className="forgot_password" style={{cursor: "pointer"}} onClick={handleToggleTrocarSenhaVisibility}>Esqueceu a senha? Trocar senha</div>
+          <div className="forgot_password" style={{ cursor: "pointer", fontSize: '1.2rem', color: '#1b2f4a' }} onClick={handleToggleTrocarSenhaVisibility}>Esqueceu a senha? Trocar senha</div>
         </div>
         )}
       </Container>

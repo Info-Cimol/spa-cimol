@@ -26,7 +26,8 @@ function CardapioMerendeira() {
   const [newData, setNewData] = useState(''); 
   const [, setSelectedCardapioId] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
+  const [fetchData, setFetchData] = useState(true);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,32 +56,41 @@ function CardapioMerendeira() {
       }
     };
   
-    fetchData();
-  });
-
-const handleNextWeek = () => {
-  if (currentWeekIndex < sundays.length - 2) {
-    setCurrentWeekIndex(currentWeekIndex + 1);
-  }
-};
-
+    if (fetchData) {
+      fetchData();
+      setFetchData(false);
+    }
+  
+    const interval = setInterval(() => {
+      setFetchData(true);
+    }, 60000); 
+  
+    return () => clearInterval(interval);
+  }, [fetchData]);
+  
+  const handleNextWeek = () => {
+    if (currentWeekIndex < sundays.length - 2) {
+      setCurrentWeekIndex(currentWeekIndex + 1);
+    }
+  };
+  
   const handlePreviousWeek = () => {
     setCurrentWeekIndex(currentWeekIndex - 1);
   };
-
+  
   const handleToggleForm = () => {
     setOpenCadastro(!openCadastro);
   };
-
+  
   const handleReservationClick = (reservation) => {
     setSelectedReservation(reservation);
     setIsDetailModalOpen(true);
   };
-
+  
   const handleCloseDetailModal = () => {
     setIsDetailModalOpen(false);
   };
-
+  
   const handleUpdateCardapioList = async () => {
     try {
       const response = await axiosFetch.get('/cardapio');
@@ -89,78 +99,87 @@ const handleNextWeek = () => {
       console.error('Erro ao atualizar lista de cardápios:', error);
     }
   };
-
+  
   const handleOpenConfirmationModal = () => {
     setConfirmationModalOpen(true);
   };
-
+  
   const handleCloseConfirmationModal = () => {
     setConfirmationModalOpen(false);
   };
-
+  
   const handleConfirmDelete = async () => {
     try {
       const idCardapio = selectedReservation.id_cardapio;
-
+  
       await axiosFetch.delete(`/cardapio/${idCardapio}`);
-
-      const response = await axiosFetch.get('/cardapio');
-      setCardapio(response.data);
-
+  
+      const updatedCardapio = cardapio.filter(item => item.id_cardapio !== idCardapio);
+      setCardapio(updatedCardapio);
+  
       toast.success('Cardápio excluído com sucesso!');
-
+  
       setIsDetailModalOpen(false);
       setConfirmationModalOpen(false);
     } catch (error) {
       console.error('Erro ao excluir cardápio:', error);
+      toast.error('Ocorreu um erro ao excluir o cardápio.');
     }
   };
-
+  
   const handleEditeCardapio = async () => {
     try {
       const idCardapio = selectedReservation.id_cardapio;
-
+  
       await axiosFetch.put(`/cardapio/${idCardapio}`, {
         nome: newNome, 
         descricao: newDescricao, 
         data: newData, 
         imagem: newImagem, 
       });
-     
+  
+      const updatedCardapio = cardapio.map(item => {
+        if (item.id_cardapio === idCardapio) {
+          return { ...item, nome: newNome, descricao: newDescricao, data: newData, imagem: newImagem };
+        }
+        return item;
+      });
+      setCardapio(updatedCardapio);
+  
       toast.success('Cardápio editado com sucesso!');
-
+  
       setIsDetailModalOpen(false);
       setIsEditModalOpen(false);
     } catch (error) {
       console.error('Erro ao editar cardápio:', error);
-      toast.error('Não foi possível editar o seu cardápio!');
+      toast.error('Ocorreu um erro ao editar o cardápio.');
     }
   };
-
+  
   const handleOpenEditModal = (cardapioId) => {
     const selectedCardapio = cardapio.find(item => item.id_cardapio === cardapioId);
     setNewNome(selectedCardapio.nome);
     setNewDescricao(selectedCardapio.descricao);
     setNewImagem(selectedCardapio.imagem);
     setNewData(selectedCardapio.data);
-
+  
     setSelectedCardapioId(cardapioId);
     setIsEditModalOpen(true);
   };
-
+  
   const currentSunday = sundays[currentWeekIndex];
   const currentSaturday = new Date(currentSunday); 
   currentSaturday.setDate(currentSaturday.getDate() + 5);
-
+  
   const weekRange = currentSunday && currentSaturday ?
     `${currentSunday.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })} - ${currentSaturday.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' })}` :
     "";
-
-    const getDayOfWeek = (dateString) => {
-      const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-      const date = new Date(dateString);
-      return days[date.getDay() + 1]; 
-    };
+  
+  const getDayOfWeek = (dateString) => {
+    const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    const date = new Date(dateString);
+    return days[date.getDay() + 1]; 
+  };
 
   return (
     <>
@@ -245,9 +264,9 @@ const handleNextWeek = () => {
             </IconButton>
           </div>
           <div className="modal-content">
-            <p><strong>Data do Prato:</strong> {getDayOfWeek(selectedReservation.data)}</p>
-            <p><strong>Nome do Prato:</strong> {selectedReservation.nome}</p>
-            <p><strong>Descrição do Prato:</strong> {selectedReservation.descricao}</p>
+            <p><strong>Data:</strong> {getDayOfWeek(selectedReservation.data)}</p>
+            <p><strong>Nome:</strong> {selectedReservation.nome}</p>
+            <p><strong>Descrição:</strong> {selectedReservation.descricao}</p>
             <p><strong>Reservas do dia:</strong> {selectedReservation.reservas}</p>
             <p><strong>Manhã:</strong> {selectedReservation.manha_count}</p>
             <p><strong>Tarde:</strong> {selectedReservation.tarde_count}</p>

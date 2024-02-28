@@ -23,6 +23,8 @@
     "crypto-js": "^4.2.0",
     "framer-motion": "^10.16.4",
     "js-cookie": "^3.0.5",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "libphonenumber-js": "^1.10.54",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.0",
