@@ -42,7 +42,6 @@ const CadastroAluno = () => {
         const response = await axiosFetch.get('/listar/alunos');
         console.log('Resposta da API:', response.data);
         
-        // Ordenar os alunos por nome em ordem alfabética
         const alunosOrdenados = response.data
           .map((aluno) => ({
             id: aluno.pessoa_id_pessoa,
@@ -56,11 +55,10 @@ const CadastroAluno = () => {
             ativo: aluno.ativo_aluno || "Status de aluno não fornecido",
             editando: false,
           }))
-          .sort((a, b) => a.nome.localeCompare(b.nome)); // Ordenar por nome
+          .sort((a, b) => a.nome.localeCompare(b.nome)); 
         
         setAlunosDisponiveis(alunosOrdenados);
   
-        // Se for a primeira vez que os alunos são carregados, marque a primeira solicitação como completa
         if (!firstLoadComplete) {
           setFirstLoadComplete(true);
         }
@@ -75,16 +73,15 @@ const CadastroAluno = () => {
     }
   
     const interval = setInterval(() => {
-      // Verificar se a primeira solicitação já foi concluída antes de ativar o intervalo de atualização
+  
       if (firstLoadComplete) {
         carregarAlunos();
       }
-    }, 60000); // Atualizar a cada 60 segundos
+    }, 60000); 
   
     return () => clearInterval(interval);
   }, [fetchData, firstLoadComplete]);
   
-
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
   };
@@ -282,7 +279,6 @@ const CadastroAluno = () => {
     try {
       await axiosFetch.put(`/desativa/aluno/${selectedAlunoId}`);
   
-      // Após desativar o aluno, atualize imediatamente a lista de alunos
       carregarAlunos();
   
       toast.success('Aluno desativado com sucesso!');
@@ -308,7 +304,6 @@ const CadastroAluno = () => {
         valorParaBanco
       );
   
-      // Após editar o aluno, atualize imediatamente a lista de alunos
       carregarAlunos();
   
       setShowEditModal(false);
@@ -318,7 +313,6 @@ const CadastroAluno = () => {
     }
   };
   
-
   useEffect(() => {
     async function fetchCursos() {
       try {
@@ -341,9 +335,9 @@ const CadastroAluno = () => {
   const startIndex = (currentPage - 1) * alunosPorPagina;
   const endIndex = startIndex + alunosPorPagina;
   // Filtrar e ordenar os alunos por nome em ordem alfabética
-const alunosFiltrados = alunosDisponiveis
-.filter((aluno) => termoPesquisa ? aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) : true)
-.sort((a, b) => a.nome.localeCompare(b.nome));
+  const alunosFiltrados = alunosDisponiveis
+  .filter((aluno) => termoPesquisa ? aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) : true)
+  .sort((a, b) => a.nome.localeCompare(b.nome));
 
 // Aplicar a paginação após a ordenação
 const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
@@ -436,6 +430,7 @@ const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
     </div>
 
     </div>
+
         <DetalhesAlunoModal alunoSelecionado={alunoSelecionado} onClose={() => setAlunoSelecionado(null)} />
 
         <table>
@@ -580,7 +575,6 @@ const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
                         <DeleteIcon />
                       </IconButton>
                     </>
-                    
                     )}
                   </td>
                   </tr>

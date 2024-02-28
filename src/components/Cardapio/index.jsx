@@ -25,11 +25,26 @@ function Cardapio() {
   const [selectedCardapioId, setSelectedCardapioId] = useState(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [idReservaToDelete, setIdReservaToDelete] = useState(null);
+  const [confirming, setConfirming] = useState(false);
 
   // Função para abrir o modal de confirmação
   const openConfirmationModal = (idReserva) => {
     setIdReservaToDelete(idReserva);
     setShowConfirmationModal(true);
+  };
+
+  const handleReservation = async () => {
+    // Impedir cliques repetidos enquanto a reserva está em andamento
+    if (confirming) return;
+
+    // Marcar como confirmando para impedir cliques repetidos
+    setConfirming(true);
+
+    // Lógica de reserva aqui
+    await reservarCardapio(selectedCardapioId);
+
+    // Depois que a reserva for concluída, redefinir o estado para permitir novos cliques
+    setConfirming(false);
   };
 
   // Função para fechar o modal de confirmação
@@ -267,39 +282,40 @@ const handlePreviousWeek = () => {
                                     </div>
                                 </div>
                                 <Modal open={showModal} onClose={closeModal}>
-                                    <div className="modal-container">
-                                        <div className="header">
-                                            <h2 className="title">Reserva de Cardápio</h2>
-                                            <div className="close-button">
-                                                <IconButton onClick={closeModal}>
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </div>
-                                        </div>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                            <FormControlLabel
-                                                control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'manhã', e.target.checked)} />}
-                                                label="Manhã"
-                                            />
-                                            <FormControlLabel
-                                                control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'tarde', e.target.checked)} />}
-                                                label="Tarde"
-                                            />
-                                            <FormControlLabel
-                                                control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'noite', e.target.checked)} />}
-                                                label="Noite"
-                                            />  
-                                        </Box>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            style={{ marginRight: '30px' }}
-                                            onClick={() => reservarCardapio(selectedCardapioId)}
-                                        >
-                                            Confirmar
-                                        </Button>
+                                <div className="modal-container">
+                                  <div className="header">
+                                    <h2 className="title">Reserva de Cardápio</h2>
+                                    <div className="close-button">
+                                      <IconButton onClick={closeModal}>
+                                        <CloseIcon />
+                                      </IconButton>
                                     </div>
-                                </Modal>
+                                  </div>
+                                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    <FormControlLabel
+                                      control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'manhã', e.target.checked)} />}
+                                      label="Manhã"
+                                    />
+                                    <FormControlLabel
+                                      control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'tarde', e.target.checked)} />}
+                                      label="Tarde"
+                                    />
+                                    <FormControlLabel
+                                      control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'noite', e.target.checked)} />}
+                                      label="Noite"
+                                    />
+                                  </Box>
+                                  <Button
+                                    variant="contained"
+                                    color="primary"
+                                    style={{ marginRight: '30px' }}
+                                    onClick={handleReservation} // Chame a função que faz a reserva
+                                    disabled={confirming} // Desabilite o botão quando a reserva estiver em andamento
+                                  >
+                                    {confirming ? 'Reservando...' : 'Confirmar'} {/* Alterne entre 'Confirmar' e 'Reservando...' dependendo do estado de confirmação */}
+                                  </Button>
+                                </div>
+                              </Modal>
                             </motion.div>
                         );
                     }
