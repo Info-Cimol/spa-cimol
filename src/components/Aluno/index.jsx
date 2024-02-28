@@ -334,12 +334,11 @@ const CadastroAluno = () => {
 
   const startIndex = (currentPage - 1) * alunosPorPagina;
   const endIndex = startIndex + alunosPorPagina;
-  // Filtrar e ordenar os alunos por nome em ordem alfabética
+
   const alunosFiltrados = alunosDisponiveis
   .filter((aluno) => termoPesquisa ? aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) : true)
   .sort((a, b) => a.nome.localeCompare(b.nome));
 
-// Aplicar a paginação após a ordenação
 const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
 
   return (
@@ -582,24 +581,24 @@ const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
           </tbody>
         </table>
 
-  {exibirCadastroAlunoForm && 
-      <CadastroAlunoForm open={true} onClose={() => setShowEditModal(false)} />    
-  }
-     <div className="pagination">
-      <Button
-        disabled={currentPage === 1}
-        onClick={() => setCurrentPage(currentPage - 1)}
-      >
-        Anterior
-      </Button>
-      <span>{currentPage}</span>
-      <Button
-        disabled={endIndex >= alunosFiltrados.length}
-        onClick={() => setCurrentPage(currentPage + 1)}
-      >
-        Próxima
-      </Button>
-    </div>
+        {exibirCadastroAlunoForm && 
+            <CadastroAlunoForm open={true} onClose={() => setShowEditModal(false)} />    
+        }
+          <div className="pagination">
+            <Button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              Anterior
+            </Button>
+            <span>{currentPage}</span>
+            <Button
+              disabled={endIndex >= alunosFiltrados.length}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              Próxima
+            </Button>
+          </div>
 
         <Modal open={showConfirmationModal} onClose={handleCancelarDesativar}>
             <div style={{ padding: '16px', background: '#fff', width: '400px', margin: '50px auto' }}>

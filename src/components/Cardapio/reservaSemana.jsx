@@ -272,7 +272,6 @@ function CardapioMerendeira() {
             <p><strong>Tarde:</strong> {selectedReservation.tarde_count}</p>
             <p><strong>Noite:</strong> {selectedReservation.noite_count}</p>
 
-            {/* Botões de editar e deletar */}
             <div>
             {userRole === 'admin' || userRole === 'secretaria' ? (
               <DeleteIcon style={{ cursor: "pointer" }} onClick={handleOpenConfirmationModal}>Excluir</DeleteIcon>
@@ -285,7 +284,6 @@ function CardapioMerendeira() {
         </div>
       )}
 
-      {/* Modal de confirmação para exclusão */}
       <Dialog
         open={confirmationModalOpen}
         onClose={handleCloseConfirmationModal}

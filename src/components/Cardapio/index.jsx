@@ -27,27 +27,21 @@ function Cardapio() {
   const [idReservaToDelete, setIdReservaToDelete] = useState(null);
   const [confirming, setConfirming] = useState(false);
 
-  // Função para abrir o modal de confirmação
   const openConfirmationModal = (idReserva) => {
     setIdReservaToDelete(idReserva);
     setShowConfirmationModal(true);
   };
 
   const handleReservation = async () => {
-    // Impedir cliques repetidos enquanto a reserva está em andamento
     if (confirming) return;
 
-    // Marcar como confirmando para impedir cliques repetidos
     setConfirming(true);
 
-    // Lógica de reserva aqui
     await reservarCardapio(selectedCardapioId);
 
-    // Depois que a reserva for concluída, redefinir o estado para permitir novos cliques
     setConfirming(false);
   };
 
-  // Função para fechar o modal de confirmação
   const closeConfirmationModal = () => {
     setShowConfirmationModal(false);
   };
@@ -64,7 +58,6 @@ function Cardapio() {
   
   const excluirReserva = async (idCardapio) => {
     try {
-        // Filtra as reservas que não correspondem ao idCardapio a ser excluído
         const updatedReservas = reservas.filter(reserva => reserva.cardapio_id_cardapio !== idCardapio);
       
         await axiosFetch.delete(`/reserva/${id}/cardapio/${idCardapio}`);
@@ -77,12 +70,10 @@ function Cardapio() {
     }
 };
 
-  // Função para abrir o modal
   const openModal = () => {
     setShowModal(true);
   };
 
-  // Função para fechar o modal
   const closeModal = () => {
     setShowModal(false);
   };
@@ -309,10 +300,10 @@ const handlePreviousWeek = () => {
                                     variant="contained"
                                     color="primary"
                                     style={{ marginRight: '30px' }}
-                                    onClick={handleReservation} // Chame a função que faz a reserva
-                                    disabled={confirming} // Desabilite o botão quando a reserva estiver em andamento
+                                    onClick={handleReservation} 
+                                    disabled={confirming} 
                                   >
-                                    {confirming ? 'Reservando...' : 'Confirmar'} {/* Alterne entre 'Confirmar' e 'Reservando...' dependendo do estado de confirmação */}
+                                    {confirming ? 'Reservando...' : 'Confirmar'} 
                                   </Button>
                                 </div>
                               </Modal>
@@ -382,7 +373,6 @@ const handlePreviousWeek = () => {
               </div>
           )}
           
-              {/* Modal de confirmação para excluir reserva */}
               <Modal open={showConfirmationModal} onClose={closeConfirmationModal} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Box sx={{ width: '400px', bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2 }}>
                   <div className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>

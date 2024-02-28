@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '@mui/material/Modal';
 import { toast } from 'react-toastify';
-import { IconButton } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { IconButton, TextField, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import Button from '@mui/material/Button';
 import axiosFetch from '../../axios/config';
 
 const CadastroAlunoForm = ({ open, onClose }) => {

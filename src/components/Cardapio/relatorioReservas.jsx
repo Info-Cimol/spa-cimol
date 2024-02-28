@@ -21,22 +21,18 @@ const RelatorioReservas = () => {
             }
         };
 
-        // Atualizar o relatório a cada 60 segundos
         const interval = setInterval(fetchRelatorio, 60000);
 
-        // Buscar o relatório imediatamente
         fetchRelatorio();
 
-        // Limpar o intervalo quando o componente for desmontado
         return () => clearInterval(interval);
     }, []);
 
     const gerarPDF = () => {
         const doc = new jsPDF();
-    
-        // Define a função para adicionar o conteúdo da tabela
+
         const addContent = () => {
-            let isFirstPage = true; // Variável para controlar se é a primeira página
+            let isFirstPage = true; 
     
             relatorio.forEach(item => {
                 const data = [];
@@ -51,7 +47,6 @@ const RelatorioReservas = () => {
                     ]);
                 }
     
-                // Adiciona cabeçalho apenas na primeira página
                 if (isFirstPage) {
                     doc.setFontSize(16);
                     doc.text('Relatório de Reservas', 105, 20, null, null, 'center');
@@ -78,21 +73,17 @@ const RelatorioReservas = () => {
                     margin: { top: 10 }
                 });
     
-                // Adiciona uma nova página para o próximo cardápio
                 if (relatorio.indexOf(item) !== relatorio.length - 1) {
                     doc.addPage();
                 }
             });
         };
-    
-        // Adiciona o conteúdo
+
         addContent();
-    
-        // Salva o PDF
+
         doc.save('relatorio_reservas.pdf');
     };
     
-
     return (
         <div>
             <h2>Relatório de Reservas</h2>
