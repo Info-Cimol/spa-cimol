@@ -180,7 +180,9 @@ const handlePreviousWeek = () => {
     const hasReservation = reservas.some(reserva => reserva.cardapio_id_cardapio === idCardapio);
 
     return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate || hasReservation;
-};
+};/*  if (hasReservation) {
+  toast.error('Você já possui uma reserva para este cardápio.');
+}  */
 
   const currentSunday = sundays[currentWeekIndex];
   const currentSaturday = new Date(currentSunday); 
