@@ -8,6 +8,7 @@ import ReservaSemana from '../Cardapio/reservaSemana';
 import { Container } from './styled';
 
 function Home() {
+  const [exibirHome, setExibirHome] = useState(true);
   const [exibirAluno, setExibirAluno] = useState(false);
   const [exibirCardapio, setExibirCardapio] = useState(false);
   const [userRole] = useState(localStorage.getItem('userRole'));
@@ -18,12 +19,14 @@ function Home() {
     setExibirCardapio(true);
     setExibirAluno(false); 
     setExibirHomeProjeto(false);
+    setExibirHome(false);
   };
 
   const abrirAluno = () => {
      setExibirAluno(true); 
      setExibirCardapio(false);
      setExibirHomeProjeto(false);
+     setExibirHome(false);
   };
 
   const abrirCardapioMerenda = () => {
@@ -31,6 +34,7 @@ function Home() {
     setExibirCardapio(false); 
     setExibirAluno(false); 
     setExibirHomeProjeto(false);
+    setExibirHome(false);
   };
 
   /*const abrirComponenteProjeto = () => {
@@ -40,7 +44,7 @@ function Home() {
   return (
     <Container>
       <ContainerTopo userType={userRole} />
-      <MenuHamburguer userType={userRole} />
+      <MenuHamburguer userType={userRole} exibirHome={exibirHome} />
       {exibirAluno && (
         <Aluno />
       )}
@@ -57,7 +61,7 @@ function Home() {
         <ReservaSemana />
       )}
       
-      {!exibirAluno && !exibirCardapio && !exibirCardapioMerenda &&  !exibirHomeProjeto && (
+      {!exibirAluno && !exibirCardapio && !exibirCardapioMerenda &&  !exibirHomeProjeto && exibirHome && (
         <div className='container-fluid'>
           <div className='row'>
             <div className='buttons'>
