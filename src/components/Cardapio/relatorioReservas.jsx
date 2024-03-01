@@ -7,7 +7,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import BackArrow from '../BackArrow/index';
-import { Table, TableBody, TableCell, TablePagination, Grid, TableContainer, TableHead, TableRow, Paper, Select, MenuItem, InputLabel } from '@mui/material';
+import { Table, FormControl, TableBody, TableCell, TablePagination, Grid, TableContainer, TableHead, TableRow, Paper, Select, MenuItem, InputLabel } from '@mui/material';
 import imagem1 from '../../imagens/Capa_merenda.jpg';
 
 const RelatorioReservas = () => {
@@ -205,70 +205,78 @@ const RelatorioReservas = () => {
             <MenuHamburguer userType={userRole} />
             <BackArrow style={{ marginTop: '2000px', marginLeft: '10px' }} />
         
-            <h2  style={{ marginTop: '3rem', marginLeft: '10px' }}>Relatório de Reservas</h2>
+            <h2  className='titulo-home fade-up' style={{ marginTop: '4rem', marginLeft: '10px' }}>
+                Relatório de Reservas
+            </h2>
 
             <div>
-                <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                        <InputLabel id="turno-label">Turno</InputLabel>
-                        <Select
-                            labelId="turno-label"
-                            value={selectedTurno}
-                            onChange={handleTurnoChange}
-                            fullWidth
-                        >
-                            <MenuItem value="">Selecione o turno</MenuItem>
-                            {turnos.map((turno, index) => (
-                                <MenuItem key={index} value={turno}>{turno}</MenuItem>
-                            ))}
-                        </Select>
-                    </Grid>
-
-                    <Grid item xs={4}>
-                        <InputLabel id="curso-label">Curso</InputLabel>
-                        <Select
-                            labelId="curso-label"
-                            value={selectedCurso}
-                            onChange={handleCursoChange}
-                            fullWidth
-                        >
-                            <MenuItem value="">Selecione o curso</MenuItem>
-                            {cursos.map((curso, index) => (
-                                <MenuItem key={index} value={curso}>{curso}</MenuItem>
-                            ))}
-                        </Select>
-                    </Grid>
-
-                    <Grid item xs={4}>
+            <Grid container spacing={2}>
+                
+                <Grid item xs={12} md={4}>
+                    <FormControl fullWidth>
                         <InputLabel id="date-label">Data</InputLabel>
                         <Select
                             labelId="date-label"
+                            label="Data"
                             value={selectedDate}
                             onChange={handleDateChange}
-                            fullWidth
                         >
-                            <MenuItem value="">Selecione a data</MenuItem>
                             {dates.map((date, index) => (
                                 <MenuItem key={index} value={date}>{date}</MenuItem>
                             ))}
                         </Select>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <IconButton onClick={handleClick} style={{marginTop:'30px'}} color="primary">
-                            <UploadFileIcon fontSize="large"/>
-                        </IconButton>
-                        <Snackbar
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            open={open}
-                            autoHideDuration={6000}
-                            onClose={handleClose}
-                            message="Relatório gerado com sucesso!"
-                        />
-                    </Grid>
+                    </FormControl>
                 </Grid>
+
+                <Grid item xs={12} md={4}>
+                    <FormControl fullWidth>
+                        <InputLabel id="turno-label">Turno</InputLabel>
+                        <Select
+                            labelId="turno-label"
+                            label="Turno"
+                            value={selectedTurno}
+                            onChange={handleTurnoChange}
+                        >
+                            {turnos.map((turno, index) => (
+                                <MenuItem key={index} value={turno}>{turno}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                    <FormControl fullWidth>
+                        <InputLabel id="curso-label">Curso</InputLabel>
+                        <Select
+                            labelId="curso-label"
+                            label="Curso"
+                            value={selectedCurso}
+                            onChange={handleCursoChange}
+                        >
+                            {cursos.map((curso, index) => (
+                                <MenuItem key={index} value={curso}>{curso}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <IconButton onClick={handleClick} style={{ marginTop:'30px', marginLeft: '10px', marginRight: '10px' }} color="primary">
+                        <UploadFileIcon fontSize="large"/>
+                    </IconButton>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+                        open={open}
+                        autoHideDuration={6000}
+                        onClose={handleClose}
+                        message="Relatório gerado com sucesso!"
+                    />
+                </Grid>
+</Grid>
+
             </div>
 
             {emptyTable ? (
