@@ -17,7 +17,9 @@ const RelatorioReservas = () => {
     const [selectedTurnos] = useState(['manhã', 'tarde', 'noite']); 
     const [selectedTurno, setSelectedTurno] = useState('');
     const [selectedCurso, setSelectedCurso] = useState('');
+    const [selectedDate, setSelectedDate] = useState('');
     const [cursos, setCursos] = useState([]);
+    const [dates, setDates] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [userRole] = useState(localStorage.getItem('userRole'));
@@ -41,6 +43,10 @@ const RelatorioReservas = () => {
                 // Extrair cursos únicos do relatório
                 const uniqueCursos = [...new Set(response.data.map(item => item.pessoa.nome_curso))];
                 setCursos(uniqueCursos);
+
+                // Extrair datas únicas do relatório
+                const uniqueDates = [...new Set(response.data.map(item => item.data_cardapio))];
+                setDates(uniqueDates);
             } catch (error) {
                 console.error('Erro ao buscar relatório de reservas:', error);
             }
@@ -124,17 +130,15 @@ const RelatorioReservas = () => {
     
         const relatorioFiltrado = relatorio.filter(item =>
             (selectedTurnos.includes(item.turno_reserva) || selectedTurno === '') &&
-            (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso)
+            (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso) &&
+            (selectedDate === '' || item.data_cardapio === selectedDate)
         );        
     
-        if (selectedTurno !== '' || selectedCurso !== '') { // Verifica se algum filtro foi aplicado
-            if (selectedTurno !== '') {
-                const relatorioFiltradoPorTurno = relatorioFiltrado.filter(item =>
-                    item.turno_reserva === selectedTurno
-                );
-                addContent(relatorioFiltradoPorTurno);
-            } else {
+        if (selectedTurno !== '' || selectedCurso !== '' || selectedDate !== '') { // Verifica se algum filtro foi aplicado
+            if (selectedTurno !== '' || selectedCurso !== '') {
                 addContent(relatorioFiltrado);
+            } else {
+                addContent(relatorio);
             }
             doc.save('relatorio_reservas.pdf');
         } else { // Se nenhum filtro foi aplicado, gere o relatório completo
@@ -168,11 +172,16 @@ const handleClose = (event, reason) => {
     const handleCursoChange = (event) => {
         setSelectedCurso(event.target.value);
     };
+
+    const handleDateChange = (event) => {
+        setSelectedDate(event.target.value);
+    };
     
-    const relatorioFiltrado = selectedTurno !== '' || selectedCurso !== '' 
+    const relatorioFiltrado = selectedTurno !== '' || selectedCurso !== '' || selectedDate !== ''
     ? relatorio.filter(item =>
         (selectedTurno === '' || item.turno_reserva === selectedTurno) &&
-        (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso)
+        (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso) &&
+        (selectedDate === '' || item.data_cardapio === selectedDate)
     )
     : relatorio;
 
@@ -186,7 +195,7 @@ const handleClose = (event, reason) => {
 
             <div>
                 <Grid container spacing={2}>
-                <Grid item xs={4} style={{ marginLeft: '10px' }}>
+                <Grid item xs={4}>
                     <InputLabel id="turno-label">Turno</InputLabel>
                     <Select
                         labelId="turno-label"
@@ -215,7 +224,22 @@ const handleClose = (event, reason) => {
                             ))}
                         </Select>
                     </Grid>
-                    <Grid item xs={2}>
+
+                    <Grid item xs={4}>
+                        <InputLabel id="date-label">Data</InputLabel>
+                        <Select
+                            labelId="date-label"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            fullWidth
+                        >
+                            <MenuItem value="">Selecione a data</MenuItem>
+                            {dates.map((date, index) => (
+                                <MenuItem key={index} value={date}>{date}</MenuItem>
+                            ))}
+                        </Select>
+                    </Grid>
+                    <Grid item xs={12}>
                     <IconButton onClick={handleClick} style={{marginTop:'30px'}} color="primary">
                         <SaveAltIcon />
                     </IconButton>
