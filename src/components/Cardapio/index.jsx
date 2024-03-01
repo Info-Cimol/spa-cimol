@@ -264,7 +264,7 @@ const handlePreviousWeek = () => {
                                                     openModal();
                                                 }
                                             } else {
-                                                toast.error('Para fazer uma reserva é necessário três dias de antecedência.');
+                                                toast.error('Para fazer uma reserva é necessário dois dias de antecedência.');
                                             }
                                         }}
                                         style={{ cursor: isDisabled || hasReservedIcon ? 'not-allowed' : 'pointer' }}

@@ -1,20 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Autocomplete,
-  TextField,
-  Button,
-  IconButton,
-  Switch,
-  Modal,
-  Fade,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import {Autocomplete, TextField, Button, IconButton, Switch, Modal, Fade, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import Checkbox from '@mui/material/Checkbox';

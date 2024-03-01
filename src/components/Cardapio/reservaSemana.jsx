@@ -4,8 +4,10 @@ import MenuHamburguer from "../MenuHamburguer";
 import BackArrow from '../BackArrow/index';
 import CardapioCadastro from './cadastroCardapio';
 import CloseIcon from '@mui/icons-material/Close';
+import { Grid } from '@mui/material';
 import { IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Table, TableHead, TableBody, TableCell, TableRow } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import RelatorioReservas from './relatorioReservas';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
@@ -203,18 +205,22 @@ function CardapioMerendeira() {
         <div className='containerCardapio'>
           <h2>Cardápio {weekRange}</h2>
 
-          <div className="add-button-container">
-            {userRole === 'admin' || userRole === 'secretaria' ? (
-              <>
-                <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
-                  <AddIcon fontSize="large" />
-                </IconButton>
-                <IconButton onClick={handleAbrirRelatorio} title="Formulário de cadastro" component="span">
-                  <AddIcon fontSize="large" />
-                </IconButton>
-              </>
-            ) : null}
-          </div>
+          <Grid container justifyContent="right-end">
+            <Grid item>
+              <div className="add-button-container">
+                {userRole === 'admin' || userRole === 'secretaria' ? (
+                  <>
+                    <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
+                      <AddIcon fontSize="large" />
+                    </IconButton>
+                    <IconButton onClick={handleAbrirRelatorio} title="Formulário de cadastro" component="span">
+                      <UploadFileIcon fontSize="large" />
+                    </IconButton>
+                  </>
+                ) : null}
+              </div>
+            </Grid>
+          </Grid>
 
           {openCadastro && (
             <CardapioCadastro

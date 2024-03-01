@@ -14,6 +14,7 @@ const CadastroAlunoForm = ({ open, onClose }) => {
   const MAX_ENDERECO_LENGTH = 155;
   const MAX_OBSERVACAO_LENGTH = 100;
 
+  const [cursos, setCursos] = useState([]);
   const [modalOpen, setModalOpen] = useState(open);
 
   const [alunoData, setAlunoData] = useState({
@@ -24,6 +25,7 @@ const CadastroAlunoForm = ({ open, onClose }) => {
     endereco: '',
     observacao: '',
     matricula: '',
+    cursoId: '',
   });
 
   const [charCount, setCharCount] = useState({
@@ -102,17 +104,15 @@ const CadastroAlunoForm = ({ open, onClose }) => {
     e.preventDefault();
   
     try {
-      const alunoDataJSON = JSON.stringify(alunoData);
+      const alunoDataJSON = (alunoData);
   
       const response = await axiosFetch.post('/adiciona/aluno', alunoDataJSON);
       console.log('Resposta da API:', response.data);
 
-    // Fechar o modal após o envio do formulário
-    setModalOpen(false);
+      setModalOpen(false);
 
       toast.success('Aluno cadastrado com sucesso!', { position: toast.POSITION.TOP_RIGHT });
   
-      // Fechar o modal após o envio do formulário
       onClose();
     }catch (error) {
       if (error.response && error.response.status === 401) {
@@ -162,6 +162,29 @@ const CadastroAlunoForm = ({ open, onClose }) => {
     }
   }, [open]);
 
+  useEffect(() => {
+    async function fetchCursos() {
+      try {
+        const response = await axiosFetch.get('/listar/cursos');
+        const cursosData = response.data; // Supondo que a resposta seja um array de objetos com os dados dos cursos
+        const cursosComIds = cursosData.map(curso => ({ id: curso.id_curso, nome: curso.nome }));
+        setCursos(cursosComIds);
+      } catch (error) {
+        console.error('Erro ao buscar cursos:', error);
+      }
+    }
+
+    fetchCursos();
+  }, []);
+
+  const handleCursoSelect = event => {
+    const selectedCursoId = event.target.value;
+    setAlunoData(prevData => ({
+      ...prevData,
+      cursoId: selectedCursoId
+    }));
+  };
+  
   return (
     <Modal open={modalOpen} onClose={() => onClose()}>
       <div className="edicaoPessoa">
@@ -249,6 +272,15 @@ const CadastroAlunoForm = ({ open, onClose }) => {
             multiline
             rows={4}
           />
+
+          <select value={alunoData.cursoId} onChange={handleCursoSelect}>
+            <option value="">Selecione um curso</option>
+            {cursos.map(curso => (
+              <option key={curso.id} value={curso.id}>
+                {curso.nome}
+              </option>
+            ))}
+          </select>
 
           {/* Botões de cadastrar e cancelar */}
           <div className="botoesAcao">
