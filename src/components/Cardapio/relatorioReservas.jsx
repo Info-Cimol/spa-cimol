@@ -7,6 +7,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import BackArrow from '../BackArrow/index';
+import { Clear as ClearIcon } from '@mui/icons-material';
 import { Table, FormControl, TableBody, TableCell, TablePagination, Grid, TableContainer, TableHead, TableRow, Paper, Select, MenuItem, InputLabel } from '@mui/material';
 import imagem1 from '../../imagens/Capa_merenda.jpg';
 
@@ -97,11 +98,11 @@ const RelatorioReservas = () => {
                 imgDataAdded = true;
 
                 doc.setFontSize(12);
-                doc.text(`Data: ${alunos[0].data_cardapio}`, 15, 130);
-                doc.text(`Turno: ${turnoReserva}`, 180, 130, null, null, 'right');
+                doc.text(`Data: ${alunos[0].data_cardapio}`, 15, 80);
+                doc.text(`Turno: ${turnoReserva}`, 180, 80, null, null, 'right');
 
                 doc.setFontSize(16);
-                doc.text(`Cardápio: ${nomeCardapio}`, 105, 140, null, null, 'center');
+                doc.text(`Cardápio: ${nomeCardapio}`, 105, 100, null, null, 'center');
 
                 const data = alunos.map(aluno => [
                     aluno.pessoa.nome_pessoa || '',
@@ -114,23 +115,26 @@ const RelatorioReservas = () => {
                     body: data,
                     theme: 'grid',
                     styles: {
-                        cellPadding: 1,
-                        fontSize: 10,
+                        cellPadding: 2,
+                        fontSize: 12,
                         halign: 'left',
-                        valign: 'middle'
+                        valign: 'middle',
+                        fillColor: [255, 255, 255],
+                        textColor: [0, 0, 0], 
+                        lineWidth: 0.1, 
                     },
                     columnStyles: {
                         0: { cellWidth: 80 },
-                        1: { cellWidth: 30 },
+                        1: { cellWidth: 40 },
                         2: { cellWidth: 60 }
                     },
-                    startY: 150
+                    startY: 110
                 });
             });
 
             if (!imgDataAdded) {
                 const imgData = imagem1;
-                doc.addImage(imgData, 'JPEG', 10, 10, 180, 120);
+                doc.addImage(imgData, 'JPEG', 10, 120, 120, 120);
             }
         };
 
@@ -205,7 +209,7 @@ const RelatorioReservas = () => {
                 Relatório de Reservas
             </h2>
 
-            <div>
+            <div className='container-fluid'>
             <Grid container spacing={2}>
                 
                 <Grid item xs={12} md={4}>
@@ -216,6 +220,13 @@ const RelatorioReservas = () => {
                             label="Data"
                             value={selectedDate}
                             onChange={handleDateChange}
+                            endAdornment={
+                                selectedDate && (
+                                    <IconButton onClick={() => setSelectedDate('')}>
+                                        <ClearIcon />
+                                    </IconButton>
+                                )
+                            }
                         >
                             {dates.map((date, index) => (
                                 <MenuItem key={index} value={date}>{date}</MenuItem>
@@ -232,6 +243,13 @@ const RelatorioReservas = () => {
                             label="Turno"
                             value={selectedTurno}
                             onChange={handleTurnoChange}
+                            endAdornment={
+                                selectedTurno && (
+                                    <IconButton onClick={() => setSelectedTurno('')}>
+                                        <ClearIcon />
+                                    </IconButton>
+                                )
+                            }
                         >
                             {turnos.map((turno, index) => (
                                 <MenuItem key={index} value={turno}>{turno}</MenuItem>
@@ -248,6 +266,13 @@ const RelatorioReservas = () => {
                             label="Curso"
                             value={selectedCurso}
                             onChange={handleCursoChange}
+                            endAdornment={
+                                selectedCurso && (
+                                    <IconButton onClick={() => setSelectedCurso('')}>
+                                        <ClearIcon />
+                                    </IconButton>
+                                )
+                            }
                         >
                             {cursos.map((curso, index) => (
                                 <MenuItem key={index} value={curso}>{curso}</MenuItem>
