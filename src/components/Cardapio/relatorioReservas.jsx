@@ -59,7 +59,7 @@ const RelatorioReservas = () => {
         const addContent = (relatorioFiltrado) => {
             let isFirstPage = true;
             let imgDataAdded = false;
-        
+    
             // Agrupar relatórios por nome do cardápio e turno
             const cardapiosPorTurno = {};
             relatorioFiltrado.forEach(item => {
@@ -69,34 +69,34 @@ const RelatorioReservas = () => {
                 }
                 cardapiosPorTurno[chave].push(item);
             });
-        
+    
             // Iterar sobre os relatórios agrupados
             Object.entries(cardapiosPorTurno).forEach(([chave, alunos]) => {
-        
+    
                 if (!isFirstPage) {
                     doc.addPage();
                 }
                 isFirstPage = false;
-        
+    
                 const [nomeCardapio, turnoReserva] = chave.split('-');
-        
+    
                 const imgData = imagem1;
                 doc.addImage(imgData, 'JPEG', 10, 10, 180, 100);
                 imgDataAdded = true;
-        
+    
                 doc.setFontSize(12);
                 doc.text(`Data: ${alunos[0].data_cardapio}`, 15, 130);
                 doc.text(`Turno: ${turnoReserva}`, 180, 130, null, null, 'right');
-        
+    
                 doc.setFontSize(16);
                 doc.text(`Cardápio: ${nomeCardapio}`, 105, 140, null, null, 'center');
-        
+    
                 const data = alunos.map(aluno => [
                     aluno.pessoa.nome_pessoa || '',
                     aluno.pessoa.matricula_aluno || '',
                     aluno.pessoa.nome_curso || ''
                 ]);
-        
+    
                 doc.autoTable({
                     head: [['Nome do Aluno', 'Matrícula', 'Curso']],
                     body: data,
@@ -115,30 +115,34 @@ const RelatorioReservas = () => {
                     startY: 150
                 });
             });
-        
+    
             if (!imgDataAdded) {
                 const imgData = imagem1;
                 doc.addImage(imgData, 'JPEG', 10, 10, 180, 120);
             }
         };
-        
-    const relatorioFiltrado = relatorio.filter(item =>
-        (selectedTurnos.includes(item.turno_reserva) || selectedTurno === '') &&
-        (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso)
-    );
-
-    if (selectedTurno !== '') {
-
-        const relatorioFiltradoPorTurno = relatorioFiltrado.filter(item =>
-            item.turno_reserva === selectedTurno
-        );
-        addContent(relatorioFiltradoPorTurno); 
-    } else {
-        addContent(relatorioFiltrado); 
-    }
-
-    doc.save('relatorio_reservas.pdf');
-};
+    
+        const relatorioFiltrado = relatorio.filter(item =>
+            (selectedTurnos.includes(item.turno_reserva) || selectedTurno === '') &&
+            (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso)
+        );        
+    
+        if (selectedTurno !== '' || selectedCurso !== '') { // Verifica se algum filtro foi aplicado
+            if (selectedTurno !== '') {
+                const relatorioFiltradoPorTurno = relatorioFiltrado.filter(item =>
+                    item.turno_reserva === selectedTurno
+                );
+                addContent(relatorioFiltradoPorTurno);
+            } else {
+                addContent(relatorioFiltrado);
+            }
+            doc.save('relatorio_reservas.pdf');
+        } else { // Se nenhum filtro foi aplicado, gere o relatório completo
+            addContent(relatorio);
+            doc.save('relatorio_reservas_completo.pdf');
+        }
+    };
+    
 
 const handleClick = () => {
     gerarPDF();
@@ -158,18 +162,19 @@ const handleClose = (event, reason) => {
     };
 
     const handleTurnoChange = (event) => {
-        const selectedValue = event.target.value;
-        setSelectedTurno(selectedValue !== "" ? selectedValue : null); 
+        setSelectedTurno(event.target.value); 
     };
 
     const handleCursoChange = (event) => {
         setSelectedCurso(event.target.value);
     };
     
-    const relatorioFiltrado = relatorio.filter(item =>
+    const relatorioFiltrado = selectedTurno !== '' || selectedCurso !== '' 
+    ? relatorio.filter(item =>
         (selectedTurno === '' || item.turno_reserva === selectedTurno) &&
         (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso)
-    );
+    )
+    : relatorio;
 
     return (
         <>

@@ -1,8 +1,8 @@
 import axios from 'axios';
-/*http://localhost:5000  https://api-cimol-f6y9c.ondigitalocean.app/*/
+/*http://localhost:5000  https://api-cimol.vercel.app/*/
 
 const axiosFetch = axios.create({
-  baseURL: 'https://api-cimol-f6y9c.ondigitalocean.app/',
+  baseURL: 'https://api-cimol.vercel.app/',
 });
 
 axiosFetch.interceptors.request.use(
