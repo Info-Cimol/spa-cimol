@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axiosFetch from '../../axios/config';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { IconButton, Snackbar } from '@mui/material';
-import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
+import { IconButton, Snackbar, Typography } from '@mui/material';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import BackArrow from '../BackArrow/index';
@@ -21,10 +21,12 @@ const RelatorioReservas = () => {
     const [cursos, setCursos] = useState([]);
     const [dates, setDates] = useState([]);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(15);
     const [userRole] = useState(localStorage.getItem('userRole'));
     const [turnos] = useState(['manhã', 'tarde', 'noite']);
     const [open, setOpen] = React.useState(false);
+    const [emptyTable, setEmptyTable] = useState(false);
+    const [emptyPDF, setEmptyPDF] = useState(false);
     
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -47,6 +49,13 @@ const RelatorioReservas = () => {
                 // Extrair datas únicas do relatório
                 const uniqueDates = [...new Set(response.data.map(item => item.data_cardapio))];
                 setDates(uniqueDates);
+
+                // Verificar se a tabela está vazia
+                if (response.data.length === 0) {
+                    setEmptyTable(true);
+                } else {
+                    setEmptyTable(false);
+                }
             } catch (error) {
                 console.error('Erro ao buscar relatório de reservas:', error);
             }
@@ -65,7 +74,7 @@ const RelatorioReservas = () => {
         const addContent = (relatorioFiltrado) => {
             let isFirstPage = true;
             let imgDataAdded = false;
-    
+
             // Agrupar relatórios por nome do cardápio e turno
             const cardapiosPorTurno = {};
             relatorioFiltrado.forEach(item => {
@@ -75,33 +84,33 @@ const RelatorioReservas = () => {
                 }
                 cardapiosPorTurno[chave].push(item);
             });
-    
+
             // Iterar sobre os relatórios agrupados
             Object.entries(cardapiosPorTurno).forEach(([chave, alunos]) => {
                 if (!isFirstPage) {
                     doc.addPage();
                 }
                 isFirstPage = false;
-    
+
                 const [nomeCardapio, turnoReserva] = chave.split('-');
-    
+
                 const imgData = imagem1;
                 doc.addImage(imgData, 'JPEG', 10, 10, 180, 100);
                 imgDataAdded = true;
-    
+
                 doc.setFontSize(12);
                 doc.text(`Data: ${alunos[0].data_cardapio}`, 15, 130);
                 doc.text(`Turno: ${turnoReserva}`, 180, 130, null, null, 'right');
-    
+
                 doc.setFontSize(16);
                 doc.text(`Cardápio: ${nomeCardapio}`, 105, 140, null, null, 'center');
-    
+
                 const data = alunos.map(aluno => [
                     aluno.pessoa.nome_pessoa || '',
                     aluno.pessoa.matricula_aluno || '',
                     aluno.pessoa.nome_curso || ''
                 ]);
-    
+
                 doc.autoTable({
                     head: [['Nome do Aluno', 'Matrícula', 'Curso']],
                     body: data,
@@ -120,27 +129,32 @@ const RelatorioReservas = () => {
                     startY: 150
                 });
             });
-    
+
             if (!imgDataAdded) {
                 const imgData = imagem1;
                 doc.addImage(imgData, 'JPEG', 10, 10, 180, 120);
             }
         };
-    
+
         // Filtrar o relatório de acordo com os filtros selecionados
         let relatorioFiltrado = relatorio.filter(item =>
             (selectedTurnos.includes(item.turno_reserva) || selectedTurno === '') &&
             (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso) &&
             (selectedDate === '' || item.data_cardapio === selectedDate)
         );        
-        
+    
         if (selectedTurno !== '' || selectedCurso !== '' || selectedDate !== '') { // Verifica se algum filtro foi aplicado
             // Se apenas um turno foi selecionado, filtrar novamente para incluir apenas os alunos desse turno
             if (selectedTurno !== '') {
                 relatorioFiltrado = relatorioFiltrado.filter(item => item.turno_reserva === selectedTurno);
             }
-            addContent(relatorioFiltrado);
-            doc.save('relatorio_reservas.pdf');
+            if (relatorioFiltrado.length === 0) {
+                setEmptyPDF(true);
+            } else {
+                setEmptyPDF(false);
+                addContent(relatorioFiltrado);
+                doc.save('relatorio_reservas.pdf');
+            }
         } else { // Se nenhum filtro foi aplicado, gere o relatório completo
             addContent(relatorio);
             doc.save('relatorio_reservas_completo.pdf');
@@ -148,18 +162,17 @@ const RelatorioReservas = () => {
     };
     
     
-    
-const handleClick = () => {
-    gerarPDF();
-    setOpen(true);
-};
+    const handleClick = () => {
+        gerarPDF();
+        setOpen(true);
+    };
 
-const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-        return;
-    }
-    setOpen(false);
-};
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
 
     const toggleModal = (cardapio) => {
         setSelectedCardapio(cardapio);
@@ -188,31 +201,31 @@ const handleClose = (event, reason) => {
 
     return (
         <>
-         <ContainerTopo userType={userRole} />
-        <MenuHamburguer userType={userRole} />
-        <BackArrow style={{ marginTop: '2000px', marginLeft: '10px' }} />
+            <ContainerTopo userType={userRole} />
+            <MenuHamburguer userType={userRole} />
+            <BackArrow style={{ marginTop: '2000px', marginLeft: '10px' }} />
         
             <h2  style={{ marginTop: '3rem', marginLeft: '10px' }}>Relatório de Reservas</h2>
 
             <div>
                 <Grid container spacing={2}>
-                <Grid item xs={4}>
-                    <InputLabel id="turno-label">Turno</InputLabel>
-                    <Select
-                        labelId="turno-label"
-                        value={selectedTurno}
-                        onChange={handleTurnoChange}
-                        fullWidth
-                    >
-                        <MenuItem value="">Selecione o turno</MenuItem>
-                        {turnos.map((turno, index) => (
-                            <MenuItem key={index} value={turno}>{turno}</MenuItem>
-                        ))}
-                    </Select>
-                </Grid>
+                    <Grid item xs={4}>
+                        <InputLabel id="turno-label">Turno</InputLabel>
+                        <Select
+                            labelId="turno-label"
+                            value={selectedTurno}
+                            onChange={handleTurnoChange}
+                            fullWidth
+                        >
+                            <MenuItem value="">Selecione o turno</MenuItem>
+                            {turnos.map((turno, index) => (
+                                <MenuItem key={index} value={turno}>{turno}</MenuItem>
+                            ))}
+                        </Select>
+                    </Grid>
 
                     <Grid item xs={4}>
-                    <InputLabel id="curso-label">Curso</InputLabel>
+                        <InputLabel id="curso-label">Curso</InputLabel>
                         <Select
                             labelId="curso-label"
                             value={selectedCurso}
@@ -241,66 +254,76 @@ const handleClose = (event, reason) => {
                         </Select>
                     </Grid>
                     <Grid item xs={12}>
-                    <IconButton onClick={handleClick} style={{marginTop:'30px'}} color="primary">
-                        <SaveAltIcon />
-                    </IconButton>
-                    <Snackbar
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left',
-                        }}
-                        open={open}
-                        autoHideDuration={6000}
-                        onClose={handleClose}
-                        message="Relatório gerado com sucesso!"
-                    />
+                        <IconButton onClick={handleClick} style={{marginTop:'30px'}} color="primary">
+                            <UploadFileIcon fontSize="large"/>
+                        </IconButton>
+                        <Snackbar
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            open={open}
+                            autoHideDuration={6000}
+                            onClose={handleClose}
+                            message="Relatório gerado com sucesso!"
+                        />
                     </Grid>
                 </Grid>
             </div>
 
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Cardápio</TableCell>
-                            <TableCell>Data</TableCell>
-                            <TableCell>Turno</TableCell>
-                            <TableCell>Alunos</TableCell>
-                            <TableCell>Matrícula</TableCell>
-                            <TableCell>Curso</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {relatorioFiltrado.map((item, index) => (
-                            <TableRow key={index} onClick={() => toggleModal(item.nome_cardapio)}>
-                                <TableCell>{item.nome_cardapio}</TableCell>
-                                <TableCell>{item.data_cardapio}</TableCell>
-                                <TableCell>{item.turno_reserva}</TableCell>
-                                <TableCell>
-                                    {item.pessoa.nome_pessoa && (
-                                        <div>{item.pessoa.nome_pessoa}</div>
-                                    )}
-                                </TableCell>
-
-                                <TableCell>
-                                    {item.pessoa.matricula_aluno && (
-                                        <div>{item.pessoa.matricula_aluno}</div>
-                                    )}
-                                </TableCell>
-
-                                <TableCell>
-                                    {item.pessoa.nome_curso && (
-                                        <div>{item.pessoa.nome_curso}</div>
-                                    )}
-                                </TableCell>
+            {emptyTable ? (
+                <Typography variant="body1" style={{ marginTop: '20px', marginLeft: '10px' }}>Nenhuma reserva cadastrada</Typography>
+            ) : (
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Cardápio</TableCell>
+                                <TableCell>Data</TableCell>
+                                <TableCell>Turno</TableCell>
+                                <TableCell>Alunos</TableCell>
+                                <TableCell>Matrícula</TableCell>
+                                <TableCell>Curso</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {relatorioFiltrado
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((item, index) => (
+                                    <TableRow key={index} onClick={() => toggleModal(item.nome_cardapio)}>
+                                        <TableCell>{item.nome_cardapio}</TableCell>
+                                        <TableCell>{item.data_cardapio}</TableCell>
+                                        <TableCell>{item.turno_reserva}</TableCell>
+                                        <TableCell>
+                                            {item.pessoa.nome_pessoa && (
+                                                <div>{item.pessoa.nome_pessoa}</div>
+                                            )}
+                                        </TableCell>
+
+                                        <TableCell>
+                                            {item.pessoa.matricula_aluno && (
+                                                <div>{item.pessoa.matricula_aluno}</div>
+                                            )}
+                                        </TableCell>
+
+                                        <TableCell>
+                                            {item.pessoa.nome_curso && (
+                                                <div>{item.pessoa.nome_curso}</div>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            )}
             
+            {emptyPDF && (
+                <Typography variant="body1" style={{ marginTop: '20px', marginLeft: '10px' }}>O PDF não pode ser gerado, pois não há reservas</Typography>
+            )}
+
             <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
+                rowsPerPageOptions={[5, 10, 15, 25]}
                 component="div"
                 count={relatorioFiltrado.length}
                 rowsPerPage={rowsPerPage}

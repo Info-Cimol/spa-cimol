@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Grid } from '@mui/material';
 import { IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Table, TableHead, TableBody, TableCell, TableRow } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
+import TableChartIcon from '@mui/icons-material/TableChart';
 import RelatorioReservas from './relatorioReservas';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
@@ -213,8 +213,8 @@ function CardapioMerendeira() {
                     <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
                       <AddIcon fontSize="large" />
                     </IconButton>
-                    <IconButton onClick={handleAbrirRelatorio} title="Formulário de cadastro" component="span">
-                      <UploadFileIcon fontSize="large" />
+                    <IconButton onClick={handleAbrirRelatorio} title="Gerar Formulário" component="span">
+                    <TableChartIcon fontSize="large" />
                     </IconButton>
                   </>
                 ) : null}
