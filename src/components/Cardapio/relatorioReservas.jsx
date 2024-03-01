@@ -53,10 +53,11 @@ const RelatorioReservas = () => {
     const gerarPDF = () => {
         const doc = new jsPDF();
     
-        const addContent = (relatorioFiltrado) => { 
+        const addContent = (relatorioFiltrado) => {
             let isFirstPage = true;
             let imgDataAdded = false;
-    
+        
+            // Agrupar relatórios por nome do cardápio e turno
             const cardapiosPorTurno = {};
             relatorioFiltrado.forEach(item => {
                 const chave = `${item.nome_cardapio}-${item.turno_reserva}`;
@@ -65,33 +66,34 @@ const RelatorioReservas = () => {
                 }
                 cardapiosPorTurno[chave].push(item);
             });
-    
+        
+            // Iterar sobre os relatórios agrupados
             Object.entries(cardapiosPorTurno).forEach(([chave, alunos]) => {
-
+        
                 if (!isFirstPage) {
-                    doc.addPage(); 
+                    doc.addPage();
                 }
                 isFirstPage = false;
-    
+        
                 const [nomeCardapio, turnoReserva] = chave.split('-');
-    
+        
                 const imgData = imagem1;
                 doc.addImage(imgData, 'JPEG', 10, 10, 180, 100);
                 imgDataAdded = true;
-
+        
                 doc.setFontSize(12);
                 doc.text(`Data: ${alunos[0].data_cardapio}`, 15, 130);
                 doc.text(`Turno: ${turnoReserva}`, 180, 130, null, null, 'right');
-    
+        
                 doc.setFontSize(16);
                 doc.text(`Cardápio: ${nomeCardapio}`, 105, 140, null, null, 'center');
-    
+        
                 const data = alunos.map(aluno => [
-                    aluno.pessoa.nome_pessoa || '', 
-                    aluno.pessoa.matricula_aluno || '', 
-                    aluno.pessoa.nome_curso || '' 
+                    aluno.pessoa.nome_pessoa || '',
+                    aluno.pessoa.matricula_aluno || '',
+                    aluno.pessoa.nome_curso || ''
                 ]);
-
+        
                 doc.autoTable({
                     head: [['Nome do Aluno', 'Matrícula', 'Curso']],
                     body: data,
@@ -103,28 +105,37 @@ const RelatorioReservas = () => {
                         valign: 'middle'
                     },
                     columnStyles: {
-                        0: { cellWidth: 80 }, 
-                        1: { cellWidth: 30 }, 
-                        2: { cellWidth: 60 } 
+                        0: { cellWidth: 80 },
+                        1: { cellWidth: 30 },
+                        2: { cellWidth: 60 }
                     },
-                    startY: 150 
+                    startY: 150
                 });
             });
-
+        
             if (!imgDataAdded) {
                 const imgData = imagem1;
                 doc.addImage(imgData, 'JPEG', 10, 10, 180, 120);
             }
         };
-    
-        const relatorioFiltrado = relatorio.filter(item =>
-            selectedTurnos.includes(item.turno_reserva) &&
-            (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso)
+        
+    const relatorioFiltrado = relatorio.filter(item =>
+        (selectedTurnos.includes(item.turno_reserva) || selectedTurno === '') &&
+        (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso)
+    );
+
+    if (selectedTurno !== '') {
+
+        const relatorioFiltradoPorTurno = relatorioFiltrado.filter(item =>
+            item.turno_reserva === selectedTurno
         );
-    
+        addContent(relatorioFiltradoPorTurno); 
+    } else {
         addContent(relatorioFiltrado); 
-        doc.save('relatorio_reservas.pdf');
-    };
+    }
+
+    doc.save('relatorio_reservas.pdf');
+};
     
     const toggleModal = (cardapio) => {
         setSelectedCardapio(cardapio);
@@ -132,7 +143,8 @@ const RelatorioReservas = () => {
     };
 
     const handleTurnoChange = (event) => {
-        setSelectedTurno(event.target.value);
+        const selectedValue = event.target.value;
+        setSelectedTurno(selectedValue !== "" ? selectedValue : null); 
     };
 
     const handleCursoChange = (event) => {
