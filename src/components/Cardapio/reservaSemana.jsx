@@ -6,6 +6,7 @@ import CardapioCadastro from './cadastroCardapio';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Table, TableHead, TableBody, TableCell, TableRow } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import RelatorioReservas from './relatorioReservas';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import axiosFetch from '../../axios/config';
@@ -27,6 +28,7 @@ function CardapioMerendeira() {
   const [, setSelectedCardapioId] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [fetchData, setFetchData] = useState(true);
+  const [exibirRelatorio, setExibirRelatorio] = useState('');
   
   useEffect(() => {
     const fetchData = async () => {
@@ -77,6 +79,10 @@ function CardapioMerendeira() {
   const handlePreviousWeek = () => {
     setCurrentWeekIndex(currentWeekIndex - 1);
   };
+
+  const handleAbrirRelatorio = () =>{
+    setExibirRelatorio(true);
+  }
   
   const handleToggleForm = () => {
     setOpenCadastro(!openCadastro);
@@ -183,20 +189,30 @@ function CardapioMerendeira() {
 
   return (
     <>
-      <div>
-        <ContainerTopo userType={userRole} />
-        <MenuHamburguer userType={userRole} />
-      </div>
-
-      <div className='container-fluid'>
+      {exibirRelatorio ? (
+        <RelatorioReservas />
+      ) : (
+        <div>
+          <ContainerTopo userType={userRole} />
+          <MenuHamburguer userType={userRole} />
+        </div>
+      )}
+ {!exibirRelatorio && (
+         <div className='container-fluid'>
         <BackArrow style={{ marginTop: '2000px', marginLeft: '10px' }} />
         <div className='containerCardapio'>
+          <h2>Cardápio {weekRange}</h2>
+
           <div className="add-button-container">
-            <h2>Cardápio {weekRange}</h2>
             {userRole === 'admin' || userRole === 'secretaria' ? (
-              <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
-                <AddIcon fontSize="large" />
-              </IconButton>
+              <>
+                <IconButton onClick={handleToggleForm} title="Formulário de cadastro" component="span">
+                  <AddIcon fontSize="large" />
+                </IconButton>
+                <IconButton onClick={handleAbrirRelatorio} title="Formulário de cadastro" component="span">
+                  <AddIcon fontSize="large" />
+                </IconButton>
+              </>
             ) : null}
           </div>
 
@@ -218,8 +234,8 @@ function CardapioMerendeira() {
                 <TableCell>Cardápio</TableCell>
                 <TableCell>Reservas</TableCell>
                 {userRole === 'admin' || userRole === 'secretaria' ? (
-                        <TableCell>Ações</TableCell>      
-                            ) : null}
+                  <TableCell>Ações</TableCell>      
+                ) : null}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -236,23 +252,20 @@ function CardapioMerendeira() {
                   if (isWithinCurrentWeek) {
                     return (
                       <TableRow key={index} onClick={() => handleReservationClick(item)}>
-                      <TableCell>{getDayOfWeek(itemDate)}</TableCell>
-                      <TableCell>{item.nome}</TableCell>
-                      <TableCell>{item.reservas}</TableCell>
-                      {userRole === 'admin' || userRole === 'secretaria' ? (
-                        <>
+                        <TableCell>{getDayOfWeek(itemDate)}</TableCell>
+                        <TableCell>{item.nome}</TableCell>
+                        <TableCell>{item.reservas}</TableCell>
+                        {userRole === 'admin' || userRole === 'secretaria' ? (
                           <TableCell>                                   
                             <IconButton onClick={() => handleOpenConfirmationModal(item.id_cardapio)} title="Excluir" color="error">
                               <DeleteIcon />
                             </IconButton>
-          
                             <IconButton onClick={() => handleOpenEditModal(item.id_cardapio)} title="Editar" color="primary">
                               <EditIcon />
                             </IconButton>
                           </TableCell>
-                        </>
-                      ) : null}
-                    </TableRow>                    
+                        ) : null}
+                      </TableRow>                    
                     );
                   }
                   return null;
@@ -270,6 +283,7 @@ function CardapioMerendeira() {
           </div>
         </div>
       </div>
+        )}
 
       {isDetailModalOpen && (
         <div className="modal-container">
@@ -287,19 +301,6 @@ function CardapioMerendeira() {
             <p><strong>Manhã:</strong> {selectedReservation.manha_count}</p>
             <p><strong>Tarde:</strong> {selectedReservation.tarde_count}</p>
             <p><strong>Noite:</strong> {selectedReservation.noite_count}</p>
-
-           {/*<div>
-              {userRole === 'admin' || userRole === 'secretaria' ? (
-                <IconButton onClick={handleOpenConfirmationModal} title="Excluir" color="error">
-                  <DeleteIcon />
-                </IconButton>
-              ) : null}
-              {userRole === 'admin' || userRole === 'secretaria' ? (
-                <IconButton onClick={() => handleOpenEditModal(selectedReservation.id_cardapio)} title="Editar" color="primary">
-                  <EditIcon />
-                </IconButton>
-              ) : null}
-            </div>*/} 
           </div>
         </div>
       )}
