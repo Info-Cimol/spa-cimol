@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import {Autocomplete, TextField, Button, IconButton, Switch, Modal, Fade, Paper } from '@mui/material';
+import {
+  Autocomplete,
+  TextField,
+  Button,
+  IconButton,
+  Switch,
+  Modal,
+  Fade,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import Checkbox from '@mui/material/Checkbox';
@@ -432,34 +447,31 @@ const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
 
         <DetalhesAlunoModal alunoSelecionado={alunoSelecionado} onClose={() => setAlunoSelecionado(null)} />
 
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Matrícula</th>
-              <th>E-mail</th>
-              <th>CPF</th>
-              <th>Endereço</th>
-              <th>Contato</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-          {alunosPaginados
-            .filter((aluno) =>
-              aluno.nome.toLowerCase().includes(termoPesquisa.toLowerCase())
-            )
-            .map((aluno) => (
-              <tr
-                key={aluno.id}
-                onClick={() => {
-                  if (alunoEditando !== aluno.id) {
-                    setAlunoSelecionado(aluno);
-                  }
-                }}
-              >
-                  <td>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nome</TableCell>
+                <TableCell>Matrícula</TableCell>
+                <TableCell>E-mail</TableCell>
+                <TableCell>CPF</TableCell>
+                <TableCell>Endereço</TableCell>
+                <TableCell>Contato</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Ações</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {alunosPaginados.map((aluno) => (
+                <TableRow
+                  key={aluno.id}
+                  onClick={() => {
+                    if (alunoEditando !== aluno.id) {
+                      setAlunoSelecionado(aluno);
+                    }
+                  }}
+                >
+                  <TableCell>
                     <>
                       {alunoEditando === aluno.id ? (
                         <TextField
@@ -470,8 +482,8 @@ const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
                         aluno.nome
                       )}
                     </>
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <>
                       {alunoEditando === aluno.id ? (
                         <TextField
@@ -482,9 +494,9 @@ const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
                         aluno.matricula
                       )}
                     </>
-                  </td>
-                  <td>
-                  <>
+                  </TableCell>
+                  <TableCell>
+                    <>
                       {alunoEditando === aluno.id ? (
                         <TextField
                           value={editingAluno.email}
@@ -494,9 +506,9 @@ const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
                         aluno.email
                       )}
                     </>
-                  </td>
-                  <td>
-                  <>
+                  </TableCell>
+                  <TableCell>
+                    <>
                       {alunoEditando === aluno.id ? (
                         <TextField
                           value={editingAluno.cpf}
@@ -506,9 +518,9 @@ const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
                         aluno.cpf
                       )}
                     </>
-                    </td>
-                     <td>
-                     <>
+                  </TableCell>
+                  <TableCell>
+                    <>
                       {alunoEditando === aluno.id ? (
                         <TextField
                           value={editingAluno.endereco}
@@ -518,38 +530,33 @@ const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
                         aluno.endereco
                       )}
                     </>
-                    </td>
-                    <td>
-                    <td>
-                      {alunoEditando === aluno.id ? (
-                        <>
-                          <TextField
-                            value={editingAluno.numero}
-                            onChange={(e) => setEditingAluno((prev) => ({ ...prev, numero: e.target.value }))}
-                          />
-                        </>
-                      ) : (
-                        <>
-                           {aluno.numero}
-                        </>
-                      )}
-                    </td>
-                    </td>
-                    
-                    <td>
+                  </TableCell>
+                  <TableCell>
                     <>
                       {alunoEditando === aluno.id ? (
                         <TextField
-                          value={editingAluno.ativo}
-                          onChange={(e) => setEditingAluno((prev) => ({ ...prev, ativo: e.target.value }))}
+                          value={editingAluno.numero}
+                          onChange={(e) => setEditingAluno((prev) => ({ ...prev, numero: e.target.value }))}
                         />
                       ) : (
-                        aluno.ativo === 1 ? "Ativo" : "Suspenso"
+                        aluno.numero
                       )}
                     </>
-                  </td>
-
-                  <td>
+                  </TableCell>
+                  <TableCell>
+                    <>
+                      {alunoEditando === aluno.id ? (
+                        <Switch
+                          checked={editingAluno.ativo === 1}
+                          onChange={handleToggle}
+                          inputProps={{ 'aria-label': 'Toggle suspenso/ativo' }}
+                        />
+                      ) : (
+                        aluno.ativo === 1 ? 'Ativo' : 'Suspenso'
+                      )}
+                    </>
+                  </TableCell>
+                  <TableCell>
                     {alunoEditando === aluno.id ? (
                       <>
                         <Button onClick={handleSalvarEdicao} variant="contained" color="primary">
@@ -561,25 +568,26 @@ const alunosPaginados = alunosFiltrados.slice(startIndex, endIndex);
                       </>
                     ) : (
                       <>
-                      <IconButton
-                        onClick={() => handleEditar(aluno)}
-                        color="primary"
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => handleDesativar(aluno.id)}
-                        color="secondary"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </>
+                        <IconButton
+                          onClick={() => handleEditar(aluno)}
+                          color="primary"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleDesativar(aluno.id)}
+                          color="secondary"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </>
                     )}
-                  </td>
-                  </tr>
-                ))}
-          </tbody>
-        </table>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
         {exibirCadastroAlunoForm && 
             <CadastroAlunoForm open={true} onClose={() => setShowEditModal(false)} />    

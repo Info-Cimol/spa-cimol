@@ -188,7 +188,7 @@ const handlePreviousWeek = () => {
     const today = new Date();
 
     const minimumReservationDate = new Date(today);
-    minimumReservationDate.setDate(minimumReservationDate.getDate() + 3);
+    minimumReservationDate.setDate(minimumReservationDate.getDate() + 2);
 
     const maximumReservationDate = new Date(today);
   
