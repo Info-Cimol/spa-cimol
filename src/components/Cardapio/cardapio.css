@@ -55,11 +55,6 @@
   .title {
     font-size: 20px;
   }
-
-  .cardapio-table th,
-  .cardapio-table td {
-    font-size: 14px;
-  }
 }
 
 .modal-container {

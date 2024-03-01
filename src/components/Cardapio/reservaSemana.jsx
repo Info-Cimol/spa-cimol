@@ -4,7 +4,7 @@ import MenuHamburguer from "../MenuHamburguer";
 import BackArrow from '../BackArrow/index';
 import CardapioCadastro from './cadastroCardapio';
 import CloseIcon from '@mui/icons-material/Close';
-import { IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField  } from '@mui/material';
+import { IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Table, TableHead, TableBody, TableCell, TableRow } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
@@ -211,15 +211,18 @@ function CardapioMerendeira() {
             />
           )}
 
-          <table className="cardapio-table">
-            <thead>
-              <tr>
-                <th>Dia</th>
-                <th>Cardápio</th>
-                <th>Reservas</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Dia</TableCell>
+                <TableCell>Cardápio</TableCell>
+                <TableCell>Reservas</TableCell>
+                {userRole === 'admin' || userRole === 'secretaria' ? (
+                        <TableCell>Ações</TableCell>      
+                            ) : null}
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {cardapio.length > 0 ? (
                 cardapio.map((item, index) => {
                   const itemDate = new Date(item.data);
@@ -232,22 +235,35 @@ function CardapioMerendeira() {
 
                   if (isWithinCurrentWeek) {
                     return (
-                      <tr key={index} onClick={() => handleReservationClick(item)}>
-                        <td>{getDayOfWeek(itemDate)}</td>
-                        <td>{item.nome}</td>
-                        <td>{item.reservas}</td>
-                      </tr>
+                      <TableRow key={index} onClick={() => handleReservationClick(item)}>
+                      <TableCell>{getDayOfWeek(itemDate)}</TableCell>
+                      <TableCell>{item.nome}</TableCell>
+                      <TableCell>{item.reservas}</TableCell>
+                      {userRole === 'admin' || userRole === 'secretaria' ? (
+                        <>
+                          <TableCell>                                   
+                            <IconButton onClick={() => handleOpenConfirmationModal(item.id_cardapio)} title="Excluir" color="error">
+                              <DeleteIcon />
+                            </IconButton>
+          
+                            <IconButton onClick={() => handleOpenEditModal(item.id_cardapio)} title="Editar" color="primary">
+                              <EditIcon />
+                            </IconButton>
+                          </TableCell>
+                        </>
+                      ) : null}
+                    </TableRow>                    
                     );
                   }
                   return null;
                 })
               ) : (
-                <tr>
-                  <td colSpan="3">Nenhum cardápio cadastrado para esta semana</td>
-                </tr>
+                <TableRow>
+                  <TableCell colSpan="4">Nenhum cardápio cadastrado para esta semana</TableCell>
+                </TableRow>
               )}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
           <div className="week-navigation">
             <Button onClick={handlePreviousWeek} disabled={currentWeekIndex === 0}>Semana Anterior</Button>
             <Button onClick={handleNextWeek}>Próxima Semana</Button>
@@ -272,14 +288,18 @@ function CardapioMerendeira() {
             <p><strong>Tarde:</strong> {selectedReservation.tarde_count}</p>
             <p><strong>Noite:</strong> {selectedReservation.noite_count}</p>
 
-            <div>
-            {userRole === 'admin' || userRole === 'secretaria' ? (
-              <DeleteIcon style={{ cursor: "pointer" }} onClick={handleOpenConfirmationModal}>Excluir</DeleteIcon>
-            ) : null}
-            {userRole === 'admin' || userRole === 'secretaria' ? (
-              <EditIcon style={{ cursor: "pointer" }} onClick={() => handleOpenEditModal(selectedReservation.id_cardapio)}>Editar</EditIcon>
-            ) : null}
-            </div>
+           {/*<div>
+              {userRole === 'admin' || userRole === 'secretaria' ? (
+                <IconButton onClick={handleOpenConfirmationModal} title="Excluir" color="error">
+                  <DeleteIcon />
+                </IconButton>
+              ) : null}
+              {userRole === 'admin' || userRole === 'secretaria' ? (
+                <IconButton onClick={() => handleOpenEditModal(selectedReservation.id_cardapio)} title="Editar" color="primary">
+                  <EditIcon />
+                </IconButton>
+              ) : null}
+            </div>*/} 
           </div>
         </div>
       )}
@@ -300,71 +320,71 @@ function CardapioMerendeira() {
           <Button onClick={handleCloseConfirmationModal} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleConfirmDelete} color="primary" autoFocus>
+          <Button onClick={handleConfirmDelete} color="error" autoFocus>
             Confirmar
           </Button>
         </DialogActions>
       </Dialog>
 
       {isEditModalOpen && (
-  <Dialog open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
-    <div className="header">
-          <h2 className="title">Editar Cardápio</h2>
-          <div className="close-button">
-            <IconButton onClick={() => setIsEditModalOpen(false)}>
-              <CloseIcon />
-            </IconButton>
+        <Dialog open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+          <div className="header">
+            <h2 className="title">Editar Cardápio</h2>
+            <div className="close-button">
+              <IconButton onClick={() => setIsEditModalOpen(false)}>
+                <CloseIcon />
+              </IconButton>
+            </div>
           </div>
-        </div>
-    <DialogContent>
-      <TextField
-        autoFocus
-        margin="dense"
-        id="nome"
-        label="Nome"
-        type="text"
-        fullWidth
-        value={newNome}
-        onChange={(e) => setNewNome(e.target.value)}
-      />
-      <TextField
-        margin="dense"
-        id="descricao"
-        label="Descrição"
-        type="text"
-        fullWidth
-        value={newDescricao}
-        onChange={(e) => setNewDescricao(e.target.value)}
-      />
-      <TextField
-        margin="dense"
-        id="imagem"
-        label="Imagem URL"
-        type="text"
-        fullWidth
-        value={newImagem}
-        onChange={(e) => setNewImagem(e.target.value)}
-      />
-      <TextField
-        margin="dense"
-        id="data"
-        label="Data"
-        type="date"
-        fullWidth
-        value={newData}
-        onChange={(e) => setNewData(e.target.value)}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-    </DialogContent>
-    <DialogActions>
-      <Button onClick={handleEditeCardapio} color="primary">
-        Salvar
-      </Button>
-    </DialogActions>
-  </Dialog>
-)}
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="nome"
+              label="Nome"
+              type="text"
+              fullWidth
+              value={newNome}
+              onChange={(e) => setNewNome(e.target.value)}
+            />
+            <TextField
+              margin="dense"
+              id="descricao"
+              label="Descrição"
+              type="text"
+              fullWidth
+              value={newDescricao}
+              onChange={(e) => setNewDescricao(e.target.value)}
+            />
+            <TextField
+              margin="dense"
+              id="imagem"
+              label="Imagem URL"
+              type="text"
+              fullWidth
+              value={newImagem}
+              onChange={(e) => setNewImagem(e.target.value)}
+            />
+            <TextField
+              margin="dense"
+              id="data"
+              label="Data"
+              type="date"
+              fullWidth
+              value={newData}
+              onChange={(e) => setNewData(e.target.value)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleEditeCardapio} color="primary">
+              Salvar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   );
 }

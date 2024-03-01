@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axiosFetch from '../../axios/config';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { IconButton, Snackbar } from '@mui/material';
+import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
 import ContainerTopo from '../../components/ContainerTopo';
 import MenuHamburguer from "../../components/MenuHamburguer";
 import BackArrow from '../BackArrow/index';
@@ -20,7 +22,8 @@ const RelatorioReservas = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [userRole] = useState(localStorage.getItem('userRole'));
     const [turnos] = useState(['manhã', 'tarde', 'noite']);
-
+    const [open, setOpen] = React.useState(false);
+    
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -136,7 +139,19 @@ const RelatorioReservas = () => {
 
     doc.save('relatorio_reservas.pdf');
 };
-    
+
+const handleClick = () => {
+    gerarPDF();
+    setOpen(true);
+};
+
+const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+    setOpen(false);
+};
+
     const toggleModal = (cardapio) => {
         setSelectedCardapio(cardapio);
         setModalOpen(!modalOpen);
@@ -164,24 +179,23 @@ const RelatorioReservas = () => {
         
             <h2  style={{ marginTop: '3rem', marginLeft: '10px' }}>Relatório de Reservas</h2>
 
-            <button onClick={gerarPDF}>Gerar PDF</button>
-
             <div>
                 <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                        <InputLabel id="turno-label">Turno</InputLabel>
-                        <Select
-                            labelId="turno-label"
-                            value={selectedTurno}
-                            onChange={handleTurnoChange}
-                            fullWidth
-                        >
-                            <MenuItem value="">Selecione o turno</MenuItem>
-                            {turnos.map((turno, index) => (
-                                <MenuItem key={index} value={turno}>{turno}</MenuItem>
-                            ))}
-                        </Select>
-                    </Grid>
+                <Grid item xs={4} style={{ marginLeft: '10px' }}>
+                    <InputLabel id="turno-label">Turno</InputLabel>
+                    <Select
+                        labelId="turno-label"
+                        value={selectedTurno}
+                        onChange={handleTurnoChange}
+                        fullWidth
+                    >
+                        <MenuItem value="">Selecione o turno</MenuItem>
+                        {turnos.map((turno, index) => (
+                            <MenuItem key={index} value={turno}>{turno}</MenuItem>
+                        ))}
+                    </Select>
+                </Grid>
+
                     <Grid item xs={4}>
                     <InputLabel id="curso-label">Curso</InputLabel>
                         <Select
@@ -196,6 +210,21 @@ const RelatorioReservas = () => {
                             ))}
                         </Select>
                     </Grid>
+                    <Grid item xs={2}>
+                    <IconButton onClick={handleClick} style={{marginTop:'30px'}} color="primary">
+                        <SaveAltIcon />
+                    </IconButton>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+                        open={open}
+                        autoHideDuration={6000}
+                        onClose={handleClose}
+                        message="Relatório gerado com sucesso!"
+                    />
+                    </Grid>
                 </Grid>
             </div>
 
@@ -203,10 +232,12 @@ const RelatorioReservas = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Nome do Cardápio</TableCell>
-                            <TableCell>Data do Cardápio</TableCell>
-                            <TableCell>Turno da Reserva</TableCell>
+                            <TableCell>Cardápio</TableCell>
+                            <TableCell>Data</TableCell>
+                            <TableCell>Turno</TableCell>
                             <TableCell>Alunos</TableCell>
+                            <TableCell>Matrícula</TableCell>
+                            <TableCell>Curso</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -219,9 +250,15 @@ const RelatorioReservas = () => {
                                     {item.pessoa.nome_pessoa && (
                                         <div>{item.pessoa.nome_pessoa}</div>
                                     )}
+                                </TableCell>
+
+                                <TableCell>
                                     {item.pessoa.matricula_aluno && (
                                         <div>{item.pessoa.matricula_aluno}</div>
                                     )}
+                                </TableCell>
+
+                                <TableCell>
                                     {item.pessoa.nome_curso && (
                                         <div>{item.pessoa.nome_curso}</div>
                                     )}
