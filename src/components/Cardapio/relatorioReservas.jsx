@@ -75,7 +75,6 @@ const RelatorioReservas = () => {
             let isFirstPage = true;
             let imgDataAdded = false;
 
-            // Agrupar relatórios por nome do cardápio e turno
             const cardapiosPorTurno = {};
             relatorioFiltrado.forEach(item => {
                 const chave = `${item.nome_cardapio}-${item.turno_reserva}`;
@@ -85,7 +84,6 @@ const RelatorioReservas = () => {
                 cardapiosPorTurno[chave].push(item);
             });
 
-            // Iterar sobre os relatórios agrupados
             Object.entries(cardapiosPorTurno).forEach(([chave, alunos]) => {
                 if (!isFirstPage) {
                     doc.addPage();
@@ -95,7 +93,7 @@ const RelatorioReservas = () => {
                 const [nomeCardapio, turnoReserva] = chave.split('-');
 
                 const imgData = imagem1;
-                doc.addImage(imgData, 'JPEG', 10, 10, 180, 100);
+                doc.addImage(imgData, 'JPEG', 10, 10, 180, 60);
                 imgDataAdded = true;
 
                 doc.setFontSize(12);
@@ -136,15 +134,14 @@ const RelatorioReservas = () => {
             }
         };
 
-        // Filtrar o relatório de acordo com os filtros selecionados
         let relatorioFiltrado = relatorio.filter(item =>
             (selectedTurnos.includes(item.turno_reserva) || selectedTurno === '') &&
             (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso) &&
             (selectedDate === '' || item.data_cardapio === selectedDate)
         );        
     
-        if (selectedTurno !== '' || selectedCurso !== '' || selectedDate !== '') { // Verifica se algum filtro foi aplicado
-            // Se apenas um turno foi selecionado, filtrar novamente para incluir apenas os alunos desse turno
+        if (selectedTurno !== '' || selectedCurso !== '' || selectedDate !== '') { 
+            
             if (selectedTurno !== '') {
                 relatorioFiltrado = relatorioFiltrado.filter(item => item.turno_reserva === selectedTurno);
             }
@@ -155,12 +152,11 @@ const RelatorioReservas = () => {
                 addContent(relatorioFiltrado);
                 doc.save('relatorio_reservas.pdf');
             }
-        } else { // Se nenhum filtro foi aplicado, gere o relatório completo
+        } else { 
             addContent(relatorio);
             doc.save('relatorio_reservas_completo.pdf');
         }
     };
-    
     
     const handleClick = () => {
         gerarPDF();
@@ -270,12 +266,12 @@ const RelatorioReservas = () => {
                             horizontal: 'left',
                         }}
                         open={open}
-                        autoHideDuration={6000}
+                        autoHideDuration={2000}
                         onClose={handleClose}
                         message="Relatório gerado com sucesso!"
                     />
                 </Grid>
-</Grid>
+            </Grid>
 
             </div>
 
