@@ -43,7 +43,7 @@ const RelatorioReservas = () => {
                 // Extrair cursos únicos do relatório
                 const uniqueCursos = [...new Set(response.data.map(item => item.pessoa.nome_curso))];
                 setCursos(uniqueCursos);
-
+    
                 // Extrair datas únicas do relatório
                 const uniqueDates = [...new Set(response.data.map(item => item.data_cardapio))];
                 setDates(uniqueDates);
@@ -51,17 +51,17 @@ const RelatorioReservas = () => {
                 console.error('Erro ao buscar relatório de reservas:', error);
             }
         };
-
+    
         const interval = setInterval(fetchRelatorio, 60000);
-
+    
         fetchRelatorio();
-
+    
         return () => clearInterval(interval);
     }, []);
-
+    
     const gerarPDF = () => {
         const doc = new jsPDF();
-    
+        
         const addContent = (relatorioFiltrado) => {
             let isFirstPage = true;
             let imgDataAdded = false;
@@ -78,7 +78,6 @@ const RelatorioReservas = () => {
     
             // Iterar sobre os relatórios agrupados
             Object.entries(cardapiosPorTurno).forEach(([chave, alunos]) => {
-    
                 if (!isFirstPage) {
                     doc.addPage();
                 }
@@ -128,18 +127,19 @@ const RelatorioReservas = () => {
             }
         };
     
-        const relatorioFiltrado = relatorio.filter(item =>
+        // Filtrar o relatório de acordo com os filtros selecionados
+        let relatorioFiltrado = relatorio.filter(item =>
             (selectedTurnos.includes(item.turno_reserva) || selectedTurno === '') &&
             (selectedCurso === '' || item.pessoa.nome_curso === selectedCurso) &&
             (selectedDate === '' || item.data_cardapio === selectedDate)
         );        
-    
+        
         if (selectedTurno !== '' || selectedCurso !== '' || selectedDate !== '') { // Verifica se algum filtro foi aplicado
-            if (selectedTurno !== '' || selectedCurso !== '') {
-                addContent(relatorioFiltrado);
-            } else {
-                addContent(relatorio);
+            // Se apenas um turno foi selecionado, filtrar novamente para incluir apenas os alunos desse turno
+            if (selectedTurno !== '') {
+                relatorioFiltrado = relatorioFiltrado.filter(item => item.turno_reserva === selectedTurno);
             }
+            addContent(relatorioFiltrado);
             doc.save('relatorio_reservas.pdf');
         } else { // Se nenhum filtro foi aplicado, gere o relatório completo
             addContent(relatorio);
@@ -147,7 +147,8 @@ const RelatorioReservas = () => {
         }
     };
     
-
+    
+    
 const handleClick = () => {
     gerarPDF();
     setOpen(true);
