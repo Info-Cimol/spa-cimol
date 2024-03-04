@@ -49,7 +49,7 @@ const HomePrincipal = () => {
   };
 
   useEffect(() => {
-    loadProjects(); // Carregar os projetos ao entrar na página
+    loadProjects(); 
   }, []);
 
   return (

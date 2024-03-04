@@ -118,18 +118,13 @@ const AdicionaProjetoComponent = () => {
 
   const carregarAlunos = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const headers = {
-        'x-access-token': token,
-      };
-
-      const response = await axiosFecht.get('/listar/alunos', { headers });
+  
+      const response = await axiosFecht.get('/listar/alunos');
 
       setAlunosDisponiveis(
-        response.data.map((aluno, index) => ({
+        response.data.map((aluno) => ({
           id: aluno.pessoa_id_pessoa,
           nome: aluno.nome_aluno,
-          key: `${aluno.pessoa_id_pessoa}_${index}`,  
         }))
       );
     } catch (error) {
@@ -138,13 +133,8 @@ const AdicionaProjetoComponent = () => {
   };
 
   const carregarProfessores = async () => {
-    const token = localStorage.getItem('token');
-    const headers = {
-      'x-access-token': token,
-    };
-
     try {
-      const response = await axiosFecht.get('/listar/orientador', { headers });
+      const response = await axiosFecht.get('/listar/orientador');
 
       setProfessoresDisponiveis(
         response.data.map((professor) => ({
@@ -159,12 +149,8 @@ const AdicionaProjetoComponent = () => {
 
   const adicionarProjeto = async () => {
     try {
-      const token = localStorage.getItem('token');
       const alunosIds = alunosSelecionados.map(aluno => aluno.pessoa_id_pessoa);
       const orientadorId = orientadorSelecionado.pessoa_id_pessoa; 
-      const headers = {
-        'x-access-token': token,
-      };
   
       const projetoData = {
         orientadores: [orientadorId],  
@@ -181,7 +167,7 @@ const AdicionaProjetoComponent = () => {
         url_projeto: url,
       };
   
-      const response = await axiosFecht.post('/projeto/adiciona', projetoData, { headers });
+      const response = await axiosFecht.post('/projeto/adiciona', projetoData);
   
       if (response.status === 200) {
         setProjetoAdicionado(true);
@@ -191,7 +177,6 @@ const AdicionaProjetoComponent = () => {
       console.error('Erro ao adicionar projeto:', error);
     }
   };
-  
   
   return (
     <div>

@@ -10,7 +10,7 @@ import Cardapio from '../Cardapio/index.jsx';
 import ReservaSemana from '../Cardapio/reservaSemana.jsx';
 import StyledTextButton from "./styled";
 
-const MenuHamburguer = ({ userType}) => {
+const MenuHamburguer = ({ userType }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userNameIni] = localStorage.getItem('userName');
@@ -20,7 +20,10 @@ const MenuHamburguer = ({ userType}) => {
   const userName = localStorage.getItem('userName');
   const [exibirAluno, setExibirAluno] = useState(false);
   const [exibirCardapio, setExibirCardapio] = useState(false);
-  const [exibirCardapioMerenda, setExibirCardapioMerenda] = useState(false); 
+  const [exibirCardapioMerenda, setExibirCardapioMerenda] = useState(false);
+  const [alunoRenderizado, setAlunoRenderizado] = useState(false);
+  const [cardapioRenderizado, setCardapioRenderizado] = useState(false);
+  const [cardapioMerendaRenderizado, setCardapioMerendaRenderizado] = useState(false);
 
   const handleBottonSair = () => {
     localStorage.removeItem('userData');
@@ -28,47 +31,39 @@ const MenuHamburguer = ({ userType}) => {
   };
 
   const abrirCardapio = () => {
-    setExibirCardapio(true);
-    setExibirAluno(false); 
-    setExibirCardapioMerenda(false);
-    setIsMenuOpen(false);
+    if (!exibirCardapio && !cardapioRenderizado) {
+      setExibirAluno(false);
+      setExibirCardapioMerenda(false);
+      setIsMenuOpen(false);
+      setExibirCardapio(true);
+      setCardapioRenderizado(true);
+    }
   };
 
   const abrirAluno = () => {
-    setExibirAluno(true); 
-    setExibirCardapio(false);
-    setExibirCardapioMerenda(false);
-    setIsMenuOpen(false); 
+    if (!exibirAluno && !alunoRenderizado) {
+      setExibirCardapio(false);
+      setExibirCardapioMerenda(false);
+      setIsMenuOpen(false);
+      setExibirAluno(true);
+      setAlunoRenderizado(true);
+    }
   };
 
   const abrirCardapioMerenda = () => {
-    setExibirCardapioMerenda(true);
-    setExibirCardapio(false); 
-    setExibirAluno(false);
-    setIsMenuOpen(false); 
+    if (!exibirCardapioMerenda && !cardapioMerendaRenderizado) {
+      setExibirCardapio(false);
+      setExibirAluno(false);
+      setIsMenuOpen(false);
+      setExibirCardapioMerenda(true);
+      setCardapioMerendaRenderizado(true);
+    }
   };
-  
+
   const handleBottonHome = () => {
-      window.location.reload();
-    
-      navigate('/');
+    window.location.reload();
+    navigate('/');
   };
-
- /* const handleBottonProjeto = () => {
-    if (userType === "aluno" || userType === "admin") {
-      navigate('/Projeto');
-    } else if (userType === "professor" || userType === "admin") {
-      navigate('/Projeto');
-    }
-  };*/
-
-  /*const handleBottonMeusProjetos = () => {
-    if (userType === "aluno" || userType === "admin") {
-      navigate('/Area/Projeto');
-    } else if (userType === "professor" || userType === "admin") {
-      navigate('/Area/Projeto');
-    }
-  };*/
 
   const handleCloseProfile = () => {
     setIsMenuOpen(false);
@@ -76,10 +71,10 @@ const MenuHamburguer = ({ userType}) => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth <= 768); 
+      setIsSmallScreen(window.innerWidth <= 768);
     };
 
-    handleResize(); 
+    handleResize();
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -97,18 +92,12 @@ const MenuHamburguer = ({ userType}) => {
 
   return (
     <Container>
-         {exibirAluno && (
-        <Aluno />
-      )}
+      {exibirAluno && (<Aluno />)}
 
-      {exibirCardapio && (
-        <Cardapio />
-      )}
+      {exibirCardapio && (<Cardapio />)}
 
-{exibirCardapioMerenda && ( 
-        <ReservaSemana />
-      )}
-      
+      {exibirCardapioMerenda && (<ReservaSemana />)}
+
       {!exibirAluno && !exibirCardapio && !exibirCardapioMerenda && (
         <Menu right width={isSmallScreen ? "50%" : 150} isOpen={isMenuOpen}>
           <React.Fragment>
@@ -117,10 +106,10 @@ const MenuHamburguer = ({ userType}) => {
                 <Avatar sx={{ bgcolor: deepOrange[500], width: 50, height: 50, marginBottom: '10px' }}>{userNameIni}</Avatar>
               </IconButton>
             </Tooltip>
-    
+
             {isMenuOpen && (
               <Box
-                onClick={(e) => e.stopPropagation()} 
+                onClick={(e) => e.stopPropagation()}
                 sx={{
                   position: 'absolute',
                   top: '60px',
@@ -134,7 +123,7 @@ const MenuHamburguer = ({ userType}) => {
                   padding: '10px',
                 }}
               >
-    
+
                 <MenuItem>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <Avatar sx={{ bgcolor: deepOrange[500], width: 50, height: 50, marginBottom: '10px', md: 6 }}>{userNameIni}</Avatar>
@@ -177,7 +166,7 @@ const MenuHamburguer = ({ userType}) => {
               </Box>
             )}
           </React.Fragment>
-    
+
           {(userType === "merendeira") && (
             <>
               <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
@@ -191,8 +180,6 @@ const MenuHamburguer = ({ userType}) => {
               <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
               <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>
               <StyledTextButton>Professor</StyledTextButton>
-                {/*<StyledTextButton onClick={handleBottonProjeto}>Projeto</StyledTextButton>*/} 
-             {/*<StyledTextButton onClick={handleBottonMeusProjetos}>Meus projetos</StyledTextButton> */} 
               <StyledTextButton>Provas</StyledTextButton>
             </>
           )}
@@ -210,8 +197,6 @@ const MenuHamburguer = ({ userType}) => {
             <>
               <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
               <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
-             {/*<StyledTextButton onClick={handleBottonProjeto}>Projeto</StyledTextButton>*/} 
-             {/*<StyledTextButton onClick={handleBottonMeusProjetos}>Meus projetos</StyledTextButton> */} 
             </>
           )}
 
@@ -219,15 +204,13 @@ const MenuHamburguer = ({ userType}) => {
             <>
               <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
               <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
-             {/*<StyledTextButton onClick={handleBottonProjeto}>Projeto</StyledTextButton>*/} 
-             {/*<StyledTextButton onClick={handleBottonMeusProjetos}>Meus projetos</StyledTextButton> */} 
               <StyledTextButton>Provas</StyledTextButton>
             </>
           )}
         </Menu>
       )}
     </Container>
-  );  
+  );
 };
 
 export default MenuHamburguer;

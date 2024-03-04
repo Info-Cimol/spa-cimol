@@ -18,7 +18,8 @@ function Login() {
 
   useEffect(() => {
     const userData = localStorage.getItem('userData');
-    if (userData) {
+    const userToken = localStorage.getItem('token');
+    if (userData && userToken) {
       setAuthenticated(true);
     }
   }, []);
