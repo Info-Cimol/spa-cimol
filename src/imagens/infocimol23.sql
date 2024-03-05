@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: mysql27-farm10.kinghost.net
--- Tempo de geração: 04/03/2024 às 20:38
+-- Tempo de geração: 05/03/2024 às 09:01
 -- Versão do servidor: 10.6.16-MariaDB-log
 -- Versão do PHP: 5.3.29
 
@@ -838,7 +838,7 @@ INSERT INTO `aluno` (`pessoa_id_pessoa`, `matricula`, `curso_id_curso`) VALUES
 (4713, 6347254, 3),
 (4714, 88429, 3),
 (4715, 975404, 3),
-(4718, 4294967295, 3),
+(4718, 517367, 3),
 (4731, 6824945, 7);
 
 -- --------------------------------------------------------
@@ -1015,7 +1015,7 @@ INSERT INTO `cardapio` (`id_cardapio`, `nome`, `descricao`, `data`, `imagem`, `r
 (291, 'Bolo', '', '2024-03-05', NULL, 22),
 (292, 'Sagu', '', '2024-03-06', NULL, 17),
 (293, 'Massa com molho', '', '2024-03-07', NULL, 48),
-(294, 'Polenta com molho', '', '2024-03-08', NULL, 35);
+(294, 'Polenta com molho', '', '2024-03-08', NULL, 36);
 
 -- --------------------------------------------------------
 
@@ -1229,7 +1229,8 @@ INSERT INTO `codigo_usuario` (`codigo`, `codigo_usado`, `usuario_pessoa_id_pesso
 ('307830', 1, 4633, '2024-03-04 22:09:59.601000'),
 ('195782', 1, 4638, '2024-03-04 22:10:13.847000'),
 ('589339', 0, 4641, '2024-03-04 22:11:36.529000'),
-('281611', 1, 4641, '2024-03-04 22:13:52.895000');
+('281611', 1, 4641, '2024-03-04 22:13:52.895000'),
+('812712', 1, 4593, '2024-03-05 04:02:01.677000');
 
 -- --------------------------------------------------------
 
@@ -2241,7 +2242,7 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4590, 'Felipe Oldenburg da Silva', 'felipe-6704968@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4591, 'Felipe Roieski de Moura', 'felipe-6704969@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4592, 'Francisco Rypl Reis', 'francisco-6704970@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
-(4593, 'Gabriel Fernandes Pitta', 'gabriel-6704971@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
+(4593, 'Gabriel Fernandes Pitta', 'gabriel-6704971@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', 0),
 (4594, 'Larissa da Silva Schroeder', 'larissa-6704974@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4595, 'Lucas Borghelot Duarte', 'lucas-6704975@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4596, 'Maria Luiza Altenhofen Loth', 'maria-6704976@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
@@ -2365,7 +2366,7 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4714, 'Tales Leonardo Rizzi Ferreira', 'tales-ferreira@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4715, 'Vitória Mattos Borges', 'vitoria-borges6@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4717, 'Kelly Barbosa', 'kelly-barbosa@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4718, 'Ketlein', 'ketlein-sddsilva@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4718, 'Ketlein', 'ketlein-sddsilva@educar.rs.gov.br', 1, '064.299.850-75', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4731, 'Marina Gabriela Bolacell dos Santos', 'Marina-6824945@educar.rs.gov.br', 1, '063.911.730-95', 'Sem endereço cadastrado', 'Observação não informada', 1);
 
 -- --------------------------------------------------------
@@ -2375,16 +2376,15 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 --
 
 CREATE TABLE IF NOT EXISTS `professor` (
-  `pessoa_id_pessoa` int(10) unsigned NOT NULL,
-  `matricula` varchar(255) DEFAULT NULL
+  `pessoa_id_pessoa` int(10) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Fazendo dump de dados para tabela `professor`
 --
 
-INSERT INTO `professor` (`pessoa_id_pessoa`, `matricula`) VALUES
-(3546, NULL);
+INSERT INTO `professor` (`pessoa_id_pessoa`) VALUES
+(3546);
 
 -- --------------------------------------------------------
 
@@ -2489,7 +2489,7 @@ CREATE TABLE IF NOT EXISTS `reserva` (
   `cardapio_id_cardapio` int(11) DEFAULT NULL,
   `turno` varchar(255) DEFAULT NULL,
   `pessoa_id_pessoa` int(15) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=1135 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1136 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Fazendo dump de dados para tabela `reserva`
@@ -2629,7 +2629,8 @@ INSERT INTO `reserva` (`id_reserva`, `cardapio_id_cardapio`, `turno`, `pessoa_id
 (1131, 293, 'manhã', 4609),
 (1132, 293, 'tarde', 4609),
 (1133, 293, 'tarde', 4633),
-(1134, 293, 'manhã', 4633);
+(1134, 293, 'manhã', 4633),
+(1135, 294, 'tarde', 4593);
 
 -- --------------------------------------------------------
 
@@ -4436,7 +4437,7 @@ INSERT INTO `usuario` (`pessoa_id_pessoa`, `senha`, `perfil`) VALUES
 (4590, '$2b$10$WLnTppwSFsQDnq2B6B/E7OwH1Kf5ne957KtwHISmKqcxLL9lq9B9W', 'aluno'),
 (4591, '$2b$10$GYkQ4UrP49JP.4loHHf3S.wwSwD/9lMTI2.vuCJ/3B1OaeVQEWm6O', 'aluno'),
 (4592, '$2b$10$aHCVP0Q0EOBV5jMpoJ.Hvu4OSZ87OiCiDPE.mvUZbjhGe41GVnm1a', 'aluno'),
-(4593, '$2b$10$LeXpiq4oS.uVUuaIhF2SdeSN0br1M1ao5EaPOa5VPN4AiJdKIJDEq', 'aluno'),
+(4593, '$2b$10$gjJiIlXgnbks1SQNSAsYVOdQVwsthfmAB1JZML5GR6zikeodPTLsO', 'aluno'),
 (4594, '$2b$10$QHbjwdUhD8WJUP.gaCgZbeaKYfpRrscBrVU8eypAApqqgjtqPKUMC', 'aluno'),
 (4595, '$2b$10$uOt2szZVF7LHb84QZa7Lme5JoPUy7OecF39O4Acc5DEP9acJ3lG9G', 'aluno'),
 (4596, '$2b$10$hAJw6.sbyUCgm5d4PMvMx.gdKF9ZpPmdP7k7MRRQjsE/mDjLte6vy', 'aluno'),
@@ -4946,7 +4947,7 @@ ALTER TABLE `questao`
 -- AUTO_INCREMENT de tabela `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1135;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1136;
 --
 -- AUTO_INCREMENT de tabela `sala`
 --

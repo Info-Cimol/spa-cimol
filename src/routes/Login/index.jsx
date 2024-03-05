@@ -19,8 +19,20 @@ function Login() {
   useEffect(() => {
     const userData = localStorage.getItem('userData');
     const userToken = localStorage.getItem('token');
+    
     if (userData && userToken) {
-      setAuthenticated(true);
+      const tokenExpiration = JSON.parse(atob(userToken.split('.')[1])).exp;
+      const expirationTime = tokenExpiration * 1000; 
+      const currentTime = Date.now();
+      const timeDifference = expirationTime - currentTime;
+      
+      if (timeDifference <= 0 || timeDifference > 8 * 60 * 60 * 1000) {
+  
+        localStorage.clear();
+        window.location.reload();
+      } else {
+        setAuthenticated(true);
+      }
     }
   }, []);
   

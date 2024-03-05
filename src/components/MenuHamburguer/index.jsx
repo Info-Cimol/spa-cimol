@@ -20,6 +20,10 @@ const MenuHamburguer = ({ userType }) => {
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const handleCloseProfile = () => {
+    setIsMenuOpen(false);
+  };
+
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 768);
@@ -30,6 +34,14 @@ const MenuHamburguer = ({ userType }) => {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.addEventListener('click', handleCloseProfile);
+
+    return () => {
+      document.body.removeEventListener('click', handleCloseProfile);
     };
   }, []);
 

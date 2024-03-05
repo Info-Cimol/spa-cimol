@@ -218,7 +218,7 @@ const CadastroAluno = () => {
 
   const carregarAlunos = async () => {
     try {
-      const response = await axiosFetch.get('/listar/alunos');
+      const response = await axiosFetch.get('/alunos');
       console.log('Resposta da API:', response.data);
       setAlunosDisponiveis(
         response.data.map((aluno) => ({
@@ -317,7 +317,7 @@ const CadastroAluno = () => {
     async function fetchCursos() {
       try {
         const response = await axiosFetch.get('/listar/cursos');
-        const cursosData = response.data; // Supondo que a resposta seja um array de objetos com os dados dos cursos
+        const cursosData = response.data; 
         const cursosComIds = cursosData.map(curso => ({ id: curso.id_curso, nome: curso.nome }));
         setCursos(cursosComIds);
       } catch (error) {
