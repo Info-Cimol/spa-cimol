@@ -12,62 +12,13 @@ import StyledTextButton from "./styled";
 
 const MenuHamburguer = ({ userType }) => {
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userNameIni] = localStorage.getItem('userName');
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [userRole] = useState(localStorage.getItem('userRole'));
   const userEmail = localStorage.getItem('userEmail');
   const userName = localStorage.getItem('userName');
-  const [exibirAluno, setExibirAluno] = useState(false);
-  const [exibirCardapio, setExibirCardapio] = useState(false);
-  const [exibirCardapioMerenda, setExibirCardapioMerenda] = useState(false);
-  const [alunoRenderizado, setAlunoRenderizado] = useState(false);
-  const [cardapioRenderizado, setCardapioRenderizado] = useState(false);
-  const [cardapioMerendaRenderizado, setCardapioMerendaRenderizado] = useState(false);
-
-  const handleBottonSair = () => {
-    localStorage.removeItem('userData');
-    window.location.reload();
-  };
-
-  const abrirCardapio = () => {
-    if (!exibirCardapio && !cardapioRenderizado) {
-      setExibirAluno(false);
-      setExibirCardapioMerenda(false);
-      setIsMenuOpen(false);
-      setExibirCardapio(true);
-      setCardapioRenderizado(true);
-    }
-  };
-
-  const abrirAluno = () => {
-    if (!exibirAluno && !alunoRenderizado) {
-      setExibirCardapio(false);
-      setExibirCardapioMerenda(false);
-      setIsMenuOpen(false);
-      setExibirAluno(true);
-      setAlunoRenderizado(true);
-    }
-  };
-
-  const abrirCardapioMerenda = () => {
-    if (!exibirCardapioMerenda && !cardapioMerendaRenderizado) {
-      setExibirCardapio(false);
-      setExibirAluno(false);
-      setIsMenuOpen(false);
-      setExibirCardapioMerenda(true);
-      setCardapioMerendaRenderizado(true);
-    }
-  };
-
-  const handleBottonHome = () => {
-    window.location.reload();
-    navigate('/');
-  };
-
-  const handleCloseProfile = () => {
-    setIsMenuOpen(false);
-  };
+  const [selectedComponent, setSelectedComponent] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -82,25 +33,36 @@ const MenuHamburguer = ({ userType }) => {
     };
   }, []);
 
-  useEffect(() => {
-    document.body.addEventListener('click', handleCloseProfile);
+  const handleBottonSair = () => {
+    localStorage.removeItem('userData');
+    localStorage.removeItem('token');
+    window.location.reload();
+  };
 
-    return () => {
-      document.body.removeEventListener('click', handleCloseProfile);
-    };
-  }, []);
+  const abrirCardapio = () => {
+    setSelectedComponent(<Cardapio />);
+    setIsMenuOpen(false);
+  };
 
+  const abrirAluno = () => {
+    setSelectedComponent(<Aluno />);
+    setIsMenuOpen(false);
+  };
+
+  const abrirCardapioMerenda = () => {
+    setSelectedComponent(<ReservaSemana />);
+    setIsMenuOpen(false);
+  };
+
+  const handleBottonHome = () => {
+    window.location.reload();
+    navigate('/');
+  };
+  
   return (
     <Container>
-      {exibirAluno && (<Aluno />)}
-
-      {exibirCardapio && (<Cardapio />)}
-
-      {exibirCardapioMerenda && (<ReservaSemana />)}
-
-      {!exibirAluno && !exibirCardapio && !exibirCardapioMerenda && (
-        <Menu right width={isSmallScreen ? "50%" : 150} isOpen={isMenuOpen}>
-          <React.Fragment>
+      <Menu right width={isSmallScreen ? "50%" : 150} isOpen={isMenuOpen}>
+      <React.Fragment>
             <Tooltip title="Sua conta">
               <IconButton onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }} size="small">
                 <Avatar sx={{ bgcolor: deepOrange[500], width: 50, height: 50, marginBottom: '10px' }}>{userNameIni}</Avatar>
@@ -166,49 +128,36 @@ const MenuHamburguer = ({ userType }) => {
               </Box>
             )}
           </React.Fragment>
+          
+        {(userType === "merendeira") && (
+          <>
+            <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
+          </>
+        )}
 
-          {(userType === "merendeira") && (
-            <>
-              <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapioMerenda}>Reserva</StyledTextButton>
-            </>
-          )}
+        {(userType === "admin" || userType === "secretaria") && (
+          <>
+            <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
+            <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
+            {userType === "admin" && <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>}
+            <StyledTextButton>Professor</StyledTextButton>
+            {userType === "admin" && <StyledTextButton>Provas</StyledTextButton>}
+          </>
+        )}
 
-          {(userType === "admin") && (
-            <>
-              <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
-              <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>
-              <StyledTextButton>Professor</StyledTextButton>
-              <StyledTextButton>Provas</StyledTextButton>
-            </>
-          )}
+        {(userType === "aluno" || userType === "professor") && (
+          <>
+            <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
+            <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
+            {userType === "professor" && <StyledTextButton>Provas</StyledTextButton>}
+          </>
+        )}
+      </Menu>
 
-          {(userType === "secretaria") && (
-            <>
-              <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
-              <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>
-              <StyledTextButton>Professor</StyledTextButton>
-            </>
-          )}
-
-          {(userType === "aluno") && (
-            <>
-              <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
-            </>
-          )}
-
-          {(userType === "professor") && (
-            <>
-              <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-              <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
-              <StyledTextButton>Provas</StyledTextButton>
-            </>
-          )}
-        </Menu>
+      {selectedComponent && (
+        <>{selectedComponent}</>
       )}
+     
     </Container>
   );
 };

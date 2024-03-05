@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: mysql27-farm10.kinghost.net
--- Tempo de geração: 04/03/2024 às 09:53
+-- Tempo de geração: 04/03/2024 às 20:38
 -- Versão do servidor: 10.6.16-MariaDB-log
 -- Versão do PHP: 5.3.29
 
@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS `administrador` (
 --
 
 INSERT INTO `administrador` (`pessoa_id_pessoa`) VALUES
-(3546);
+(3546),
+(4718);
 
 -- --------------------------------------------------------
 
@@ -837,7 +838,8 @@ INSERT INTO `aluno` (`pessoa_id_pessoa`, `matricula`, `curso_id_curso`) VALUES
 (4713, 6347254, 3),
 (4714, 88429, 3),
 (4715, 975404, 3),
-(4718, 4294967295, 3);
+(4718, 4294967295, 3),
+(4731, 6824945, 7);
 
 -- --------------------------------------------------------
 
@@ -1011,9 +1013,9 @@ INSERT INTO `cardapio` (`id_cardapio`, `nome`, `descricao`, `data`, `imagem`, `r
 (287, 'Polenta com molho e frango', '', '2024-03-01', NULL, 0),
 (289, 'Lentilha com arroz', '', '2024-03-04', NULL, 12),
 (291, 'Bolo', '', '2024-03-05', NULL, 22),
-(292, 'Sagu', '', '2024-03-06', NULL, 20),
-(293, 'Massa com molho', '', '2024-03-07', NULL, 35),
-(294, 'Polenta com molho', '', '2024-03-08', NULL, 29);
+(292, 'Sagu', '', '2024-03-06', NULL, 17),
+(293, 'Massa com molho', '', '2024-03-07', NULL, 48),
+(294, 'Polenta com molho', '', '2024-03-08', NULL, 35);
 
 -- --------------------------------------------------------
 
@@ -1180,7 +1182,54 @@ INSERT INTO `codigo_usuario` (`codigo`, `codigo_usado`, `usuario_pessoa_id_pesso
 ('456549', 1, 4693, '2024-03-04 15:50:57.089000'),
 ('628637', 1, 4690, '2024-03-04 15:51:10.168000'),
 ('825622', 1, 4687, '2024-03-04 15:51:16.414000'),
-('754675', 0, 4692, '2024-03-04 15:52:18.109000');
+('754675', 0, 4692, '2024-03-04 15:52:18.109000'),
+('955757', 1, 4584, '2024-03-04 17:00:53.923000'),
+('747318', 1, 4668, '2024-03-04 18:57:25.059000'),
+('825622', 1, 4701, '2024-03-04 20:55:47.379000'),
+('749095', 0, 4701, '2024-03-04 21:16:52.744000'),
+('816823', 1, 4689, '2024-03-04 21:17:19.150000'),
+('528040', 1, 4710, '2024-03-04 21:17:51.705000'),
+('872024', 1, 4713, '2024-03-04 21:17:57.825000'),
+('741392', 1, 4703, '2024-03-04 21:18:15.259000'),
+('182665', 1, 4707, '2024-03-04 21:18:52.506000'),
+('619098', 1, 4704, '2024-03-04 21:19:00.566000'),
+('244109', 1, 4709, '2024-03-04 21:19:11.725000'),
+('137644', 1, 4714, '2024-03-04 21:19:30.924000'),
+('670353', 1, 4712, '2024-03-04 21:19:55.355000'),
+('262065', 1, 4700, '2024-03-04 21:20:59.544000'),
+('226720', 1, 4702, '2024-03-04 21:22:39.892000'),
+('445041', 0, 4593, '2024-03-04 21:24:57.354000'),
+('296888', 1, 4705, '2024-03-04 21:25:20.363000'),
+('549932', 0, 4610, '2024-03-04 21:35:11.179000'),
+('733730', 0, 4612, '2024-03-04 21:38:20.434000'),
+('791115', 0, 4610, '2024-03-04 21:39:27.553000'),
+('521567', 1, 4609, '2024-03-04 21:39:31.578000'),
+('567233', 0, 4591, '2024-03-04 21:40:52.455000'),
+('343611', 0, 4587, '2024-03-04 21:41:01.833000'),
+('451253', 0, 4595, '2024-03-04 21:41:04.405000'),
+('535326', 0, 4612, '2024-03-04 21:41:08.995000'),
+('702446', 0, 4610, '2024-03-04 21:41:19.087000'),
+('557163', 0, 4594, '2024-03-04 21:41:28.615000'),
+('362175', 1, 4612, '2024-03-04 21:41:49.848000'),
+('530118', 1, 4599, '2024-03-04 21:50:27.964000'),
+('794513', 1, 4615, '2024-03-04 21:50:37.454000'),
+('483070', 0, 4589, '2024-03-04 21:51:38.678000'),
+('855990', 0, 4585, '2024-03-04 21:56:10.447000'),
+('240417', 0, 4591, '2024-03-04 21:57:25.214000'),
+('414730', 0, 4596, '2024-03-04 21:57:31.316000'),
+('363578', 0, 4585, '2024-03-04 22:02:35.717000'),
+('962395', 0, 4593, '2024-03-04 22:04:17.082000'),
+('267757', 1, 4634, '2024-03-04 22:09:00.058000'),
+('271711', 1, 4636, '2024-03-04 22:09:06.449000'),
+('956404', 1, 4635, '2024-03-04 22:09:11.190000'),
+('489215', 1, 4642, '2024-03-04 22:09:11.252000'),
+('614572', 1, 4643, '2024-03-04 22:09:23.694000'),
+('591947', 1, 4632, '2024-03-04 22:09:28.677000'),
+('835378', 1, 4639, '2024-03-04 22:09:39.740000'),
+('307830', 1, 4633, '2024-03-04 22:09:59.601000'),
+('195782', 1, 4638, '2024-03-04 22:10:13.847000'),
+('589339', 0, 4641, '2024-03-04 22:11:36.529000'),
+('281611', 1, 4641, '2024-03-04 22:13:52.895000');
 
 -- --------------------------------------------------------
 
@@ -1406,7 +1455,7 @@ CREATE TABLE IF NOT EXISTS `pessoa` (
   `endereco` varchar(255) DEFAULT NULL,
   `observacao` varchar(255) DEFAULT NULL,
   `first_login` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4731 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4732 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Fazendo dump de dados para tabela `pessoa`
@@ -1782,7 +1831,7 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4180, 'Kalita Viviani Wolff', 'kalita-wolff@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4181, 'Maria Eduarda Marques de Lima', 'maria-lima16@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4182, 'Sara Hoffmann Cassoli', 'sara-cassoli@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4183, 'Adriany Ferreira Balbuena', 'adriany-balbuena@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4183, 'Adriany Ferreira Balbuena', 'adriany-balbuena@educar.rs.gov.br', 1, '', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4184, 'Ana Livia Custodio Beck', 'ana-beck@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4185, 'Eduarda de Avila Costa', 'eduarda-costa4@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4186, 'Elisa Beatriz Ourique dos Santos', 'elisa-santos4@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
@@ -2056,9 +2105,9 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4455, 'Pedro Henrique Silva de Oliveira', 'pedro-6575933@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4456, 'Pedro Squinatti Bernardes', 'pedro-6705052@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4457, 'Pierry Henry Bandeira Jacques', 'pierry-6573130@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
-(4458, 'Priscila da Silva Barbosa', 'priscila-6705053@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL);
+(4458, 'Priscila da Silva Barbosa', 'priscila-6705053@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
+(4459, 'Arthur Pastorini da Rosa Rodrigues', 'arthur-2589460@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL);
 INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, `observacao`, `first_login`) VALUES
-(4459, 'Arthur Pastorini da Rosa Rodrigues', 'arthur-2589460@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4460, 'Brayan Benites de Azevedo', 'brayan-6575787@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4461, 'Diogo Antônio Vieira da Silva', 'diogo-6569389@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4462, 'Diully Manuella de Melos Inacio', 'diully-6575812@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
@@ -2183,7 +2232,7 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4581, 'Renato Augusto Lui', 'renato-alui@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4582, 'Rodrigo Brusius Paim', 'rodrigo-paim1@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4583, 'Vitor Silveira Fraga', 'vitor-fraga@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4584, 'William de Oliveira', 'william-oliveira5@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4584, 'William de Oliveira', 'william-oliveira5@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4585, 'Alicia Cariny Borges', 'alicia-5362720@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4586, 'Ariel Vasconcellos Bernardes', 'ariel-6704947@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4587, 'Arthur Kaiser dos Reis', 'arthur-6797650@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
@@ -2198,7 +2247,7 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4596, 'Maria Luiza Altenhofen Loth', 'maria-6704976@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4597, 'Murilo Damaceno Diefenbach', 'murilo-6773808@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4598, 'Murilo de Mello', 'murilo-6704977@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
-(4599, 'Rafael Felipe Bazotti', 'rafael-6704944@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
+(4599, 'Rafael Felipe Bazotti', 'rafael-6704944@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', 0),
 (4600, 'Rafael Nascimento Be', 'rafael-6704945@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4601, 'Rafaela de Oliveira Lopes dos Santos', '26979@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4602, 'Theo Keller Paiva', 'theo-6704930@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
@@ -2208,13 +2257,13 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4606, 'Max Sebben da Costa Tiburski', 'Max.2396296@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4607, 'Daniel Scheffel de Oliveira', 'daniel-sdoliveira5@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
 (4608, 'Natalia Taise Pithan Korsack Rosa', '47468@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Sem observação cadastrada', NULL),
-(4609, 'Arianne Arruda de Mattos', 'arianne-admattos@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4609, 'Arianne Arruda de Mattos', 'arianne-admattos@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4610, 'Arthur Kehl Kerschner', 'arthur-6735177@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4611, 'João Batista Ecker', 'joao-ecker@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4612, 'Lucas Rodrigo Beier da Silva', 'lucas-rbdsilva@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4612, 'Lucas Rodrigo Beier da Silva', 'lucas-rbdsilva@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4613, 'Nicolas Cavallari da Silva', 'nicolas-cdsilva18@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4614, 'Sara Amabili Castilhos', 'sara-acastilhos@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
-(4615, 'William dos Santos Hennemann', 'william-dhennemann@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4615, 'William dos Santos Hennemann', 'william-dhennemann@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4616, 'Davi Matheus Abreu Waszilewski', 'davi-6567718@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4617, 'Guilherme Cambruzzi Arteiro', 'guilherme-arteiro@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4618, 'Heitor Augusto do Amaral da Silva', 'heitor-4465564@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
@@ -2231,18 +2280,18 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4629, 'Tomas Agustin Rauch', 'tomas-6575880@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4630, 'Vitor Soares da Silva', 'vitor-6541025@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4631, 'Wellington Kaue Barbieri Freitas', 'wellington-6575882@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4632, 'André Gabriel Schuh', 'andre-gschuh@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4633, 'Arthur Leite', 'arthur-6575867@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4634, 'Bernardo de Borba Raimundo', 'bernardo-6624530@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4635, 'Bruno Matheus Fridrich', 'bruno-6575868@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4636, 'Bruno Waschburger Silva', 'bruno-6575869@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4632, 'André Gabriel Schuh', 'andre-gschuh@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4633, 'Arthur Leite', 'arthur-6575867@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4634, 'Bernardo de Borba Raimundo', 'bernardo-6624530@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4635, 'Bruno Matheus Fridrich', 'bruno-6575868@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4636, 'Bruno Waschburger Silva', 'bruno-6575869@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4637, 'Eduarda Guimaraes', 'eduarda-6573019@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
-(4638, 'Emily da Fonseca Ribeiro', 'emily-6575951@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4639, 'Fábio Mello Gil', 'fabio-6385601@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4638, 'Emily da Fonseca Ribeiro', 'emily-6575951@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4639, 'Fábio Mello Gil', 'fabio-6385601@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4640, 'Ilana Mallmann Saldanha', 'ilana-6575873@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4641, 'Isabella Dreher Emerichs da Rosa', 'isabella-dedrosa@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4642, 'Isadora Gularte', 'isadora-gularte2@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4643, 'Marcelo Rangel Barros', 'marcelo-barros@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4641, 'Isabella Dreher Emerichs da Rosa', 'isabella-dedrosa@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4642, 'Isadora Gularte', 'isadora-gularte2@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4643, 'Marcelo Rangel Barros', 'marcelo-barros@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4644, 'Raul Oliveira Garcia', 'raul-6704946@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4645, 'Ricardo Gabriel Jung Americo', 'ricardo-americo@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4646, 'Valentina Gaspar Magri', 'valentina-6625812@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
@@ -2267,7 +2316,7 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4665, 'Guilherme Reinehr', 'guilherme-reinehr@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4666, 'Guilherme dos Santos Marta', 'guilherme-marta@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4667, 'José Inácio Belotto', 'jose-belotto@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
-(4668, 'Julia Sorgetz Alves', 'julia-salves7@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4668, 'Julia Sorgetz Alves', 'julia-salves7@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4669, 'Larissa Tayza Gewehr', 'larissa-gewehr@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4670, 'Laura dos Santos Ribeiro', 'laura-ribeiro2@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4671, 'Manuela Farias da Silva', 'manuela-silva11@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
@@ -2288,7 +2337,7 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4686, 'Caroline Casagrande dos Santos', 'caroline-cdsantos9@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4687, 'Cassiano Richard de Carli', 'cassiano-carli@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4688, 'Cauã Rodrigues de Vargas', 'caua-rvargas@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4689, 'Chaene Braz Nasr', 'chaene-nasr@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4689, 'Chaene Braz Nasr', 'chaene-nasr@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4690, 'Diony Jefferson Rinker', 'diony-rinker@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4691, 'Eduarda Schaurer Tavares', 'eduarda-tavares1@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4692, 'Filipe Pacheco Adam', 'filipe-adam1@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
@@ -2299,24 +2348,25 @@ INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`, `ativo`, `cpf`, `endereco`, 
 (4697, 'Jean William Rauta', 'jean-wrauta@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4698, 'João Vitor Amaral Medeiros', 'joao-vamedeiros2@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4699, 'João Vitor Wermuth Machado', 'joao-vwmachado@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4700, 'Juan Alberto Welter', 'juan-welter@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4701, 'Laura Foscarini Fetter', 'laura-fetter@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4702, 'Liandri Marcos de Vargas', 'liandri-vargas@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4703, 'Lucas Renan Rossini Wolff', 'lucas-wolff1@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4704, 'Matheus Rossini', 'matheus-rossini@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4705, 'Mikael Antonio Ribeiro Krug', 'mikael-akrug@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4700, 'Juan Alberto Welter', 'juan-welter@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4701, 'Laura Foscarini Fetter', 'laura-fetter@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4702, 'Liandri Marcos de Vargas', 'liandri-vargas@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4703, 'Lucas Renan Rossini Wolff', 'lucas-wolff1@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4704, 'Matheus Rossini', 'matheus-rossini@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4705, 'Mikael Antonio Ribeiro Krug', 'mikael-akrug@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4706, 'Neytan Belisario', 'neytan-belisario@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
-(4707, 'Nicolas Lamb', 'nicolas-lamb@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4707, 'Nicolas Lamb', 'nicolas-lamb@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4708, 'Nicole Eduarda Trentin de Souza', 'nicole-esouza@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4709, 'Otávio Fetter Ghesla', 'otavio-fghesla@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4710, 'Pedro Henrique Bighelini Camargo', 'pedro-camargo@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4709, 'Otávio Fetter Ghesla', 'otavio-fghesla@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4710, 'Pedro Henrique Bighelini Camargo', 'pedro-camargo@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4711, 'Rafael dos Santos Mengue', 'rafael-dsmengue@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4712, 'Ryan Wolf Gabriel Koch', 'ryan-wkoch@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4713, 'Sarah Gabriele Batista', 'sarah-batista@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4714, 'Tales Leonardo Rizzi Ferreira', 'tales-ferreira@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
+(4712, 'Ryan Wolf Gabriel Koch', 'ryan-wkoch@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4713, 'Sarah Gabriele Batista', 'sarah-batista@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4714, 'Tales Leonardo Rizzi Ferreira', 'tales-ferreira@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
 (4715, 'Vitória Mattos Borges', 'vitoria-borges6@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
 (4717, 'Kelly Barbosa', 'kelly-barbosa@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', NULL),
-(4718, 'Ketlin', 'ketlein-sddsilva@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0);
+(4718, 'Ketlein', 'ketlein-sddsilva@educar.rs.gov.br', 1, 'Sem CPF cadastrado', 'Sem endereço cadastrado', 'Observação não informada', 0),
+(4731, 'Marina Gabriela Bolacell dos Santos', 'Marina-6824945@educar.rs.gov.br', 1, '063.911.730-95', 'Sem endereço cadastrado', 'Observação não informada', 1);
 
 -- --------------------------------------------------------
 
@@ -2439,7 +2489,7 @@ CREATE TABLE IF NOT EXISTS `reserva` (
   `cardapio_id_cardapio` int(11) DEFAULT NULL,
   `turno` varchar(255) DEFAULT NULL,
   `pessoa_id_pessoa` int(15) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=1116 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1135 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Fazendo dump de dados para tabela `reserva`
@@ -2526,9 +2576,6 @@ INSERT INTO `reserva` (`id_reserva`, `cardapio_id_cardapio`, `turno`, `pessoa_id
 (1069, 294, 'tarde', 4189),
 (1070, 292, 'manhã', 4189),
 (1071, 292, 'tarde', 4189),
-(1072, 292, 'manhã', 3546),
-(1073, 292, 'manhã', 4205),
-(1074, 292, 'tarde', 4205),
 (1076, 293, 'manhã', 4193),
 (1077, 293, 'tarde', 4193),
 (1078, 294, 'manhã', 4193),
@@ -2563,7 +2610,26 @@ INSERT INTO `reserva` (`id_reserva`, `cardapio_id_cardapio`, `turno`, `pessoa_id
 (1112, 293, 'manhã', 4694),
 (1113, 293, 'tarde', 4694),
 (1114, 293, 'tarde', 4681),
-(1115, 293, 'manhã', 4681);
+(1115, 293, 'manhã', 4681),
+(1116, 294, 'tarde', 4671),
+(1117, 293, 'tarde', 4671),
+(1118, 293, 'tarde', 4668),
+(1119, 293, 'tarde', 4637),
+(1120, 293, 'manhã', 4637),
+(1121, 294, 'tarde', 4637),
+(1122, 294, 'manhã', 4637),
+(1123, 293, 'tarde', 4666),
+(1124, 294, 'tarde', 4666),
+(1125, 293, 'manhã', 4704),
+(1126, 293, 'tarde', 4704),
+(1127, 294, 'manhã', 4704),
+(1128, 294, 'tarde', 4704),
+(1129, 293, 'manhã', 4700),
+(1130, 293, 'tarde', 4700),
+(1131, 293, 'manhã', 4609),
+(1132, 293, 'tarde', 4609),
+(1133, 293, 'tarde', 4633),
+(1134, 293, 'manhã', 4633);
 
 -- --------------------------------------------------------
 
@@ -3610,7 +3676,8 @@ INSERT INTO `telefone` (`pessoa_id_pessoa`, `numero`, `status`) VALUES
 (4714, 'Sem número cadastrado', 1),
 (4715, 'Sem número cadastrado', 1),
 (4717, 'Sem número cadastrado', 1),
-(4718, 'Sem número cadastrado', 1);
+(4718, 'Sem número cadastrado', 1),
+(4731, 'Sem número cadastrado', 1);
 
 -- --------------------------------------------------------
 
@@ -4360,7 +4427,7 @@ INSERT INTO `usuario` (`pessoa_id_pessoa`, `senha`, `perfil`) VALUES
 (4581, '$2b$10$JBZMbYczALqRPqmBvVBAXeyA0LbKgM/AV9cAF9hgMx6cdcaavz3ve', 'aluno'),
 (4582, '$2b$10$1r8FQzcHNoVSkKDqLZmn7eVKq1GMPJe/Nk5UwweLnG5HB0eY89VVy', 'aluno'),
 (4583, '$2b$10$rjopf4XKRDR21OO9YnyGB.Du9KNfMpIornmR5NfBSs83thbZsKGN2', 'aluno'),
-(4584, '$2b$10$CknHODLPTD7B2Jd526x1Y.k/iy.5tEiBW16T19HE6dXL24DVMAVEW', 'aluno'),
+(4584, '$2b$10$a/yJgQJJ44zxD9Ci218j3.1SnjfoIIjSnDdaFKIaKECAWly7cr69a', 'aluno'),
 (4585, '$2b$10$7qA2Wh/qoU1jCijVGrF9X.XTTCTvle6aVLDxcBv3dHm87WRj4qufK', 'aluno'),
 (4586, '$2b$10$yo3eehVlObMiHixyhchO9ODsa04wDKChXNZ0mT8hlgW62ubHC57Rq', 'aluno'),
 (4587, '$2b$10$rNbsc37n9gaHMwuSmCs5CuR2pZq8Mc8OGEYcFrBXPdrdFQZyfyxUm', 'aluno'),
@@ -4375,7 +4442,7 @@ INSERT INTO `usuario` (`pessoa_id_pessoa`, `senha`, `perfil`) VALUES
 (4596, '$2b$10$hAJw6.sbyUCgm5d4PMvMx.gdKF9ZpPmdP7k7MRRQjsE/mDjLte6vy', 'aluno'),
 (4597, '$2b$10$9ySN3F1SodCG1Iy9eySJ5eaRjcNxrhPFJq3IdBPsWt0JP0yL9F.Cq', 'aluno'),
 (4598, '$2b$10$E9SlWPPoJtVMpUmIicfkmuLj8e9F6ZUr2X8q6FdUY4LBQPzLqbc5S', 'aluno'),
-(4599, '$2b$10$cXYRaS.7XtdhhryAvFi1WeTT9Alxf4aJTMlmwcULNpsVfHDcDxEkS', 'aluno'),
+(4599, '$2b$10$BZV4zvnyBGKqIQxajrEFyuTMPFduDwsMloAMhal/6SqP5us1k1oee', 'aluno'),
 (4600, '$2b$10$VqqQxv7nNR7DvPEDQWZHweuZi8wgXDHXMGEMTyRAZ22HMar0z0e7C', 'aluno'),
 (4601, '$2b$10$Y5L6VjFI29FK/8rCkR.P/uVJmLbxA4F33cUAXrMQaltBgDPFXeBDS', 'aluno'),
 (4602, '$2b$10$0lHbFSRu5RZSPOmMDZAp.e3Y0QgJQVlX/i3tE6PknCaM/1O8Nd3z2', 'aluno'),
@@ -4385,13 +4452,13 @@ INSERT INTO `usuario` (`pessoa_id_pessoa`, `senha`, `perfil`) VALUES
 (4606, '$2b$10$DHfMNl8uhV3NfXrj046cjuihT4wWwaQ/VBxgYHL/I9ew8WFa1IRjC', 'aluno'),
 (4607, '$2b$10$2TELn5AZfLWv8sjZTYEqcuXToFKswTxbXil5haIX/ARnLlGBAKpxC', 'aluno'),
 (4608, '$2b$10$Ns.g6Uqnyl.OkZN2ynpaY.oXn0w8GB8OH7Osre8njScvjHKaLzodK', 'aluno'),
-(4609, '$2b$10$yt0OiaQ/Y8yHFiyym/zmEedUyTYRjmM8LGSB1NTCn1DT8mIHuuNoW', 'aluno'),
+(4609, '$2b$10$Nr3YHozsnXjT5.UDmXAI7.uTqwX3/OGCKKmPQr3JPjyrEuKzR/vI2', 'aluno'),
 (4610, '$2b$10$FJFIhfwcI1PX.55f/B7ea.fYiGMI6XFbRFXYR7llcFRhtm1HeyzY6', 'aluno'),
 (4611, '$2b$10$je0u27zhpw48rNND70MID.r.fgmNkS7RkLz0N1eCgw1Ag.mQm7tmi', 'aluno'),
-(4612, '$2b$10$fnedW8/vlucnYaLmcGkGc.ZTG8lrAmgGq8YLMXa0Mv..8C0W7tQVa', 'aluno'),
+(4612, '$2b$10$np.g.j8cK9j..qr6pKlu3ODfUjcL/yGBV9qcU/KGfpF.KxP4xdDza', 'aluno'),
 (4613, '$2b$10$gZEo0aCjdMmLkKei5K/4Ze8rBEvgxHzILCS6zIgh2ziJo8hF4qA5y', 'aluno'),
 (4614, '$2b$10$Buu.FwQlQCBrjbNSjWeTfOVHL3wNf5YK.z9WIgKfEvVypSv6XMTYq', 'aluno'),
-(4615, '$2b$10$yOrbhE3PT4A.WR74YMIYS.tB.IA6ljGwoT27Uv5xWdYu/FTLlCfZ6', 'aluno'),
+(4615, '$2b$10$ORhwVbrYuoCVOJb9lH.zcOcd9WX8U5XYVxn3A/moO88eq97dZNTum', 'aluno'),
 (4616, '$2b$10$tTbcUbrc3jIY8KlA90zeXeq75PHMqlCNzQDCemV22YAK54cfNWLjW', 'aluno'),
 (4617, '$2b$10$evhxNF/DZLiwJ2jGpv7Jjew4MjP0w4QRETTig0TSW58OVq78zNOm.', 'aluno'),
 (4618, '$2b$10$K5snhVzrnrQBSd2djO9AKe59m11TdL0U3yWb/JTmsSBg4.s.2tHwi', 'aluno'),
@@ -4408,18 +4475,18 @@ INSERT INTO `usuario` (`pessoa_id_pessoa`, `senha`, `perfil`) VALUES
 (4629, '$2b$10$d5ZmhWReVot6Kz0famo.AuLLQo.SwxrFuExx/HfyBG12q1/61h8rG', 'aluno'),
 (4630, '$2b$10$4vw6Wfgq11LXP/vOci/.GuhyD/G91vwV5qHTUsGIkNRbYCzSeZsv.', 'aluno'),
 (4631, '$2b$10$X.8NbLZgeZuVA5j2MUnqRe5qT27bU46GYtLB/eu.WetEiVpzgAqLa', 'aluno'),
-(4632, '$2b$10$CcnkQKET50HS93wXohbXKudRUC2MgeCP3yYypbHdisI4icwcMEqNa', 'aluno'),
-(4633, '$2b$10$RBEN/Ak7ffRTSLaUc0QffefUyAdg9gdF2.Gpe1.hUIkdOlT7XpAk.', 'aluno'),
-(4634, '$2b$10$IBifKy8YCZZ6ZBlNLdN88OtupIeG4/cOHVoIic5s5mUp/ckex41DW', 'aluno'),
-(4635, '$2b$10$gSYs1m9E/sagPTX4hu8ujeVZmRbEEUy.VeT0tuEIOV3rTd1bElptK', 'aluno'),
-(4636, '$2b$10$saFoT.tDkV7fiI.9XQlNMOE2SzH9OQUVriybBn4w1kLTwRjT/mztm', 'aluno'),
+(4632, '$2b$10$aHCdpG4HwniCJ3NDxQt5l.Y0e5sOHM0nc4V.ZneGDuJ8rhYKd3PZG', 'aluno'),
+(4633, '$2b$10$FNS5.WKSFf0PWuDXiNW3peoDNpil1oMCsE.BSpeblTLr6n5rqEZWa', 'aluno'),
+(4634, '$2b$10$OTL7bbLcgsO5FEO5K6.AgeWgLMczXWxLeMnh9ucbjCosagiYNGSbG', 'aluno'),
+(4635, '$2b$10$s4qHX6Zvr9H2PfRGgevb3Ot0XJsVsHfbDhznw/n0BwfiJZILgmzrO', 'aluno'),
+(4636, '$2b$10$lhzuNUpJiTY8ppkaXt10SOQ0.b3lb6XePoTMHcnrN9uAaItT/K/yu', 'aluno'),
 (4637, '$2b$10$1uZp79sjzm4NefvHppdcqON7cp8PtqThczGbQJqPP4U6KocTN6d6C', 'aluno'),
-(4638, '$2b$10$70iEbcwgTAXbAHFVVyRUfeFuGrsHz.2MXSaGAvpcu37G3BS.aX/1q', 'aluno'),
-(4639, '$2b$10$NJ8KgYj.Vxfk4C.VSjaeM.XunnWDvTy2XbeSF3wAJGT0EXIxAt9/6', 'aluno'),
+(4638, '$2b$10$rj8RL5U5aPoC/8EKwnqODujERPr4rEia0mH2yUooC9GuKtdYJEvy2', 'aluno'),
+(4639, '$2b$10$yzOylqzlb3pFwKptyBiPwuKpEthoobkR6Vy1x2CCY8yLd/tiLkbjm', 'aluno'),
 (4640, '$2b$10$uiTUK/yMFfB0uoOHL3cgDOoGyG216ZuwNaAUPqvSSwyVyN.vjvxUi', 'aluno'),
-(4641, '$2b$10$YPPgJ4dOmuo7yamk.5GTve82XfXdY3kvZwmumlUQH5wm835/1cDKO', 'aluno'),
-(4642, '$2b$10$e6X2/urCYzM9Qb0IrOnSveMnRLOEDwfXD8HrahtQBbU2j63XhzEdm', 'aluno'),
-(4643, '$2b$10$A8pYpKZfTy9nzwoCVxJGgex3yQQb7NhVPShOFSEQ0IwOirfHosU.C', 'aluno'),
+(4641, '$2b$10$Jj4hQvgMF8QT/M5WRLFwH.PJ2EJ6z38uFiXaQJFS11EYbWMxpMuPa', 'aluno'),
+(4642, '$2b$10$z8TSIhi8RRvQUy4TEZFLpeAR.O.e7jx7VkeiVgYuMiqfrukF6BwQO', 'aluno'),
+(4643, '$2b$10$9VWFLjMnWKpKF2oWxpGWHOpctQBM.3nwm/deW6WBh.Y4JihSqpggW', 'aluno'),
 (4644, '$2b$10$DV.gphjE/uEEBspAhuGFpuHZrbRTzKCjf6Ee3ZyovaQkQcWq61/96', 'aluno'),
 (4645, '$2b$10$2DXlVSSYBRiD/4wnKm5ZSuQCTawAhv5kJf/R7uMoj4tfN5FDUklla', 'aluno'),
 (4646, '$2b$10$r3pWtonbaBwUBMGnvWzjv.pymaxeliYDndoVoP9R5dZgtDQfeAAkW', 'aluno'),
@@ -4444,7 +4511,7 @@ INSERT INTO `usuario` (`pessoa_id_pessoa`, `senha`, `perfil`) VALUES
 (4665, '$2b$10$wJe1jy90DQv6rbbIf9OAyugmBIDuZ9iPefx7SvG8//JGyHQ11sL5i', 'aluno'),
 (4666, '$2b$10$4O0079yVDIW/iWsvPUbvfu72rDx4.JtyEIeapfufgBKqJqeejw7da', 'aluno'),
 (4667, '$2b$10$VvyQ0A5JjdeihgS56niVSOfhjU5w1wo8E3QzjfkuRs6n2uGhg9ete', 'aluno'),
-(4668, '$2b$10$.GrQW4xAuJBRfxnwtU6/pOME6cTxcDRHy67FV50bEaWp/jULl11ZW', 'aluno'),
+(4668, '$2b$10$W9kcIxruV2OOaxrx5g9CeOTVxPFnIG1CkSQZOV5kwCW4EzM5/TvMq', 'aluno'),
 (4669, '$2b$10$qB14Wgly3BrJ3H1IWhVE0OFi/jTNVPZHcvmXXVQZpFADd8RK9kila', 'aluno'),
 (4670, '$2b$10$.nIGDfiASZ0W8PIQjmUz4evIri8uh1D.p6mPyDiGKQylQaD2mhUtS', 'aluno'),
 (4671, '$2b$10$seza0nmWofokF8ci68BCjOlewTmdUA7J/XYOZwcMuCKb7ENPU1kyS', 'aluno'),
@@ -4465,7 +4532,7 @@ INSERT INTO `usuario` (`pessoa_id_pessoa`, `senha`, `perfil`) VALUES
 (4686, '$2b$10$TxJGBaXtjrBlYP27reLNB.uBRVRTSJI19nYSe4E/4invVkzX2bWPO', 'aluno'),
 (4687, '$2b$10$uUa8YwBfIueJNTkomrIPHO6ifX26EqJVNXzpBfk4UqTHNML6wn5aW', 'aluno'),
 (4688, '$2b$10$p4Y/19UBbAPJ6Lg85fMvYOpBYxC2Jnz2cC5mP1adEJAk4DEmr.Rme', 'aluno'),
-(4689, '$2b$10$0dIRI8Q4J9ZpHkfLaINASu3n27IZHz7q4mHSxqDqJiRyZZlolkqL2', 'aluno'),
+(4689, '$2b$10$zNbchDoGiy371FZS0OF63.fBVeL3mibJuAS2Ao0fBXwpzG9tLmgy6', 'aluno'),
 (4690, '$2b$10$8OP9epSno7CC5uAQYTinMuI3cuvWLkYlKfBHg9S6ZQASLgEMKRQcu', 'aluno'),
 (4691, '$2b$10$iRR2BT5ijQUdFaQnX0smoeHpTBDJI7nOEzFgyLrGaklALXnDCL7zK', 'aluno'),
 (4692, '$2b$10$h0TDghudaecuCsEZdyI4n.UU3xqy9DgQzbRu.3wMUvNpGJRYoBkoO', 'aluno'),
@@ -4476,24 +4543,25 @@ INSERT INTO `usuario` (`pessoa_id_pessoa`, `senha`, `perfil`) VALUES
 (4697, '$2b$10$FfSTpyAuO71YVbJ3KED6ZuFWs0iSDgOL1p0ai3H.X62zdb2DP3ceu', 'aluno'),
 (4698, '$2b$10$YbZ3FVYiz5YYbA08.TRL7e2RQ6Dfbw0v6GVtQYzJ1DkC9/LuPzoCa', 'aluno'),
 (4699, '$2b$10$rBzBh8PlOlGfQijQlPWDHulIh9UJfUkAM/.lH4H6Wcwk6nfNakpKS', 'aluno'),
-(4700, '$2b$10$c3pEaD3bumGKMckMmZPO5OcxaJ4yZ30jDlIP8qVoxvaXICR0StmGS', 'aluno'),
-(4701, '$2b$10$ZWRnYRQ0aT8nmFa/qe0zpOPcXpc7WOhERBjiCKV2fgqwPPJ1Sc8C.', 'aluno'),
-(4702, '$2b$10$VeUkqCi9mlISRjnD7XRf6eeOlYa0qRwYx875LWxqCBYvE8wym428.', 'aluno'),
-(4703, '$2b$10$3YDfbMxMRFXhrEHkcq8B1uN9z8asIH9rrhz8jyL9ZE5r6TANN3K7u', 'aluno'),
-(4704, '$2b$10$tiLU60IenBf3Fed2OwRigOz5554jM5gnl/bd44W2nJRpOoZ2luW.a', 'aluno'),
-(4705, '$2b$10$0xhVaqEKMgiPLKJRGqXo/eGVQZQN2whyhDW1zH95Lq1y6s3gjjASK', 'aluno'),
+(4700, '$2b$10$VSvlALWQxqAQLaHiOfA65eAoTCzGu.SFw4DcJXIQMHQPi5FvVt7re', 'aluno'),
+(4701, '$2b$10$0YIyMcXljs5ZW358GqszbeNYbTvUeGpNPiYWnwH3GkP/ij9U0SvOK', 'aluno'),
+(4702, '$2b$10$VUUnL98.oMWdzJBrxAWjkORBzGxXy5pxfesvYVbwJCYxor3cgyUD.', 'aluno'),
+(4703, '$2b$10$7rglWmWA/LQu9rd8OBqOXON7a3aJe7Sl/7/U9vg.RiNrp0cwvcB5e', 'aluno'),
+(4704, '$2b$10$JBIg9R2v6wmL0F/CDmIwAueEe2BIV9fTRUBUWmMWAqh11G/yDdJ7m', 'aluno'),
+(4705, '$2b$10$Nr/SrMdft0BTVEnYuxdUHe9XwNvZOlBa/W4QKxoKqrdJ.QUzPpeZm', 'aluno'),
 (4706, '$2b$10$8TVNE8WRps91xlOo.GATruSnT1iwFhu6Zkvof2aniuWmQfoblVzkO', 'aluno'),
-(4707, '$2b$10$TCDpENw1L8zBbJWtMiv0rOfP/n5xGqFHTvZkAWwWIWbchqcaYJG.S', 'aluno'),
+(4707, '$2b$10$SCRoe9M5vKAobfy3O6Nc7ewPIGBc4uhJMx0qFtOKkhw3CA2PvWRdu', 'aluno'),
 (4708, '$2b$10$7zZMHelzWKUi6KLMAwm/BeIm1JGmFvtUlPWrARLicbntI/fgvtW2q', 'aluno'),
-(4709, '$2b$10$PlSyM/ou.CJNd4ulfYS6GuMCgvkJnv6hf/wMrAK503rJxJhjFhVCS', 'aluno'),
-(4710, '$2b$10$5Ks70YKWo5g33ywcp4P5nOKq4bgWXciN/JnZlOlM4SG.GUjJ63EFC', 'aluno'),
+(4709, '$2b$10$fMNoayRpozyKxp1UChQpwOLoEyrx6aH8sF57K4ZKieQzH5DUJdM3.', 'aluno'),
+(4710, '$2b$10$NGCI8I0pDaaCwudQCzRSOeb3H74lN69RwcOUFmF4HkdaXqgqYgyOK', 'aluno'),
 (4711, '$2b$10$bo.yNCTvYMjYKTXHObeAlee6zn1BWa40ppzMS0VIPsjVKEYCkPdeK', 'aluno'),
-(4712, '$2b$10$/cchd.0XQ9VBlfNvuFEETOuDvzeRl8lIuTmcBZVXTiAy8eNpeZGd6', 'aluno'),
-(4713, '$2b$10$a1Jg25iDY3Es1ZmiV1kMOe5LVlOrRmIMcYyUChmOlyb.DRqisnXdq', 'aluno'),
-(4714, '$2b$10$MB3IKOOV7FrpRXhcXy//Hef37d436e.pWHI9FJ6HKAif0Sgqaokai', 'aluno'),
+(4712, '$2b$10$avkI/KDvq0dMcEP4Zg361u8BiFNJLPEaJ11uZXrXCkeUlN1v96hau', 'aluno'),
+(4713, '$2b$10$4598.4mZFHPnrOE8GkVV7e/wYirncmy7gUN0rk0DWu2PeLSgRr216', 'aluno'),
+(4714, '$2b$10$OG.0h7J//ti5pCcNrZh4W.I8iMZ06HU3Le2TEGvfa4FpsWNjElQG.', 'aluno'),
 (4715, '$2b$10$gNUWozqFsIZJqP6/a4Ov0OvTuEDFlnt8KFMdk9ClXGpVMuXLNNDcy', 'aluno'),
 (4717, '$2a$10$eeXsbt2IgCqYmk9EybrjfulI5TSkfQQ6ic0p2UNF3mtUdibXTLGae', 'secretaria'),
-(4718, '$2b$10$WM3zeFwlg41aiF2H9VPHt.h0p14JvwYVEjZANoD4PdIjoIzOg6xRC', 'aluno');
+(4718, '$2b$10$WM3zeFwlg41aiF2H9VPHt.h0p14JvwYVEjZANoD4PdIjoIzOg6xRC', 'aluno'),
+(4731, '$2b$10$lh1V2XJIR/az44LIDEZjfOdwLlroLstQWNxJnU22Ywq8nIzKs.sTC', 'aluno');
 
 --
 -- Índices de tabelas apagadas
@@ -4858,7 +4926,7 @@ ALTER TABLE `oportunidade`
 -- AUTO_INCREMENT de tabela `pessoa`
 --
 ALTER TABLE `pessoa`
-  MODIFY `id_pessoa` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4731;
+  MODIFY `id_pessoa` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4732;
 --
 -- AUTO_INCREMENT de tabela `projeto`
 --
@@ -4878,7 +4946,7 @@ ALTER TABLE `questao`
 -- AUTO_INCREMENT de tabela `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1116;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1135;
 --
 -- AUTO_INCREMENT de tabela `sala`
 --
