@@ -45,7 +45,6 @@ export const Container = styled.div`
 .formulario-login {
   width: 80%; 
   max-width: 650px; 
-  margin-top: 10px;
   padding: 30px;
   border-radius: 10px;
   background-color: #ffffff;
@@ -98,7 +97,8 @@ export const Container = styled.div`
 /* Adicionando media queries para ajustar estilos em diferentes tamanhos de tela */
 @media screen and (max-width: 768px) {
   .formulario-login {
-    width: 90%; /* Ajustando a largura do formulário para telas menores */
+    width: 90%; 
+    margin-top: 100px;
   }
 
   .btn-primary {
