@@ -151,7 +151,7 @@ const MenuHamburguer = ({ userType }) => {
           <>
             <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
             <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
-            {userType === "admin" && <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>}
+            <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>
             <StyledTextButton>Professor</StyledTextButton>
             {userType === "admin" && <StyledTextButton>Provas</StyledTextButton>}
           </>
@@ -160,7 +160,7 @@ const MenuHamburguer = ({ userType }) => {
         {(userType === "aluno" || userType === "professor") && (
           <>
             <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
-            <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>
+            {userType === "aluno" && <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>}
             {userType === "professor" && <StyledTextButton>Provas</StyledTextButton>}
           </>
         )}

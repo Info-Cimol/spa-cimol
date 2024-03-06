@@ -53,6 +53,7 @@ function Login() {
       const userRole = userRoles[0];
       saveUserData(response, userRole);
     } else if (userRoles.length > 1) {
+      toast.info('Por favor, selecione um perfil antes de prosseguir.');
       setUserTypes(userRoles);
     } else {
       console.log('Usuário sem perfil atribuído');
@@ -133,8 +134,8 @@ function Login() {
   
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); 
-  
+    setLoading(true);
+
     try {
       const loginData = {
         email: login,
@@ -142,7 +143,7 @@ function Login() {
       };
   
       const response = await axiosFecht.post('/user/login', loginData);
-
+  
       if (response.data.auth === true) {
         handleLogin(response);
       } else {

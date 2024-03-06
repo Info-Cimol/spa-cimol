@@ -52,7 +52,6 @@ function TrocarSenha() {
   
     try {
       if (newPassword !== confirmPassword) {
-        // Se as senhas não coincidirem, exibir um toast de erro
         toast.error('As senhas não coincidem. Por favor, verifique e tente novamente.');
         setLoading(false);
         return; 
@@ -70,9 +69,7 @@ function TrocarSenha() {
   
       if (response.status === 200) {
         if (codeVerified) {
-          // Se a senha foi atualizada com sucesso
           toast.success('Senha atualizada com sucesso!');
-          // Limpar os campos e reiniciar o estado
           setEmail('');
           setVerificationCode('');
           setNewPassword('');
@@ -80,7 +77,6 @@ function TrocarSenha() {
           setEmailSent(false);
           setCodeVerified(false);
         } else {
-          // Se o código foi verificado com sucesso
           toast.success('Senha alterada com sucesso!');
           setCodeVerified(true);
           window.location.reload();
@@ -96,7 +92,6 @@ function TrocarSenha() {
     setLoading(false);
   };
   
-
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
