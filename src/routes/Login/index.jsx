@@ -4,7 +4,6 @@ import { TextField, Button, FormControlLabel, Radio, RadioGroup, FormLabel, Circ
 import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import axiosFecht from '../../axios/config';
 import { toast } from 'react-toastify'; 
-import BackArrow from '../../components/BackArrow/index';
 import TrocarSenha from '../../components/TrocarSenha/index';
 import Home from '../../components/Home/index'; 
 
@@ -180,7 +179,6 @@ function Login() {
         </div>
         {showTrocarSenha ? (
           <>
-            <BackArrow style={{ marginTop: '120px', marginLeft: '10px' }} />
             <TrocarSenha />
           </>
         ) : (
