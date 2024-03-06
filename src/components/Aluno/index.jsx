@@ -35,7 +35,7 @@ const CadastroAluno = () => {
   const [selectedCursoId, setSelectedCursoId] = useState(null);
   const [firstLoadComplete, setFirstLoadComplete] = useState(false);
   const [fetchData, setFetchData] = useState(true); 
-  
+
   useEffect(() => {
     const carregarAlunos = async () => {
       try {
@@ -218,7 +218,7 @@ const CadastroAluno = () => {
 
   const carregarAlunos = async () => {
     try {
-      const response = await axiosFetch.get('/alunos');
+      const response = await axiosFetch.get('/listar/alunos');
       console.log('Resposta da API:', response.data);
       setAlunosDisponiveis(
         response.data.map((aluno) => ({

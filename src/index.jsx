@@ -43,22 +43,22 @@ const router = createBrowserRouter([
       },
 
         //Rota responsável pela listagem dos projetos de cada indivíduo, que esteja relacionado ao projeto
-        {
-          path: '/Visualiza/Projeto/:id',
-          element: <Private allowedRoles={['aluno', 'professor', 'admin']}><VisualizaProjetoPessoa/></Private>
-        },
+      {
+        path: '/Visualiza/Projeto/:id',
+        element: <Private allowedRoles={['aluno', 'professor', 'admin']}><VisualizaProjetoPessoa/></Private>
+      },
 
         //Rota responsável pela criação de projeto 
-        {
-          path: '/Adiciona/Projeto',
-          element: <Private allowedRoles={['aluno', 'professor', 'admin']}><AdicionaProjeto/></Private>
-        },
+      {
+        path: '/Adiciona/Projeto',
+        element: <Private allowedRoles={['aluno', 'professor', 'admin']}><AdicionaProjeto/></Private>
+      },
 
          //Rota responsável pela edição de projetos pelo id 
-         {
-          path: '/Edita/Projeto/:id',
-          element: <Private allowedRoles={['aluno', 'professor', 'admin']}><EditaProjeto/></Private>
-        },
+      {
+        path: '/Edita/Projeto/:id',
+        element: <Private allowedRoles={['aluno', 'professor', 'admin']}><EditaProjeto/></Private>
+      },
     ],
   },
 ]);

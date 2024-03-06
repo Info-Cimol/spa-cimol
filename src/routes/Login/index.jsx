@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container } from './styled';
+import { TextField, Button, FormControlLabel, Radio, RadioGroup, FormLabel, CircularProgress, Typography } from '@mui/material';
+import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import axiosFecht from '../../axios/config';
 import { toast } from 'react-toastify'; 
 import BackArrow from '../../components/BackArrow/index';
@@ -159,89 +161,99 @@ function Login() {
       setLoading(false);
     }
   };
+
+  const handleLogoClick = () => {
+    window.open('https://www.cimol.g12.br/', '_blank');
+  };
   
   if (authenticated) {
     return <Home />;
   } else {
     return (
       <Container>
-        <div className="topo">
+       <div className="topo">
           <div className="topo2"></div>
         </div>
-      
+
         <div className="imgCentral">
-          <img src="/cimol.png" alt="Cimol" />
+          <img src="/cimol.png" alt="Cimol" onClick={handleLogoClick} style={{ cursor: 'pointer' }} />
         </div>
-        {showTrocarSenha ? ( 
-        <BackArrow style={{ marginTop: '120px', marginLeft: '10px' }} /> ,
-        <TrocarSenha />
+        {showTrocarSenha ? (
+          <>
+            <BackArrow style={{ marginTop: '120px', marginLeft: '10px' }} />
+            <TrocarSenha />
+          </>
         ) : (
-        <div className="areaLogin">
-          <i className="bi bi-person" style={{ fontSize: '50px' }}></i>
-          <form className="formulario-login" onSubmit={handleFormSubmit}>
-            <div className="input-group mb-3">
-              <span className="input-group-text align-items-center">
-                <i className="input-icon uil uil-at"></i>
-              </span>
+          <div className="areaLogin">
+            <form className="formulario-login" onSubmit={handleFormSubmit}>
+            <i className="bi bi-person" style={{ fontSize: '50px' }}></i>
+              <div className="input-group mb-3">
+                <span className="input-group-text align-items-center">
+                  <Email />
+                </span>
 
-              <input
-                value={login}
-                onChange={(e) => setLogin(e.target.value)}
-                type="text"
-                placeholder="E-mail"
-                required
-                className="form-control email-input"
-              />
-            </div>
-
-            <div className="input-group mb-3">
-              <span className="input-group-text">
-                <i className="input-icon uil uil-lock-alt"></i>
-              </span>
-              <input
-                name="logpass"
-                id="logpass"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type={showPassword ? "text" : "password"} 
-                placeholder="Senha"
-                required
-                className="form-control password-input"
-              />
-              <span className="input-group-text" onClick={handleTogglePasswordVisibility}> 
-                <i className={`bi bi-eye${showPassword ? "-slash" : ""}`} style={{ cursor: 'pointer' }}></i>
-              </span>
-            </div>
-
-            {userTypes.length > 1 && (
-              <div className="profile-selector-container">
-                <label className="profile-label">Selecione um perfil</label>
-
-                {userTypes.map((type) => (
-                  <label className="valor-label" key={type}>
-                    <input
-                      className="checkbox-input"
-                      type="radio"
-                      value={type}
-                      checked={selectedUserType === type}
-                      onChange={() => setSelectedUserType(type)}
-                    />
-                    <label className="checkbox-text">{type}</label>
-                  </label>
-                ))}
-
-                <button className="select-button" onClick={handleProfileSelection}>
-                  Selecionar Perfil
-                </button>
+                <TextField
+                  value={login}
+                  label="E-mail"
+                  onChange={(e) => setLogin(e.target.value)}
+                  type="text"
+                  placeholder="E-mail"
+                  required
+                  className="form-control email-input"
+                />
               </div>
-            )}
 
-            <button className="btn btn-primary">
-              {loading ? 'Carregando...' : 'Entrar'}
-            </button>
-          </form>
-          <div className="forgot_password" style={{ cursor: "pointer", fontSize: '1.2rem', color: '#1b2f4a' }} onClick={handleToggleTrocarSenhaVisibility}>Esqueceu a senha? Trocar senha</div>
-        </div>
+              <div className="input-group mb-3">
+                <span className="input-group-text">
+                  <Lock />
+                </span>
+                <TextField
+                  name="logpass"
+                  id="logpass"
+                  label="Senha"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Senha"
+                  required
+                  className="form-control password-input"
+                />
+                <span className="input-group-text" onClick={handleTogglePasswordVisibility}>
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </span>
+              </div>
+
+              {userTypes.length > 1 && (
+                <div className="profile-selector-container">
+                  <FormLabel className="profile-label">Selecione um perfil</FormLabel>
+
+                  <RadioGroup
+                    aria-label="userType"
+                    name="userType"
+                    value={selectedUserType}
+                    onChange={(e) => setSelectedUserType(e.target.value)}
+                  >
+                    {userTypes.map((type) => (
+                      <FormControlLabel
+                        key={type}
+                        value={type}
+                        control={<Radio />}
+                        label={type}
+                      />
+                    ))}
+                  </RadioGroup>
+
+                  <Button variant="contained" onClick={handleProfileSelection}>
+                    Selecionar Perfil
+                  </Button>
+                </div>
+              )}
+              <Typography variant="body1" className="forgot_password" style={{ cursor: "pointer", fontSize: '1.2rem', color: '#1b2f4a' }} onClick={handleToggleTrocarSenhaVisibility}>Esqueceu a senha? Trocar senha</Typography>
+              <Button variant="contained" color="primary" type="submit" disabled={loading}>
+                {loading ? <CircularProgress size={24} /> : 'Entrar'}
+              </Button>
+            </form>
+          </div>
         )}
       </Container>
     );

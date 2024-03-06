@@ -121,7 +121,7 @@ const CadastroProfessor = () => {
 
   const carregarProfessores = async () => {
     try {
-      const response = await axiosFetch.get('/orientador');
+      const response = await axiosFetch.get('/professor');
       console.log('Resposta da API:', response.data);
       
       const professoresOrdenados = response.data
@@ -178,79 +178,79 @@ const CadastroProfessor = () => {
 return (
   <>
   <div>
-  <ContainerTopo userType={userRole} />
-  <MenuHamburguer userType={userRole} />
-  </div>
-    <div className="container-fluid">
-      
-    <BackArrow style={{ marginTop: '200px', marginLeft: '10px' }}/>
-    <IconButton style={{ marginTop: '50px', marginLeft: '10px' }}></IconButton>
+      <ContainerTopo userType={userRole} />
+      <MenuHamburguer userType={userRole} />
+      </div>
+        <div className="container-fluid">
+          
+        <BackArrow style={{ marginTop: '200px', marginLeft: '10px' }}/>
+        <IconButton style={{ marginTop: '50px', marginLeft: '10px' }}></IconButton>
 
-    <Autocomplete
-      style={{ marginTop: '30px' }}
-      options={professoresDisponiveis}
-      getOptionLabel={(professor) => professor.nome}
-      inputValue={termoPesquisa} 
-      onInputChange={(event, newValue) => {
-        setTermoPesquisa(newValue);
-      }}
-      onChange={(event, newValue) => {
-        if (!newValue) {
-          setIsSearchEmpty(true); 
-        }
-      }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Pesquisar Professor"
-          variant="outlined"
-          fullWidth
-        />
-      )}
-    />
-    </div>
-
-<div className='container-fluid'>
-   <div className="botoesAcao">
-
-   <div className="uploaders">
-    <IconButton onClick={handleToggleForm} title="Formulário de cadastro Professor" component="span">
-      <AddIcon fontSize="large" />
-    </IconButton>
-
-    <IconButton onClick={handleToggleAttachmentModal} title="Escolha o tipo de anexo" component="span">
-      <UploadFileIcon fontSize="large" />
-    </IconButton>
-
-    <Modal
-      open={showAttachmentModal}
-      onClose={handleToggleAttachmentModal}
-      aria-labelledby="attachment-options"
-      aria-describedby="choose-attachment-type"
-    >
-      <div className="attachment-modal">
-        <div className="anexo">
-          <h2>Selecione um Anexo</h2>
-          <div className="close-icon">
-            <IconButton onClick={handleToggleAttachmentModal}>
-              <CloseIcon style={{ color: 'cinza' }} />
-            </IconButton>
-          </div>
-        </div>
-        <div className="options">
-          <FormControlLabel
-            control={<Checkbox checked={selectedOption === 'Ficha Unitária'} onChange={() => handleOptionSelect('Ficha Unitária')} />}
-            label="Ficha única professor"
-          />
-            <FormControlLabel
-              control={<Checkbox checked={selectedOption === 'Ficha Geral'} onChange={() => handleOptionSelect('Ficha Geral')} />}
-              label="Lista Geral alunos"
+        <Autocomplete
+          style={{ marginTop: '30px' }}
+          options={professoresDisponiveis}
+          getOptionLabel={(professor) => professor.nome}
+          inputValue={termoPesquisa} 
+          onInputChange={(event, newValue) => {
+            setTermoPesquisa(newValue);
+          }}
+          onChange={(event, newValue) => {
+            if (!newValue) {
+              setIsSearchEmpty(true); 
+            }
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Pesquisar Professor"
+              variant="outlined"
+              fullWidth
             />
-          </div>
+          )}
+        />
         </div>
-      </Modal>
-    </div>
-  </div>
+
+        <div className='container-fluid'>
+          <div className="botoesAcao">
+
+          <div className="uploaders">
+            <IconButton onClick={handleToggleForm} title="Formulário de cadastro Professor" component="span">
+              <AddIcon fontSize="large" />
+            </IconButton>
+
+            <IconButton onClick={handleToggleAttachmentModal} title="Escolha o tipo de anexo" component="span">
+              <UploadFileIcon fontSize="large" />
+            </IconButton>
+
+            <Modal
+              open={showAttachmentModal}
+              onClose={handleToggleAttachmentModal}
+              aria-labelledby="attachment-options"
+              aria-describedby="choose-attachment-type"
+            >
+              <div className="attachment-modal">
+                <div className="anexo">
+                  <h2>Selecione um Anexo</h2>
+                  <div className="close-icon">
+                    <IconButton onClick={handleToggleAttachmentModal}>
+                      <CloseIcon style={{ color: 'cinza' }} />
+                    </IconButton>
+                  </div>
+                </div>
+                <div className="options">
+                  <FormControlLabel
+                    control={<Checkbox checked={selectedOption === 'Ficha Unitária'} onChange={() => handleOptionSelect('Ficha Unitária')} />}
+                    label="Ficha única professor"
+                  />
+                    <FormControlLabel
+                      control={<Checkbox checked={selectedOption === 'Ficha Geral'} onChange={() => handleOptionSelect('Ficha Geral')} />}
+                      label="Lista Geral alunos"
+                    />
+                  </div>
+                </div>
+              </Modal>
+            </div>
+          </div>
 
         <TableContainer>
           <Table>
@@ -266,89 +266,89 @@ return (
               </TableRow>
             </TableHead>
             <TableBody>
-  {professoresPaginados.map((professor) => (
-    <TableRow
-      key={professor.id}
-      onClick={() => {
-        if (professorEditando !== professor.id) {
-          setProfessorSelecionado(professor);
-        }
-      }}
-    >
-      <TableCell>
-        <>
-          {professorEditando === professor.id ? (
-            <TextField
-              value={editingProfessor.nome}
-              onChange={(e) => setEditingProfessor((prev) => ({ ...prev, nome: e.target.value }))}
-            />
-          ) : (
-            professor.nome
-          )}
-        </>
-      </TableCell>
-      <TableCell>
-        <>
-          {professorEditando === professor.id ? (
-            <TextField
-              value={editingProfessor.email}
-              onChange={(e) => setEditingProfessor((prev) => ({ ...prev, email: e.target.value }))}
-            />
-          ) : (
-            professor.email
-          )}
-        </>
-      </TableCell>
-      <TableCell>
-        <>
-          {professorEditando === professor.id ? (
-            <TextField
-              value={editingProfessor.cpf}
-              onChange={(e) => setEditingProfessor((prev) => ({ ...prev, cpf: e.target.value }))}
-            />
-          ) : (
-            professor.cpf
-          )}
-        </>
-      </TableCell>
-      <TableCell>
-        <>
-          {professorEditando === professor.id ? (
-            <TextField
-              value={editingProfessor.endereco}
-              onChange={(e) => setEditingProfessor((prev) => ({ ...prev, endereco: e.target.value }))}
-            />
-          ) : (
-            professor.endereco
-          )}
-        </>
-      </TableCell>
-      <TableCell>
-        <>
-          {professorEditando === professor.id ? (
-            <TextField
-              value={editingProfessor.numero}
-              onChange={(e) => setEditingProfessor((prev) => ({ ...prev, numero: e.target.value }))}
-            />
-          ) : (
-            professor.numero
-          )}
-        </>
-      </TableCell>
-      <TableCell>
-        <>
-          {professorEditando === professor.id ? (
-            <Switch
-              checked={editingProfessor.ativo === 1}
-              onChange={handleToggle}
-              inputProps={{ 'aria-label': 'Toggle suspenso/ativo' }}
-            />
-          ) : (
-            professor.ativo === 1 ? 'Ativo' : 'Suspenso'
-          )}
-        </>
-      </TableCell>
-      <TableCell>
+            {professoresPaginados.map((professor) => (
+              <TableRow
+                key={professor.id}
+                onClick={() => {
+                  if (professorEditando !== professor.id) {
+                    setProfessorSelecionado(professor);
+                  }
+                }}
+              >
+                <TableCell>
+                  <>
+                    {professorEditando === professor.id ? (
+                      <TextField
+                        value={editingProfessor.nome}
+                        onChange={(e) => setEditingProfessor((prev) => ({ ...prev, nome: e.target.value }))}
+                      />
+                    ) : (
+                      professor.nome
+                    )}
+                  </>
+                </TableCell>
+                <TableCell>
+                  <>
+                    {professorEditando === professor.id ? (
+                      <TextField
+                        value={editingProfessor.email}
+                        onChange={(e) => setEditingProfessor((prev) => ({ ...prev, email: e.target.value }))}
+                      />
+                    ) : (
+                      professor.email
+                    )}
+                  </>
+                </TableCell>
+                <TableCell>
+                  <>
+                    {professorEditando === professor.id ? (
+                      <TextField
+                        value={editingProfessor.cpf}
+                        onChange={(e) => setEditingProfessor((prev) => ({ ...prev, cpf: e.target.value }))}
+                      />
+                    ) : (
+                      professor.cpf
+                    )}
+                  </>
+                </TableCell>
+                <TableCell>
+                  <>
+                    {professorEditando === professor.id ? (
+                      <TextField
+                        value={editingProfessor.endereco}
+                        onChange={(e) => setEditingProfessor((prev) => ({ ...prev, endereco: e.target.value }))}
+                      />
+                    ) : (
+                      professor.endereco
+                    )}
+                  </>
+                </TableCell>
+                <TableCell>
+                  <>
+                    {professorEditando === professor.id ? (
+                      <TextField
+                        value={editingProfessor.numero}
+                        onChange={(e) => setEditingProfessor((prev) => ({ ...prev, numero: e.target.value }))}
+                      />
+                    ) : (
+                      professor.numero
+                    )}
+                  </>
+                </TableCell>
+                <TableCell>
+                  <>
+                    {professorEditando === professor.id ? (
+                      <Switch
+                        checked={editingProfessor.ativo === 1}
+                        onChange={handleToggle}
+                        inputProps={{ 'aria-label': 'Toggle suspenso/ativo' }}
+                      />
+                    ) : (
+                      professor.ativo === 1 ? 'Ativo' : 'Suspenso'
+                    )}
+                  </>
+                </TableCell>
+                <TableCell>
                     {professorEditando === professor.id ? (
                       <>
                         <Button  variant="contained" color="primary">
@@ -375,12 +375,11 @@ return (
                       </>
                     )}
                   </TableCell>
-    </TableRow>
-  ))}
-</TableBody>
-
-          </Table>
-        </TableContainer>
+                  </TableRow>
+                ))}
+              </TableBody>
+               </Table>
+          </TableContainer>
 
           <div className="pagination">
             <Button
