@@ -33,14 +33,14 @@ function TrocarSenha() {
       const response = await axiosFetch.post('/reset-password/request', requestData);
 
       if (response.status === 200) {
-        toast.success('E-mail enviado com sucesso!');
+        toast.success('E-mail enviado ao e-mail com sucesso, confira seu e-mail!');
         setEmailSent(true);
       } else {
-        toast.error('Falha ao enviar o e-mail. Tente novamente mais tarde.');
+        toast.error('Erro ao enviar o e-mail. O mesmo pode não existir, entrar em contato com o suporte!');
       }
     } catch (error) {
       console.error(error);
-      toast.error('Erro ao enviar o e-mail. Tente novamente mais tarde.');
+      toast.error('Erro ao enviar o e-mail. O mesmo pode não existir, entrar em contato com o suporte!');
     }
 
     setLoading(false);
@@ -52,7 +52,7 @@ function TrocarSenha() {
   
     try {
       if (newPassword !== confirmPassword) {
-        toast.error('As senhas não coincidem. Por favor, verifique e tente novamente.');
+        toast.error('As senhas não coincidem. Verifique e tente novamente.');
         setLoading(false);
         return; 
       }
@@ -69,7 +69,7 @@ function TrocarSenha() {
   
       if (response.status === 200) {
         if (codeVerified) {
-          toast.success('Senha atualizada com sucesso!');
+          toast.success('Senha atualizada com sucesso. Faça o seu login!');
           setEmail('');
           setVerificationCode('');
           setNewPassword('');
@@ -82,11 +82,11 @@ function TrocarSenha() {
           window.location.reload();
         }
       } else {
-        toast.error('Falha ao processar a solicitação. Tente novamente.');
+        toast.error('Falha ao processar a solicitação.');
       }
     } catch (error) {
       console.error(error);
-      toast.error('Erro ao processar a solicitação. Tente novamente.');
+      toast.error('Erro ao processar a solicitação. Entre em contato com a coordenação de info');
     }
   
     setLoading(false);

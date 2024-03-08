@@ -187,7 +187,7 @@ const handlePreviousWeek = () => {
     const today = new Date();
 
     const minimumReservationDate = new Date(today);
-    minimumReservationDate.setDate(minimumReservationDate.getDate() + 2);
+    minimumReservationDate.setDate(minimumReservationDate.getDate());
 
     const maximumReservationDate = new Date(today);
   
@@ -282,18 +282,27 @@ const handlePreviousWeek = () => {
                                     </div>
                                   </div>
                                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                    <FormControlLabel
-                                      control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'manhã', e.target.checked)} />}
-                                      label="Manhã"
-                                    />
-                                    <FormControlLabel
-                                      control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'tarde', e.target.checked)} />}
-                                      label="Tarde"
-                                    />
-                                    <FormControlLabel
-                                      control={<Checkbox onChange={(e) => handleTurnoChange(selectedCardapioId, 'noite', e.target.checked)} />}
-                                      label="Noite"
-                                    />
+
+                                  <FormControlLabel
+                                    control={<Checkbox 
+                                              onChange={(e) => handleTurnoChange(selectedCardapioId, 'manhã', e.target.checked)} 
+                                              checked={selectedTurno[selectedCardapioId]?.manhã} />}
+                                    label="Manhã"
+                                  />
+
+                                  <FormControlLabel
+                                    control={<Checkbox 
+                                              onChange={(e) => handleTurnoChange(selectedCardapioId, 'tarde', e.target.checked)} 
+                                              checked={selectedTurno[selectedCardapioId]?.tarde} />}
+                                    label="Tarde"
+                                  />
+
+                                  <FormControlLabel
+                                    control={<Checkbox 
+                                              onChange={(e) => handleTurnoChange(selectedCardapioId, 'noite', e.target.checked)} 
+                                              checked={selectedTurno[selectedCardapioId]?.noite} />}
+                                    label="Noite"
+                                  />
                                   </Box>
                                   <Button
                                     variant="contained"
@@ -353,7 +362,7 @@ const handlePreviousWeek = () => {
                               className='card__cardapio'
                               style={{ marginRight: '20px', flex: '0 0 auto' }}
                           >
-                              <img src={reserva.imagem ? reserva.imagem : img} alt='text alt' className='card__image' />
+                              <img src={reserva.imagem_cardapio ? reserva.imagem_cardapio : img} alt='text alt' className='card__image' />
                               <div className="card__content">
                                   <h2 className="card__title"><strong>{reserva.nome_cardapio}</strong></h2>
                                   <h2 className='card__title'>{getDayOfWeek(reserva.data)}</h2>
@@ -371,7 +380,6 @@ const handlePreviousWeek = () => {
                   <p style={{ fontSize: '20px', marginTop: '20px' }}>Você não possui nenhuma reserva cadastrada!</p>
               </div>
           )}
-          
               <Modal open={showConfirmationModal} onClose={closeConfirmationModal} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Box sx={{ width: '400px', bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2 }}>
                   <div className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -389,10 +397,6 @@ const handlePreviousWeek = () => {
                 </Box>
               </Modal>
             </motion.div>
-            <div className="week-navigation">
-            <Button onClick={handlePreviousWeek} disabled={currentWeekIndex === 0}>Semana Anterior</Button>
-            <Button onClick={handleNextWeek}>Próxima Semana</Button>
-          </div>
           </div>
         </div>
     </>

@@ -73,6 +73,7 @@ const MenuHamburguer = ({ userType }) => {
   
   return (
     <Container>
+
       <Menu right width={isSmallScreen ? "50%" : 150} isOpen={isMenuOpen}>
       <React.Fragment>
             <Tooltip title="Sua conta">
@@ -139,7 +140,7 @@ const MenuHamburguer = ({ userType }) => {
                 </MenuItem>
               </Box>
             )}
-          </React.Fragment>
+      </React.Fragment>
           
         {(userType === "merendeira") && (
           <>

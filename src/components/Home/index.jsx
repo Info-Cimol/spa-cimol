@@ -100,18 +100,13 @@ function Home() {
                       <div className="card__body">
                         <h5 className="card__head">Catálogo de Projetos</h5>
                         <p className="card__desc">Explore o catálogo de projetos disponíveis.</p>
-                        <button className="card__btn">Indisponível</button>
-                      </div>
-                    </div>
-                    <div className="card">
-                      <div className="card__body">
-                        <h5 className="card__head">Provas</h5>
                         <p className="card__desc">Indisponível.</p>
                       </div>
                     </div>
                     <div className="card">
                       <div className="card__body">
-                        <h5 className="card__head">Ármários</h5>
+                        <h5 className="card__head">Provas</h5>
+                        <p className="card__desc">Explore o sistema de provas quando assim estiver disponíveis.</p>
                         <p className="card__desc">Indisponível.</p>
                       </div>
                     </div>
@@ -144,7 +139,8 @@ function Home() {
                     <div className="card">
                       <div className="card__body">
                         <h5 className="card__head">Professor</h5>
-                        <p className="card__desc">Clique para ver os professores.</p>
+                        <p className="card__desc">Clique para ver os professores cadastrados.</p>
+                        <p className="card__desc">Indisponível.</p>
                       </div>
                     </div>
                     <div className="card">
@@ -157,13 +153,15 @@ function Home() {
                     <div className="card">
                       <div className="card__body">
                         <h5 className="card__head">Provas</h5>
+                        <p className="card__desc">Explore o sistema de provas quando assim estiver disponíveis.</p>
                         <p className="card__desc">Indisponível</p>
                       </div>
                     </div>
                     <div className="card">
                       <div className="card__body">
-                        <h5 className="card__head">Armários</h5>
-                        <p className="card__desc">Indisponível</p>
+                        <h5 className="card__head">Ármários</h5>
+                        <p className="card__desc">Explore o sistema de armários quando assim estiver disponíveis.</p>
+                        <p className="card__desc">Indisponível.</p>
                       </div>
                     </div>
                   </div>
