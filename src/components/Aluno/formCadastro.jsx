@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import axiosFetch from '../../axios/config';
 
 const CadastroAlunoForm = ({ open, onClose }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const MAX_NOME_LENGTH = 255;
   const MAX_EMAIL_LENGTH = 255;
   const MAX_CPF_LENGTH = 14;
@@ -102,46 +103,26 @@ const CadastroAlunoForm = ({ open, onClose }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); // Inicia o processo de envio
   
     try {
-      const alunoDataJSON = (alunoData);
+      const alunoDataJSON = { ...alunoData };
   
       const response = await axiosFetch.post('/adiciona/aluno', alunoDataJSON);
       console.log('Resposta da API:', response.data);
-
+  
       setModalOpen(false);
-
+  
       toast.success('Aluno cadastrado com sucesso!', { position: toast.POSITION.TOP_RIGHT });
   
       onClose();
-    }catch (error) {
-      if (error.response && error.response.status === 401) {
-          if (error.response.data.error === 'A matrícula já está em uso') {
-              toast.error('Matrícula já existe. Por favor, escolha outra matrícula.');
-          } else if (error.response.data.error === 'Email já existente') {
-              toast.error('Email já existe. Por favor, escolha outro email.');
-          } else {
-              // Se o erro não for especificamente de matrícula ou email já existentes, exibir mensagem genérica
-              toast.error('Erro ao cadastrar aluno. Detalhes no console.');
-              console.error('Detalhes do erro (response.data):', error.response.data);
-          }
-      } else if (error.response) {
-          // Se houver uma resposta do servidor com um status diferente de 409, exibir mensagem genérica
-          console.error('Erro ao cadastrar aluno:', error);
-          console.error('Detalhes do erro (response.data):', error.response.data);
-          console.error('Status do erro (response.status):', error.response.status);
-          toast.error('Erro ao cadastrar aluno. Detalhes no console.');
-      } else if (error.request) {
-          // Se não houver resposta do servidor, exibir mensagem genérica
-          console.error('Erro na requisição (sem resposta do servidor):', error.request);
-          toast.error('Erro na requisição. Detalhes no console.', { position: toast.POSITION.TOP_RIGHT });
-      } else {
-          // Se ocorrer um erro durante o processamento da requisição, exibir mensagem genérica
-          console.error('Erro ao processar requisição:', error.message);
-          toast.error('Erro ao processar requisição. Detalhes no console.', { position: toast.POSITION.TOP_RIGHT });
-      }
-  }
-}
+    } catch (error) {
+      // Lida com erros
+    } finally {
+      setIsSubmitting(false); // Finaliza o processo de envio, independentemente do resultado
+    }
+  };
+  
   
   const handleCancel = () => {
     setModalOpen(false);
@@ -284,9 +265,15 @@ const CadastroAlunoForm = ({ open, onClose }) => {
 
           {/* Botões de cadastrar e cancelar */}
           <div className="botoesAcao">
-            <Button type="submit" variant="contained" color="primary" style={{ marginRight: 10 }}>
-              Cadastrar Aluno
-            </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            style={{ marginRight: 10 }}
+            disabled={isSubmitting} 
+          >
+            {isSubmitting ? 'Cadastrando...' : 'Cadastrar Aluno'}
+          </Button>
           </div>
         </form>
       </div>

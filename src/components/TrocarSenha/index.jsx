@@ -33,7 +33,7 @@ function TrocarSenha() {
       const response = await axiosFetch.post('/reset-password/request', requestData);
 
       if (response.status === 200) {
-        toast.success('E-mail enviado ao e-mail com sucesso, confira seu e-mail!');
+        toast.success('Código de verificação enviado para o seu e-mail, confira!');
         setEmailSent(true);
       } else {
         toast.error('Erro ao enviar o e-mail. O mesmo pode não existir, entrar em contato com o suporte!');
@@ -86,7 +86,7 @@ function TrocarSenha() {
       }
     } catch (error) {
       console.error(error);
-      toast.error('Erro ao processar a solicitação. Entre em contato com a coordenação de info');
+      toast.error('Erro ao processar a solicitação. Entre em contato com o suporte!');
     }
   
     setLoading(false);

@@ -1,10 +1,4 @@
 .containerCardapio {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.containerCardapio {
   margin-top: 20px;
   background-color: #f4f4f4;
   border-radius: 10px;

@@ -223,7 +223,7 @@ const handlePreviousWeek = () => {
             className='cardapio-carousel'
             style={{
               display: 'flex',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-start',
               overflowX: 'auto',
               width: '100%',
               cursor: 'pointer',
@@ -341,7 +341,7 @@ const handlePreviousWeek = () => {
               className='cardapio-carousel'
               style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  justifyContent: 'flex-start',
                   overflowX: 'auto',
                   width: '100%',
                   cursor: 'pointer',

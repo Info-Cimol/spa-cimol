@@ -63,7 +63,7 @@ function Login() {
       if (response.data.message === "Usuário desativado. Entre em contato com o suporte.") {
         toast.error("Usuário desativado. Entre em contato com o suporte.");
       } else {
-        toast.error("Credenciais inválidas");
+        toast.error("Senha ou e-mail incorreto!");
       }
     } else {
       if (firstLogin === false) { 
@@ -152,7 +152,7 @@ function Login() {
           toast.error(response.data.message);
         } else {
           console.log('Senha incorreta');
-          toast.error('Credenciais inválidas');
+          toast.error('Senha ou e-mail incorreto!');
         }
       }
     } catch (error) {
