@@ -31,17 +31,6 @@ function Cardapio() {
     setIdReservaToDelete(idReserva);
     setShowConfirmationModal(true);
   };
-
-  const handleReservation = async () => {
-    if (confirming) return;
-
-    setConfirming(true);
-
-    await reservarCardapio(selectedCardapioId);
-
-    setConfirming(false);
-  };
-
   const closeConfirmationModal = () => {
     setShowConfirmationModal(false);
   };
@@ -144,37 +133,47 @@ const handlePreviousWeek = () => {
     localStorage.setItem('reservado', JSON.stringify(reservas));
   };
 
-  const reservarCardapio = async (idCardapio, maisDeUmTurno, updateReservas = true) => {
+  const reservarCardapio = async (idCardapio, maisDeUmTurno, deleteReservation = true, updateReservas = true) => {
     try {
-      const id = localStorage.getItem('id');
-      let turno;
-      if (maisDeUmTurno) {
-        turno = ['manha', 'tarde', 'noite'];
-      } else {
-   
-        turno = Object.keys(selectedTurno[idCardapio]).filter(turno => selectedTurno[idCardapio][turno]);
-      }
-  
-      const response = await axiosFetch.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno });
-      if (response.data.deletado === true) {
-        console.log('Reserva removida');
-        toast.error('Não foi possível realizar sua reserva!');
-      } else {
-        toast.success('Sua reserva foi cadastrada!');
-        const newReservado = { ...reservado, [idCardapio]: turno };
-        setReservado(newReservado);
-        salvarReservasLocalStorage(newReservado);
-        closeModal();
-        if (updateReservas) {
-          const updatedReservasResponse = await axiosFetch.get(`/reservas/${id}`);
-          setReservas(updatedReservasResponse.data);
+        const id = localStorage.getItem('id');
+
+        if (deleteReservation) {
+            const reservasAnteriores = reservas.filter(reserva => reserva.cardapio_id_cardapio === idCardapio);
+            for (const reserva of reservasAnteriores) {
+                await excluirReserva(reserva.cardapio_id_cardapio); // Exclui todas as reservas anteriores para o mesmo cardápio
+            }
         }
-      }
+
+        let turno;
+        if (maisDeUmTurno) {
+            turno = ['manhã', 'tarde', 'noite'];
+        } else {
+            turno = Object.keys(selectedTurno[idCardapio]).filter(turno => selectedTurno[idCardapio][turno]);
+        }
+
+        const response = await axiosFetch.post(`/reserva/${id}/cardapio/${idCardapio}`, { turno });
+
+        if (response.data.deletado === true) {
+            console.log('Reserva removida');
+            toast.error('Não foi possível realizar sua reserva!');
+        } else {
+            toast.success('Sua reserva foi atualizada!');
+            const newReservado = { ...reservado, [idCardapio]: turno };
+            setReservado(newReservado);
+            salvarReservasLocalStorage(newReservado);
+            closeModal();
+            if (updateReservas) {
+                const updatedReservasResponse = await axiosFetch.get(`/reservas/${id}`);
+                setReservas(updatedReservasResponse.data);
+            }
+        }
     } catch (error) {
-      console.log("Erro ao reservar cardápio ", error);
-      toast.error(error);
+        console.log("Erro ao reservar cardápio ", error);
+        toast.error(error);
     }
-  }; 
+};
+
+
 
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
@@ -182,18 +181,16 @@ const handlePreviousWeek = () => {
     return days[date.getDay() + 1];
   };
 
-  const isReservaDisabled = (data, idCardapio, reservas) => {
+  const isReservaDisabled = (data) => {
     const dataCardapio = new Date(data);
     const today = new Date();
 
     const minimumReservationDate = new Date(today);
-    minimumReservationDate.setDate(minimumReservationDate.getDate());
+    minimumReservationDate.setDate(minimumReservationDate.getDate() + 2);
 
     const maximumReservationDate = new Date(today);
-  
-    const hasReservation = reservas.some(reserva => reserva.cardapio_id_cardapio === idCardapio);
 
-    return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate || hasReservation;
+    return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate;
 };
 
   const currentSunday = sundays[currentWeekIndex];
@@ -241,6 +238,20 @@ const handlePreviousWeek = () => {
                     const isWithinCurrentWeek = itemDate >= sundayOfCurrentWeek && itemDate <= saturdayOfCurrentWeek;
                     const hasReservedIcon = reservas.some(reserva => reserva.id_cardapio === item.id_cardapio && reserva.id_usuario === id);
 
+                    const handleReservation = async () => {
+                      if (confirming) return;
+                  
+                      setConfirming(true);
+                  
+                      if (isAlreadyReserved) {
+                          await reservarCardapio(selectedCardapioId, true, true); // Exclui a reserva anterior e cria uma nova com os turnos selecionados
+                      } else {
+                          await reservarCardapio(selectedCardapioId); // Reserva normalmente
+                      }
+                  
+                      setConfirming(false);
+                  };
+
                     if (isWithinCurrentWeek) {
                         return (
                             <motion.div
@@ -268,7 +279,13 @@ const handlePreviousWeek = () => {
                                         }}
                                         style={{ cursor: isDisabled || hasReservedIcon ? 'not-allowed' : 'pointer' }}
                                     >
-                                        <Button disabled={isDisabled || hasReservedIcon}>Reservar</Button>
+                                     <Button
+                                      disabled={isDisabled}
+                                    
+                                  >
+                                      {hasReservedIcon ? 'Atualizar Reserva' : 'Reservar'}
+                                  </Button>
+
                                     </div>
                                 </div>
                                 <Modal open={showModal} onClose={closeModal}>
@@ -380,6 +397,7 @@ const handlePreviousWeek = () => {
                   <p style={{ fontSize: '20px', marginTop: '20px' }}>Você não possui nenhuma reserva cadastrada!</p>
               </div>
           )}
+          
               <Modal open={showConfirmationModal} onClose={closeConfirmationModal} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Box sx={{ width: '400px', bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2 }}>
                   <div className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
