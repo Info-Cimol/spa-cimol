@@ -205,7 +205,7 @@ const RelatorioReservas = () => {
             <MenuHamburguer userType={userRole} />
             <BackArrow style={{ marginTop: '2000px', marginLeft: '10px' }} />
         
-        <div className='container-fluid'>
+           <div className='container-fluid'>
              <h2  className='titulo-home fade-up' style={{ marginTop: '4rem', marginLeft: '10px' }}>
                 Relatório de Reservas
             </h2>

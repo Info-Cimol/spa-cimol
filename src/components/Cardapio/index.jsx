@@ -37,14 +37,33 @@ function Cardapio() {
 
   const handleTurnoChange = (idCardapio, turno, isChecked) => {
     setSelectedTurno(prevState => ({
-      ...prevState,
-      [idCardapio]: {
-        ...prevState[idCardapio],
-        [turno]: isChecked
-      }
+        ...prevState,
+        [idCardapio]: {
+            ...prevState[idCardapio],
+            [turno]: isChecked
+        }
     }));
-  };  
-  
+  };
+
+  useEffect(() => {
+    const populateSelectedTurno = () => {
+        const selectedReserva = reservas.find(reserva => reserva.cardapio_id_cardapio === selectedCardapioId);
+        if (selectedReserva && Array.isArray(selectedReserva.turnos)) {
+            const selectedTurno = {
+                manhã: selectedReserva.turnos.includes('manhã'),
+                tarde: selectedReserva.turnos.includes('tarde'),
+                noite: selectedReserva.turnos.includes('noite')
+            };
+            setSelectedTurno(prevState => ({
+                ...prevState,
+                [selectedCardapioId]: selectedTurno
+            }));
+        }
+    };
+
+    populateSelectedTurno();
+  }, [selectedCardapioId, reservas]);
+
   const excluirReserva = async (idCardapio) => {
     try {
         const updatedReservas = reservas.filter(reserva => reserva.cardapio_id_cardapio !== idCardapio);
@@ -57,7 +76,7 @@ function Cardapio() {
         console.error('Erro ao excluir reserva:', error);
         toast.error('Erro ao excluir reserva. Por favor, tente novamente.');
     }
-};
+  };
 
   const openModal = () => {
     setShowModal(true);
@@ -67,32 +86,32 @@ function Cardapio() {
     setShowModal(false);
   };
  
- useEffect(() => {
+  useEffect(() => {
   const fetchData = async () => {
-    try {
-      const response = await axiosFetch.get('/cardapio');
-      setCardapio(response.data);
+      try {
+        const response = await axiosFetch.get('/cardapio');
+        setCardapio(response.data);
 
-      const today = new Date();
-      const currentDayOfWeek = today.getDay();
-      const diffStart = today.getDate() - currentDayOfWeek;
+        const today = new Date();
+        const currentDayOfWeek = today.getDay();
+        const diffStart = today.getDate() - currentDayOfWeek;
 
-      const sunday = new Date(today);
-      sunday.setDate(diffStart);
+        const sunday = new Date(today);
+        sunday.setDate(diffStart);
 
-      const endOfWeek = new Date(sunday);
-      endOfWeek.setDate(sunday.getDate() + 6);
+        const endOfWeek = new Date(sunday);
+        endOfWeek.setDate(sunday.getDate() + 6);
 
-      const sundays = [];
-      let current = new Date(sunday);
-      while (sundays.length < 3) {
-        sundays.push(new Date(current));
-        current.setDate(current.getDate() + 7);
+        const sundays = [];
+        let current = new Date(sunday);
+        while (sundays.length < 3) {
+          sundays.push(new Date(current));
+          current.setDate(current.getDate() + 7);
+        }
+        setSundays(sundays);
+      } catch (error) {
+        console.log('Erro ao listar cardápio', error);
       }
-      setSundays(sundays);
-    } catch (error) {
-      console.log('Erro ao listar cardápio', error);
-    }
   };
 
   fetchData();
@@ -100,17 +119,18 @@ function Cardapio() {
   const interval = setInterval(fetchData, 60000); 
 
   return () => clearInterval(interval);
-}, []);
+  }, []);
 
-const handleNextWeek = () => {
-if (currentWeekIndex < sundays.length - 2) {
-  setCurrentWeekIndex(currentWeekIndex + 1);
-}
-};
 
-const handlePreviousWeek = () => {
-  setCurrentWeekIndex(currentWeekIndex - 1);
-};
+  const handleNextWeek = () => {
+  if (currentWeekIndex < sundays.length - 2) {
+    setCurrentWeekIndex(currentWeekIndex + 1);
+  }
+  };
+
+  const handlePreviousWeek = () => {
+    setCurrentWeekIndex(currentWeekIndex - 1);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -171,9 +191,7 @@ const handlePreviousWeek = () => {
         console.log("Erro ao reservar cardápio ", error);
         toast.error(error);
     }
-};
-
-
+  };
 
   const getDayOfWeek = (dateString) => {
     const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
@@ -191,7 +209,7 @@ const handlePreviousWeek = () => {
     const maximumReservationDate = new Date(today);
 
     return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate;
-};
+   };
 
   const currentSunday = sundays[currentWeekIndex];
   const currentSaturday = new Date(currentSunday); 
@@ -244,13 +262,13 @@ const handlePreviousWeek = () => {
                       setConfirming(true);
                   
                       if (isAlreadyReserved) {
-                          await reservarCardapio(selectedCardapioId, true, true); // Exclui a reserva anterior e cria uma nova com os turnos selecionados
+                          await reservarCardapio(selectedCardapioId, true, true); 
                       } else {
-                          await reservarCardapio(selectedCardapioId); // Reserva normalmente
+                          await reservarCardapio(selectedCardapioId); 
                       }
                   
                       setConfirming(false);
-                  };
+                    };
 
                     if (isWithinCurrentWeek) {
                         return (
@@ -288,6 +306,7 @@ const handlePreviousWeek = () => {
 
                                     </div>
                                 </div>
+
                                 <Modal open={showModal} onClose={closeModal}>
                                 <div className="modal-container">
                                   <div className="header">
@@ -301,24 +320,24 @@ const handlePreviousWeek = () => {
                                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
                                   <FormControlLabel
-                                    control={<Checkbox 
-                                              onChange={(e) => handleTurnoChange(selectedCardapioId, 'manhã', e.target.checked)} 
-                                              checked={selectedTurno[selectedCardapioId]?.manhã} />}
-                                    label="Manhã"
+                                      control={<Checkbox 
+                                                onChange={(e) => handleTurnoChange(selectedCardapioId, 'manhã', e.target.checked)} 
+                                                checked={selectedTurno[selectedCardapioId]?.manhã || false} />}
+                                      label="Manhã"
                                   />
 
                                   <FormControlLabel
-                                    control={<Checkbox 
-                                              onChange={(e) => handleTurnoChange(selectedCardapioId, 'tarde', e.target.checked)} 
-                                              checked={selectedTurno[selectedCardapioId]?.tarde} />}
-                                    label="Tarde"
+                                      control={<Checkbox 
+                                                onChange={(e) => handleTurnoChange(selectedCardapioId, 'tarde', e.target.checked)} 
+                                                checked={selectedTurno[selectedCardapioId]?.tarde || false} />}
+                                      label="Tarde"
                                   />
 
                                   <FormControlLabel
-                                    control={<Checkbox 
-                                              onChange={(e) => handleTurnoChange(selectedCardapioId, 'noite', e.target.checked)} 
-                                              checked={selectedTurno[selectedCardapioId]?.noite} />}
-                                    label="Noite"
+                                      control={<Checkbox 
+                                                onChange={(e) => handleTurnoChange(selectedCardapioId, 'noite', e.target.checked)} 
+                                                checked={selectedTurno[selectedCardapioId]?.noite || false} />}
+                                      label="Noite"
                                   />
                                   </Box>
                                   <Button
@@ -364,6 +383,7 @@ const handlePreviousWeek = () => {
                   cursor: 'pointer',
                   height: 'auto'}}
           >
+            
           {reservas.length > 0 ? (
               reservas.map((reserva) => {
                   const reservaDate = new Date(reserva.data);
