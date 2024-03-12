@@ -3,7 +3,7 @@ import ContainerTopo from '../ContainerTopo';
 import MenuHamburguer from "../MenuHamburguer";
 import Aluno from '../Aluno';
 import Cardapio from '../Cardapio/index';
-import ProjetoHomePessa from '../../routes/CatalogoProjetos/homeProjeto';
+import ProjetoHomePessa from '../CatalogoProjetos/homeProjeto';
 import ReservaSemana from '../Cardapio/reservaSemana';
 import { Container } from './styled';
 
@@ -37,14 +37,18 @@ function Home() {
     setExibirHome(false);
   };
 
-  /*const abrirComponenteProjeto = () => {
+  const abrirComponenteProjeto = () => {
     setExibirHomeProjeto(true);
-  };*/
+    setExibirCardapio(false); 
+    setExibirAluno(false);
+    setExibirHome(false);
+  };
 
   return (
     <Container>
       <ContainerTopo userType={userRole} />
       <MenuHamburguer userType={userRole} exibirHome={exibirHome} />
+
       {exibirAluno && (
         <Aluno />
       )}
@@ -83,7 +87,7 @@ function Home() {
                       <div className="card__body">
                         <h5 className="card__head">Catálogo de Projetos</h5>
                         <p className="card__desc">Explore o catálogo de projetos disponíveis.</p>
-                        <p className="card__desc">Indisponível.</p>
+                        <button className="card__btn" onClick={abrirComponenteProjeto}>Abrir</button>
                       </div>
                     </div>
                   </div>

@@ -8,6 +8,7 @@ import { PersonAdd, Settings, Logout, VpnKey } from '@mui/icons-material';
 import Aluno from '../Aluno/index.jsx';
 import Cardapio from '../Cardapio/index.jsx';
 import ReservaSemana from '../Cardapio/reservaSemana.jsx';
+import MeusProjetos from '../CatalogoProjetos/areaPessoaProjeto.jsx';
 import StyledTextButton from "./styled";
 
 const MenuHamburguer = ({ userType }) => {
@@ -61,6 +62,11 @@ const MenuHamburguer = ({ userType }) => {
     setIsMenuOpen(false);
   };
 
+  const abrirMeusProjetos = () => {
+    setSelectedComponent(<MeusProjetos />);
+    setIsMenuOpen(false);
+  };
+
   const abrirCardapioMerenda = () => {
     setSelectedComponent(<ReservaSemana />);
     setIsMenuOpen(false);
@@ -75,6 +81,7 @@ const MenuHamburguer = ({ userType }) => {
     <Container>
 
       <Menu right width={isSmallScreen ? "50%" : 150} isOpen={isMenuOpen}>
+
       <React.Fragment>
             <Tooltip title="Sua conta">
               <IconButton onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }} size="small">
@@ -154,6 +161,7 @@ const MenuHamburguer = ({ userType }) => {
             <StyledTextButton onClick={abrirCardapioMerenda}>Merenda</StyledTextButton>
             <StyledTextButton onClick={abrirAluno}>Aluno</StyledTextButton>
             <StyledTextButton>Professor</StyledTextButton>
+            {userType === "admin" && <StyledTextButton>Meus Projetos</StyledTextButton>}
             {userType === "admin" && <StyledTextButton>Provas</StyledTextButton>}
           </>
         )}
@@ -163,8 +171,10 @@ const MenuHamburguer = ({ userType }) => {
             <StyledTextButton onClick={handleBottonHome}>Home</StyledTextButton>
             {userType === "aluno" && <StyledTextButton onClick={abrirCardapio}>Cardapio</StyledTextButton>}
             {userType === "professor" && <StyledTextButton>Provas</StyledTextButton>}
+            <StyledTextButton onClick={abrirMeusProjetos}>Meus Projetos</StyledTextButton>
           </>
         )}
+        
       </Menu>
 
       {selectedComponent && (

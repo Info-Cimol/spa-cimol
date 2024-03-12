@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Button, Modal, FormControlLabel, Checkbox, Box } from '@mui/material';
 import { toast } from 'react-toastify';
 import ContainerTopo from '../../components/ContainerTopo';
+import {Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material'
 import MenuHamburguer from "../../components/MenuHamburguer";
 import BackArrow from '../BackArrow/index';
 import IconButton from '@mui/material/IconButton';
@@ -206,9 +207,11 @@ function Cardapio() {
     const minimumReservationDate = new Date(today);
     minimumReservationDate.setDate(minimumReservationDate.getDate() + 2);
 
+    const hasReservation = reservas.some(reserva => reserva.cardapio_id_cardapio);
+
     const maximumReservationDate = new Date(today);
 
-    return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate;
+    return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate || hasReservation;
    };
 
   const currentSunday = sundays[currentWeekIndex];
@@ -297,12 +300,12 @@ function Cardapio() {
                                         }}
                                         style={{ cursor: isDisabled || hasReservedIcon ? 'not-allowed' : 'pointer' }}
                                     >
-                                     <Button
-                                      disabled={isDisabled}
-                                    
-                                  >
-                                      {hasReservedIcon ? 'Atualizar Reserva' : 'Reservar'}
-                                  </Button>
+                                    <Button
+                                        disabled={isDisabled || hasReservedIcon}
+                                    >
+                                        {hasReservedIcon ? 'Atualizar Reserva' : 'Reservar'}
+                                    </Button>
+
 
                                     </div>
                                 </div>
@@ -322,21 +325,21 @@ function Cardapio() {
                                   <FormControlLabel
                                       control={<Checkbox 
                                                 onChange={(e) => handleTurnoChange(selectedCardapioId, 'manhã', e.target.checked)} 
-                                                checked={selectedTurno[selectedCardapioId]?.manhã || false} />}
+                                                checked={selectedTurno[selectedCardapioId]?.manhã} />}
                                       label="Manhã"
                                   />
 
                                   <FormControlLabel
                                       control={<Checkbox 
                                                 onChange={(e) => handleTurnoChange(selectedCardapioId, 'tarde', e.target.checked)} 
-                                                checked={selectedTurno[selectedCardapioId]?.tarde || false} />}
+                                                checked={selectedTurno[selectedCardapioId]?.tarde} />}
                                       label="Tarde"
                                   />
 
                                   <FormControlLabel
                                       control={<Checkbox 
                                                 onChange={(e) => handleTurnoChange(selectedCardapioId, 'noite', e.target.checked)} 
-                                                checked={selectedTurno[selectedCardapioId]?.noite || false} />}
+                                                checked={selectedTurno[selectedCardapioId]?.noite} />}
                                       label="Noite"
                                   />
                                   </Box>
@@ -391,7 +394,7 @@ function Cardapio() {
                   const saturdayOfCurrentWeek = new Date(sundayOfCurrentWeek);
                   saturdayOfCurrentWeek.setDate(saturdayOfCurrentWeek.getDate() + 6);
                   const isWithinCurrentWeek = reservaDate >= sundayOfCurrentWeek && reservaDate <= saturdayOfCurrentWeek;
-
+               
                   if (isWithinCurrentWeek) {
                       return (
                           <motion.div
@@ -404,7 +407,15 @@ function Cardapio() {
                                   <h2 className="card__title"><strong>{reserva.nome_cardapio}</strong></h2>
                                   <h2 className='card__title'>{getDayOfWeek(reserva.data)}</h2>
                                   <p className="card__info"><strong>Turno da reserva:</strong> {reserva.turnos}</p>
-                                  <Button color="error" onClick={() => openConfirmationModal(reserva.cardapio_id_cardapio)} className="btn-excluir-reserva">Excluir Reserva</Button>
+                                  <DeleteIcon color="error" style={{margin: '15px'}} onClick={() => openConfirmationModal(reserva.cardapio_id_cardapio)} className="btn-excluir-reserva"></DeleteIcon>
+                                  <EditIcon   
+                                      onClick={() => {
+                                          setSelectedCardapioId(reserva.cardapio_id_cardapio);
+                                          openModal();
+                                      }} 
+                                      color="primary"  
+                                      className="btn-excluir-reserva">
+                                </EditIcon>
                               </div>
                           </motion.div>
                       );
