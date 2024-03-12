@@ -1,46 +1,63 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 export const Container = styled.div`
+  .topo {
+    position: fixed;
+    height: 85px;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+  }
 
-    .topo{
-        height: 100px;
-        width: 100%;
-        position: fixed;
-        z-index: 1000;
-        display: flex;
-        flex-direction: column;
+  #cici {
+    width: 50px;
+    margin-left: 8%;
+    margin-top: 0.8%;
+  }
+
+  .containerTopo {
+    bottom: 78px;
+    background-color: #1b2f4a;
+    height: 95%;
+    animation: ${fadeIn} 1.8s ease; 
+
+    img {
+      width: 40px;
+      margin-left: 8%;
+      margin-top: 5%;
     }
+  }
 
-    .container1{
-        background-color: #275faf;
-        height: 95%;
+  .linhaAmarela {
+    background-color: #ffbd59;
+    height: 6px;
+  }
 
-        img{
-            width: 40px;
-            margin-left: 8%;
-            margin-top: 5%;
-        }
+  @media screen and (min-width: 570px) {
+    .containerTopo {
+      img {
+        margin-top: 3%;
+      }
     }
+  }
 
-    .container2{
-        background-color: #FFBD59;
-        height: 6px;
+  @media screen and (min-width: 570px) {
+    .containerTopo {
+      img {
+        margin-top: 2%;
+      }
     }
-
-    @media screen and (min-width: 570px) {
-        .container1{
-            img{
-                margin-top: 3%;
-            }
-        }
-    }
-
-    @media screen and (min-width: 570px) {
-        .container1{
-            img{
-                margin-top: 2%;
-            }
-        }
-    }
-    
+  }
 `;

@@ -1,0 +1,278 @@
+.edicaoPessoa {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 1000px;
+  max-height: 500px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow:scroll;
+}
+
+.anexo{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+ .close{
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-top: -80px;
+  margin-bottom: 50px;
+ }
+
+.botoesAcao {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.uploaders {
+  display: flex;
+  width: 100%; 
+}
+
+.attachment-modal {
+  width: 450px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.attachment-modal h2 {
+  margin-top: 0;
+}
+
+.options {
+  margin-bottom: 20px;
+}
+
+.options .MuiFormControlLabel-root {
+  margin-bottom: 10px;
+}
+
+.options .MuiCheckbox-root {
+  color: #1976d2; 
+}
+
+.options .MuiFormControlLabel-label {
+  font-size: 16px;
+}
+
+.options .MuiButton-root {
+  margin-right: 10px;
+}
+
+.miniCard {
+  width: 100%; 
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 0 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.attachment-modal-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+
+.miniCard:hover {
+  transform: scale(1.05);
+}
+
+p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.detahes-aluno-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.detalhes-aluno-paper {
+  background-color: #f7f7f7;
+  padding: 30px;
+  outline: none;
+  max-width: 80%;
+  width: 100%;
+  border-radius: 15px;
+}
+
+.detalhes-aluno-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.detalhes-aluno-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 10px; 
+}
+
+.detalhes-aluno-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.detalhes-aluno-info {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.detalhes-aluno-close-button {
+  background-color: #3498db;
+  color: #fff;
+  margin: 20px auto 0; 
+  border-radius: 15px; 
+  font-size: 1.6rem; 
+  padding: 15px 30px; 
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.detalhes-aluno-close-button:hover {
+  background-color: #2980b9;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.inputField {
+  width: 100%;
+  height: 100%;
+}
+
+.botoesAcao {
+  display: flex;
+  justify-content: space-between;
+}
+
+.botoesAcao button {
+  width: 48%;
+}
+
+.botoesAcao {
+  margin-top: 1rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  overflow-x: auto; 
+  white-space: nowrap; 
+  transition: opacity 0.5s ease; 
+}
+
+.pagination.show {
+  opacity: 1; 
+}
+
+.page-numbers {
+  display: flex;
+  gap: 5px;
+}
+
+.page-numbers button {
+  margin: 0 5px;
+}
+
+@media screen and (max-width: 600px) {
+  .pagination {
+    flex-direction: flex;
+    align-items: center;
+  }
+  .attachment-modal {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .page-numbers button {
+    display: none;
+  }
+
+  .page-numbers button:first-child,
+  .page-numbers button:last-child {
+    display: inline-block;
+  }
+}
+
+#pesquisa-text {
+  margin-top: 1500px;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  box-shadow: 8px 8px 8px 8px rgba(0.1, 0.1, 0.1, 0.1); 
+  border-radius: 8px;
+  overflow-x: auto; 
+  cursor: pointer;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  min-width: 100px; 
+}
+
+th {
+  background-color: #f2f2f2;
+  color: #333;
+  padding: 12px;
+  text-align: left;
+  font-weight: bold;
+  border: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #e0f7fa; 
+}
+
+tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+@media screen and (max-width: 767px) {
+  table {
+    width: 100%;
+    overflow-x: auto; 
+  }
+
+  th, td {
+    min-width: 100px; 
+  }
+}

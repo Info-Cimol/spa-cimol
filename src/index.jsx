@@ -1,38 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import Login from './routes/Login';
-import Aluno from './routes/Aluno';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Secretaria from './routes/Secretaria';
-import Funcionario from './routes/Funcionario';
-import ErrorPage from './routes/ErrorPage';
-import { Private, UsuarioLogado } from './auth/checkAuthentication';
+import { Private } from './auth/checkAuthentication';
 import { ToastContainer } from 'react-toastify';
+import App from './App';
+import ScrollToTopButton from './components/ScrollTop'
+import Login from './routes/Login/index';
+import Teste from './components/Professor/index';
 import 'react-toastify/dist/ReactToastify.css';
+import './index.css';
 
 const router = createBrowserRouter([
   {
-    element: <App />,
-    errorElement: <ErrorPage/>,
+    element: <App/>,
     children: [
+
       {
-        path: "/",
-        element: <UsuarioLogado><Login/></UsuarioLogado>
+        path: '/',
+        element: <Private allowedRoles={['aluno', 'professor', 'admin', 'merendeira', 'secretaria']}><Login /></Private>,
       },
+
       {
-        path: "/Aluno",
-        element: <Private allowedRoles={["aluno"]}><Aluno/></Private>
+        path: '/Teste',
+        element: <Private allowedRoles={['admin', 'secretaria']}><Teste/></Private> ,
       },
-      {
-        path: "/Secretaria",  
-        element: <Private allowedRoles={["professor"]}><Secretaria/></Private>
-      },
-      {
-        path: "/Funcionario",
-        element:<Private allowedRoles={["funcionario"]}><Funcionario/></Private> 
-      }
     ],
   },
 ]);
@@ -40,9 +31,8 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ToastContainer autoClose={3000}/>
-    <RouterProvider router={router}/>
+    <ToastContainer autoClose={3000} />
+    <RouterProvider router={router} />
+    <ScrollToTopButton />
   </React.StrictMode>
 );
-
-

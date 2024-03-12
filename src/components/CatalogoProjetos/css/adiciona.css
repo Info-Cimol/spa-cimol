@@ -1,0 +1,35 @@
+.input-complete{
+  margin-top: 2rem;
+} 
+
+.custom-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1B2F4A;
+  color: #fff;
+  padding: 2% 4%;
+  border: 2px solid #1B2F4A;
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.custom-file:hover {
+  background-color: #fff;
+  color: #1B2F4A;
+  border-color: #1B2F4A;
+}
+
+@media screen and (max-width: 768px) {
+  .custom-file {
+    padding: 3% 6%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .custom-file {
+    padding: 4% 8%;
+  }
+}

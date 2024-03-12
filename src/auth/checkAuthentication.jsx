@@ -1,39 +1,24 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-export function Private({children, allowedRoles}){
-   
-    const navigate = useNavigate();
-    const userDataString = localStorage.getItem('userData')
-    const userData = JSON.parse(userDataString)
-    const perfil = userData.user.perfil[0];
+export function Private({ children, allowedRoles }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const userRole = localStorage.getItem('userRole');
+  const userDataString = localStorage.getItem('userData');
+  const userData = JSON.parse(userDataString);
+  const isAuthenticated = useState('');
+  
+  useEffect(() => {
+    const isAuthenticated = userRole && userData;
 
-    useEffect(() =>{
-        if(!userData){
-            navigate('/')
-        }else if(!allowedRoles.includes(perfil)){
-            navigate('/ErrorPage')
-        }
-    })
-    
-    if(userData && allowedRoles.includes(perfil)){
-        return children;
+    if (!isAuthenticated || !allowedRoles.includes(userRole)) {
+      if (location.pathname !== '/') {
+        // Permanece na rota atual se não houver permissão
+        navigate('/');
+      }
     }
-}
+  }, [navigate, location.pathname, userRole, userData, allowedRoles]);
  
-export function UsuarioLogado({children}){
-    const navigate = useNavigate();
-    
-    useEffect(()=>{
-        const userDataString = localStorage.getItem('userData');
-        const userData = JSON.parse(userDataString);
-
-        if(userData){
-            if(userData.user.perfil[0] === 'aluno'){
-                navigate('/Aluno');
-            }
-        }
-    })
-
-    return children;
+  return isAuthenticated ? children : null;
 }

@@ -1,24 +1,37 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    .buttons{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 55%;
 
-        button{
-            width: 55%;
-            padding: 7%;
-            border: 1px solid;
-            border-radius: 10px;
-            margin-top: 5%;
-            background-color: white;
-            font-size: 25px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5); /* x, y, desfoque, cor */
-            transition: box-shadow 0.3s ease;
-        }
-    }
+.buttons {
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+    
+ 
+}
+   .titulo-home {
+    font-family: 'Inika', serif; 
+    align-items: center;
+    text-align: center;
+    margin-bottom: 5rem;
+    margin-top: -7rem;
+}
+
+.button {
+    width: 300px;
+    padding: 7%;
+    border: 1px solid;
+    border-radius: 10px;
+    margin-top: 5%;
+    background-color: white;
+    font-size: 25px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.3s ease;
+}
+
+.button:hover {
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.7);
+}
 
     .containerCardapio{
         width: 100%;
@@ -196,6 +209,10 @@ export const Container = styled.div`
             width: 400px;
         }
 
+        .buttons {
+            margin-top: 7rem;
+        }
+
         .carrossel{
             width: 400px;
         }
@@ -213,13 +230,21 @@ export const Container = styled.div`
         }
     }
 
-    @media screen and (min-width: 800px){
+    @media screen and (max-width: 800px){
         .boxCardapio{
             width: 500px;
         }
 
         .carrossel{
             width: 500px;
+        }
+
+        .titulo-home{
+            margin-top: -1rem;
+        }
+
+        .buttons {
+            margin-top: 2rem;
         }
 
         .containerCardapio{
@@ -239,6 +264,10 @@ export const Container = styled.div`
     @media screen and (min-width: 1000px){
         .boxCardapio{
             width: 600px;
+        }
+
+        .buttons {
+            margin-top: 7rem;
         }
 
         .carrossel{

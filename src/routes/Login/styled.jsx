@@ -2,111 +2,104 @@ import styled from "styled-components";
 
 export const Container = styled.div`
 
-    .topo{
-        background-color: #275faf;
-        height: 124px;
-        display: flex;
-        align-items: flex-end;
-    }
+.topo {
+  background-color: #1b2f4a;
+  height: 124px;
+  display: flex;
+  align-items: flex-end;
+}
 
-    .topo2{
-        background-color: #FFBD59;
-        width: 100%;
-        height: 6%;
-    }
+.topo2 {
+  background-color: #ffbd59;
+  width: 100%;
+  height: 6%;
+}
 
-    .imgCentral{
-        position: absolute; 
-        top: 15%; 
-        left: 50%;
-        transform: translate(-50%, -50%);
+.imgCentral {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90px;
+}
 
-        img{
-            width: 90px;
-        }
-    }
+.areaLogin {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8%;
+  align-items: center;
+  animation: fadeIn 1.5s ease; 
+}
 
-    .areaLogin{
-        display: flex;
-        flex-direction: column;
-        padding-top: 18%;
-        align-items: center;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-        h1{
-            margin-bottom: 5%;
-            font-weight: bold;
-        }
+.formulario-login {
+  width: 80%; 
+  max-width: 650px; 
+  padding: 30px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 20px rgba(0.1, 0.1, 0.1, 0.1);
+  text-align: center;
+}
 
-        h2{
-            top: 2%;
-            position: absolute;
-        }
+.formulario-login .password-input i {
+  cursor: pointer;
+}
 
-        p{
-            font-size: 18px;
-            font-weight: 500;
-            
-            a{
-                text-decoration: underline;
-                color: black;
-                cursor: pointer;
-            }
-        }
+.profile-selector-container {
+  margin-top: 20px;
+}
 
-        form{
-            display: flex;
-            flex-direction: column;
-            width: 80%;
+.profile-selector-container .profile-label {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
 
-            label{
-                font-size: 20px;
-                margin-bottom: 0.5%;
-            }
+.profile-selector-container .MuiFormControlLabel-root {
+  margin-bottom: 10px;
+}
 
-            input{
-                padding: 2%;
-                border-radius: 10px;
-                margin-bottom: 4%;
-                border: 1px solid;
-                font-size: 20px;
-            }
+.forgot_password {
+  margin-top: 10px;
+  color: #1b2f4a;
+  cursor: pointer;
+}
 
-            button{
-                width: 50%;
-                background-color: #D8A43D ;
-                border-radius: 10px;
-                border: 1px solid;
-                padding: 1%;
-                font-size: 20px;
-                font-weight: bold;
-                align-self: center;
-                margin-bottom: 5%;
-            }
-        }
-    }
+.btn-primary {
+  width: 100%;
+  max-width: 300px; 
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 15px; 
+  margin-top: 20px;
+  cursor: pointer;
+  margin-top: 50px;
+}
 
-    .containerAlterarSenha{
-        width: 100%;
-        height: 100%;
-        background-color: white;
-        z-index: 1000;
-        position: absolute;
-        top: 25%
-    }
+.btn-primary:hover {
+  background-color: #0056b3;
+}
 
-    @media screen and (min-width: 750px) {
-        
-        .areaLogin{
-            padding-top: 7%;
+@media screen and (max-width: 768px) {
+  .formulario-login {
+    width: 90%; 
+    margin-top: 100px;
+  }
 
-            h1{
-                margin-bottom: 2%;
-            }
-
-            form{
-                width: 30%;
-            }
-        }
-    }
-
-`
+  .btn-primary {
+    max-width: 250px;
+  }
+}
+`;
