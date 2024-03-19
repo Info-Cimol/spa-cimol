@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import App from './App';
 import ScrollToTopButton from './components/ScrollTop'
 import Login from './routes/Login/index';
-import Teste from './components/Professor/index';
+import Teste from './components/FileUploader/pdfUploaderProfessor';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
