@@ -207,12 +207,11 @@ function Cardapio() {
     const minimumReservationDate = new Date(today);
     minimumReservationDate.setDate(minimumReservationDate.getDate() + 2);
 
-    const hasReservation = reservas.some(reserva => reserva.cardapio_id_cardapio);
+    //const hasReservation = reservas.some(reserva => reserva.cardapio_id_cardapio);
 
-    const maximumReservationDate = new Date(today);
+    return dataCardapio < minimumReservationDate;
+};
 
-    return dataCardapio < minimumReservationDate || dataCardapio <= maximumReservationDate || hasReservation;
-   };
 
   const currentSunday = sundays[currentWeekIndex];
   const currentSaturday = new Date(currentSunday); 
